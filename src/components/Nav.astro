@@ -1,0 +1,25 @@
+---
+const links = [
+  { href: '/meet-kylie', label: 'About' },
+  { href: '/services', label: 'Work With Me' },
+  { href: '/podcast', label: 'Podcast' },
+  { href: 'https://shop.kyliekelly.com/', label: 'Shop' },
+  { href: 'https://www.skool.com/email-marketing-skool/about', label: 'Free Community' },
+];
+---
+<header class="bg-black text-white">
+  <div class="text-center text-xs sm:text-sm py-2 px-4 bg-pink font-medium tracking-wide">
+    <a href="https://kyliekelly.thrivecart.com/breakup-with-insta/" class="hover:opacity-80">
+      Wanna break up with Instagram? Check out my new course →
+    </a>
+  </div>
+  <nav class="max-w-6xl mx-auto flex items-center justify-between px-6 py-5">
+    <a href="/" class="font-sans tracking-widest text-sm uppercase">Kylie&nbsp;|&nbsp;Kelly</a>
+    <ul class="hidden md:flex items-center gap-8 text-xs uppercase tracking-wide font-medium">
+      {links.map((link) => (
+        <li><a href={link.href} class="hover:text-pink transition-colors">{link.label}</a></li>
+      ))}
+    </ul>
+    <a href="/services" class="btn-outline text-xs !py-2 !px-5 hidden sm:inline-block">Work With Me</a>
+  </nav>
+</header>

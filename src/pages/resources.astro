@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const tools = [
+  { name: 'Kit', desc: 'Still my favourite for easy email marketing. I use it for automation, segmentation, and building out email funnels without the tech headache.', url: 'https://partners.kit.com/kyliekelly' },
+  { name: 'Thrivecart', desc: 'This is what I use to sell my offers, host workshops, and set up sales funnels, super simple to use and it just works.', url: 'https://thepregnantceo--checkout.thrivecart.com/thrivecart-standard-account/673d48af62985/' },
+  { name: 'Try Interact', desc: 'I use Interact to build my visibility strategy quiz, and it\u2019s been a list-building game changer.', url: 'https://get.tryinteract.com/kyliekelly' },
+  { name: 'ConvertBox', desc: 'This little tool helps me show the right message to the right person, without being annoying. Exit pop-ups, time-sensitive CTAs, personalised messages.', url: 'https://thepregnantceo--sslcheckout.thrivecart.com/cb-lifetime/595258cb2d05b/' },
+  { name: 'Buzzsprout', desc: 'This is where all my podcast episodes live. Super easy to use, helps me track downloads, and integrates beautifully with my website.', url: 'https://www.buzzsprout.com/?referrer_id=2046932' },
+];
+---
+<Layout title="Resources | Kylie Kelly" description="All my favourite resources for business and life.">
+
+  <section class="bg-black text-white px-6 py-20 text-center">
+    <p class="script-accent text-pink-light text-xl mb-3">everything I love, all in one place</p>
+    <h1 class="text-4xl sm:text-5xl font-bold mb-4">Resources</h1>
+    <p class="text-warmgray max-w-xl mx-auto text-sm">
+      Friendly heads up: some links may be affiliate links. I never recommend anything I don't personally use and love.
+    </p>
+  </section>
+
+  <section class="px-6 py-16">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-10">Business tools I actually use</h2>
+      <div class="space-y-6">
+        {tools.map((t) => (
+          <a href={t.url} class="block bg-offwhite rounded-lg p-6 hover:shadow-md transition-shadow">
+            <p class="font-serif font-bold text-lg mb-2">{t.name}</p>
+            <p class="text-sm text-muted">{t.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-offwhite px-6 py-16">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-2xl font-bold mb-10">Wanna go deeper?</h2>
+      <div class="grid md:grid-cols-3 gap-6 text-left">
+        <div class="bg-white rounded-lg p-6">
+          <p class="font-serif font-bold mb-2">Ms "Strategic Planner" Sally</p>
+          <p class="text-sm text-muted mb-4">Takes the guesswork out of audience growth by creating a personalised 90-day plan tailored to your business in seconds.</p>
+          <a href="https://kyliekelly.thrivecart.com/strategic-planner-sally/" class="btn-outline text-xs !py-2 !px-4">Access Sally →</a>
+        </div>
+        <div class="bg-white rounded-lg p-6">
+          <p class="font-serif font-bold mb-2">Your Next 1000 Subscribers</p>
+          <p class="text-sm text-muted mb-4">11 strategies to grow your email list fast, broken down by effort level.</p>
+          <a href="/guide" class="btn-outline text-xs !py-2 !px-4">Grab Your Guide →</a>
+        </div>
+        <div class="bg-white rounded-lg p-6">
+          <p class="font-serif font-bold mb-2">The Audio Summit Case Study</p>
+          <p class="text-sm text-muted mb-4">How Kylie grew her list by 1,100+ subscribers and turned it into $25K in revenue with one simple audio-only event.</p>
+          <a href="/inside" class="btn-outline text-xs !py-2 !px-4">Watch the Case Study →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>

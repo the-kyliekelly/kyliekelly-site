@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const reviews = [
+  { title: 'Solid Gold!', body: "This podcast is such an incredible resource! Not only are there amazing guests that provide valuable takeaways, but Kylie is so knowledgeable and explains things in such a clear and concise way.", author: 'Clarissa B 21' },
+  { title: 'This podcast is such a gem!', body: "Kylie's down to earth personality makes you feel like you're sitting down for tea with a good girl friend! Love this podcast and all the great advice offered.", author: 'Dom1116' },
+  { title: 'Biz tips that are actually useful!', body: "I love Kylie's passion for supporting fellow moms in biz, and the topics she features are almost always applicable to things I'm curious about.", author: 'annalocke' },
+  { title: 'The show for every mama in business!', body: "Absolutely love this show! Kylie and her guests share such great insight into navigating motherhood and entrepreneurship. Such great tips without the fluff.", author: 'Sweeetly_broken' },
+];
+---
+<Layout title="The Email Growth Show Podcast | Kylie Kelly" description="Listen in as Kylie Kelly shares bold visibility strategies, relationship-first marketing advice, and honest behind-the-scenes biz lessons.">
+
+  <section class="bg-black text-white px-6 py-20 text-center">
+    <h1 class="text-4xl sm:text-5xl font-bold mb-4">The Email Growth <span class="script-accent italic text-pink-light">Show</span></h1>
+    <p class="text-warmgray max-w-xl mx-auto mb-8">A must-listen podcast with audience growth tips for female business owners.</p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3" class="btn-outline">Listen on Spotify</a>
+      <a href="https://podcasts.apple.com/eg/podcast/this-mama-means-business-with-kylie-kelly/id1550211753" class="btn-outline">Listen on Apple Podcasts</a>
+    </div>
+  </section>
+
+  <section class="px-6 py-16">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="text-muted mb-10">
+        Every Friday, we talk visibility, list growth, and building an empire without the burnout. Recorded from my home office, often while my kids are asleep, tune in for actionable strategies to help you build and monetise your email list.
+      </p>
+      <div class="grid grid-cols-4 gap-4 text-center">
+        <div><p class="font-serif text-2xl sm:text-3xl font-bold">70+</p><p class="text-xs uppercase tracking-wide text-muted mt-1">5 star reviews</p></div>
+        <div><p class="font-serif text-2xl sm:text-3xl font-bold">4</p><p class="text-xs uppercase tracking-wide text-muted mt-1">years podcasting</p></div>
+        <div><p class="font-serif text-2xl sm:text-3xl font-bold">250+</p><p class="text-xs uppercase tracking-wide text-muted mt-1">episodes streaming</p></div>
+        <div><p class="font-serif text-2xl sm:text-3xl font-bold">50k+</p><p class="text-xs uppercase tracking-wide text-muted mt-1">downloads to date</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-offwhite px-6 py-16">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-10">Start with these three</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <a href="https://kyliekelly.com/you-dont-need-instagram-to-grow-your-business/" class="bg-white rounded-lg p-6 hover:shadow-md transition-shadow">
+          <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-2">Visibility</p>
+          <p class="font-serif font-bold mb-2">You Don't Need Instagram to Grow Your Business</p>
+          <p class="text-sm text-muted">The episode that explains the whole philosophy, what to do instead of posting into the void.</p>
+        </a>
+        <a href="https://kyliekelly.com/doubled-email-list-without-social-media/" class="bg-white rounded-lg p-6 hover:shadow-md transition-shadow">
+          <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-2">List Growth</p>
+          <p class="font-serif font-bold mb-2">How I Doubled My Email List in 12 Months</p>
+          <p class="text-sm text-muted">The receipts. Exactly what worked, what flopped, real numbers included.</p>
+        </a>
+        <a href="https://kyliekelly.com/why-your-emails-arent-making-sales-what-to-do-about-it/" class="bg-white rounded-lg p-6 hover:shadow-md transition-shadow">
+          <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-2">Email Marketing</p>
+          <p class="font-serif font-bold mb-2">Why Your Emails Aren't Making Sales</p>
+          <p class="text-sm text-muted">The four mistakes hiding in most sales emails, and what to write instead.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-6 py-16">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-10">Love what you hear?</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        {reviews.map((r) => (
+          <div class="border border-warmgray/40 rounded-lg p-6">
+            <p class="text-pink mb-2">★★★★★</p>
+            <p class="font-serif font-bold mb-2">{r.title}</p>
+            <p class="text-sm text-muted mb-3">{r.body}</p>
+            <p class="text-xs uppercase tracking-wide text-muted">{r.author}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</Layout>

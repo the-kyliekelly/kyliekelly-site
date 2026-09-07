@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  color: #1a1a1a;
+  background: #ffffff;
+  line-height: 1.7;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.script-accent {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+}
+
+/* Pill CTA buttons */
+.btn-primary,
+.btn-pink,
+.btn-outline {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 50px;
+  transition: opacity 0.2s ease;
+}
+.btn-primary {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+.btn-pink {
+  background: #e040fb;
+  color: #ffffff;
+}
+.btn-outline {
+  background: transparent;
+  color: inherit;
+  border: 1.5px solid currentColor;
+}
+.btn-primary:hover,
+.btn-pink:hover,
+.btn-outline:hover {
+  opacity: 0.85;
+}
+
+/* Section divider */
+.divider-pink {
+  height: 2px;
+  width: 64px;
+  background: #e040fb;
+  border: none;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

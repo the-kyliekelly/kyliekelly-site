@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const packages = [
+  { name: 'Reset', sub: '4 Week Reboot', price: '$2,200', desc: "Stop the spiral. Two calls plus weekday voice support. We clear the bottlenecks and hand you a 30-day plan you can execute immediately." },
+  { name: 'Momentum', sub: '90 Day Sprint', price: '$5,500', desc: "Six calls, weekday voice support, my eyes on every asset you ship. Expect list growth, polished offers, and sales you can screenshot." },
+  { name: 'Empire', sub: '6 Month Package', price: '$9,500', desc: "Twelve calls, weekday support, vault access, and warm intros to my network. We expand your reach, stack recurring revenue, and position you as the name people drop in rooms you haven't even walked in." },
+];
+---
+<Layout title="Work with Kylie | Email Marketing for Female Biz Owners" description="Growing your visibility and email list is just one step away.">
+
+  <section class="bg-black text-white px-6 py-20">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-4xl sm:text-5xl font-bold mb-6">You're working your ass off, but for what? Let's fix that.</h1>
+      <p class="text-warmgray mb-8">
+        You're everywhere. Launching. Posting. Tweaking your offers for the hundredth time. And yet, nothing's moving. Not because you're lazy, but because you're duct-taping strategies together and hoping for magic.
+      </p>
+      <a href="https://tidycal.com/kyliekelly/chemistry-call" class="btn-pink">Book the Call or Keep Guessing. Your Move.</a>
+    </div>
+  </section>
+
+  <section class="px-6 py-16">
+    <div class="max-w-2xl mx-auto grid sm:grid-cols-2 gap-10">
+      <div>
+        <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-3">This is for you if...</p>
+        <ul class="text-sm text-muted space-y-2">
+          <li>+ You'd rather make money than excuses</li>
+          <li>+ You're tired of second-guessing every move and want focus</li>
+          <li>+ You take fast action once you have a plan</li>
+          <li>+ You're done hiding and ready to get loud about your offers</li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide font-semibold mb-3 text-muted">Not for you if...</p>
+        <ul class="text-sm text-muted space-y-2">
+          <li>&minus; You want someone else to do the work</li>
+          <li>&minus; You collect freebies like Pok&eacute;mon cards</li>
+          <li>&minus; Honest feedback makes you spiral instead of taking action</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-offwhite px-6 py-16">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-12">How I'll help you succeed</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        {packages.map((p) => (
+          <div class="bg-white rounded-lg p-8">
+            <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-1">{p.sub}</p>
+            <h3 class="font-serif text-2xl font-bold mb-3">{p.name}</h3>
+            <p class="font-semibold mb-4">{p.price} investment</p>
+            <p class="text-sm text-muted">{p.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="px-6 py-16 text-center">
+    <p class="text-muted mb-6">Book Your Chemistry Call &rarr; Pick Your Package &rarr; Get Moving</p>
+    <a href="https://tidycal.com/kyliekelly/chemistry-call" class="btn-primary">Book Your Chemistry Call Now →</a>
+  </section>
+
+</Layout>
