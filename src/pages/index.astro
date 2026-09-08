@@ -12,47 +12,36 @@ import Layout from '../layouts/Layout.astro';
     </p>
   </section>
 
-  <!-- HERO -->
-  <section class="bg-black text-white px-6 pt-24 pb-12">
-    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <h1 class="text-2xl sm:text-3xl font-bold leading-snug mb-4">
-          Helping you get known, trusted, and selling, with an email list and real relationships that work<br />
-          <em class="italic">{even when you're not online}</em>.
-        </h1>
-        <p class="text-pink text-base mb-6 max-w-md">
-          {no content treadmill, no chasing the algorithm, just visibility systems that keep working long after you build them}
-        </p>
-        <p class="text-white text-base mb-8 max-w-md">
-          For coaches, course creators and service providers who want consistent sales without living on social media, built on the exact system that took me from 0 to 7,000+ subscribers in 18 months, no ads, no algorithm.
-        </p>
-        <a href="https://kyliekelly.myflodesk.com/audience" class="btn-pink">Grab Your Next 1000 Subscribers →</a>
-      </div>
-      <div class="hidden md:block relative h-80">
-        <div class="absolute top-2 left-0 w-[46%] bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-6">
-          <img src="/images/hero-1.jpg" alt="Kylie Kelly" class="w-full rounded-sm" />
-        </div>
-        <div class="absolute top-0 left-[30%] w-[48%] bg-white p-2 pb-6 rounded-sm shadow-xl rotate-3 z-10">
-          <img src="/images/hero-2.jpg" alt="Kylie Kelly laughing" class="w-full rounded-sm" />
-        </div>
-        <div class="absolute top-16 left-[58%] w-[46%] bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-2 z-20">
-          <img src="/images/hero-7.jpg" alt="Kylie Kelly holding a disco ball" class="w-full rounded-sm" />
-        </div>
-      </div>
+  <!-- HERO, centered / Carinda-model -->
+  <section class="bg-black text-white px-6 pt-20 pb-16 text-center relative">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-4xl sm:text-6xl font-bold leading-tight mb-6">
+        Helping you get <em class="italic text-pink">known, trusted, and selling,</em><br class="hidden sm:block" />
+        with an email list and real relationships that work<br class="hidden sm:block" />
+        <em class="italic">{even when you're not online}</em>.
+      </h1>
+      <p class="text-pink text-sm sm:text-base uppercase tracking-wide mb-6 max-w-xl mx-auto">
+        {no content treadmill, no chasing the algorithm, just visibility systems that keep working long after you build them}
+      </p>
+      <p class="text-warmgray text-base mb-8 max-w-xl mx-auto">
+        For coaches, course creators and service providers who want consistent sales without living on social media, built on the exact system that took me from 0 to 7,000+ subscribers in 18 months, no ads, no algorithm.
+      </p>
+      <a href="https://kyliekelly.myflodesk.com/audience" class="btn-pink">Grab Your Next 1000 Subscribers →</a>
     </div>
 
-    <div class="max-w-5xl mx-auto grid grid-cols-3 mt-8 pt-5 border-t border-white/10 text-center">
-      <div>
-        <p class="font-serif text-3xl sm:text-4xl font-bold">7,000+</p>
-        <p class="text-xs uppercase tracking-wide text-warmgray mt-2 leading-relaxed">business owners<br />helped worldwide</p>
-      </div>
-      <div class="border-x border-white/10">
-        <p class="font-serif text-3xl sm:text-4xl font-bold">265</p>
-        <p class="text-xs uppercase tracking-wide text-warmgray mt-2 leading-relaxed">podcast episodes,<br />top 1.5% globally</p>
-      </div>
-      <div>
-        <p class="font-serif text-3xl sm:text-4xl font-bold">0</p>
-        <p class="text-xs uppercase tracking-wide text-warmgray mt-2 leading-relaxed">reels danced<br />to get there 😉</p>
+    <div class="mt-6 mb-4">
+      <div class="relative mx-auto w-[280px] sm:w-[360px] h-56 sm:h-72">
+        <div class="relative">
+          <div class="absolute top-2 left-0 w-[46%] bg-white p-2 pb-6 rounded-sm shadow-2xl -rotate-6">
+            <img src="/images/hero-1.jpg" alt="Kylie Kelly" class="w-full rounded-sm" />
+          </div>
+          <div class="absolute top-0 left-[30%] w-[48%] bg-white p-2 pb-6 rounded-sm shadow-2xl rotate-3 z-10">
+            <img src="/images/hero-2.jpg" alt="Kylie Kelly laughing" class="w-full rounded-sm" />
+          </div>
+          <div class="absolute top-16 left-[58%] w-[46%] bg-white p-2 pb-6 rounded-sm shadow-2xl -rotate-2 z-20">
+            <img src="/images/hero-7.jpg" alt="Kylie Kelly holding a disco ball" class="w-full rounded-sm" />
+          </div>
+        </div>
       </div>
     </div>
   </section>

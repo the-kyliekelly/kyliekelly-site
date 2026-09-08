@@ -6,7 +6,7 @@ const links = [
   { href: 'https://www.skool.com/email-marketing-skool/about', label: 'Free Community' },
 ];
 ---
-<header class="bg-black text-white">
+<header class="bg-white text-black">
   <nav class="max-w-6xl mx-auto flex items-center justify-between px-6 py-5">
     <a href="/" class="font-sans tracking-widest text-sm uppercase">Kylie&nbsp;|&nbsp;Kelly</a>
     <ul class="hidden md:flex items-center gap-8 text-xs uppercase tracking-wide font-medium">
@@ -14,6 +14,6 @@ const links = [
         <li><a href={link.href} class="hover:text-pink transition-colors">{link.label}</a></li>
       ))}
     </ul>
-    <a href="/services" class="btn-outline text-xs !py-2 !px-5 hidden sm:inline-block">Work With Me</a>
+    <a href="/services" class="btn-outline text-xs !py-2 !px-5 !border-pink hidden sm:inline-block">Work With Me</a>
   </nav>
 </header>
