@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@400;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,8 +9,8 @@ html {
 }
 
 body {
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
-  color: #1a1a1a;
+  font-family: 'Work Sans', 'Helvetica Neue', sans-serif;
+  color: #000000;
   background: #ffffff;
   line-height: 1.7;
 }
@@ -20,30 +20,30 @@ h1, h2, h3 {
 }
 
 .script-accent {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Playfair Display', Georgia, serif;
   font-style: italic;
 }
 
-/* Pill CTA buttons */
+/* CTA buttons */
 .btn-primary,
 .btn-pink,
 .btn-outline {
   display: inline-block;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 14px 32px;
-  border-radius: 50px;
+  border-radius: 8px;
   transition: opacity 0.2s ease;
 }
 .btn-primary {
-  background: #1a1a1a;
+  background: #000000;
   color: #ffffff;
 }
 .btn-pink {
-  background: #e040fb;
+  background: #e579df;
   color: #ffffff;
 }
 .btn-outline {
@@ -61,7 +61,7 @@ h1, h2, h3 {
 .divider-pink {
   height: 2px;
   width: 64px;
-  background: #e040fb;
+  background: #e579df;
   border: none;
 }
 

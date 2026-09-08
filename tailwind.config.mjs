@@ -4,19 +4,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        black: '#1a1a1a',
-        offwhite: '#f5f4f2',
+        black: '#000000',
+        offwhite: '#f9f1f2',
         pink: {
-          DEFAULT: '#e040fb',
-          light: '#f472b6',
+          DEFAULT: '#e579df',
+          light: '#d5b9db',
         },
         muted: '#666666',
         warmgray: '#d4d0cc',
       },
       fontFamily: {
         serif: ['Playfair Display', 'Georgia', 'serif'],
-        sans: ['Inter', 'Helvetica Neue', 'sans-serif'],
-        script: ['Cormorant Garamond', 'Georgia', 'serif'],
+        sans: ['Work Sans', 'Helvetica Neue', 'sans-serif'],
+        script: ['Playfair Display', 'Georgia', 'serif'],
       },
       borderRadius: {
         pill: '50px',
