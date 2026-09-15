@@ -1,5 +1,46 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const testimonials = [
+  {
+    quote: "I went from stuck and overwhelmed to 122 new subscribers, in just days of working with Kylie (all without social media!!) She is great at what she does!!",
+    name: 'Erin K.',
+  },
+  {
+    quote: "I've gone from 45 to currently just under 800 active subscribers in less than a month!",
+    name: 'Amy G.',
+  },
+  {
+    quote: 'I started with 231 people before I met you and now my email list is currently 643 with 412 new subscribers 🎉',
+    name: 'Celia V.',
+  },
+  {
+    quote: "I was exhausted from showing up everywhere - social media, press, LinkedIn, email, blogs. But after joining Kylie's world, I'm so much calmer. One month, one focus.",
+    name: 'Harsimrat K.',
+  },
+  {
+    quote: 'Kylie has helped me overcome email overwhelm with her clear, totally doable framework.',
+    name: 'Debra V.',
+  },
+  {
+    quote: "I have close to 500 people on my email list AND I've just gotten two course sales! In 2 months, I have had more success with this than I did in 5 years of blogging & waiting passively for subscribers (& income) to find me!",
+    name: 'Vanessa R.',
+  },
+];
+
+const tickerItems = [
+  "hater of country music {unless it's OG Tay Tay}",
+  '0 to 7,000+ subscribers in 18 months',
+  'top 1.5% podcast globally',
+  'english breakfast tea within 5 minutes of waking',
+  'never slept in makeup, not even in my 20s',
+  'built without social media',
+  'lover of oat milk lattes',
+  'ex international wedding photographer',
+  'industry speaker',
+  'really uncoordinated',
+  'always says thank you & please to Claude',
+];
 ---
 <Layout title="Kylie Kelly | Grow Your Email List Without Social Media">
 
@@ -13,17 +54,17 @@ import Layout from '../layouts/Layout.astro';
   </section>
 
   <!-- HERO, centered / Carinda-model -->
-  <section class="bg-black text-white px-6 pt-20 pb-16 text-center relative">
+  <section class="bg-black text-white px-6 pt-20 pb-8 text-center relative">
     <div class="max-w-3xl mx-auto">
       <h1 class="text-4xl sm:text-6xl font-bold leading-tight mb-6">
         Helping you get <em class="italic text-pink">known, trusted, and selling,</em><br class="hidden sm:block" />
-        with an email list and real relationships that work<br class="hidden sm:block" />
-        <em class="italic">{even when you're not online}</em>.
+        with an email list &amp; real relationships that work<br class="hidden sm:block" />
+        <em class="italic">{"{even when you're not online}"}</em>.
       </h1>
       <p class="text-pink text-sm sm:text-base uppercase tracking-wide mb-6 max-w-xl mx-auto">
-        {no content treadmill, no chasing the algorithm, just visibility systems that keep working long after you build them}
+        {"{no content treadmill, no chasing the algorithm, just visibility systems that keep working long after you build them}"}
       </p>
-      <p class="text-warmgray text-base mb-8 max-w-xl mx-auto">
+      <p class="text-white text-base mb-8 max-w-xl mx-auto">
         For coaches, course creators and service providers who want consistent sales without living on social media, built on the exact system that took me from 0 to 7,000+ subscribers in 18 months, no ads, no algorithm.
       </p>
       <a href="https://kyliekelly.myflodesk.com/audience" class="btn-pink">Grab Your Next 1000 Subscribers →</a>
@@ -47,7 +88,7 @@ import Layout from '../layouts/Layout.astro';
   </section>
 
   <!-- AS FEATURED IN -->
-  <section class="bg-white px-6 py-14">
+  <section class="bg-white px-6 py-8">
     <p class="text-center text-xs uppercase tracking-widest text-muted mb-8">As featured in:</p>
     <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
       <a href="https://www.forbes.com/advisor/business/software/email-marketing-strategy/" target="_blank" rel="noopener">
@@ -58,26 +99,55 @@ import Layout from '../layouts/Layout.astro';
         <img src="/images/press/london-daily-news.png" alt="London Daily News" class="h-10 sm:h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" />
       </a>
       <a href="https://businessmondays.co.uk/independent-business-podcast-surpasses-200-episodes-40000-downloads-highlighting-the-power-of-sustainable-growth/" target="_blank" rel="noopener">
-        <img src="/images/press/business-mondays.jpg" alt="Business Mondays" class="h-10 sm:h-12 w-auto opacity-80 hover:opacity-100 transition-opacity" />
+        <img src="/images/press/business-mondays.jpg" alt="Business Mondays" class="h-14 sm:h-16 w-auto opacity-80 hover:opacity-100 transition-opacity" />
       </a>
     </div>
   </section>
 
-  <!-- 50 A DAY CALLOUT -->
-  <section class="bg-offwhite px-6 py-16 text-center">
-    <p class="text-xs uppercase tracking-widest text-muted mb-3">Email marketing for women who are done with the algorithm</p>
-    <a href="/50-a-day" class="btn-primary">Start with 50 A Day, $27 →</a>
-  </section>
+  <div class="border-t border-dashed border-warmgray"></div>
 
-  <!-- SOCIAL PROOF -->
-  <section class="px-6 py-20">
-    <div class="max-w-3xl mx-auto text-center">
-      <p class="script-accent text-pink text-xl mb-3">what happens when you get in the right room</p>
-      <h2 class="text-3xl sm:text-4xl font-bold mb-6">$25K in revenue. 1,100+ subscribers in 7 days.<br class="hidden sm:block" /> No social media required.</h2>
-      <p class="text-muted mb-8">
-        Those results came from one aligned collaboration, being in the right rooms, and emails that actually convert. Not from posting more. Not from doing everything. From focusing on what actually moves the needle.
+  <!-- PAIN MIRROR -->
+  <section class="px-6 pt-8 pb-20">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-bold mb-6">
+          You started a business to build something real. <em class="italic text-pink font-bold">{"{not to be glued to your phone forever.}"}</em>
+        </h2>
+        <p class="text-black mb-6">
+          As a small business owner with a thousand things on your plate, doing the offer AND the marketing AND the selling, all without social media? Can be seriously hard.
+        </p>
+        <p class="text-black uppercase tracking-wide text-sm mb-4">Sound familiar?</p>
+        <ul class="text-black mb-8">
+          <li class="pb-3 mb-3 border-b border-warmgray/50 w-fit"><span class="text-pink">+</span> Maybe you're posting (or not posting) and still wondering where your next client is coming from.</li>
+          <li class="pb-3 mb-3 border-b border-warmgray/50 w-fit"><span class="text-pink">+</span> Maybe your email list has stalled, or it's growing but nobody's buying.</li>
+          <li class="pb-3 mb-3 border-b border-warmgray/50 w-fit"><span class="text-pink">+</span> Maybe you've tried Instagram, then SEO, then Pinterest, and you still don't know what works.</li>
+          <li class="pb-3 mb-3 border-b border-warmgray/50 w-fit"><span class="text-pink">+</span> Maybe you're tired of being "always on" just to stay visible.</li>
+          <li class="pb-3 mb-3 border-b border-warmgray/50 w-fit"><span class="text-pink">+</span> Maybe you know your email list is one of the few things in your business you actually own, you're not sure how to grow it without living on social media.</li>
+          <li><span class="text-pink">+</span> Or maybe you're thinking, "Kylie, that's literally all of it."</li>
+        </ul>
+        <p class="text-black font-bold mb-8">
+          One of those hit? All six? I've got you my love.<br />
+          <span class="text-pink">You're in the right place.</span>
+        </p>
+        <p class="text-black mb-6">
+          That's exactly why I built this space around it, the email strategy, the collaboration playbook, and the simpler model that takes the weight off, so your email list (and your business) can grow without you being everywhere.
+        </p>
+        <p class="text-black mb-8">
+          Because you don't need to post more, hustle harder, or carry it all alone. You need an email list that actually sells, relationships that open doors, and a system that keeps working <em class="italic">{"{even on the days you don't show up at all}"}</em>.
+        </p>
+      </div>
+      <div class="hidden md:flex items-center justify-center">
+        <div class="bg-white p-3 pb-8 rounded-sm shadow-xl rotate-3 max-w-xs">
+          <img src="/images/desk-scene.jpg" alt="" class="w-full rounded-sm" />
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto mt-6 pt-6 border-t border-warmgray/40 text-center">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">The Kylie Kelly Promise</p>
+      <p class="font-serif text-xl sm:text-2xl italic font-bold">
+        "I'm on a mission to help you get known, trusted, & selling to the right people, through email & real relationships. Never an algorithm."
       </p>
-      <a href="https://www.skool.com/email-marketing-skool/about" class="btn-pink">Join Email Marketing Skool →</a>
     </div>
   </section>
 
@@ -86,62 +156,259 @@ import Layout from '../layouts/Layout.astro';
   <!-- WAYS TO WORK TOGETHER -->
   <section class="bg-offwhite px-6 py-20">
     <div class="max-w-5xl mx-auto">
-      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-3">Ways to work together</h2>
-      <p class="text-muted text-center max-w-xl mx-auto mb-12">Each room is designed for a different stage of your journey.</p>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white rounded-lg p-8">
-          <h3 class="font-serif text-xl font-bold mb-2">1:1 Private Strategy</h3>
-          <p class="text-sm text-muted mb-4">One focused conversation to get unstuck. Your offer, your list, your launch plan, my full attention and a clear action plan.</p>
-          <p class="font-semibold mb-4">$297 USD &middot; Limited availability</p>
-          <a href="https://tidycal.com/kyliekelly/straetgy-session-website" class="btn-outline text-xs !py-2 !px-5">Book the Call →</a>
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold text-center mb-3">&mdash; Ways to Work Together &mdash;</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-3">Three steps, whichever one fits where you're at.</h2>
+      <p class="text-black italic text-center max-w-xl mx-auto mb-16">{"{no pressure to jump to the end, most people start with step one}"}</p>
+
+      <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+        <div class="flex justify-center">
+          <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 max-w-[220px]">
+            <img src="/images/hero-8.jpg" alt="Kylie Kelly" class="w-full rounded-sm" />
+          </div>
         </div>
-        <div class="bg-white rounded-lg p-8">
-          <h3 class="font-serif text-xl font-bold mb-2">The Shop</h3>
-          <p class="text-sm text-muted mb-4">Grab-and-go courses, templates and AI tools that work while you sleep. Start with 50 A Day ($27) or browse the full shop.</p>
-          <a href="https://shop.kyliekelly.com/" class="btn-outline text-xs !py-2 !px-5">Browse the Shop →</a>
+        <div>
+          <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">01</p>
+          <h3 class="text-2xl sm:text-3xl font-bold mb-1">Start for free.</h3>
+          <p class="text-xs uppercase tracking-wide text-black mb-4">Email Marketing Skool</p>
+          <p class="text-black mb-4">For online business owners who want more sales from an email list, without living on social media. Inside, you'll learn how to grow an email list of the right people, find collaborations that bring warm subscribers, turn subscribers into buyers, and build visibility without constant posting.</p>
+          <ul class="text-black text-sm space-y-2 mb-6">
+            <li><span class="text-pink">+</span> A simple 90-day growth plan</li>
+            <li><span class="text-pink">+</span> The Email Marketing Starter Kit, free on joining</li>
+            <li><span class="text-pink">+</span> Premium: live Q&amp;A, templates, and the Audience Growth Tool Vault</li>
+          </ul>
+          <a href="https://www.skool.com/email-marketing-skool/about" class="btn-pink">Start My Free Growth Plan →</a>
         </div>
-        <div class="bg-white rounded-lg p-8">
-          <h3 class="font-serif text-xl font-bold mb-2">Free Community</h3>
-          <p class="text-sm text-muted mb-4">Email Marketing Skool, where thousands of women are growing their lists without the burnout. Upgrade to premium when you're ready.</p>
-          <a href="https://www.skool.com/email-marketing-skool/about" class="btn-outline text-xs !py-2 !px-5">Join Free →</a>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+        <div class="md:order-2 flex justify-center">
+          <div class="bg-white p-2 pb-6 rounded-sm shadow-xl rotate-3 max-w-[340px]">
+            <img src="/images/shop-mockup.jpg" alt="The KK Digital Product Shop preview" class="w-full rounded-sm" />
+          </div>
+        </div>
+        <div class="md:order-1">
+          <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">02</p>
+          <h3 class="text-2xl sm:text-3xl font-bold mb-1">Grab what you need, start today.</h3>
+          <p class="text-xs uppercase tracking-wide text-black mb-4">The KK Digital Product Shop</p>
+          <p class="text-black mb-6">Grab-and-go courses, templates and trainings for growing your email list without social media, from a $17 collaboration database to a full no-social growth system.</p>
+          <a href="https://shop.kyliekelly.com/" class="btn-pink">Help me grow my email list →</a>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="flex justify-center">
+          <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 max-w-[220px]">
+            <img src="/images/desk-scene.jpg" alt="" class="w-full rounded-sm" />
+          </div>
+        </div>
+        <div>
+          <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">03</p>
+          <h3 class="text-2xl sm:text-3xl font-bold mb-1">Get my brain in your corner.</h3>
+          <p class="text-xs uppercase tracking-wide text-black mb-4">Coaching Group &middot; $297</p>
+          <p class="text-black mb-6">Weekly voice-note coaching for the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent. Real questions, real answers, all week long.</p>
+          <blockquote class="font-typewriter border-l-2 border-pink pl-4 mb-6 text-sm not-italic text-black">
+            "I legitimately feel my shoulders drop every time I listen to one of your Voxer responses&hellip; I don't need to do everything, I just need to do the next right thing."
+            <footer class="text-xs uppercase tracking-wide text-black mt-2">&mdash; Nicole Elliott</footer>
+          </blockquote>
+          <a href="https://coaching.kyliekelly.com/checkout" class="btn-pink">Get Weekly Support &amp; Answers →</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- EMPRESS METHOD -->
-  <section class="px-6 py-20">
-    <div class="max-w-4xl mx-auto text-center">
-      <p class="script-accent text-pink text-xl mb-3">the model behind the rooms I build</p>
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4">The Empress Method</h2>
-      <p class="text-muted max-w-2xl mx-auto mb-12">
-        When audience, authority, and cash work together, growth becomes simpler, steadier, and far more powerful.
-      </p>
-      <div class="grid md:grid-cols-3 gap-10 text-left">
-        <div>
-          <p class="text-pink font-semibold text-sm uppercase tracking-wide mb-2">Audience</p>
-          <p class="text-sm text-muted">Through collaborations, partnerships, podcasting, and email growth, visibility becomes relational, not performative. You're seen in rooms that already trust you.</p>
+  <!-- HAPPY CLIENTS / TESTIMONIAL SLIDER -->
+  <section class="bg-black text-white px-6 py-20">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="text-pink text-xs uppercase tracking-widest font-normal mb-3">— Happy Clients —</p>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-14">Real students. <span class="script-accent italic text-pink">Real results.</span></h2>
+      <div class="min-h-[220px] sm:min-h-[160px] flex flex-col items-center justify-center">
+        {testimonials.map((t, i) => (
+          <div class="testimonial-slide" data-index={i} style={i === 0 ? '' : 'display:none;'}>
+            <p class="font-serif text-xl sm:text-2xl leading-relaxed text-white mb-6">&ldquo;{t.quote}&rdquo;</p>
+            <p class="text-pink text-xs uppercase tracking-widest font-semibold">— {t.name}</p>
+          </div>
+        ))}
+      </div>
+      <div class="flex items-center justify-center gap-3 mt-12">
+        {testimonials.map((t, i) => (
+          <button
+            type="button"
+            class="testimonial-dot w-2.5 h-2.5 rounded-full border border-white/40 transition-colors"
+            data-index={i}
+            aria-label={`Show testimonial from ${t.name}`}
+            style={i === 0 ? 'background:#e579df;border-color:#e579df;' : 'background:transparent;'}
+          ></button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const slides = document.querySelectorAll<HTMLElement>('.testimonial-slide');
+    const dots = document.querySelectorAll<HTMLElement>('.testimonial-dot');
+    let current = 0;
+    let timer: ReturnType<typeof setInterval>;
+
+    function show(index: number) {
+      slides.forEach((s, i) => {
+        s.style.display = i === index ? '' : 'none';
+      });
+      dots.forEach((d, i) => {
+        d.style.background = i === index ? '#e579df' : 'transparent';
+        d.style.borderColor = i === index ? '#e579df' : 'rgba(255,255,255,0.4)';
+      });
+      current = index;
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        show((current + 1) % slides.length);
+      }, 6000);
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        show(parseInt(dot.dataset.index ?? '0', 10));
+        resetTimer();
+      });
+    });
+
+    if (slides.length > 0) resetTimer();
+  </script>
+
+  <!-- MEET KYLIE -->
+  <section class="bg-pink-light overflow-hidden py-3">
+    <div class="ticker-wrap flex">
+      <div class="ticker-track flex items-center gap-10 pr-10 shrink-0">
+        {tickerItems.map((item) => (
+          <span class="flex items-center gap-10 text-xs sm:text-sm uppercase tracking-widest text-black font-normal whitespace-nowrap">
+            {item}
+            <span class="text-pink text-base">+</span>
+          </span>
+        ))}
+      </div>
+      <div class="ticker-track flex items-center gap-10 pr-10 shrink-0" aria-hidden="true">
+        {tickerItems.map((item) => (
+          <span class="flex items-center gap-10 text-xs sm:text-sm uppercase tracking-widest text-black font-normal whitespace-nowrap">
+            {item}
+            <span class="text-pink text-base">+</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .ticker-wrap {
+      width: max-content;
+      animation: ticker-scroll 50s linear infinite;
+    }
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-wrap { animation: none; }
+    }
+  </style>
+
+  <section class="bg-offwhite px-6 py-20">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-[1fr_1.2fr] gap-12 items-start">
+      <div>
+        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">— Meet Kylie —</p>
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+          Kylie <span class="script-accent italic text-pink">{'{founder}'}</span> + Nick, Spencer &amp; Sammy <span class="script-accent italic text-pink">{'{my why}'}</span>.
+        </h2>
+        <p class="text-xs uppercase tracking-wide text-black font-semibold mb-6">
+          One builds the strategy. The others are why school pickup never moves.
+        </p>
+        <ul class="text-black text-sm space-y-2 mb-4">
+          <li><span class="text-pink">+</span> From 0 to 7,000+ email subscribers in 18 months, no ads, no algorithm.</li>
+          <li><span class="text-pink">+</span> A Skool community of 1,300+.</li>
+          <li><span class="text-pink">+</span> A podcast ranked in the top 1.5% globally.</li>
+        </ul>
+        <p class="text-black mb-8">
+          Built around nap times, school runs, and a genuine belief that business gets to be fun.
+        </p>
+        <a href="/meet-kylie" class="btn-pink">Get to Know Kylie →</a>
+      </div>
+      <div class="grid grid-cols-2 gap-6 items-start">
+        <div class="bg-white p-3 rounded-sm shadow-2xl -rotate-3">
+          <img src="/images/kylie-podcast.jpg" alt="Kylie Kelly" class="w-full rounded-sm" />
+          <div class="h-16 flex items-center justify-center">
+            <p class="text-center font-typewriter text-base uppercase tracking-wide text-black">Kylie</p>
+          </div>
         </div>
-        <div>
-          <p class="text-pink font-semibold text-sm uppercase tracking-wide mb-2">Authority</p>
-          <p class="text-sm text-muted">Built through trust, consistency, and leadership. Guest features, PR, media, and thought-led visibility position you as the go-to, so people don't just find you, they remember you.</p>
-        </div>
-        <div>
-          <p class="text-pink font-semibold text-sm uppercase tracking-wide mb-2">Cash</p>
-          <p class="text-sm text-muted">This is where clarity turns into income. Simple sales rhythms, scalable offers, and intentional planning. Revenue becomes steady, not stressful.</p>
+        <div class="bg-white p-3 rounded-sm shadow-2xl rotate-3 mt-10">
+          <img src="/images/little-fam.jpg" alt="Kylie with Nick, Spencer and Sammy" class="w-full rounded-sm" />
+          <div class="h-16 flex items-center justify-center">
+            <p class="text-center font-typewriter text-base uppercase tracking-wide text-black">Nick, Spencer &amp; Sammy</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- PODCAST PROMO -->
-  <section class="bg-black text-white px-6 py-20">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4">The Email Growth <span class="script-accent italic text-pink-light">Show</span></h2>
-      <p class="text-warmgray max-w-xl mx-auto mb-8">
-        Honest conversations about visibility, trust, and building a business off social media. A top 1.5% podcast, with new episodes every Friday.
+  <section class="bg-white text-black px-6 py-20 relative overflow-hidden">
+    <p class="absolute inset-0 flex items-center justify-center font-serif italic text-[5rem] sm:text-[8rem] whitespace-nowrap pointer-events-none select-none" style="color:rgba(0,0,0,0.04);">
+      PODCAST PODCAST
+    </p>
+    <div class="max-w-5xl mx-auto relative">
+      <div class="grid md:grid-cols-2 gap-10 items-center mb-24">
+        <div>
+          <p class="text-pink text-xs uppercase tracking-widest font-normal mb-4">The Email Growth Show ⭐️⭐️⭐️⭐️⭐️</p>
+          <h2 class="font-serif text-4xl sm:text-5xl leading-tight text-black">
+            The top 1.5% podcast for women growing an email list <em class="italic font-bold text-pink">without social media</em><span class="text-pink">.</span>
+          </h2>
+        </div>
+        <div>
+          <p class="text-black mb-6">
+            Your go-to podcast for coaches, course creators and online business owners who want to grow an email list and make consistent sales, without relying on social media or paid ads.
+            <br /><br />
+            New episodes every Friday.
+          </p>
+          <a href="/podcast" class="btn-pink">Listen to All Episodes →</a>
+        </div>
+      </div>
+      <div class="relative max-w-3xl mx-auto">
+        <div class="absolute -inset-6 rounded-3xl blur-2xl opacity-50 bg-pink"></div>
+        <div class="relative bg-offwhite rounded-sm shadow-2xl p-2 sm:p-3">
+        <iframe
+          title="The Email Growth Show"
+          allowtransparency="true"
+          height="450"
+          width="100%"
+          style="border: none; min-width: 100%;"
+          scrolling="no"
+          data-name="pb-iframe-player"
+          src="https://www.buzzsprout.com/2065148?client_source=small_player&iframe=true"
+          loading="lazy"
+        ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREE AI AUDIENCE GROWTH TOOL -->
+  <section class="bg-white px-6 py-20">
+    <div class="max-w-xl mx-auto text-center">
+      <p class="text-pink text-xs uppercase tracking-widest font-normal mb-4">Free AI Audience Growth Tool</p>
+      <h2 class="text-3xl sm:text-4xl font-bold italic mb-6 leading-tight text-black">
+        Not sure what to focus on to <br /><span class="text-pink">grow your email list?</span>
+      </h2>
+      <p class="text-black mb-10">
+        Answer 6 quick questions and get the list-building strategy most likely to work for your business right now.
       </p>
-      <a href="/podcast" class="btn-pink">Listen to the Podcast →</a>
+      <form action="https://form.flodesk.com/forms/6a389632c69dbd7193980270/submit" method="post" class="max-w-sm mx-auto text-left">
+        <p class="font-serif text-2xl mb-1 text-black text-center">Get instant access:</p>
+        <p class="italic text-xs text-pink text-center mb-6">{'{Takes less than 5 minutes - instant results}'}</p>
+        <input type="text" name="firstName" placeholder="First name" required class="w-full mb-4 px-4 py-3 border border-warmgray rounded-sm bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+        <input type="text" name="email" placeholder="Email address" required class="w-full mb-4 px-4 py-3 border border-warmgray rounded-sm bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+        <input type="text" name="confirm_email_address" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
+        <button type="submit" class="btn-pink w-full">Yes, Build My Plan →</button>
+      </form>
     </div>
   </section>
 

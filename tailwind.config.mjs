@@ -17,6 +17,7 @@ export default {
         serif: ['Playfair Display', 'Georgia', 'serif'],
         sans: ['Work Sans', 'Helvetica Neue', 'sans-serif'],
         script: ['Playfair Display', 'Georgia', 'serif'],
+        typewriter: ['Courier New', 'Courier', 'monospace'],
       },
       borderRadius: {
         pill: '50px',

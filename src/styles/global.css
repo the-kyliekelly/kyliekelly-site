@@ -31,11 +31,11 @@ h1, h2, h3 {
   display: inline-block;
   font-family: 'Work Sans', sans-serif;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 14px 32px;
-  border-radius: 8px;
+  border-radius: 0;
   transition: opacity 0.2s ease;
 }
 .btn-primary {
