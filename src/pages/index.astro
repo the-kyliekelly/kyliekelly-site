@@ -372,16 +372,17 @@ const tickerItems = [
           <a href="/podcast" class="btn-pink">Listen to All Episodes →</a>
         </div>
       </div>
-      <div class="relative max-w-3xl mx-auto">
+      <p class="text-center text-pink text-xs uppercase tracking-widest font-semibold mb-4">↓ Scroll The Player To Browse Every Episode &amp; Hit Play ↓</p>
+      <div class="relative max-w-4xl mx-auto">
         <div class="absolute -inset-6 rounded-3xl blur-2xl opacity-50 bg-pink"></div>
         <div class="relative bg-offwhite rounded-sm shadow-2xl p-2 sm:p-3">
         <iframe
           title="The Email Growth Show"
           allowtransparency="true"
-          height="450"
+          height="600"
           width="100%"
-          style="border: none; min-width: 100%;"
-          scrolling="no"
+          style="border: none; min-width: 100%; overflow-y: auto;"
+          scrolling="yes"
           data-name="pb-iframe-player"
           src="https://www.buzzsprout.com/2065148?client_source=small_player&iframe=true"
           loading="lazy"
