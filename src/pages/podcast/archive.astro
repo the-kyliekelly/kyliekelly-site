@@ -8,9 +8,15 @@ const featuredSlugs = new Set([
   'plan-rest-of-year-without-burning-out',
 ]);
 
+function extractEpisodeNumber(post) {
+  const match = post.content.match(/EPISODE\s+(\d+)/i) || post.title.match(/\[?Ep\.?\s*#?(\d+)\]?/i) || post.content.match(/\[?Ep\.?\s*#?(\d+)\]?/i);
+  return match ? match[1] : null;
+}
+
 const archivePosts = allPosts
   .filter((p) => !featuredSlugs.has(p.slug))
   .map((p) => ({
+    num: extractEpisodeNumber(p),
     title: p.title,
     date: new Date(p.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
     href: `/${p.slug}/`,
@@ -76,15 +82,47 @@ const episodes = [
       </div>
 
       <h2 class="text-2xl font-bold text-center mb-10">The Full Archive</h2>
-      <div class="divide-y divide-warmgray/40">
-        {archivePosts.map((p) => (
-          <a href={p.href} class="flex flex-wrap items-baseline justify-between gap-2 py-4 hover:text-pink">
-            <span class="font-semibold">{p.title}</span>
-            <span class="text-xs uppercase tracking-wide text-muted whitespace-nowrap">{p.date}</span>
+    </div>
+  </section>
+
+  <section class="bg-black text-white px-6 py-16">
+    <div class="max-w-5xl mx-auto">
+      <div id="archive-grid" class="grid sm:grid-cols-2">
+        {archivePosts.map((p, i) => (
+          <a href={p.href} class="archive-item flex gap-5 py-7 sm:px-6 border-b border-white/15 hover:opacity-70 transition-opacity" data-index={i}>
+            <span class="font-serif italic text-pink text-3xl shrink-0 w-10">{p.num ?? '—'}</span>
+            <span>
+              <span class="block font-semibold leading-snug mb-2">{p.title}</span>
+              <span class="block text-xs uppercase tracking-widest text-warmgray">{p.date}</span>
+            </span>
           </a>
         ))}
       </div>
+      <div class="text-center mt-12">
+        <button id="load-more-btn" class="btn-pink">See More Episodes →</button>
+      </div>
     </div>
   </section>
+
+  <style>
+    .archive-item.hidden { display: none; }
+  </style>
+
+  <script>
+    const PAGE_SIZE = 20;
+    const items = Array.from(document.querySelectorAll('.archive-item'));
+    const btn = document.getElementById('load-more-btn');
+    let shown = 0;
+
+    function showNext() {
+      items.slice(shown, shown + PAGE_SIZE).forEach((el) => el.classList.remove('hidden'));
+      shown += PAGE_SIZE;
+      if (shown >= items.length && btn) btn.style.display = 'none';
+    }
+
+    items.forEach((el) => el.classList.add('hidden'));
+    showNext();
+    btn?.addEventListener('click', showNext);
+  </script>
 
 </Layout>
