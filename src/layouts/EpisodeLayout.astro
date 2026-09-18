@@ -1,0 +1,120 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  epNumber: string;
+  meta?: string;
+  guestName?: string;
+  guestHref?: string;
+  prevHref?: string;
+  prevLabel?: string;
+  nextHref?: string;
+  nextLabel?: string;
+}
+
+const { title, description, epNumber, meta, guestName, guestHref, prevHref, prevLabel, nextHref, nextLabel } = Astro.props;
+---
+<Layout title={title} description={description}>
+
+  <section class="bg-pink-light px-6 py-4">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+      Wife. Mom of two boys. Founder of Kylie Kelly. Host of The Email Growth Show.
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+    </p>
+  </section>
+
+  <article class="px-6 py-16">
+    <div class="max-w-2xl mx-auto">
+
+      <header class="text-center mb-12">
+        <a href="/podcast/archive" class="inline-block mb-6 text-sm font-semibold underline underline-offset-2 hover:text-pink">← Back to the episode library</a>
+        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Ep {epNumber}{meta ? ` · ${meta}` : ''}</p>
+        <h1 class="text-3xl sm:text-4xl font-bold leading-tight">{title.split(' | ')[0]}</h1>
+        {guestName && (
+          <p class="text-muted mt-4">With <a href={guestHref} class="font-semibold underline underline-offset-2 hover:text-pink" target="_blank" rel="noopener">{guestName}</a></p>
+        )}
+      </header>
+
+      <div class="episode-body">
+        <slot />
+      </div>
+
+      <div class="flex flex-col sm:flex-row justify-between gap-4 mt-16 pt-8 border-t border-warmgray/40 text-sm font-semibold">
+        {prevHref ? <a href={prevHref} class="underline underline-offset-2 hover:text-pink">← {prevLabel}</a> : <span />}
+        {nextHref ? <a href={nextHref} class="underline underline-offset-2 hover:text-pink">{nextLabel} →</a> : <a href="/podcast/archive" class="underline underline-offset-2 hover:text-pink">Browse all episodes →</a>}
+      </div>
+
+    </div>
+  </article>
+
+</Layout>
+
+<style>
+  .episode-body :global(p) {
+    font-size: 1.05rem;
+    color: #222;
+    margin: 0 0 20px;
+  }
+  .episode-body :global(h2) {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 44px 0 16px;
+  }
+  .episode-body :global(h3) {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #e579df;
+    margin: 28px 0 12px;
+  }
+  .episode-body :global(blockquote) {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    border-left: 3px solid #e579df;
+    padding-left: 22px;
+    margin: 28px 0;
+  }
+  .episode-body :global(a) {
+    color: #e579df;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .episode-body :global(.embed-box) {
+    margin: 26px 0;
+  }
+  .episode-body :global(.embed-placeholder) {
+    background: #f9f1f2;
+    border-radius: 12px;
+    padding: 26px 28px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  .episode-body :global(details.transcript) {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin: 32px 0;
+  }
+  .episode-body :global(details.transcript summary) {
+    cursor: pointer;
+    padding: 18px 24px;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .episode-body :global(details.transcript .t-body) {
+    padding: 0 24px 24px;
+    font-size: 0.95rem;
+    color: #3c3c3c;
+  }
+  .episode-body :global(details.transcript .t-body p) {
+    margin: 0 0 16px;
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const episodes = [
+  {
+    num: '265',
+    meta: 'Solo Episode · 26 Min Listen · 4 Min Read',
+    title: "The Low-Lift Way I'm Growing My List Right Now",
+    desc: "Back in 2022, tiny audio pop-up events grew my list by 100–150 people at a time. I brought them back this year, small and low-lift, one a month. Here's what actually happened with the first one, including the $97 offer that sold exactly once.",
+    href: '/podcast/episodes/low-lift-email-list-growth/',
+  },
+  {
+    num: '264',
+    meta: 'With Anita Mack · 28 Min Listen · 5 Min Read',
+    title: 'Claude, Claude Code, and the Chrome Extension: How to Actually Delegate to Claude',
+    desc: 'My biz bestie Anita Mack breaks down Claude.ai vs Claude Code vs the Chrome extension, the "human-AI sandwich," and how she built a full sales page with Claude in under two hours.',
+    href: '/podcast/episodes/claude-claude-code-chrome-extension-delegate/',
+  },
+  {
+    num: '260',
+    meta: 'With Katherine Mackenzie-Smith',
+    title: 'How to Plan the Rest of Your Year Without Burning Out',
+    desc: "Katherine Mackenzie-Smith on why copying someone else's business system rarely works, how to review the first half of your year before planning the second, and why a 90-day plan beats a 12-month one.",
+    href: '/podcast/episodes/plan-rest-of-year-without-burning-out/',
+  },
+];
+---
+<Layout title="Episode Library | The Email Growth Show | Kylie Kelly" description="Every episode of The Email Growth Show, newest first, with full show notes one click away.">
+
+  <section class="bg-pink-light px-6 py-4">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+      Wife. Mom of two boys. Founder of Kylie Kelly. Host of The Email Growth Show.
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+    </p>
+  </section>
+
+  <section class="bg-offwhite px-6 py-16 text-center">
+    <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Episode Library</p>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">Every episode. Every show note. One place.</h1>
+    <p class="text-muted max-w-md mx-auto mb-6">Looking for a past episode? Newest first, full show notes one click away.</p>
+    <a href="/podcast" class="text-sm font-semibold underline underline-offset-2 hover:text-pink">← Back to the podcast home</a>
+  </section>
+
+  <section class="px-6 py-16">
+    <div class="max-w-3xl mx-auto">
+      {episodes.map((ep) => (
+        <div class="grid sm:grid-cols-[90px_1fr] gap-6 py-8 border-b border-warmgray/40 first:pt-0">
+          <p class="font-serif italic text-3xl text-pink">{ep.num}</p>
+          <div>
+            <p class="text-xs uppercase tracking-widest font-semibold text-muted mb-2">{ep.meta}</p>
+            <h3 class="text-xl font-bold mb-3">{ep.title}</h3>
+            <p class="text-black text-sm mb-4 max-w-xl">{ep.desc}</p>
+            <a href={ep.href} class="text-sm font-semibold underline underline-offset-2 hover:text-pink">Read the show notes →</a>
+          </div>
+        </div>
+      ))}
+
+      <div class="bg-offwhite rounded-lg p-8 text-center mt-10">
+        <p class="text-muted">New episodes every Friday. This library grows every week, come back for more.</p>
+      </div>
+    </div>
+  </section>
+
+</Layout>

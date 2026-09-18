@@ -1,0 +1,16 @@
+---
+interface Props {
+  kicker: string;
+  title: string;
+  description: string;
+  ctaLabel: string;
+  ctaHref: string;
+}
+const { kicker, title, description, ctaLabel, ctaHref } = Astro.props;
+---
+<div class="bg-black text-white rounded-lg px-8 py-10 my-10 text-center">
+  <p class="font-serif italic text-pink text-xl mb-2">{kicker}</p>
+  <h3 class="text-2xl font-bold mb-3">{title}</h3>
+  <p class="text-warmgray max-w-md mx-auto mb-6">{description}</p>
+  <a href={ctaHref} class="btn-pink">{ctaLabel}</a>
+</div>

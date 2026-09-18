@@ -1,0 +1,13 @@
+---
+interface Props {
+  name: string;
+  bio: string;
+  href: string;
+}
+const { name, bio, href } = Astro.props;
+---
+<div class="bg-offwhite rounded-lg p-7 my-7">
+  <p class="font-serif font-bold text-lg mb-2">About {name}</p>
+  <p class="text-sm text-black mb-3">{bio}</p>
+  <a href={href} target="_blank" rel="noopener" class="text-sm font-semibold hover:text-pink">Visit {name.split(' ')[0]}'s site →</a>
+</div>

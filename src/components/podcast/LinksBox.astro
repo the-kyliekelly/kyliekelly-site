@@ -1,0 +1,12 @@
+---
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+---
+<div class="border border-black rounded-lg px-7 py-6 my-7">
+  <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Links Mentioned</p>
+  <div class="space-y-2 text-sm">
+    {items.map((item) => <p set:html={`→ ${item}`} />)}
+  </div>
+</div>

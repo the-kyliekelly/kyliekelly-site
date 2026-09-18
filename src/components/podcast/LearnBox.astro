@@ -1,0 +1,12 @@
+---
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+---
+<div class="bg-offwhite rounded-lg px-7 py-6 my-7">
+  <p class="text-xs uppercase tracking-widest font-semibold mb-3">What You'll Learn In This Episode</p>
+  <ul class="space-y-2 text-sm">
+    {items.map((item) => <li><span class="text-pink">+</span> {item}</li>)}
+  </ul>
+</div>
