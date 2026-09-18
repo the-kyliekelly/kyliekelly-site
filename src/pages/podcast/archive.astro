@@ -1,5 +1,20 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import allPosts from '../../data/blog-posts.json';
+
+const featuredSlugs = new Set([
+  'low-lift-email-list-growth',
+  'claude-claude-code-chrome-extension-delegate',
+  'plan-rest-of-year-without-burning-out',
+]);
+
+const archivePosts = allPosts
+  .filter((p) => !featuredSlugs.has(p.slug))
+  .map((p) => ({
+    title: p.title,
+    date: new Date(p.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+    href: `/${p.slug}/`,
+  }));
 
 const episodes = [
   {
@@ -56,8 +71,18 @@ const episodes = [
         </div>
       ))}
 
-      <div class="bg-offwhite rounded-lg p-8 text-center mt-10">
+      <div class="bg-offwhite rounded-lg p-8 text-center mt-10 mb-16">
         <p class="text-muted">New episodes every Friday. This library grows every week, come back for more.</p>
+      </div>
+
+      <h2 class="text-2xl font-bold text-center mb-10">The Full Archive</h2>
+      <div class="divide-y divide-warmgray/40">
+        {archivePosts.map((p) => (
+          <a href={p.href} class="flex flex-wrap items-baseline justify-between gap-2 py-4 hover:text-pink">
+            <span class="font-semibold">{p.title}</span>
+            <span class="text-xs uppercase tracking-wide text-muted whitespace-nowrap">{p.date}</span>
+          </a>
+        ))}
       </div>
     </div>
   </section>

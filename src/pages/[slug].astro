@@ -1,0 +1,25 @@
+---
+import BlogPostLayout from '../layouts/BlogPostLayout.astro';
+import posts from '../data/blog-posts.json';
+
+export async function getStaticPaths() {
+  // These already have a hand-built, richer page under /podcast/episodes/ —
+  // skip them here so we don't publish duplicate content at two URLs.
+  const handBuiltSlugs = new Set([
+    'low-lift-email-list-growth',
+    'claude-claude-code-chrome-extension-delegate',
+    'plan-rest-of-year-without-burning-out',
+  ]);
+  return posts
+    .filter((post) => !handBuiltSlugs.has(post.slug))
+    .map((post) => ({
+      params: { slug: post.slug },
+      props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+---
+<BlogPostLayout title={post.title} description={post.excerpt} date={post.date}>
+  <Fragment set:html={post.content} />
+</BlogPostLayout>
