@@ -1,37 +1,81 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Contact Kylie Kelly | Email Marketing Educator" description="Questions, collaborations, or podcast invitations? Get in touch with Kylie Kelly. Replies within 48 hours, Monday to Friday AEST.">
+<Layout title="Contact | Kylie Kelly" description="Questions, collaborations, or podcast invitations? Get in touch with Kylie Kelly. Replies within 48 hours, Monday to Friday AEST.">
 
-  <section class="bg-black text-white px-6 py-20">
-    <div class="max-w-2xl mx-auto text-center">
-      <h1 class="text-4xl sm:text-5xl font-bold mb-6">Let's start the conversation that puts your name on the map.</h1>
+  <!-- TAG BAR -->
+  <section class="bg-pink-light px-6 py-4">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+      Wife. Mom of two boys. Founder of Kylie Kelly. Host of The Email Growth Show.
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+    </p>
+  </section>
+
+  <!-- HERO -->
+  <section class="bg-black text-white px-6 py-20 text-center">
+    <div class="max-w-2xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Get In Touch</p>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-6">Say hey. I'd love to hear from you.</h1>
       <p class="text-warmgray">
-        Got a question, collaboration idea, or want to work together? I'd love to hear from you. Send me a message and I'll get back to you within 48 hours, Monday to Friday AEST.
+        Got a question, a collaboration idea, or want to work together? Pop it in the form below and it'll land straight in my inbox <span class="italic">{'{not a chatbot, not a VA, just me}'}</span>.
       </p>
-      <p class="text-warmgray mt-4">Or email me directly at <a href="mailto:hello@kyliekelly.com" class="text-pink-light underline">hello@kyliekelly.com</a></p>
     </div>
   </section>
 
-  <section class="px-6 py-16">
-    <form class="max-w-lg mx-auto space-y-4">
-      <div>
-        <label for="name" class="block text-xs uppercase tracking-wide text-muted mb-1">Name</label>
-        <input id="name" name="name" type="text" class="w-full border border-warmgray rounded-md px-4 py-3" required />
+  <!-- GET IN TOUCH -->
+  <section class="px-6 py-20">
+    <div class="max-w-4xl mx-auto grid md:grid-cols-[0.85fr_1.15fr] gap-12 items-start">
+
+      <!-- info card -->
+      <div class="bg-offwhite rounded-lg p-8">
+        <div class="w-24 h-24 rounded-full overflow-hidden mb-6">
+          <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling" class="w-full h-full object-cover" />
+        </div>
+        <h2 class="text-xl font-bold mb-3">Prefer to email direct?</h2>
+        <p class="text-black text-sm mb-6">That works too. I read every single one myself.</p>
+
+        <div class="mb-6">
+          <p class="text-xs uppercase tracking-widest font-semibold text-muted mb-2">Email</p>
+          <a href="mailto:hello@kyliekelly.com" class="font-semibold hover:text-pink">hello@kyliekelly.com</a>
+          <p class="text-sm text-muted mt-1">I get back to everyone within 48 hours, Monday to Friday AEST.</p>
+        </div>
+
+        <div class="mb-6">
+          <p class="text-xs uppercase tracking-widest font-semibold text-muted mb-2">Elsewhere</p>
+          <a href="https://www.instagram.com/the_kyliekelly/" class="font-semibold underline underline-offset-2 hover:text-pink">Instagram</a>
+        </div>
+
+        <div>
+          <p class="text-xs uppercase tracking-widest font-semibold text-muted mb-2">Free Community</p>
+          <a href="https://www.skool.com/email-marketing-skool/about" class="font-semibold underline underline-offset-2 hover:text-pink">Email Marketing Skool →</a>
+        </div>
       </div>
+
+      <!-- form -->
       <div>
-        <label for="email" class="block text-xs uppercase tracking-wide text-muted mb-1">Email</label>
-        <input id="email" name="email" type="email" class="w-full border border-warmgray rounded-md px-4 py-3" required />
+        <h2 class="text-2xl font-bold mb-3">Ask away, I can't wait to connect.</h2>
+        <p class="text-muted mb-8 max-w-md">Got a question about working together, a collaboration, or the podcast? Fill this in and I'll be in your inbox soon.</p>
+
+        <form class="space-y-5" action="mailto:hello@kyliekelly.com" method="post" enctype="text/plain">
+          <div>
+            <label for="name" class="block text-xs uppercase tracking-wide font-semibold mb-2">Name *</label>
+            <input id="name" name="Name" type="text" required class="w-full border border-warmgray rounded-md px-4 py-3 focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+          </div>
+          <div>
+            <label for="email" class="block text-xs uppercase tracking-wide font-semibold mb-2">Email *</label>
+            <input id="email" name="Email" type="email" required class="w-full border border-warmgray rounded-md px-4 py-3 focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+          </div>
+          <div>
+            <label for="message" class="block text-xs uppercase tracking-wide font-semibold mb-2">How can I help? *</label>
+            <textarea id="message" name="Message" rows="5" required class="w-full border border-warmgray rounded-md px-4 py-3 focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink"></textarea>
+          </div>
+          <button type="submit" class="btn-pink">Send It →</button>
+          <p class="text-xs text-muted">This opens your email app with your message ready to send to hello@kyliekelly.com.</p>
+        </form>
       </div>
-      <div>
-        <label for="message" class="block text-xs uppercase tracking-wide text-muted mb-1">Message</label>
-        <textarea id="message" name="message" rows="5" class="w-full border border-warmgray rounded-md px-4 py-3" required></textarea>
-      </div>
-      <button type="submit" class="btn-primary w-full">Send Message</button>
-      <p class="text-xs text-muted text-center">
-        Note: wire this up to your form handler of choice (Formspree, Resend, etc.) once live, it's just markup for now.
-      </p>
-    </form>
+
+    </div>
   </section>
 
 </Layout>

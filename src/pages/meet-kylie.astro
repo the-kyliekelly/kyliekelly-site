@@ -1,52 +1,204 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const timeline = [
+  { label: '10+ years', text: "I was an international wedding photographer. I loved the work. I did not love wondering when the next booking would land." },
+  { label: '2020', text: "Two kids under two and a global pause I did not see coming. I knew I didn't want to build a business that depended on being online every single day. I just didn't know what would work instead." },
+  { label: 'The moment', text: "I sat down and actually looked at how many people my daily Instagram posts were sending to my website. Almost none. All that effort, and there was nothing to show for it. Not sales. Not clients. Not even clicks. That was the moment I stopped chasing the algorithm." },
+  { label: '18 months later', text: "0 to 7,000+ email subscribers. No ads. No algorithm. Just email, collaborations, and relationships that actually work." },
+  { label: 'Since then', text: "I started The Email Growth Show (now a top 1.5% podcast globally), built Email Marketing Skool (1,300+ women and counting), and helped hundreds of women grow their own lists the same simple way." },
+  { label: 'Right now', text: "I'm building toward a business that can help thousands of women whether I'm online that day or not. Fewer hours on calls. More simple tools that keep working after I've done the school run." },
+];
+
+const listicle = [
+  {
+    title: 'I believe in...',
+    items: [
+      'Business gets easier when more of the right people know you exist.',
+      'Relationships over algorithms, every time.',
+      'Your email list is one of the few things in your business you actually own.',
+      'Simple usually beats complicated.',
+      "Consistency isn't about being perfect, it's about showing up often enough that people remember you.",
+    ],
+  },
+  {
+    title: 'Daily rituals:',
+    items: [
+      'English Breakfast tea within 5 minutes of waking.',
+      'An oat milk latte before lunch, non negotiable.',
+      'Checking my email metrics the way other people check the weather.',
+    ],
+  },
+  {
+    title: 'At school pickup you can find me:',
+    items: ['Slightly late.', 'Somehow still uncoordinated.', "Already thinking about tomorrow's voice note to my coaching group."],
+  },
+  {
+    title: "I don't have time for:",
+    items: [
+      "An algorithm that changes its mind every six months.",
+      "Content for content's sake.",
+      'Pretending a business has to be complicated to be taken seriously.',
+    ],
+  },
+];
+
+const paths = [
+  {
+    num: '01',
+    title: 'Start for free.',
+    text: 'Join Email Marketing Skool for a simple 90-day growth plan, the Email Marketing Starter Kit, and a free community of 1,300+ women doing the same work.',
+    cta: 'Start My Free Growth Plan →',
+    href: 'https://www.skool.com/email-marketing-skool/about',
+  },
+  {
+    num: '02',
+    title: 'Grab what you need.',
+    text: 'Browse the KK Digital Product Shop for grab-and-go courses, templates and trainings for growing your list without social media.',
+    cta: 'Help Me Grow My Email List →',
+    href: 'https://shop.kyliekelly.com/',
+  },
+  {
+    num: '03',
+    title: 'Get my brain in your corner.',
+    text: 'Join the Coaching Group for weekly voice-note coaching on the real questions: offer clarity, launch strategy, what to prioritise when everything feels urgent.',
+    cta: 'Get Weekly Support & Answers →',
+    href: '/services',
+  },
+];
 ---
 <Layout title="Meet Kylie Kelly | Email Marketing Educator & Podcast Host" description="From burnt-out wedding photographer to a multi six-figure business built entirely on email. Meet Kylie Kelly, host of The Email Growth Show.">
 
+  <!-- TAG BAR -->
+  <section class="bg-pink-light px-6 py-4">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+      Wife. Mom of two boys. Founder of Kylie Kelly. Host of The Email Growth Show.
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+    </p>
+  </section>
+
+  <!-- HERO -->
   <section class="bg-black text-white px-6 py-20">
-    <div class="max-w-3xl mx-auto">
-      <p class="script-accent text-pink text-xl mb-3">hi, I'm Kylie</p>
-      <h1 class="text-4xl sm:text-5xl font-bold mb-6">I'm Kylie Kelly...</h1>
-      <p class="text-warmgray mb-4">
-        I help women stop chasing visibility and start building it properly. The kind that leads to trust. Demand. And clients who already know they want to work with you.
-      </p>
-      <p class="text-warmgray">
-        I teach a quieter, more intentional way to grow: through email, collaborations, podcasting, and thoughtfully built rooms that do the selling for you. No paid ads. No content treadmill. No pretending you enjoy showing up every day.
-      </p>
-    </div>
-  </section>
-
-  <section class="px-6 py-16">
-    <div class="max-w-3xl mx-auto grid grid-cols-3 text-center gap-6 mb-16">
-      <div><p class="font-serif text-3xl font-bold">15+</p><p class="text-xs uppercase tracking-wide text-muted mt-2">years self-employed</p></div>
-      <div><p class="font-serif text-3xl font-bold">7k+</p><p class="text-xs uppercase tracking-wide text-muted mt-2">clients helped &amp; supported</p></div>
-      <div><p class="font-serif text-3xl font-bold">18</p><p class="text-xs uppercase tracking-wide text-muted mt-2">months to grow her list without social or paid ads</p></div>
-    </div>
-
-    <div class="max-w-2xl mx-auto space-y-10">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
       <div>
-        <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-1">2020&ndash;2022</p>
-        <p class="text-muted">Rebuilding her life while trying to rebuild an income. Two kids. A global pause. A lot of uncertainty. She knew that if she wanted stability, she couldn't rely on algorithms or luck.</p>
+        <p class="script-accent text-pink text-xl mb-3">hi, I'm Kylie</p>
+        <h1 class="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
+          I help women get known, trusted, and <em class="italic text-pink">selling</em>, without living on social media.
+        </h1>
+        <p class="text-warmgray mb-4">
+          I spent ten years chasing wedding bookings, then a few more chasing likes for a business that wasn't paying the bills. And honestly? I'm done chasing anything now.
+        </p>
+        <p class="text-warmgray mb-8">
+          These days I build audiences the slower, sturdier way. Email lists. Real relationships. Rooms worth being in. No algorithm required.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/services" class="btn-pink">Work With Me →</a>
+          <a href="https://www.skool.com/email-marketing-skool/about" class="btn-outline !border-white text-white">Join The Free Community</a>
+        </div>
       </div>
-      <div>
-        <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-1">May 2022</p>
-        <p class="text-muted">Hosted her first online room. No fancy funnel, no audience hype. Just the right people, in the right space. Her email list grew quickly and her first online sales came in quietly, consistently, and without social media noise.</p>
-      </div>
-      <div>
-        <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-1">September 2022</p>
-        <p class="text-muted">The moment it clicked: visibility didn't need to be louder. It needed to be intentional.</p>
-      </div>
-      <div>
-        <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-1">2023&ndash;now</p>
-        <p class="text-muted">Built another room, then another. Same outcome. More trust, more momentum, more ease. What mattered wasn't the platform, it was the container.</p>
+      <div class="bg-white p-3 pb-8 rounded-sm shadow-2xl rotate-2 max-w-xs mx-auto">
+        <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="w-full rounded-sm aspect-[4/5] object-cover" />
       </div>
     </div>
   </section>
 
+  <!-- HONEST SECTION -->
+  <section class="px-6 py-16 text-center">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl font-bold mb-8">You didn't start a business to live on your phone.</h2>
+      <div class="text-left space-y-3 mb-8">
+        <p class="text-black"><span class="text-pink">+</span> Maybe you're posting (or not posting) and still wondering where your next client is coming from.</p>
+        <p class="text-black"><span class="text-pink">+</span> Maybe your list has stalled, or it's growing and nobody's buying.</p>
+        <p class="text-black"><span class="text-pink">+</span> Maybe you've tried Instagram, then SEO, then Pinterest, and you still don't know what actually works.</p>
+        <p class="text-black">I've asked myself every single one of those questions. More than once.</p>
+      </div>
+      <p class="font-serif italic text-pink text-xl">Here's the short version of how I found some answers.</p>
+    </div>
+  </section>
+
+  <!-- STATS -->
   <section class="bg-offwhite px-6 py-16">
-    <div class="max-w-2xl mx-auto text-center">
-      <h2 class="text-2xl sm:text-3xl font-bold mb-6">Let's build a visibility strategy that actually feels good, one that attracts aligned leads, gets you known in your industry, and gives you more time for the life you're actually building all of this for.</h2>
-      <a href="/services" class="btn-primary">Explore Working Together →</a>
+    <div class="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 text-center gap-6">
+      <div><p class="font-serif text-3xl font-bold">0→7,000+</p><p class="text-xs uppercase tracking-wide text-muted mt-2">subscribers in 18 months</p></div>
+      <div><p class="font-serif text-3xl font-bold">Top 1.5%</p><p class="text-xs uppercase tracking-wide text-muted mt-2">The Email Growth Show, globally</p></div>
+      <div><p class="font-serif text-3xl font-bold">1,300+</p><p class="text-xs uppercase tracking-wide text-muted mt-2">women in Email Marketing Skool</p></div>
+      <div><p class="font-serif text-3xl font-bold">2</p><p class="text-xs uppercase tracking-wide text-muted mt-2">small boys who make sure school pickup never moves</p></div>
+    </div>
+  </section>
+
+  <!-- ORIGIN / TIMELINE -->
+  <section class="bg-black text-white px-6 py-20">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16">
+        <p class="text-pink-light text-xs uppercase tracking-widest font-semibold mb-3">How it all unfolded</p>
+        <h2 class="font-serif italic text-3xl sm:text-4xl font-normal">The short version of a very long story.</h2>
+      </div>
+      <div class="grid md:grid-cols-[0.8fr_1.2fr] gap-12 items-start">
+        <div class="bg-white p-2 pb-6 rounded-sm shadow-2xl -rotate-2 max-w-xs mx-auto">
+          <img src="/images/kylie-photography.jpg" alt="Kylie working as a wedding photographer, shooting a bride and groom by a pool" class="w-full rounded-sm aspect-[4/5] object-cover" />
+        </div>
+        <div class="border-l border-white/20 pl-8 space-y-8">
+          {timeline.map((t) => (
+            <div class="relative">
+              <span class="absolute -left-[34px] top-1.5 w-2 h-2 rounded-full bg-pink"></span>
+              <p class="text-pink-light text-xs uppercase tracking-widest font-semibold mb-2">{t.label}</p>
+              <p class="text-warmgray">{t.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BIO LISTICLE -->
+  <section class="px-6 py-20">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14">
+        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">A few more things about me</p>
+        <h2 class="text-3xl sm:text-4xl font-bold">Because a bio never tells the whole story.</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {listicle.map((card) => (
+          <div class="bg-offwhite rounded-lg p-6">
+            <h3 class="font-serif italic text-lg mb-4">{card.title}</h3>
+            <ul class="text-sm text-black space-y-3">
+              {card.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAMILY -->
+  <section class="bg-pink-light px-6 py-16 text-center">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl font-bold mb-5">
+        Kylie <span class="script-accent italic">{'{founder}'}</span> + Nick, Spencer &amp; Sammy <span class="script-accent italic">{'{my why}'}</span>.
+      </h2>
+      <p class="text-black mb-3">One of us builds the strategy. The other three are why school pickup never moves.</p>
+      <p class="text-black mb-6">This business is built around nap times, school runs, and a genuine belief that it gets to be fun. If it doesn't fit around my real life, it's not a plan I'm interested in running.</p>
+      <p class="font-serif italic text-lg">Cheering you on always, Kylie xx</p>
+    </div>
+  </section>
+
+  <!-- CHOOSE YOUR PATH -->
+  <section class="bg-offwhite px-6 py-20 text-center">
+    <div class="max-w-5xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Ways to keep going</p>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-3">Now that you know me, here's where to go next.</h2>
+      <p class="text-muted max-w-xl mx-auto mb-14">Three steps, whichever one fits where you're at. No pressure to jump to the end, most people start with step one.</p>
+      <div class="grid md:grid-cols-3 gap-6 text-left">
+        {paths.map((p) => (
+          <div class="bg-white border border-black rounded-lg p-8 flex flex-col">
+            <p class="font-serif italic text-pink text-4xl mb-2">{p.num}</p>
+            <h3 class="text-xl font-bold mb-3">{p.title}</h3>
+            <p class="text-sm text-muted mb-6 flex-grow">{p.text}</p>
+            <a href={p.href} class="btn-outline text-center">{p.cta}</a>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 

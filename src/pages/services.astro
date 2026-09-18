@@ -1,65 +1,202 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const packages = [
-  { name: 'Reset', sub: '4 Week Reboot', price: '$2,200', desc: "Stop the spiral. Two calls plus weekday voice support. We clear the bottlenecks and hand you a 30-day plan you can execute immediately." },
-  { name: 'Momentum', sub: '90 Day Sprint', price: '$5,500', desc: "Six calls, weekday voice support, my eyes on every asset you ship. Expect list growth, polished offers, and sales you can screenshot." },
-  { name: 'Empire', sub: '6 Month Package', price: '$9,500', desc: "Twelve calls, weekday support, vault access, and warm intros to my network. We expand your reach, stack recurring revenue, and position you as the name people drop in rooms you haven't even walked in." },
+const offers = [
+  {
+    num: '01',
+    eyebrow: 'Start For Free',
+    title: 'Email Marketing Skool',
+    tag: 'Free',
+    tagSub: '· Premium from $59/month',
+    desc: "For online business owners who want more sales from an email list, without living on social media. Inside, you'll learn how to grow an email list of the right people, find collaborations that bring warm subscribers, turn subscribers into buyers, and build visibility without constant posting.",
+    items: [
+      'A simple 90-day growth plan',
+      'The Email Marketing Starter Kit, free on joining',
+      'Premium: live Q&A, templates, and the Audience Growth Tool Vault',
+    ],
+    cta: 'Start My Free Growth Plan →',
+    href: 'https://www.skool.com/email-marketing-skool/about',
+    quote: null,
+    flip: false,
+    id: 'door-01',
+  },
+  {
+    num: '02',
+    eyebrow: 'Grab What You Need, Start Today',
+    title: 'The KK Digital Product Shop',
+    tag: 'From $17',
+    tagSub: '',
+    desc: 'Grab-and-go courses, templates and trainings for growing your email list without social media. Start with a $17 collaboration database, or go straight for 50 a Day ($27), my system for growing your list by 50 new subscribers a day, no social media required.',
+    items: [
+      '50 a Day, the full audience growth system built on my V2 framework',
+      'Templates and trainings you can put to work the same day',
+      'New tools added as I build them, from $17 up',
+    ],
+    cta: 'Help Me Grow My Email List →',
+    href: 'https://shop.kyliekelly.com/',
+    quote: null,
+    flip: true,
+    id: 'door-02',
+  },
+  {
+    num: '03',
+    eyebrow: 'Get My Brain In Your Corner',
+    title: 'Coaching Group',
+    tag: '$297',
+    tagSub: '',
+    desc: 'Weekly voice-note coaching for the real questions, offer clarity, launch strategy, what to prioritise when everything feels urgent. Real questions, real answers, all week long, straight to your phone.',
+    items: [],
+    cta: 'Get Weekly Support & Answers →',
+    href: 'https://coaching.kyliekelly.com/checkout',
+    quote: { text: "I legitimately feel my shoulders drop every time I listen to one of your Voxer responses… I don't need to do everything, I just need to do the next right thing.", name: 'Nicole Elliott' },
+    flip: false,
+    id: 'door-03',
+  },
 ];
 ---
-<Layout title="Work with Kylie | Email Marketing for Female Biz Owners" description="Growing your visibility and email list is just one step away.">
+<Layout title="Work With Me | Kylie Kelly" description="Three ways to work with Kylie Kelly, whichever door fits where your business is at right now. No algorithm required.">
 
-  <section class="bg-black text-white px-6 py-20">
+  <!-- TAG BAR -->
+  <section class="bg-pink-light px-6 py-4">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+      Three ways to work with me. No algorithm required.
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+    </p>
+  </section>
+
+  <!-- HERO -->
+  <section class="bg-black text-white px-6 py-20 text-center">
     <div class="max-w-3xl mx-auto">
-      <h1 class="text-4xl sm:text-5xl font-bold mb-6">You're working your ass off, but for what? Let's fix that.</h1>
-      <p class="text-warmgray mb-8">
-        You're everywhere. Launching. Posting. Tweaking your offers for the hundredth time. And yet, nothing's moving. Not because you're lazy, but because you're duct-taping strategies together and hoping for magic.
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Ways To Work With Me</p>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
+        I don't think you need another strategy. I think you need the <em class="italic text-pink">right</em> one for right now.
+      </h1>
+      <p class="text-warmgray max-w-xl mx-auto mb-10">
+        Three ways to work with me, whichever fits where your business is at today. No wrong door, promise. Most people start with door one.
       </p>
-      <a href="https://tidycal.com/kyliekelly/chemistry-call" class="btn-pink">Book the Call or Keep Guessing. Your Move.</a>
-    </div>
-  </section>
-
-  <section class="px-6 py-16">
-    <div class="max-w-2xl mx-auto grid sm:grid-cols-2 gap-10">
-      <div>
-        <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-3">This is for you if...</p>
-        <ul class="text-sm text-muted space-y-2">
-          <li>+ You'd rather make money than excuses</li>
-          <li>+ You're tired of second-guessing every move and want focus</li>
-          <li>+ You take fast action once you have a plan</li>
-          <li>+ You're done hiding and ready to get loud about your offers</li>
-        </ul>
-      </div>
-      <div>
-        <p class="text-xs uppercase tracking-wide font-semibold mb-3 text-muted">Not for you if...</p>
-        <ul class="text-sm text-muted space-y-2">
-          <li>&minus; You want someone else to do the work</li>
-          <li>&minus; You collect freebies like Pok&eacute;mon cards</li>
-          <li>&minus; Honest feedback makes you spiral instead of taking action</li>
-        </ul>
+      <div class="flex flex-wrap gap-3 justify-center text-xs uppercase tracking-widest font-semibold">
+        <a href="#door-01" class="border border-white/40 text-warmgray hover:border-pink hover:text-pink px-5 py-2.5 transition-colors">01 · Start Free</a>
+        <a href="#door-02" class="border border-white/40 text-warmgray hover:border-pink hover:text-pink px-5 py-2.5 transition-colors">02 · The Shop</a>
+        <a href="#door-03" class="border border-white/40 text-warmgray hover:border-pink hover:text-pink px-5 py-2.5 transition-colors">03 · Coaching</a>
       </div>
     </div>
   </section>
 
-  <section class="bg-offwhite px-6 py-16">
-    <div class="max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold text-center mb-12">How I'll help you succeed</h2>
-      <div class="grid md:grid-cols-3 gap-8">
-        {packages.map((p) => (
-          <div class="bg-white rounded-lg p-8">
-            <p class="text-pink text-xs uppercase tracking-wide font-semibold mb-1">{p.sub}</p>
-            <h3 class="font-serif text-2xl font-bold mb-3">{p.name}</h3>
-            <p class="font-semibold mb-4">{p.price} investment</p>
-            <p class="text-sm text-muted">{p.desc}</p>
+  <!-- SOUND FAMILIAR -->
+  <section class="px-6 py-20 text-center">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl font-bold mb-8">Maybe one of these sounds familiar.</h2>
+      <div class="text-left space-y-3 mb-8">
+        <p class="text-black"><span class="text-pink">+</span> Maybe you're posting (or not posting) and still wondering where your next client is coming from.</p>
+        <p class="text-black"><span class="text-pink">+</span> Maybe your email list has stalled, or it's growing but nobody's buying.</p>
+        <p class="text-black"><span class="text-pink">+</span> Maybe you've tried Instagram, then SEO, then Pinterest, and you still don't know what actually works.</p>
+        <p class="text-black"><span class="text-pink">+</span> Or maybe you just don't know which of these three doors is the one to start with.</p>
+      </div>
+      <p class="font-serif italic text-pink text-xl">Good news, there's a place to start no matter which one is true.</p>
+    </div>
+  </section>
+
+  <!-- DOORS INTRO -->
+  <section class="bg-offwhite px-6 py-16 text-center">
+    <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Ways To Work Together</p>
+    <h2 class="text-3xl sm:text-4xl font-bold mb-3">Choose your own adventure.</h2>
+    <p class="text-muted max-w-md mx-auto">Three steps. No pressure to jump to the end, most people start with step one.</p>
+  </section>
+
+  <!-- OFFERS -->
+  {offers.map((o, i) => (
+    <section id={o.id} class={`px-6 py-20 ${i % 2 === 1 ? 'bg-offwhite' : 'bg-white'}`}>
+      <div class={`max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center`}>
+        <div class={o.flip ? 'md:order-2 flex justify-center' : 'flex justify-center'}>
+          <div class={`bg-white p-3 pb-8 rounded-sm shadow-2xl max-w-xs ${o.flip ? 'rotate-2' : '-rotate-2'}`}>
+            {o.num === '01' ? (
+              <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="w-full rounded-sm aspect-[4/5] object-cover" />
+            ) : (
+              <div class="w-full aspect-[4/5] rounded-sm flex items-center justify-center text-center p-6" style={o.num === '02' ? 'background:linear-gradient(160deg,#d5b9db,#e579df);' : 'background:linear-gradient(200deg,#e579df,#d5b9db);'}>
+                <span class="font-serif italic text-white text-2xl leading-snug">{o.num === '02' ? '50 a Day & more' : 'Weekly Voxer Coaching'}</span>
+              </div>
+            )}
           </div>
-        ))}
+        </div>
+        <div class={o.flip ? 'md:order-1' : ''}>
+          <p class="font-serif italic text-pink text-5xl mb-2">{o.num}</p>
+          <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-2">{o.eyebrow}</p>
+          <h2 class="text-3xl font-bold mb-2">{o.title}</h2>
+          <p class="text-xs uppercase tracking-wide font-semibold mb-5">
+            <span class="text-pink">{o.tag}</span> {o.tagSub}
+          </p>
+          <p class="text-black mb-5">{o.desc}</p>
+          {o.items.length > 0 && (
+            <ul class="text-sm text-black space-y-2 mb-6">
+              {o.items.map((item) => <li><span class="text-pink">+</span> {item}</li>)}
+            </ul>
+          )}
+          {o.quote && (
+            <blockquote class="font-typewriter border-l-2 border-pink pl-4 mb-6 text-sm not-italic text-black">
+              "{o.quote.text}"
+              <footer class="text-xs uppercase tracking-wide text-black mt-2">— {o.quote.name}</footer>
+            </blockquote>
+          )}
+          <a href={o.href} class="btn-pink">{o.cta}</a>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- DECIDER -->
+  <section class="bg-black text-white px-6 py-20 text-center">
+    <div class="max-w-5xl mx-auto">
+      <p class="text-pink-light text-xs uppercase tracking-widest font-semibold mb-3">Still Deciding?</p>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-14">Not sure which door is yours? Here's a shortcut.</h2>
+      <div class="grid md:grid-cols-3 gap-6 text-left">
+        <div class="border border-white/20 p-7">
+          <p class="font-serif italic text-lg mb-3">Just getting serious about email?</p>
+          <p class="text-warmgray text-sm">Start with the free community. Get the 90-day plan and the starter kit before you spend a thing.</p>
+        </div>
+        <div class="border border-white/20 p-7">
+          <p class="font-serif italic text-lg mb-3">Know exactly what you need?</p>
+          <p class="text-warmgray text-sm">Head to the shop. Grab the training that solves your one specific problem and put it to work today.</p>
+        </div>
+        <div class="border border-white/20 p-7">
+          <p class="font-serif italic text-lg mb-3">Want eyes on your business weekly?</p>
+          <p class="text-warmgray text-sm">Join coaching. Bring me the real questions, I'll bring you the next right thing to do about them.</p>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- WHAT'S NEXT -->
   <section class="px-6 py-16 text-center">
-    <p class="text-muted mb-6">Book Your Chemistry Call &rarr; Pick Your Package &rarr; Get Moving</p>
-    <a href="https://tidycal.com/kyliekelly/chemistry-call" class="btn-primary">Book Your Chemistry Call Now →</a>
+    <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">What's Next</p>
+    <h2 class="text-2xl sm:text-3xl font-bold mb-4 max-w-xl mx-auto">Bigger ways to work together are coming in 2027.</h2>
+    <p class="text-muted max-w-xl mx-auto">I'm building toward more signature programs and deeper support, the kind of offers that take longer to get right. For now, these three doors are exactly where I'm putting my energy, and honestly, I think that's exactly where they should be.</p>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="bg-pink-light px-6 py-16 text-center">
+    <div class="max-w-2xl mx-auto">
+      <p class="font-serif italic text-xl leading-relaxed mb-5">"I went from stuck and overwhelmed to 122 new subscribers, in just days of working with Kylie (all without social media!!) She is great at what she does!!"</p>
+      <p class="text-xs uppercase tracking-widest font-semibold">— Erin K.</p>
+    </div>
+  </section>
+
+  <!-- CLOSING NOTE -->
+  <section class="px-6 py-20 text-center">
+    <div class="max-w-xl mx-auto">
+      <h2 class="text-2xl sm:text-3xl font-bold mb-5">Whichever door you pick, you don't have to figure this out alone anymore.</h2>
+      <p class="text-black mb-1">I built these three ways to work together because I know business doesn't look the same for everyone, and it shouldn't have to. Start where you're at. Move to the next door when you're ready, not before.</p>
+      <p class="font-serif italic text-pink text-lg mt-5">Cheering you on always, Kylie xx</p>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="bg-black text-white px-6 py-20 text-center">
+    <h2 class="text-3xl sm:text-4xl font-bold mb-8 max-w-xl mx-auto">Ready to stop guessing and pick a door?</h2>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="https://www.skool.com/email-marketing-skool/about" class="btn-pink">Start Free →</a>
+      <a href="https://shop.kyliekelly.com/" class="btn-outline !border-white text-white">Browse The Shop →</a>
+    </div>
   </section>
 
 </Layout>
