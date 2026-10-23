@@ -1,0 +1,80 @@
+---
+// A row of stats that count up from 0 the first time they scroll into view.
+// Usage: <CountUpStats stats={[{ value: 250, suffix: '+', label: 'Episodes' }]} dark />
+// Props per stat: value (number), label, prefix?, suffix?. Set dark for a black or dark background.
+// The final number is in the HTML, so it is correct without JavaScript and for screen readers.
+interface Stat {
+  value: number;
+  label: string;
+  prefix?: string;
+  suffix?: string;
+}
+interface Props {
+  stats: Stat[];
+  dark?: boolean;
+}
+const { stats, dark = false } = Astro.props;
+
+const decimalsOf = (n: number) => (String(n).split('.')[1] || '').length;
+const format = (n: number) => {
+  const d = decimalsOf(n);
+  return n.toLocaleString('en-AU', { minimumFractionDigits: d, maximumFractionDigits: d });
+};
+---
+<dl class:list={['grid gap-10 text-center', stats.length >= 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-1 sm:grid-cols-3']}>
+  {stats.map((s) => (
+    <div>
+      <dt class:list={['text-xs uppercase tracking-widest order-2 mt-2', dark ? 'text-white' : 'text-black']}>{s.label}</dt>
+      <dd
+        class="font-serif text-4xl sm:text-5xl font-bold text-pink tabular-nums whitespace-nowrap"
+        data-countup
+        data-value={s.value}
+        data-decimals={decimalsOf(s.value)}
+      >
+        <span aria-hidden="true">{s.prefix && <span class="text-[0.5em] mr-1 align-baseline">{s.prefix}</span>}<span data-num>{format(s.value)}</span>{s.suffix}</span>
+        <span class="sr-only">{s.prefix}{format(s.value)}{s.suffix}</span>
+      </dd>
+    </div>
+  ))}
+</dl>
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>('[data-countup]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const fmt = (n: number, d: number) =>
+    n.toLocaleString('en-AU', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+  function run(el: HTMLElement) {
+    const target = Number(el.dataset.value);
+    const d = Number(el.dataset.decimals);
+    const out = el.querySelector<HTMLElement>('[data-num]')!;
+    const start = performance.now();
+    const duration = 1500;
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      out.textContent = fmt(target * eased, d);
+      if (t < 1) requestAnimationFrame(tick);
+      else out.textContent = fmt(target, d);
+    };
+    requestAnimationFrame(tick);
+  }
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          io.unobserve(entry.target);
+          run(entry.target as HTMLElement);
+        });
+      },
+      { threshold: 0.6 }
+    );
+    els.forEach((el) => {
+      el.querySelector<HTMLElement>('[data-num]')!.textContent = fmt(0, Number(el.dataset.decimals));
+      io.observe(el);
+    });
+  }
+</script>

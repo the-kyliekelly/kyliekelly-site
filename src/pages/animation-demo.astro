@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Highlight from '../components/Highlight.astro';
+import CountUpStats from '../components/CountUpStats.astro';
+import FooterMarquee from '../components/FooterMarquee.astro';
+---
+<Layout title="Animation demo" noindex>
+  <section class="bg-white px-6 py-24">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="text-pink text-xs uppercase tracking-widest mb-4">1. Highlight</p>
+      <h2 class="font-serif text-4xl sm:text-5xl leading-tight text-black">
+        Grow your email list <Highlight>without social media</Highlight>, and keep it growing while you sleep.
+      </h2>
+      <p class="text-black mt-6">Scroll this into view to see the marker draw once. It also wraps cleanly across lines on a narrow screen.</p>
+    </div>
+  </section>
+
+  <section class="bg-black px-6 py-24">
+    <div class="max-w-4xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest mb-10 text-center">2. Count-up stats (dark)</p>
+      <CountUpStats dark stats={[
+        { value: 250, suffix: '+', label: 'Episodes' },
+        { value: 50000, suffix: '+', label: 'Downloads' },
+        { value: 70, suffix: '+', label: 'Five-star reviews' },
+        { prefix: 'Top ', value: 1.5, suffix: '%', label: 'Podcasts globally' },
+      ]} />
+    </div>
+  </section>
+
+  <section class="bg-offwhite px-6 py-24">
+    <div class="max-w-4xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest mb-10 text-center">2. Count-up stats (light, three stats)</p>
+      <CountUpStats stats={[
+        { value: 250, suffix: '+', label: 'Episodes' },
+        { value: 50000, suffix: '+', label: 'Downloads' },
+        { value: 70, suffix: '+', label: 'Five-star reviews' },
+      ]} />
+    </div>
+  </section>
+
+  <section class="bg-black px-6 pt-20 pb-6 overflow-hidden">
+    <p class="text-pink text-xs uppercase tracking-widest mb-6 text-center">3. Footer marquee</p>
+    <FooterMarquee />
+  </section>
+</Layout>

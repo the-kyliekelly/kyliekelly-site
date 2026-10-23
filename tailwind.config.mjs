@@ -7,7 +7,7 @@ export default {
         black: '#000000',
         offwhite: '#f9f1f2',
         pink: {
-          DEFAULT: '#e579df',
+          DEFAULT: '#e040fb',
           light: '#d5b9db',
         },
         muted: '#666666',

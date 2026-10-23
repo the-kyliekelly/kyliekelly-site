@@ -236,7 +236,7 @@ const tickerItems = [
             class="testimonial-dot w-2.5 h-2.5 rounded-full border border-white/40 transition-colors"
             data-index={i}
             aria-label={`Show testimonial from ${t.name}`}
-            style={i === 0 ? 'background:#e579df;border-color:#e579df;' : 'background:transparent;'}
+            style={i === 0 ? 'background:#e040fb;border-color:#e040fb;' : 'background:transparent;'}
           ></button>
         ))}
       </div>
@@ -254,8 +254,8 @@ const tickerItems = [
         s.style.display = i === index ? '' : 'none';
       });
       dots.forEach((d, i) => {
-        d.style.background = i === index ? '#e579df' : 'transparent';
-        d.style.borderColor = i === index ? '#e579df' : 'rgba(255,255,255,0.4)';
+        d.style.background = i === index ? '#e040fb' : 'transparent';
+        d.style.borderColor = i === index ? '#e040fb' : 'rgba(255,255,255,0.4)';
       });
       current = index;
     }

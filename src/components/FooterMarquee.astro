@@ -1,0 +1,58 @@
+---
+// Giant brand name drifting slowly and endlessly across a band. Decorative only.
+// Usage: <FooterMarquee /> or <FooterMarquee text="Kylie Kelly" seconds={60} />
+// Put it on a dark band (the text is a soft white). With reduced motion it stays still.
+interface Props {
+  text?: string;
+  seconds?: number;
+}
+const { text = 'Kylie Kelly', seconds = 60 } = Astro.props;
+const copies = [0, 1, 2, 3];
+---
+<div class="marquee" aria-hidden="true" style={`--marquee-seconds:${seconds}s`}>
+  <div class="track">
+    {[0, 1].map(() => (
+      <div class="group">
+        {copies.map(() => (
+          <span class="item">{text}<span class="sep">.</span></span>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    width: 100%;
+    line-height: 1;
+  }
+  .track {
+    display: flex;
+    width: max-content;
+    animation: drift var(--marquee-seconds) linear infinite;
+  }
+  .group {
+    display: flex;
+    flex: none;
+  }
+  .item {
+    flex: none;
+    padding-right: 0.5em;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(5rem, 14vw, 13rem);
+    color: rgba(255, 255, 255, 0.16);
+    white-space: nowrap;
+  }
+  .sep {
+    color: #e040fb;
+  }
+  @keyframes drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .track { animation: none; }
+  }
+</style>

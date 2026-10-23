@@ -35,7 +35,7 @@ h1, h2, h3 {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 14px 32px;
-  border-radius: 0;
+  border-radius: 999px;
   transition: opacity 0.2s ease;
 }
 .btn-primary {
@@ -43,7 +43,7 @@ h1, h2, h3 {
   color: #ffffff;
 }
 .btn-pink {
-  background: #e579df;
+  background: #e040fb;
   color: #ffffff;
 }
 .btn-outline {
@@ -61,7 +61,7 @@ h1, h2, h3 {
 .divider-pink {
   height: 2px;
   width: 64px;
-  background: #e579df;
+  background: #e040fb;
   border: none;
 }
 
