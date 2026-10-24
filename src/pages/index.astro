@@ -70,29 +70,29 @@ const tickerItems = [
       </h1>
       <p class="text-white text-base mb-10">For coaches, course creators and service providers.</p>
 
-      <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-4 sm:gap-5 max-w-xs sm:max-w-none mx-auto">
+      <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-4 sm:gap-5 lg:gap-6 max-w-xs sm:max-w-none mx-auto">
         {heroPills.map((pill) => (
           <a
             href={pill.href}
-            class="group flex items-center justify-between gap-5 bg-white text-black rounded-full pl-6 pr-2 py-2 text-[15px] font-semibold shadow-[0_8px_22px_rgba(224,64,251,0.18)] transition-transform duration-300 hover:-translate-y-1"
+            class="group flex items-center justify-between gap-5 bg-white text-black rounded-full pl-6 pr-2 py-2 lg:pl-7 lg:py-2.5 lg:pr-2.5 text-[15px] lg:text-base font-semibold shadow-[0_8px_22px_rgba(224,64,251,0.18)] transition-transform duration-300 hover:-translate-y-1"
           >
             <span>{pill.label}</span>
-            <span class={`grid place-items-center h-10 w-10 rounded-full transition-colors duration-300 ${pill.dot}`}>
-              <svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
+            <span class={`grid place-items-center h-10 w-10 lg:h-12 lg:w-12 rounded-full transition-colors duration-300 ${pill.dot}`}>
+              <svg viewBox="0 0 16 16" class="h-4 w-4 lg:h-5 lg:w-5 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
             </span>
           </a>
         ))}
       </div>
     </div>
 
-    <div class="flex justify-center items-start mt-16 sm:mt-20 h-[210px] sm:h-[260px]">
-      <div class="flex-none w-[118px] sm:w-[190px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] shadow-2xl -rotate-6 translate-y-3 -mr-[10px] sm:-mr-[14px]">
+    <div class="flex justify-center items-start mt-16 sm:mt-20 h-[210px] sm:h-[260px] lg:h-[330px]">
+      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl -rotate-6 translate-y-3 -mr-[10px] sm:-mr-[14px] lg:-mr-[18px]">
         <img src="/images/hero-1.jpg" alt="Kylie Kelly" class="block w-full" />
       </div>
-      <div class="flex-none w-[118px] sm:w-[190px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] shadow-2xl rotate-2 z-10">
+      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl rotate-2 z-10">
         <img src="/images/hero-2.jpg" alt="Kylie Kelly laughing" class="block w-full" />
       </div>
-      <div class="flex-none w-[118px] sm:w-[190px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] shadow-2xl -rotate-2 translate-y-2 -ml-[10px] sm:-ml-[14px] z-20">
+      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl -rotate-2 translate-y-2 -ml-[10px] sm:-ml-[14px] lg:-ml-[18px] z-20">
         <img src="/images/hero-7.jpg" alt="Kylie Kelly holding a disco ball" class="block w-full" />
       </div>
     </div>
