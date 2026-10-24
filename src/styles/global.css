@@ -116,3 +116,21 @@ h1, h2, h3 {
     box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.4);
   }
 }
+
+/* Magenta waveform that "plays" on the podcast cards. Static bars with reduced motion. */
+.wave { display: flex; align-items: center; justify-content: space-between; gap: 3px; height: 40px; }
+.wave i {
+  display: block;
+  flex: none;
+  width: 3px;
+  height: 100%;
+  border-radius: 999px;
+  background: #e040fb;
+  transform: scaleY(var(--h, 0.5));
+  animation: wave-bounce 1.15s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes wave-bounce {
+  0%, 100% { transform: scaleY(var(--h, 0.5)); }
+  50% { transform: scaleY(calc(var(--h, 0.5) * 0.3 + 0.12)); }
+}

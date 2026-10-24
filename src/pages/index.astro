@@ -39,26 +39,76 @@ const heroPills = [
   { label: 'Work with me', href: '/services', dot: 'border-2 border-black bg-black text-white group-hover:bg-white group-hover:text-black' },
 ];
 
-// Signature course spotlight. Nothing renders until show is true and the copy is filled in.
+// Signature course spotlight. Fill in href with the course link when it is ready.
 const signatureCourse = {
-  show: false,
+  show: true,
   eyebrow: 'My signature course',
   name: 'The Money Making Email System',
-  tagline: '',
-  description: '',
-  buttonLabel: '',
-  href: '',
+  tagline: '{A simple system for growing your list and selling to it, without social media.}',
+  description: 'I grew my email list from zero to 7,000+ without social media, and my revenue still comes from that list today. This is how I do it, from your first subscriber to your first sale.',
+  buttonLabel: 'See what’s inside',
+  href: '', // add the course link here; until then the button does nothing when clicked
   image: '/images/hero-2.jpg',
   imageAlt: 'Kylie Kelly',
 };
 
-// Latest three episodes, read from the episode library at build time.
+// Latest episodes: read from the podcast feed at build time, with the episode library as a backup.
 const handBuiltEpisodes = new Set([
   'low-lift-email-list-growth',
   'claude-claude-code-chrome-extension-delegate',
   'plan-rest-of-year-without-burning-out',
 ]);
-const latestEpisodes = episodePosts
+const knownEpisodePages = new Set(episodePosts.map((p) => p.slug));
+
+const decodeText = (text) =>
+  text
+    .replace(/<!\[CDATA\[|\]\]>/g, '')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .trim();
+const feedTag = (item, name) => {
+  const m = item.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`));
+  return m ? decodeText(m[1]) : null;
+};
+const formatDate = (d) => new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+
+async function loadFeedEpisodes() {
+  try {
+    const res = await fetch('https://feeds.buzzsprout.com/2065148.rss', { signal: AbortSignal.timeout(8000) });
+    if (!res.ok) return [];
+    const xml = await res.text();
+    return (xml.match(/<item>[\s\S]*?<\/item>/g) ?? [])
+      .map((item) => {
+        const num = feedTag(item, 'itunes:episode');
+        if (!num) return null;
+        const title = (feedTag(item, 'title') ?? '').replace(/\s*\[Ep\.?\s*\d+\]\s*$/i, '');
+        const rawDuration = feedTag(item, 'itunes:duration') ?? '';
+        const seconds = rawDuration.includes(':')
+          ? rawDuration.split(':').reduce((acc, part) => acc * 60 + Number(part), 0)
+          : Number(rawDuration);
+        const siteSlug = (feedTag(item, 'link') ?? '').match(/kyliekelly\.com\/([^/]+)\/?$/)?.[1];
+        const audio = item.match(/<enclosure[^>]*url="([^"]+)"/)?.[1] ?? '';
+        const listenPage = audio.replace(/\.(mp3|m4a)(\?.*)?$/, '');
+        return {
+          num,
+          mins: seconds ? String(Math.round(seconds / 60)) : null,
+          title,
+          date: formatDate(feedTag(item, 'pubDate')),
+          href: siteSlug && knownEpisodePages.has(siteSlug)
+            ? (handBuiltEpisodes.has(siteSlug) ? `/podcast/episodes/${siteSlug}/` : `/${siteSlug}/`)
+            : listenPage,
+        };
+      })
+      .filter((e) => e && e.href);
+  } catch {
+    return [];
+  }
+}
+
+const libraryEpisodes = episodePosts
   .map((p) => {
     const ep = p.excerpt.match(/EP\s*(\d+)/i);
     if (!ep) return null;
@@ -67,14 +117,18 @@ const latestEpisodes = episodePosts
       num: ep[1],
       mins: mins ? mins[1] : null,
       title: p.title,
-      date: new Date(p.date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }),
+      date: formatDate(p.date),
       href: handBuiltEpisodes.has(p.slug) ? `/podcast/episodes/${p.slug}/` : `/${p.slug}/`,
     };
   })
-  .filter(Boolean)
-  .sort((x, y) => Number(y.num) - Number(x.num))
-  .slice(0, 3);
-const episodeCount = latestEpisodes.length ? Number(latestEpisodes[0].num) : 265;
+  .filter(Boolean);
+
+const feedEpisodes = await loadFeedEpisodes();
+const allEpisodes = (feedEpisodes.length ? feedEpisodes : libraryEpisodes).sort((x, y) => Number(y.num) - Number(x.num));
+const wave = (seed) =>
+  Array.from({ length: 36 }, (_, i) => Number((0.22 + 0.78 * Math.abs(Math.sin(i * 0.6 + seed) * Math.cos(i * 0.27 + seed * 1.7))).toFixed(2)));
+const latestEpisodes = allEpisodes.slice(0, 3).map((ep, i) => ({ ...ep, bars: wave(i * 2.3 + (Number(ep.num) % 7)) }));
+const episodeCount = allEpisodes.length ? Number(allEpisodes[0].num) : 266;
 
 const tickerItems = [
   "hater of country music {unless it's OG Tay Tay}",
@@ -160,7 +214,7 @@ const tickerItems = [
   <section class="bg-white px-6 pt-12 pb-14 sm:pt-14 sm:pb-16 text-center border-t border-black/10">
     <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">The Kylie Kelly Promise</p>
     <p class="font-serif font-normal italic text-[18px] sm:text-[22px] lg:text-[25px] leading-[1.45] max-w-[38em] mx-auto text-black text-balance">
-      I'm on a mission to <strong class="font-bold">help you get known, trusted, and selling to the right people</strong>. Built on the system that took me from 0 to 7,000 subscribers in 18 months - <span class="whitespace-nowrap"><Highlight>I want you to have consistent sales</Highlight></span> from visibility systems that keep working long after you build them.
+      I'm on a mission to <strong class="font-bold">help you get known, trusted, and selling to the right people</strong>. Built on the system that took me from 0 to 7,000+ subscribers in 18 months - <span class="whitespace-nowrap"><Highlight>I want you to have consistent sales</Highlight></span> from visibility systems that keep working long after you build them.
     </p>
   </section>
 
@@ -314,8 +368,8 @@ const tickerItems = [
           <h2 class="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.02] text-white mb-5 text-balance">{signatureCourse.name}</h2>
           {signatureCourse.tagline && <p class="text-xl sm:text-2xl font-bold leading-snug mb-5">{signatureCourse.tagline}</p>}
           {signatureCourse.description && <p class="text-black text-lg mb-8 max-w-lg">{signatureCourse.description}</p>}
-          {signatureCourse.href && signatureCourse.buttonLabel && (
-            <a href={signatureCourse.href} class="inline-block rounded-full bg-white text-black px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-pink-light">{signatureCourse.buttonLabel} →</a>
+          {signatureCourse.buttonLabel && (
+            <a href={signatureCourse.href || '#'} {...(signatureCourse.href ? {} : { onclick: 'return false' })} class="inline-block rounded-full bg-white text-black px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-pink-light">{signatureCourse.buttonLabel} →</a>
           )}
         </div>
         <div class="relative mx-auto w-full max-w-[340px] md:max-w-none pt-6 pl-6 sm:pt-8 sm:pl-8">
@@ -496,7 +550,10 @@ const tickerItems = [
           <li>
             <a href={ep.href} class="group flex h-full flex-col rounded-3xl border border-black/5 bg-offwhite p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
               <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Ep {ep.num}{ep.mins && ` · ${ep.mins} min listen`}</p>
-              <h3 class="font-serif text-2xl leading-snug text-black mb-8 text-balance">{ep.title}</h3>
+              <h3 class="font-serif text-2xl leading-snug text-black mb-6 text-balance">{ep.title}</h3>
+              <div class="wave mb-7" aria-hidden="true">
+                {ep.bars.map((h, i) => <i style={`--h:${h};--d:${((i * 7) % 11) * 0.1}s`}></i>)}
+              </div>
               <div class="mt-auto flex items-center justify-between gap-4">
                 <span class="text-xs uppercase tracking-widest text-black/70">{ep.date}</span>
                 <span class="grid h-12 w-12 flex-none place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black group-hover:text-white" aria-hidden="true">
@@ -516,7 +573,7 @@ const tickerItems = [
         <CountUpStats stats={[
           { value: episodeCount, label: 'Episodes' },
           { value: 54000, suffix: '+', label: 'Downloads' },
-          { prefix: 'Top ', value: 1.5, suffix: '%', label: 'Podcasts globally' },
+          { prefix: 'TOP ', value: 1.5, suffix: '%', label: 'Podcasts globally' },
         ]} />
       </div>
     </div>
