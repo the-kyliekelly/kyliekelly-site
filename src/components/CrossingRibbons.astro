@@ -1,0 +1,94 @@
+---
+// Two coloured bands tilted in opposite directions, crossing in an X, with text drifting in opposite directions. Decorative only.
+// Usage: <CrossingRibbons /> or <CrossingRibbons first={['EMAIL', 'PODCAST']} second={['AUDIENCE', 'REVENUE']} />
+// With reduced motion the bands stay still.
+interface Props {
+  first?: string[];
+  second?: string[];
+}
+const {
+  first = ['EMAIL', 'COLLABORATIONS', 'SUMMITS', 'PODCAST', 'COMMUNITY'],
+  second = ['AUDIENCE', 'RELATIONSHIPS', 'REVENUE'],
+} = Astro.props;
+
+const bands = [
+  { words: first, repeat: 2, cls: 'band-a', track: 'to-left', seconds: 70 },
+  { words: second, repeat: 3, cls: 'band-b', track: 'to-right', seconds: 85 },
+];
+---
+<div class="ribbons" aria-hidden="true">
+  {bands.map((b) => (
+    <div class={`band ${b.cls}`}>
+      <div class={`track ${b.track}`} style={`--seconds:${b.seconds}s`}>
+        {[0, 1].map(() => (
+          <div class="group">
+            {Array.from({ length: b.repeat }).map(() =>
+              b.words.map((w) => (
+                <span class="item">{w}<span class="slash">/</span></span>
+              ))
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .ribbons {
+    position: relative;
+    overflow: hidden;
+    height: clamp(150px, 27vw, 340px);
+  }
+  .band {
+    position: absolute;
+    left: -10%;
+    width: 120%;
+    overflow: hidden;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.9rem, 4.6vw, 4.2rem);
+    line-height: 1.12;
+    padding-block: 0.12em;
+    white-space: nowrap;
+  }
+  .band-a {
+    top: 40%;
+    background: #d5b9db;
+    color: #000;
+    transform: translateY(-50%) rotate(-5deg);
+  }
+  .band-b {
+    top: 60%;
+    background: #e040fb;
+    color: #fff;
+    transform: translateY(-50%) rotate(4deg);
+  }
+  .track {
+    display: flex;
+    width: max-content;
+    animation: drift var(--seconds) linear infinite;
+  }
+  .to-right {
+    animation-direction: reverse;
+  }
+  .group {
+    display: flex;
+    flex: none;
+  }
+  .item {
+    flex: none;
+    padding-right: 0.45em;
+    letter-spacing: 0.01em;
+  }
+  .slash {
+    padding-left: 0.45em;
+    font-weight: 400;
+  }
+  @keyframes drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .track { animation: none; }
+  }
+</style>

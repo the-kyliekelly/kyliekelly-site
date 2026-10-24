@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Highlight from '../components/Highlight.astro';
+import CrossingRibbons from '../components/CrossingRibbons.astro';
 
 const testimonials = [
   {
@@ -177,66 +178,78 @@ const tickerItems = [
     </div>
   </section>
 
-  <hr class="divider-pink mx-auto" />
+  <!-- WAYS TO WORK TOGETHER: crossing ribbons, then three cards that stack as you scroll -->
+  <section class="bg-offwhite pb-24">
+    <CrossingRibbons />
 
-  <!-- WAYS TO WORK TOGETHER -->
-  <section class="bg-offwhite px-6 py-20">
-    <div class="max-w-5xl mx-auto">
-      <p class="text-pink text-xs uppercase tracking-widest font-semibold text-center mb-3">&mdash; Ways to Work Together &mdash;</p>
-      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-3">Three steps, whichever one fits where you're at.</h2>
-      <p class="text-black italic text-center max-w-xl mx-auto mb-16">{"{no pressure to jump to the end, most people start with step one}"}</p>
+    <div class="px-6 pt-12 sm:pt-16">
+      <div class="max-w-5xl mx-auto">
+        <p class="text-pink text-xs uppercase tracking-widest font-semibold text-center mb-3">&mdash; Ways to Work Together &mdash;</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-center mb-3">Three steps, whichever one fits where you're at.</h2>
+        <p class="text-black italic text-center max-w-xl mx-auto mb-12 sm:mb-16">{"{no pressure to jump to the end, most people start with step one}"}</p>
 
-      <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
-        <div class="flex justify-center">
-          <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 max-w-[220px]">
-            <img src="/images/hero-8.jpg" alt="Kylie Kelly" class="w-full rounded-sm" />
+        <div class="space-y-8 md:space-y-10">
+
+          <div class="stack-card rounded-[2rem] bg-white p-7 sm:p-10 lg:p-12 shadow-[0_-12px_40px_rgba(0,0,0,0.08)]" style="--stack-top:6rem;">
+            <div class="grid md:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center">
+              <div>
+                <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">01</p>
+                <h3 class="text-2xl sm:text-3xl font-bold mb-1">Start for free.</h3>
+                <p class="text-xs uppercase tracking-wide text-black mb-4">Email Marketing Skool</p>
+                <p class="text-black mb-4">For online business owners who want more sales from an email list, without living on social media. Inside, you'll learn how to grow an email list of the right people, find collaborations that bring warm subscribers, turn subscribers into buyers, and build visibility without constant posting.</p>
+                <ul class="text-black text-sm space-y-2 mb-6">
+                  <li><span class="text-pink">+</span> A simple 90-day growth plan</li>
+                  <li><span class="text-pink">+</span> The Email Marketing Starter Kit, free on joining</li>
+                  <li><span class="text-pink">+</span> Premium: live Q&amp;A, templates, and the Audience Growth Tool Vault</li>
+                </ul>
+                <a href="https://www.skool.com/email-marketing-skool/about" class="btn-pink">Start My Free Growth Plan →</a>
+              </div>
+              <div class="flex justify-center order-first md:order-none">
+                <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 w-[190px] sm:w-[230px] max-w-full">
+                  <img src="/images/hero-8.jpg" alt="Kylie Kelly" class="w-full rounded-sm" />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div>
-          <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">01</p>
-          <h3 class="text-2xl sm:text-3xl font-bold mb-1">Start for free.</h3>
-          <p class="text-xs uppercase tracking-wide text-black mb-4">Email Marketing Skool</p>
-          <p class="text-black mb-4">For online business owners who want more sales from an email list, without living on social media. Inside, you'll learn how to grow an email list of the right people, find collaborations that bring warm subscribers, turn subscribers into buyers, and build visibility without constant posting.</p>
-          <ul class="text-black text-sm space-y-2 mb-6">
-            <li><span class="text-pink">+</span> A simple 90-day growth plan</li>
-            <li><span class="text-pink">+</span> The Email Marketing Starter Kit, free on joining</li>
-            <li><span class="text-pink">+</span> Premium: live Q&amp;A, templates, and the Audience Growth Tool Vault</li>
-          </ul>
-          <a href="https://www.skool.com/email-marketing-skool/about" class="btn-pink">Start My Free Growth Plan →</a>
-        </div>
-      </div>
 
-      <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
-        <div class="md:order-2 flex justify-center">
-          <div class="bg-white p-2 pb-6 rounded-sm shadow-xl rotate-3 max-w-[340px]">
-            <img src="/images/shop-mockup.jpg" alt="The KK Digital Product Shop preview" class="w-full rounded-sm" />
+          <div class="stack-card rounded-[2rem] bg-[#e9d9ec] p-7 sm:p-10 lg:p-12 shadow-[0_-12px_40px_rgba(0,0,0,0.1)]" style="--stack-top:7.5rem;">
+            <div class="grid md:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center">
+              <div>
+                <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">02</p>
+                <h3 class="text-2xl sm:text-3xl font-bold mb-1">Grab what you need, start today.</h3>
+                <p class="text-xs uppercase tracking-wide text-black mb-4">The KK Digital Product Shop</p>
+                <p class="text-black mb-6">Grab-and-go courses, templates and trainings for growing your email list without social media, from a $17 collaboration database to a full no-social growth system.</p>
+                <a href="https://shop.kyliekelly.com/" class="btn-pink">Help me grow my email list →</a>
+              </div>
+              <div class="flex justify-center order-first md:order-none">
+                <div class="bg-white p-2 pb-6 rounded-sm shadow-xl rotate-3 w-[240px] sm:w-[320px] max-w-full">
+                  <img src="/images/shop-mockup.jpg" alt="The KK Digital Product Shop preview" class="w-full rounded-sm" />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="md:order-1">
-          <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">02</p>
-          <h3 class="text-2xl sm:text-3xl font-bold mb-1">Grab what you need, start today.</h3>
-          <p class="text-xs uppercase tracking-wide text-black mb-4">The KK Digital Product Shop</p>
-          <p class="text-black mb-6">Grab-and-go courses, templates and trainings for growing your email list without social media, from a $17 collaboration database to a full no-social growth system.</p>
-          <a href="https://shop.kyliekelly.com/" class="btn-pink">Help me grow my email list →</a>
-        </div>
-      </div>
 
-      <div class="grid md:grid-cols-2 gap-12 items-center">
-        <div class="flex justify-center">
-          <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 max-w-[220px]">
-            <img src="/images/desk-scene.jpg" alt="" class="w-full rounded-sm" />
+          <div class="stack-card rounded-[2rem] bg-black text-white p-7 sm:p-10 lg:p-12 shadow-[0_-12px_40px_rgba(0,0,0,0.18)]" style="--stack-top:9rem;">
+            <div class="grid md:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center">
+              <div>
+                <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">03</p>
+                <h3 class="text-2xl sm:text-3xl font-bold mb-1">Get my brain in your corner.</h3>
+                <p class="text-xs uppercase tracking-wide text-white mb-4">Coaching Group &middot; $297</p>
+                <p class="text-white mb-6">Weekly voice-note coaching for the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent. Real questions, real answers, all week long.</p>
+                <blockquote class="font-typewriter border-l-2 border-pink pl-4 mb-6 text-sm not-italic text-white">
+                  "I legitimately feel my shoulders drop every time I listen to one of your Voxer responses&hellip; I don't need to do everything, I just need to do the next right thing."
+                  <footer class="text-xs uppercase tracking-wide text-white mt-2">&mdash; Nicole Elliott</footer>
+                </blockquote>
+                <a href="https://coaching.kyliekelly.com/checkout" class="inline-block rounded-full bg-white text-black px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-pink-light">Get Weekly Support &amp; Answers →</a>
+              </div>
+              <div class="flex justify-center order-first md:order-none">
+                <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 w-[190px] sm:w-[230px] max-w-full">
+                  <img src="/images/desk-scene.jpg" alt="" class="w-full rounded-sm" />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div>
-          <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">03</p>
-          <h3 class="text-2xl sm:text-3xl font-bold mb-1">Get my brain in your corner.</h3>
-          <p class="text-xs uppercase tracking-wide text-black mb-4">Coaching Group &middot; $297</p>
-          <p class="text-black mb-6">Weekly voice-note coaching for the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent. Real questions, real answers, all week long.</p>
-          <blockquote class="font-typewriter border-l-2 border-pink pl-4 mb-6 text-sm not-italic text-black">
-            "I legitimately feel my shoulders drop every time I listen to one of your Voxer responses&hellip; I don't need to do everything, I just need to do the next right thing."
-            <footer class="text-xs uppercase tracking-wide text-black mt-2">&mdash; Nicole Elliott</footer>
-          </blockquote>
-          <a href="https://coaching.kyliekelly.com/checkout" class="btn-pink">Get Weekly Support &amp; Answers →</a>
+
         </div>
       </div>
     </div>

@@ -72,3 +72,10 @@ h1, h2, h3 {
     transition: none !important;
   }
 }
+
+/* Stacking cards: each card pins near the top and the next slides over it.
+   Only on larger screens, tall enough to show a card, and when motion is welcome. */
+.stack-card { position: relative; }
+@media (min-width: 768px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .stack-card { position: sticky; top: var(--stack-top, 6rem); }
+}
