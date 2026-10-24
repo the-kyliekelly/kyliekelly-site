@@ -477,8 +477,8 @@ const tickerItems = [
   </section>
 
   <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
-  <section slot="reveal" class="bg-[#e9d9ec] px-6 py-10 sm:py-12">
-    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+  <section slot="reveal" class="bg-[#e9d9ec] px-6 py-12 sm:py-20 lg:py-24">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
       <div class="relative mx-auto w-full max-w-[230px] sm:max-w-sm md:max-w-none">
         <img src="/images/freebie-mockup.png" alt="The Your Next 1000 Subscribers quiz on a desktop monitor" class="block w-full h-auto drop-shadow-[0_26px_26px_rgba(70,20,80,0.28)]" />
         <span class="absolute bottom-[14%] right-0 sm:bottom-[16%] md:bottom-auto md:top-2 md:right-2 inline-flex items-center gap-2 rounded-full bg-white text-black px-4 py-2 text-xs sm:text-sm font-semibold shadow-lg">
@@ -486,17 +486,17 @@ const tickerItems = [
           Free &middot; 60 seconds
         </span>
       </div>
-      <div class="text-center max-w-md mx-auto w-full">
-        <p class="text-black text-lg sm:text-xl mb-1">Oh hey!</p>
-        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl leading-tight text-black mb-4 text-balance">You almost left without this freebie?</h2>
-        <p class="text-black mb-6">
+      <div class="text-center max-w-md lg:max-w-lg mx-auto w-full">
+        <p class="text-black text-lg sm:text-xl lg:text-2xl mb-1">Oh hey!</p>
+        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl lg:text-5xl leading-tight text-black mb-4 lg:mb-5 text-balance">You almost left without this freebie?</h2>
+        <p class="text-black lg:text-lg mb-6 lg:mb-8">
           Answer 6 quick questions and get the list-building strategy most likely to work for your business right now. It takes about 60 seconds.
         </p>
         <form action="https://form.flodesk.com/forms/6a389632c69dbd7193980270/submit" method="post" class="text-left">
-          <input type="text" name="firstName" placeholder="First name" required class="w-full mb-3 px-6 py-3 border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
-          <input type="text" name="email" placeholder="Email address" required class="w-full mb-3 px-6 py-3 border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+          <input type="text" name="firstName" placeholder="First name" required class="w-full mb-3 lg:mb-4 px-6 py-3 lg:py-4 lg:text-lg border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+          <input type="text" name="email" placeholder="Email address" required class="w-full mb-3 lg:mb-4 px-6 py-3 lg:py-4 lg:text-lg border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
           <input type="text" name="confirm_email_address" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
-          <button type="submit" class="btn-primary w-full text-center cursor-pointer">Yes, Build My Plan →</button>
+          <button type="submit" class="btn-primary w-full text-center cursor-pointer lg:!py-[18px]">Yes, Build My Plan →</button>
         </form>
       </div>
     </div>
