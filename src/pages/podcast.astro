@@ -1,29 +1,52 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Highlight from '../components/Highlight.astro';
+import CountUpStats from '../components/CountUpStats.astro';
+import FreebieReveal from '../components/FreebieReveal.astro';
+import reviewData from '../data/listener-reviews.json';
+import { getEpisodes } from '../lib/episodes';
 
-const recentEpisodes = [
-  {
-    num: '265',
-    meta: 'Solo Episode · 26 Min Listen',
-    title: "The Low-Lift Way I'm Growing My List Right Now",
-    desc: "The real numbers from my first audio pop-up event since 2022. 303 signups, 370+ downloads, and one very humbling $97 offer.",
-    href: '/podcast/episodes/low-lift-email-list-growth/',
-  },
-  {
-    num: '264',
-    meta: 'With Anita Mack · 28 Min Listen',
-    title: 'How to Actually Delegate to Claude',
-    desc: "Claude vs Claude Code vs the Chrome extension, and how my biz bestie built a full sales page with Claude in under two hours.",
-    href: '/podcast/episodes/claude-claude-code-chrome-extension-delegate/',
-  },
-  {
-    num: '260',
-    meta: 'With Katherine Mackenzie-Smith',
-    title: 'How to Plan the Rest of Your Year Without Burning Out',
-    desc: "Why a 90-day plan beats a 12-month one, and how to review the first half of your year before you plan the second.",
-    href: '/podcast/episodes/plan-rest-of-year-without-burning-out/',
-  },
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
+const playIcon = 'M5 3.5v9l7.5-4.5z';
+
+// Real episodes from the podcast feed, newest first.
+const allEpisodes = await getEpisodes();
+const episodeCount = allEpisodes.length ? Number(allEpisodes[0].num) : 272;
+const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min listen` : '');
+
+const newest = allEpisodes.slice(0, 3);
+const latestGrid = allEpisodes.slice(3, 9);
+
+// "Start here" picks. Swap these slugs to feature different episodes.
+const startHereSlugs = [
+  'low-lift-email-list-growth',
+  'claude-claude-code-chrome-extension-delegate',
+  'plan-rest-of-year-without-burning-out',
 ];
+const startHere = startHereSlugs
+  .map((slug) => allEpisodes.find((ep) => ep.href.includes(slug)))
+  .filter((ep): ep is NonNullable<typeof ep> => Boolean(ep));
+
+const findHere = [
+  'Real strategies to grow your email list and sell to it, without relying on social media',
+  "Solo episodes from me, and guests who are building their businesses differently too",
+  'Full show notes with every episode, so you can read it, skim it, or listen on your walk',
+  'A new episode every Friday',
+];
+
+// Real 5-star Apple Podcasts reviews, word for word. Picked for length so the cards stay tidy.
+const praiseOrder = [4, 0, 6, 7, 2, 1];
+const praise = praiseOrder.map((i) => reviewData[i]);
+const praiseStyle = [
+  'bg-[#e9d9ec] text-black -rotate-2',
+  'bg-pink text-white rotate-1 lg:mt-12',
+  'bg-[#fbe6f7] text-black rotate-2',
+  'bg-pink-light text-black rotate-1',
+  'bg-white text-black -rotate-2 lg:mt-12',
+  'bg-[#e9d9ec] text-black rotate-2',
+];
+const tileTint = ['bg-[#e9d9ec]', 'bg-[#fbe6f7]', 'bg-pink-light', 'bg-offwhite', 'bg-[#e9d9ec]', 'bg-[#fbe6f7]'];
+const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light text-black'];
 ---
 <Layout title="The Email Growth Show | Kylie Kelly" description="A top 1.5% podcast globally for women growing an email list without social media. Every Friday, real talk on visibility, list growth, and building a business without the burnout.">
 
@@ -35,103 +58,291 @@ const recentEpisodes = [
     </p>
   </section>
 
-  <!-- HERO -->
-  <section class="bg-black text-white px-6 py-20 text-center">
-    <div class="max-w-2xl mx-auto">
-      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">The Podcast</p>
-      <h1 class="text-4xl sm:text-5xl font-bold mb-6">The Email Growth Show</h1>
-      <p class="text-warmgray max-w-xl mx-auto mb-10">
-        A top 1.5% podcast globally for women growing an email list without social media. Every Friday, real talk on visibility, list growth, and building a business without the burnout <span class="italic">{'{no algorithm required}'}</span>.
-      </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="https://podcasts.apple.com/podcast/id1550211753" class="btn-outline !border-white text-white">Apple Podcasts</a>
-        <a href="https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3" class="btn-outline !border-white text-white">Spotify</a>
-        <a href="https://emailgrowthshow.buzzsprout.com/share" class="btn-pink">All Platforms →</a>
+  <!-- HERO: the background drifts slowly through soft colours -->
+  <section class="pod-hero px-6 pt-14 pb-28 sm:pt-20 sm:pb-36 overflow-hidden">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-[1.05fr_0.95fr] gap-14 md:gap-10 items-center">
+      <div>
+        <p class="flex items-center gap-3 text-sm font-semibold mb-6">
+          <span class="text-pink tracking-[0.2em]" role="img" aria-label="5 out of 5 stars">★★★★★</span>
+          Top 1.5% podcast globally
+        </p>
+        <p class="text-xs uppercase tracking-widest font-semibold mb-3">The Email Growth Show with Kylie Kelly</p>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.08] text-balance mb-6">
+          The podcast for women growing an email list <span class="script-accent italic text-pink">without social media.</span>
+        </h1>
+        <p class="text-black max-w-md mb-9">
+          Every Friday, real talk on visibility, list growth, and building a business without the burnout <span class="italic">{'{no algorithm required}'}</span>.
+        </p>
+        <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3 items-start">
+          <a href="https://podcasts.apple.com/podcast/id1550211753" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-6 pr-2 py-2 text-[15px] font-semibold shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-transform duration-300 hover:-translate-y-1">
+            Listen on Apple
+            <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
+          <a href="https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-6 pr-2 py-2 text-[15px] font-semibold shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-transform duration-300 hover:-translate-y-1">
+            Listen on Spotify
+            <span class="grid place-items-center h-10 w-10 rounded-full bg-black text-white transition-colors duration-300 group-hover:bg-pink"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
+          <a href="https://emailgrowthshow.buzzsprout.com/share" target="_blank" rel="noopener" class="group inline-flex items-center gap-3 px-3 py-3 text-[15px] font-semibold underline underline-offset-4 decoration-black/30 hover:decoration-pink">
+            All platforms
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="relative mx-auto w-[82%] sm:w-full max-w-[460px]">
+        <div class="pod-cover relative">
+          <img src="/images/podcast-cover.jpg" alt="The Email Growth Show podcast cover, with host Kylie Kelly" class="block w-full rounded-[1.75rem] shadow-[0_30px_70px_rgba(0,0,0,0.18)]" width="900" height="900" />
+          <span class="pod-flare" aria-hidden="true"></span>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- ABOUT THE SHOW -->
+  <section class="relative z-10 -mt-14 sm:-mt-20 rounded-t-[2.5rem] bg-white px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 text-center">
+    <div class="max-w-3xl mx-auto">
+      <p class="text-xs uppercase tracking-widest font-semibold mb-5">About the show</p>
+      <h2 class="text-3xl sm:text-5xl font-bold leading-tight text-balance">
+        I'm here to help you get known, trusted, and selling to the right people, <Highlight>without living on social media</Highlight>.
+      </h2>
+      <p class="mt-6 text-black max-w-xl mx-auto">Recorded from my home office, often while my kids are asleep.</p>
+    </div>
+    <div class="max-w-2xl mx-auto mt-14 text-left">
+      <p class="text-pink font-semibold mb-5">What you'll find here</p>
+      <ul class="space-y-4">
+        {findHere.map((line) => (
+          <li class="flex items-start gap-4">
+            <span class="mt-1 grid place-items-center h-6 w-6 flex-none rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h9M8.5 4l4 4-4 4" /></svg></span>
+            <span class="font-serif text-xl sm:text-2xl leading-snug">{line}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <section class="overflow-hidden bg-white pb-12 sm:pb-16" aria-hidden="true">
+    <div class="pod-marquee flex w-max">
+      {[0, 1].map(() => (
+        <div class="flex flex-none">
+          {Array.from({ length: 5 }).map(() => (
+            <span class="font-serif text-5xl sm:text-7xl uppercase whitespace-nowrap pr-8">Tune in + grow your list <span class="text-pink">/</span></span>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- NEWEST EPISODES: round artwork cards -->
+  {newest.length > 0 && (
+    <section class="bg-white px-6 pb-20 sm:pb-28">
+      <div class="max-w-5xl mx-auto">
+        <p class="text-xs uppercase tracking-widest font-semibold mb-12 text-center">New this week</p>
+        <div class="grid md:grid-cols-3 gap-x-6 gap-y-16">
+          {newest.map((ep, i) => (
+            <a href={ep.href} class="group relative flex flex-col rounded-[2rem] bg-offwhite px-7 pt-16 pb-8 transition-transform duration-300 hover:-translate-y-1.5">
+              <img src="/images/hero-1.jpg" alt="" class="absolute -top-10 left-7 h-20 w-20 rounded-full object-cover border-4 border-white shadow-md" loading="lazy" />
+              <p class="text-xs uppercase tracking-widest font-semibold text-black/70 mb-3">Ep {ep.num}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</p>
+              <h3 class="font-serif text-xl sm:text-2xl leading-snug mb-8 flex-grow text-balance">{ep.title}</h3>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-black/70">{ep.date}</span>
+                <span class={`grid place-items-center h-11 w-11 rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- ABOUT YOUR HOST -->
-  <section class="bg-offwhite px-6 py-16">
-    <div class="max-w-3xl mx-auto grid sm:grid-cols-[auto_1fr] gap-8 items-center text-center sm:text-left">
-      <div class="w-32 h-32 rounded-full overflow-hidden mx-auto sm:mx-0">
-        <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling" class="w-full h-full object-cover" />
-      </div>
-      <div>
-        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-2">About Your Host</p>
-        <p class="font-serif text-xl font-bold mb-2">Kylie Kelly</p>
-        <p class="text-black text-sm mb-4">
-          Wife, mom of two boys, and proof that you can grow a real email list without living on social media. I went from 0 to 7,000+ subscribers in 18 months without social media, and now I share exactly how, every Friday.
-        </p>
-        <a href="/meet-kylie" class="text-sm font-semibold underline underline-offset-2 hover:text-pink">More About Me →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- INTRO STRIP -->
-  <section class="px-6 py-16 text-center">
-    <div class="max-w-2xl mx-auto">
-      <h2 class="text-2xl sm:text-3xl font-bold mb-6">Recorded from my home office, often while my kids are asleep.</h2>
-      <p class="text-muted">
-        Tune in for real strategies to build and monetise your email list, no social media required. Some weeks it's just me. Some weeks it's a guest who's building it differently too. Every episode gets full show notes, so you can read it, skim it, or listen on your walk.
-      </p>
-    </div>
-  </section>
-
-  <!-- RECENT EPISODES -->
-  <section class="bg-offwhite px-6 py-20">
+  <section class="bg-black text-white px-6 py-20 sm:py-28 rounded-t-[2.5rem]">
     <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-14">
-        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Recent Episodes</p>
-        <h2 class="text-3xl sm:text-4xl font-bold">Hit play <span class="italic">{'{or scroll, we don\'t judge}'}</span>.</h2>
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">About your host</p>
+      <h2 class="text-3xl sm:text-5xl font-bold leading-tight text-balance max-w-3xl mb-14">
+        I'm Kylie, ex international wedding photographer turned email marketing educator, and your host.
+      </h2>
+      <div class="grid md:grid-cols-[0.8fr_1.2fr] gap-10 md:gap-16 items-start">
+        <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="w-full max-w-sm aspect-[4/5] object-cover object-[50%_25%] rounded-[2rem]" loading="lazy" />
+        <div>
+          <p class="font-serif text-2xl sm:text-3xl leading-snug mb-6 text-balance">
+            I started this podcast to show women that you can grow a real email list without living on social media.
+          </p>
+          <p class="text-warmgray mb-5">
+            Wife, mom of two boys, and proof that it works. I went from 0 to 7,000+ subscribers in 18 months without social media, and now I share exactly how, every Friday. Some weeks it's just me. Some weeks it's a guest who's building it differently too.
+          </p>
+          <a href="/meet-kylie" class="group inline-flex items-center gap-3 font-semibold">
+            More about me
+            <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
+        </div>
       </div>
-      <div class="grid md:grid-cols-3 gap-6">
-        {recentEpisodes.map((ep) => (
-          <div class="bg-white rounded-lg p-7 flex flex-col">
-            <p class="font-serif italic text-pink text-2xl mb-3">{ep.num}</p>
-            <p class="text-xs uppercase tracking-widest font-semibold text-muted mb-3">{ep.meta}</p>
-            <h3 class="text-lg font-bold mb-3">{ep.title}</h3>
-            <p class="text-sm text-muted mb-6 flex-grow">{ep.desc}</p>
-            <a href={ep.href} class="text-sm font-semibold underline underline-offset-2 hover:text-pink">Read the show notes →</a>
-          </div>
+      <div class="mt-20 pt-12 border-t border-white/15">
+        <CountUpStats dark stats={[
+          { value: episodeCount, label: 'Episodes' },
+          { value: 54000, suffix: '+', label: 'Downloads' },
+          { prefix: 'TOP ', value: 1.5, suffix: '%', label: 'Podcasts globally' },
+        ]} />
+      </div>
+    </div>
+  </section>
+
+  <!-- PRAISE -->
+  <section class="bg-offwhite px-6 py-20 sm:py-28 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+      <p class="text-xs uppercase tracking-widest font-semibold mb-3 text-center">Praise for</p>
+      <h2 class="font-serif text-5xl sm:text-7xl uppercase text-pink text-center mb-14 sm:mb-20">The Show</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+        {praise.map((r, i) => (
+          <figure class={`rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.08)] ${praiseStyle[i]}`}>
+            <p class="tracking-[0.2em] mb-4" role="img" aria-label="5 out of 5 stars">★★★★★</p>
+            <blockquote class="text-[15px] leading-relaxed">&ldquo;{r.body}&rdquo;</blockquote>
+            <figcaption class="mt-6 text-xs uppercase tracking-widest font-semibold">{r.name}</figcaption>
+          </figure>
         ))}
       </div>
-      <div class="text-center mt-12">
-        <a href="/podcast/archive" class="btn-primary">Browse The Full Episode Library →</a>
+      <p class="text-center text-sm text-black/70 mt-12">5-star reviews from Apple Podcasts</p>
+    </div>
+  </section>
+
+  <!-- START HERE -->
+  {startHere.length > 0 && (
+    <section class="relative overflow-hidden bg-black text-white px-6 py-24 sm:py-32">
+      <img src="/images/podcast-cover.jpg" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full scale-125 object-cover opacity-60 blur-2xl" />
+      <div class="absolute inset-0 bg-gradient-to-b from-pink/50 via-black/35 to-black/60" aria-hidden="true"></div>
+      <div class="relative max-w-2xl mx-auto">
+        <h2 class="font-serif text-6xl sm:text-8xl uppercase text-center leading-[0.95] mb-12 sm:mb-16">Start<br />here</h2>
+        <div class="space-y-4">
+          {startHere.map((ep, i) => (
+            <a href={ep.href} class="group flex items-center gap-4 sm:gap-5 rounded-full bg-white text-black p-3 pr-4 sm:pr-5 shadow-xl transition-transform duration-300 hover:-translate-y-1">
+              <img src="/images/hero-1.jpg" alt="" class="h-16 w-16 sm:h-20 sm:w-20 flex-none rounded-full object-cover" loading="lazy" />
+              <span class="flex-1 min-w-0">
+                <span class="block text-[11px] uppercase tracking-widest font-semibold text-black/70 mb-1">Ep {ep.num}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</span>
+                <span class="block font-semibold leading-snug text-[15px] sm:text-base">{ep.title}</span>
+              </span>
+              <span class={`grid place-items-center h-11 w-11 flex-none rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+            </a>
+          ))}
+        </div>
+        <p class="text-center mt-12">
+          <a href="/podcast/archive" class="font-serif text-xl underline underline-offset-4 decoration-white/40 hover:decoration-white">All episodes →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <!-- ALL THE LATEST -->
+  {latestGrid.length > 0 && (
+    <section class="bg-white px-6 py-20 sm:py-28">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="font-serif text-4xl sm:text-5xl mb-12">All the latest:</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-10">
+          {latestGrid.map((ep, i) => (
+            <a href={ep.href} class="group block">
+              <div class={`relative aspect-square overflow-hidden rounded-[1.5rem] ${tileTint[i % tileTint.length]} flex items-center justify-center transition-transform duration-300 group-hover:-translate-y-1`}>
+                <span class="font-serif italic text-pink text-7xl sm:text-8xl leading-none">{ep.num}</span>
+                <span class="absolute bottom-3 right-3 grid place-items-center h-10 w-10 rounded-full bg-white text-black shadow-md transition-transform duration-300 group-hover:scale-110" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+              </div>
+              <p class="text-[11px] uppercase tracking-widest font-semibold text-black/70 mt-4 mb-1.5">{ep.date}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</p>
+              <h3 class="font-serif text-lg sm:text-xl leading-snug text-balance group-hover:text-pink transition-colors">{ep.title}</h3>
+            </a>
+          ))}
+        </div>
+        <p class="text-right mt-12">
+          <a href="/podcast/archive" class="font-serif text-xl underline underline-offset-4 decoration-black/30 hover:decoration-pink">All episodes →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <!-- GUESTS + SPONSORS -->
+  <section class="bg-offwhite px-6 py-20 sm:py-28">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
+      <div class="relative overflow-hidden rounded-[2rem] bg-pink text-white min-h-[420px] flex items-center justify-center text-center p-10">
+        <img src="/images/desk-scene.jpg" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-multiply" loading="lazy" />
+        <div class="relative max-w-sm">
+          <h2 class="font-serif text-3xl sm:text-4xl leading-tight mb-4 text-balance">Want to come on the show?</h2>
+          <p class="mb-7">I'm always looking for guests with a real number to share: a launch that worked, one that flopped, or a way of growing an audience that doesn't look like everyone else's.</p>
+          <a href="/contact" class="inline-block rounded-full bg-white text-black px-7 py-3.5 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">Apply here →</a>
+        </div>
+      </div>
+      <div class="overflow-hidden rounded-[2rem] bg-white">
+        <img src="/images/kylie-podcast.jpg" alt="Kylie Kelly recording a podcast" class="h-56 w-full object-cover object-[50%_30%]" loading="lazy" />
+        <div class="p-8 sm:p-10">
+          <h2 class="font-serif text-3xl sm:text-4xl leading-tight mb-4 text-balance">Sponsors / media inquiries</h2>
+          <p class="mb-7">Interested in sponsoring an episode, or want to feature the show? Say hello and I'll get back to you.</p>
+          <a href="/contact" class="inline-block rounded-full bg-pink text-white px-7 py-3.5 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">Contact us</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- TESTIMONIAL -->
-  <section class="bg-pink-light px-6 py-16 text-center">
-    <div class="max-w-2xl mx-auto">
-      <p class="font-serif italic text-xl leading-relaxed mb-5">"I went from stuck and overwhelmed to 122 new subscribers, in just days of working with Kylie (all without social media!!) She is great at what she does!!"</p>
-      <p class="text-xs uppercase tracking-widest font-semibold">— Erin K.</p>
-    </div>
-  </section>
-
-  <!-- BE OUR GUEST -->
-  <section class="bg-black text-white px-6 py-20 text-center">
-    <div class="max-w-xl mx-auto">
-      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Want To Be On The Show?</p>
-      <h2 class="text-2xl sm:text-3xl font-bold mb-5">Got a story, strategy, or real result other list-builders need to hear?</h2>
-      <p class="text-warmgray mb-8">
-        I'm always looking for guests with a real number to share, a launch that worked, one that flopped, or a way of growing an audience that doesn't look like everyone else's. If that's you, pitch yourself.
-      </p>
-      <a href="/contact" class="btn-pink">Apply to Be a Guest →</a>
-    </div>
-  </section>
-
-  <!-- EMAIL OPT-IN -->
-  <section class="px-6 py-20 text-center">
-    <div class="max-w-xl mx-auto">
-      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Before You Go</p>
-      <h2 class="text-2xl sm:text-3xl font-bold mb-5">Get the strategies before they're episodes.</h2>
-      <p class="text-muted mb-8">
-        Join my free list for the same visibility and email growth strategies I talk about on the show, straight to your inbox, no waiting for Friday.
-      </p>
-      <a href="https://kyliekelly.myflodesk.com/audience" class="btn-primary">Get Your Next 1000 Subscribers →</a>
-    </div>
-  </section>
+  <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
+  <FreebieReveal slot="reveal" />
 
 </Layout>
+
+<style>
+  /* Hero background drifts through soft colours */
+  .pod-hero {
+    background-color: #e9d9ec;
+    animation: pod-hues 30s ease-in-out infinite;
+  }
+  @keyframes pod-hues {
+    0%, 100% { background-color: #e9d9ec; }
+    25% { background-color: #fbe6f7; }
+    50% { background-color: #fde8dd; }
+    75% { background-color: #dfe5f8; }
+  }
+
+  /* Tilted cover with a lens flare in the top-left corner */
+  .pod-cover {
+    transform: rotate(5deg);
+    animation: pod-float 7s ease-in-out infinite;
+  }
+  @keyframes pod-float {
+    0%, 100% { transform: rotate(5deg) translateY(0); }
+    50% { transform: rotate(4deg) translateY(-8px); }
+  }
+  .pod-flare {
+    position: absolute;
+    top: -9%;
+    left: -9%;
+    width: 30%;
+    aspect-ratio: 1;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,1) 0 7%, rgba(255,255,255,0.7) 16%, rgba(255,255,255,0) 58%);
+    animation: pod-flare 5s ease-in-out infinite;
+  }
+  .pod-flare::before,
+  .pod-flare::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .pod-flare::before {
+    width: 150%;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), #fff, rgba(255,255,255,0));
+  }
+  .pod-flare::after {
+    width: 2px;
+    height: 150%;
+    background: linear-gradient(180deg, rgba(255,255,255,0), #fff, rgba(255,255,255,0));
+  }
+  @keyframes pod-flare {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.18); }
+  }
+
+  .pod-marquee { animation: pod-marquee 70s linear infinite; }
+  @keyframes pod-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pod-hero, .pod-cover, .pod-flare, .pod-marquee { animation: none; }
+  }
+</style>

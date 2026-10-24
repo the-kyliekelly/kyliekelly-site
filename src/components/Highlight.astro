@@ -3,9 +3,7 @@
 // Usage: <Highlight>without social media</Highlight>
 // Without JavaScript, or with reduced motion on, the highlight is simply there.
 ---
-<span class="hl"><slot /></span>
-
-<style>
+<span class="hl"><slot /></span><style>
   .hl {
     background-image: linear-gradient(rgba(224, 64, 251, 0.26), rgba(224, 64, 251, 0.26));
     background-repeat: no-repeat;
@@ -22,9 +20,7 @@
   .hl[data-hl="in"] {
     transition: background-size 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
-</style>
-
-<script>
+</style><script>
   const items = document.querySelectorAll<HTMLElement>('.hl');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

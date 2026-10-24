@@ -5,7 +5,7 @@ import CrossingRibbons from '../components/CrossingRibbons.astro';
 import RotatingBadge from '../components/RotatingBadge.astro';
 import CountUpStats from '../components/CountUpStats.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
-import episodePosts from '../data/blog-posts.json';
+import { getEpisodes } from '../lib/episodes';
 import reviewData from '../data/listener-reviews.json';
 
 const testimonials = [
@@ -54,83 +54,8 @@ const signatureCourse = {
   imageAlt: 'Kylie Kelly',
 };
 
-// Latest episodes: read from the podcast feed at build time, with the episode library as a backup.
-const handBuiltEpisodes = new Set([
-  'low-lift-email-list-growth',
-  'claude-claude-code-chrome-extension-delegate',
-  'plan-rest-of-year-without-burning-out',
-]);
-const knownEpisodePages = new Set(episodePosts.map((p) => p.slug));
-
-const decodeText = (text) =>
-  text
-    .replace(/<!\[CDATA\[|\]\]>/g, '')
-    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&')
-    .trim();
-const feedTag = (item, name) => {
-  const m = item.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`));
-  return m ? decodeText(m[1]) : null;
-};
-const formatDate = (d) => new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
-
-async function loadFeedEpisodes() {
-  try {
-    const res = await fetch('https://feeds.buzzsprout.com/2065148.rss', { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) return [];
-    const xml = await res.text();
-    return (xml.match(/<item>[\s\S]*?<\/item>/g) ?? [])
-      .map((item) => {
-        const num = feedTag(item, 'itunes:episode');
-        if (!num) return null;
-        const title = (feedTag(item, 'title') ?? '').replace(/\s*\[Ep\.?\s*\d+\]\s*$/i, '');
-        const rawDuration = feedTag(item, 'itunes:duration') ?? '';
-        const seconds = rawDuration.includes(':')
-          ? rawDuration.split(':').reduce((acc, part) => acc * 60 + Number(part), 0)
-          : Number(rawDuration);
-        const siteSlug = (feedTag(item, 'link') ?? '').match(/kyliekelly\.com\/([^/]+)\/?$/)?.[1];
-        const audio = item.match(/<enclosure[^>]*url="([^"]+)"/)?.[1] ?? '';
-        const listenPage = audio.replace(/\.(mp3|m4a)(\?.*)?$/, '');
-        return {
-          num,
-          mins: seconds ? String(Math.round(seconds / 60)) : null,
-          seconds: seconds || null,
-          title,
-          iso: feedTag(item, 'pubDate'),
-          date: formatDate(feedTag(item, 'pubDate')),
-          href: siteSlug && knownEpisodePages.has(siteSlug)
-            ? (handBuiltEpisodes.has(siteSlug) ? `/podcast/episodes/${siteSlug}/` : `/${siteSlug}/`)
-            : listenPage,
-        };
-      })
-      .filter((e) => e && e.href);
-  } catch {
-    return [];
-  }
-}
-
-const libraryEpisodes = episodePosts
-  .map((p) => {
-    const ep = p.excerpt.match(/EP\s*(\d+)/i);
-    if (!ep) return null;
-    const mins = p.excerpt.match(/(\d+)\s*MIN\s*LISTEN/i);
-    return {
-      num: ep[1],
-      mins: mins ? mins[1] : null,
-      seconds: mins ? Number(mins[1]) * 60 : null,
-      title: p.title,
-      iso: p.date,
-      date: formatDate(p.date),
-      href: handBuiltEpisodes.has(p.slug) ? `/podcast/episodes/${p.slug}/` : `/${p.slug}/`,
-    };
-  })
-  .filter(Boolean);
-
-const feedEpisodes = await loadFeedEpisodes();
-const allEpisodes = (feedEpisodes.length ? feedEpisodes : libraryEpisodes).sort((x, y) => Number(y.num) - Number(x.num));
+// Latest episodes come from the podcast feed at build time (see src/lib/episodes.ts).
+const allEpisodes = await getEpisodes();
 const wave = (seed) =>
   Array.from({ length: 36 }, (_, i) => Number((0.22 + 0.78 * Math.abs(Math.sin(i * 0.6 + seed) * Math.cos(i * 0.27 + seed * 1.7))).toFixed(2)));
 const latestEpisodes = allEpisodes.slice(0, 3).map((ep, i) => ({ ...ep, bars: wave(i * 2.3 + (Number(ep.num) % 7)) }));
