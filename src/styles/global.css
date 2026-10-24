@@ -134,3 +134,34 @@ h1, h2, h3 {
   0%, 100% { transform: scaleY(var(--h, 0.5)); }
   50% { transform: scaleY(calc(var(--h, 0.5) * 0.3 + 0.12)); }
 }
+
+/* Listener reviews slide through. Paused on hover; scrollable by hand with reduced motion. */
+.reviews-strip {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+.reviews-track {
+  display: flex;
+  width: max-content;
+  animation: reviews-slide 120s linear infinite;
+}
+.reviews-track:hover { animation-play-state: paused; }
+.reviews-group { display: flex; flex: none; gap: 1.25rem; padding-right: 1.25rem; margin: 0; list-style: none; }
+.reviews-card {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: 300px;
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+}
+@media (min-width: 640px) { .reviews-card { width: 360px; padding: 2rem; } }
+@keyframes reviews-slide {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reviews-strip { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .reviews-track { animation: none; }
+}

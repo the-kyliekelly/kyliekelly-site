@@ -12,8 +12,10 @@ interface Stat {
 interface Props {
   stats: Stat[];
   dark?: boolean;
+  compact?: boolean;
+  left?: boolean;
 }
-const { stats, dark = false } = Astro.props;
+const { stats, dark = false, compact = false, left = false } = Astro.props;
 
 const decimalsOf = (n: number) => (String(n).split('.')[1] || '').length;
 const format = (n: number) => {
@@ -21,12 +23,12 @@ const format = (n: number) => {
   return n.toLocaleString('en-AU', { minimumFractionDigits: d, maximumFractionDigits: d });
 };
 ---
-<dl class:list={['grid gap-10 text-center', stats.length >= 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-1 sm:grid-cols-3']}>
+<dl class:list={['grid', compact ? 'grid-cols-3 items-end gap-4 sm:gap-6' : 'gap-10', left ? 'text-left' : 'text-center', !compact && (stats.length >= 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-1 sm:grid-cols-3')]}>
   {stats.map((s) => (
     <div>
-      <dt class:list={['text-xs uppercase tracking-widest order-2 mt-2', dark ? 'text-white' : 'text-black']}>{s.label}</dt>
+      <dt class:list={['uppercase tracking-widest order-2 mt-2', compact ? 'text-[10px] sm:text-xs' : 'text-xs', dark ? 'text-white' : 'text-black']}>{s.label}</dt>
       <dd
-        class="font-serif text-4xl sm:text-5xl font-bold text-pink tabular-nums whitespace-nowrap"
+        class:list={['font-serif font-bold text-pink tabular-nums whitespace-nowrap', compact ? 'text-2xl sm:text-4xl' : 'text-4xl sm:text-5xl']}
         data-countup
         data-value={s.value}
         data-decimals={decimalsOf(s.value)}
