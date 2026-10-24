@@ -1,0 +1,48 @@
+---
+// Cover art for an episode, composed from a portrait, a colour band and the episode title.
+// Every image in src/assets/episode-art is used, in filename order. Add portraits there and
+// they appear on the next build, so new episodes always get their own cover.
+// Usage: <EpisodeArt num="272" title="Why Some People Get Invited to Everything" />
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  num: string;
+  title: string;
+  class?: string;
+}
+const { num, title, class: className = '' } = Astro.props;
+
+const found = import.meta.glob<{ default: ImageMetadata }>('../assets/episode-art/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
+const photos = Object.entries(found)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, mod]) => mod.default);
+
+const bands = [
+  'bg-black text-white',
+  'bg-pink text-white',
+  'bg-[#e9d9ec] text-black',
+  'bg-[#fbe6f7] text-black',
+];
+const n = Number(num) || 0;
+const photo = photos.length ? photos[n % photos.length] : null;
+// Shift the colour each time the portraits cycle round, so the same photo never repeats the same band.
+const band = bands[(n + Math.floor(n / Math.max(photos.length, 1))) % bands.length];
+---
+<div class:list={['bg-white p-2 sm:p-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.12)]', className]}>
+  <div class="relative flex aspect-[3/4.7] flex-col overflow-hidden bg-[#dcd7dc]">
+    <div class="relative flex-1 min-h-0">
+      {photo && (
+        <Image src={photo} alt="" widths={[320, 480, 640]} sizes="(min-width: 768px) 300px, 45vw" class="absolute inset-0 h-full w-full object-cover object-top" loading="lazy" />
+      )}
+      <div class="absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-white/85 via-white/45 to-transparent px-3 pb-8 pt-3 text-center">
+        <p class="font-serif italic font-bold leading-none text-pink text-[16px] md:text-[23px]">The Email Growth Show</p>
+        <p class="mt-1.5 text-[8px] sm:text-[9px] uppercase tracking-[0.16em] font-semibold text-black">Grow your list without social media</p>
+      </div>
+    </div>
+    <div class:list={['px-3 py-3 text-center', band]}>
+      <p class="font-serif leading-tight text-[13px] sm:text-[15px] line-clamp-4 text-balance">EP {num}: {title}</p>
+      <p class="mt-2 text-[8px] sm:text-[9px] uppercase tracking-[0.16em] font-semibold opacity-90">With Kylie Kelly</p>
+    </div>
+  </div>
+</div>
