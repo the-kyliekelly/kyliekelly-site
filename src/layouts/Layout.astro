@@ -9,6 +9,7 @@ interface Props {
   noindex?: boolean;
 }
 
+const hasReveal = Astro.slots.has('reveal');
 const { title, description = 'Email marketing strategies for women in business who want to grow their list, without relying on social media.', noindex = false } = Astro.props;
 ---
 <!doctype html>
@@ -23,10 +24,44 @@ const { title, description = 'Email marketing strategies for women in business w
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <Nav />
-    <main>
-      <slot />
-    </main>
-    <Footer />
+    <div class="reveal-page" data-reveal-page>
+      <Nav />
+      <main>
+        <slot />
+      </main>
+      <Footer />
+    </div>
+    {hasReveal && (
+      <div class="reveal-panel" data-reveal-panel>
+        <slot name="reveal" />
+      </div>
+    )}
   </body>
 </html>
+
+<style is:global>
+  /* Footer reveal: the page scrolls up like a curtain to uncover a panel fixed behind it.
+     Without JavaScript, with reduced motion, or if the panel is taller than the screen,
+     the panel simply sits below the footer. */
+  html.reveal-on .reveal-page { position: relative; z-index: 10; background: #fff; }
+  html.reveal-on .reveal-panel { position: fixed; left: 0; right: 0; bottom: 0; z-index: 0; }
+</style>
+
+<script>
+  const page = document.querySelector<HTMLElement>('[data-reveal-page]');
+  const panel = document.querySelector<HTMLElement>('[data-reveal-panel]');
+
+  if (page && panel) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => {
+      const h = panel.offsetHeight;
+      const on = !reduce.matches && h > 0 && h <= window.innerHeight;
+      document.documentElement.classList.toggle('reveal-on', on);
+      page.style.marginBottom = on ? `${h}px` : '';
+    };
+    update();
+    window.addEventListener('resize', update);
+    if ('ResizeObserver' in window) new ResizeObserver(update).observe(panel);
+    reduce.addEventListener('change', update);
+  }
+</script>
