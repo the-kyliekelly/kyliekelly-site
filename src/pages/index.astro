@@ -140,32 +140,42 @@ const tickerItems = [
 
   <div class="border-t border-dashed border-warmgray"></div>
 
-  <!-- PAIN MIRROR -->
-  <section class="px-6 pt-8 pb-20">
-    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <h2 class="text-2xl sm:text-3xl font-bold mb-6">
-          You started a business to build something real. <em class="italic text-pink font-bold">{"{not to be glued to your phone forever.}"}</em>
-        </h2>
-        <p class="text-black uppercase tracking-wide text-sm mb-4">Sound familiar?</p>
-        <ul class="text-black mb-8">
-          <li class="pb-3 mb-3 border-b border-warmgray/50 w-fit"><span class="text-pink">+</span> Maybe you're posting (or not posting) and still wondering where your next client is coming from.</li>
-          <li class="pb-3 mb-3 border-b border-warmgray/50 w-fit"><span class="text-pink">+</span> Maybe your email list has stalled, or it's growing but nobody's buying.</li>
-          <li class="pb-3 mb-3 border-b border-warmgray/50 w-fit"><span class="text-pink">+</span> Maybe you've tried Instagram, then SEO, then Pinterest, and you still don't know what works.</li>
-          <li class="pb-3 mb-3 border-b border-warmgray/50 w-fit"><span class="text-pink">+</span> Maybe you're tired of being "always on" just to stay visible.</li>
-          <li><span class="text-pink">+</span> Or maybe you're thinking, "Kylie, that's literally all of it."</li>
-        </ul>
-        <p class="text-black font-bold text-xl sm:text-2xl leading-snug mb-8">
-          One of those hit? All five?<br />
-          I've got you my love.<br />
-          <span class="text-pink">You're in the right place.</span>
-        </p>
-      </div>
-      <div class="hidden md:flex items-center justify-center">
-        <div class="bg-white p-3 pb-8 rounded-sm shadow-xl rotate-3 max-w-xs">
-          <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly" class="w-full rounded-sm" />
-        </div>
-      </div>
+  <!-- PAIN MIRROR: five thought cards that pop in one after another -->
+  <section class="px-6 pt-14 pb-16 sm:pt-16 sm:pb-20">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-bold text-center max-w-3xl mx-auto leading-tight mb-3 text-balance">
+        You started a business to build something real. <em class="italic text-pink font-bold">{"{not to be glued to your phone forever.}"}</em>
+      </h2>
+      <p class="text-black uppercase tracking-widest text-sm text-center mb-10">Sound familiar?</p>
+
+      <ul class="flex flex-wrap justify-center gap-4 sm:gap-5" data-pop-group>
+        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+          <span>Maybe you're posting (or not posting) and still wondering where your next client is coming from.</span>
+        </li>
+        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+          <span>Maybe your email list has stalled, or it's growing but nobody's buying.</span>
+        </li>
+        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+          <span>Maybe you've tried Instagram, then SEO, then Pinterest, and you still don't know what works.</span>
+        </li>
+        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+          <span>Maybe you're tired of being "always on" just to stay visible.</span>
+        </li>
+        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-black text-white p-6 flex items-start gap-4">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+          <span>Or maybe you're thinking, "Kylie, that's literally all of it."</span>
+        </li>
+      </ul>
+
+      <p class="text-black font-bold text-2xl sm:text-3xl leading-snug text-center mt-12 sm:mt-14">
+        One of those hit? All five?<br />
+        I've got you my love.<br />
+        <span class="text-pink">You're in the right place.</span>
+      </p>
     </div>
   </section>
 
@@ -515,6 +525,28 @@ const tickerItems = [
     } else {
       window.addEventListener('resize', equalise);
     }
+  }
+</script>
+
+<script>
+  // Pop the thought cards in one after another the first time they scroll into view.
+  const group = document.querySelector<HTMLElement>('[data-pop-group]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (group && !reduceMotion && 'IntersectionObserver' in window) {
+    const items = Array.from(group.querySelectorAll<HTMLElement>('.pop-item'));
+    items.forEach((el, i) => {
+      el.dataset.pop = 'pending';
+      el.style.setProperty('--pop-delay', `${i * 130}ms`);
+    });
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        io.disconnect();
+        items.forEach((el) => (el.dataset.pop = 'in'));
+      },
+      { threshold: 0.2 }
+    );
+    io.observe(group);
   }
 </script>
 </Layout>
