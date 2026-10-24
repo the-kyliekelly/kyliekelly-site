@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Highlight from '../components/Highlight.astro';
 
 const testimonials = [
   {
@@ -28,6 +29,12 @@ const testimonials = [
   },
 ];
 
+const heroPills = [
+  { label: 'Start for free', href: 'https://www.skool.com/email-marketing-skool/about', dot: 'bg-pink text-white group-hover:bg-black' },
+  { label: 'Shop the products', href: 'https://shop.kyliekelly.com/', dot: 'bg-pink-light text-black group-hover:bg-pink group-hover:text-white' },
+  { label: 'Work with me', href: '/services', dot: 'border-2 border-black bg-black text-white group-hover:bg-white group-hover:text-black' },
+];
+
 const tickerItems = [
   "hater of country music {unless it's OG Tay Tay}",
   '0 to 7,000+ subscribers in 18 months',
@@ -53,36 +60,40 @@ const tickerItems = [
     </p>
   </section>
 
-  <!-- HERO, centered / Carinda-model -->
-  <section class="bg-black text-white px-6 pt-20 pb-8 text-center relative">
+  <!-- HERO: one centred column, three call-to-action pills, polaroid fan -->
+  <section class="bg-black text-white px-6 pt-14 sm:pt-16 text-center relative overflow-hidden">
     <div class="max-w-3xl mx-auto">
-      <h1 class="text-4xl sm:text-6xl font-bold leading-tight mb-6">
-        Helping you get <em class="italic text-pink">known, trusted, and selling,</em><br class="hidden sm:block" />
-        with an email list &amp; real relationships that work<br class="hidden sm:block" />
-        <em class="italic">{"{even when you're not online}"}</em>.
+      <h1 class="text-[29px] sm:text-[40px] lg:text-[44px] font-bold leading-[1.15] mb-5 text-balance">
+        Helping you get <em class="italic font-bold text-pink">known, trusted, and selling,</em>
+        with an email list &amp; real relationships that work
+        <em class="italic font-normal">{"{even when you're not online}"}</em>.
       </h1>
-      <p class="text-pink text-sm sm:text-base uppercase tracking-wide mb-6 max-w-xl mx-auto">
-        {"{no content treadmill, no chasing the algorithm, just visibility systems that keep working long after you build them}"}
-      </p>
-      <p class="text-white text-base mb-8 max-w-xl mx-auto">
-        For coaches, course creators and service providers who want consistent sales without living on social media, built on the exact system that took me from 0 to 7,000+ subscribers in 18 months, no ads, no algorithm.
-      </p>
-      <a href="https://kyliekelly.myflodesk.com/audience" class="btn-pink">Grab Your Next 1000 Subscribers →</a>
+      <p class="text-white text-base mb-10">For coaches, course creators and service providers.</p>
+
+      <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-4 sm:gap-5 max-w-xs sm:max-w-none mx-auto">
+        {heroPills.map((pill) => (
+          <a
+            href={pill.href}
+            class="group flex items-center justify-between gap-5 bg-white text-black rounded-full pl-6 pr-2 py-2 text-[15px] font-semibold shadow-[0_8px_22px_rgba(224,64,251,0.18)] transition-transform duration-300 hover:-translate-y-1"
+          >
+            <span>{pill.label}</span>
+            <span class={`grid place-items-center h-10 w-10 rounded-full transition-colors duration-300 ${pill.dot}`}>
+              <svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
+            </span>
+          </a>
+        ))}
+      </div>
     </div>
 
-    <div class="mt-6 mb-4">
-      <div class="relative mx-auto w-[280px] sm:w-[360px] h-56 sm:h-72">
-        <div class="relative">
-          <div class="absolute top-2 left-0 w-[46%] bg-white p-2 pb-6 rounded-sm shadow-2xl -rotate-6">
-            <img src="/images/hero-1.jpg" alt="Kylie Kelly" class="w-full rounded-sm" />
-          </div>
-          <div class="absolute top-0 left-[30%] w-[48%] bg-white p-2 pb-6 rounded-sm shadow-2xl rotate-3 z-10">
-            <img src="/images/hero-2.jpg" alt="Kylie Kelly laughing" class="w-full rounded-sm" />
-          </div>
-          <div class="absolute top-16 left-[58%] w-[46%] bg-white p-2 pb-6 rounded-sm shadow-2xl -rotate-2 z-20">
-            <img src="/images/hero-7.jpg" alt="Kylie Kelly holding a disco ball" class="w-full rounded-sm" />
-          </div>
-        </div>
+    <div class="flex justify-center items-start mt-16 sm:mt-20 h-[210px] sm:h-[260px]">
+      <div class="flex-none w-[118px] sm:w-[190px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] shadow-2xl -rotate-6 translate-y-3 -mr-[10px] sm:-mr-[14px]">
+        <img src="/images/hero-1.jpg" alt="Kylie Kelly" class="block w-full" />
+      </div>
+      <div class="flex-none w-[118px] sm:w-[190px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] shadow-2xl rotate-2 z-10">
+        <img src="/images/hero-2.jpg" alt="Kylie Kelly laughing" class="block w-full" />
+      </div>
+      <div class="flex-none w-[118px] sm:w-[190px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] shadow-2xl -rotate-2 translate-y-2 -ml-[10px] sm:-ml-[14px] z-20">
+        <img src="/images/hero-7.jpg" alt="Kylie Kelly holding a disco ball" class="block w-full" />
       </div>
     </div>
   </section>
@@ -102,6 +113,14 @@ const tickerItems = [
         <img src="/images/press/business-mondays.jpg" alt="Business Mondays" class="h-14 sm:h-16 w-auto opacity-80 hover:opacity-100 transition-opacity" />
       </a>
     </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="bg-white px-6 pt-12 pb-14 sm:pt-14 sm:pb-16 text-center border-t border-black/10">
+    <p class="text-pink text-xs uppercase tracking-widest font-normal mb-4">Email list + real relationships</p>
+    <p class="font-serif text-xl sm:text-[25px] leading-[1.4] max-w-[34em] mx-auto text-black text-balance">
+      Built on the system that took me from 0 to 7,000 subscribers in 18 months. That's what I want for you: <span class="whitespace-nowrap"><Highlight>consistent sales</Highlight></span> from visibility systems that keep working long after you build them.
+    </p>
   </section>
 
   <div class="border-t border-dashed border-warmgray"></div>
