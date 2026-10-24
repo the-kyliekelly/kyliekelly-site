@@ -95,7 +95,9 @@ async function loadFeedEpisodes() {
         return {
           num,
           mins: seconds ? String(Math.round(seconds / 60)) : null,
+          seconds: seconds || null,
           title,
+          iso: feedTag(item, 'pubDate'),
           date: formatDate(feedTag(item, 'pubDate')),
           href: siteSlug && knownEpisodePages.has(siteSlug)
             ? (handBuiltEpisodes.has(siteSlug) ? `/podcast/episodes/${siteSlug}/` : `/${siteSlug}/`)
@@ -116,7 +118,9 @@ const libraryEpisodes = episodePosts
     return {
       num: ep[1],
       mins: mins ? mins[1] : null,
+      seconds: mins ? Number(mins[1]) * 60 : null,
       title: p.title,
+      iso: p.date,
       date: formatDate(p.date),
       href: handBuiltEpisodes.has(p.slug) ? `/podcast/episodes/${p.slug}/` : `/${p.slug}/`,
     };
@@ -129,6 +133,16 @@ const wave = (seed) =>
   Array.from({ length: 36 }, (_, i) => Number((0.22 + 0.78 * Math.abs(Math.sin(i * 0.6 + seed) * Math.cos(i * 0.27 + seed * 1.7))).toFixed(2)));
 const latestEpisodes = allEpisodes.slice(0, 3).map((ep, i) => ({ ...ep, bars: wave(i * 2.3 + (Number(ep.num) % 7)) }));
 const episodeCount = allEpisodes.length ? Number(allEpisodes[0].num) : 266;
+
+// The phone mockup always shows the newest episode.
+const phoneEpisode = latestEpisodes[0];
+const phoneDate = phoneEpisode
+  ? new Date(phoneEpisode.iso).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()
+  : '';
+const phoneRemaining = (() => {
+  const left = Math.max(0, (phoneEpisode?.seconds ?? 0) - 4);
+  return `-${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
+})();
 
 const tickerItems = [
   "hater of country music {unless it's OG Tay Tay}",
@@ -235,7 +249,7 @@ const tickerItems = [
         </li>
         <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
           <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
-          <span>Maybe your email list has stalled, or it's growing but nobody's buying.</span>
+          <span>Maybe your email list doesn't exist yet, has stalled, or it's growing but nobody's buying.</span>
         </li>
         <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
           <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
@@ -520,15 +534,13 @@ const tickerItems = [
       PODCAST PODCAST
     </p>
     <div class="max-w-6xl mx-auto relative">
-      <div class="grid md:grid-cols-2 gap-10 items-center mb-14">
+      <div class="grid md:grid-cols-[1.15fr_0.85fr] gap-14 md:gap-10 items-center mb-16">
         <div>
           <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">The Email Growth Show ⭐️⭐️⭐️⭐️⭐️</p>
-          <h2 class="font-serif text-4xl sm:text-5xl leading-tight text-black text-balance">
+          <h2 class="font-serif text-4xl sm:text-5xl leading-tight text-black text-balance mb-6">
             The top 1.5% podcast for women growing an email list <em class="italic font-bold text-pink">without social media</em><span class="text-pink">.</span>
           </h2>
-        </div>
-        <div>
-          <p class="text-black mb-3">
+          <p class="text-black mb-3 max-w-xl">
             Your go-to podcast for coaches, course creators and online business owners who want to grow an email list and make consistent sales, without relying on social media.
           </p>
           <p class="text-black font-semibold mb-7">New episodes every Friday.</p>
@@ -543,6 +555,32 @@ const tickerItems = [
             </a>
           </div>
         </div>
+
+        {phoneEpisode && (
+          <div class="relative mx-auto w-[250px] sm:w-[280px] rotate-[3deg]" aria-hidden="true">
+            <div class="rounded-[2.6rem] bg-black p-[10px] shadow-[0_40px_60px_-20px_rgba(0,0,0,0.45)]">
+              <div class="relative overflow-hidden rounded-[2.1rem] bg-white">
+                <div class="mx-auto mt-2 h-[20px] w-[78px] rounded-full bg-black"></div>
+                <div class="px-5 pb-5 pt-3">
+                  <div class="mx-auto mb-3 h-1 w-9 rounded-full bg-black/15"></div>
+                  <img src="/images/podcast-cover.jpg" alt="" class="block aspect-square w-full rounded-xl object-cover shadow-lg" />
+                  <p class="mt-4 text-[10px] font-medium uppercase tracking-wide text-black/50">{phoneDate}</p>
+                  <p class="mt-1 text-[15px] font-semibold leading-snug text-black line-clamp-2">{phoneEpisode.title}</p>
+                  <p class="text-[13px] text-pink">The Email Growth Show</p>
+                  <div class="wave mt-4" style="height:30px">
+                    {phoneEpisode.bars.map((h, i) => <i style={`--h:${h};--d:${((i * 7) % 11) * 0.1}s`}></i>)}
+                  </div>
+                  <div class="mt-1 flex justify-between text-[10px] text-black/50"><span>0:04</span><span>{phoneRemaining}</span></div>
+                  <div class="mt-3 flex items-center justify-center gap-7 text-black">
+                    <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor"><path d="M6 6h2v12H6zM9.5 12 18 18V6z" /></svg>
+                    <span class="grid h-12 w-12 place-items-center rounded-full bg-pink text-white"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /></svg></span>
+                    <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor"><path d="M16 6h2v12h-2zM6 18V6l8.5 6z" /></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <ul class="grid md:grid-cols-3 gap-5">
