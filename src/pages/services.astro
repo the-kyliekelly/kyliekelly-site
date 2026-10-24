@@ -120,7 +120,7 @@ const offers = [
     num: '03',
     eyebrow: 'Get my brain in your corner',
     title: 'Coaching Group',
-    tag: '$297',
+    tag: '$297 one time',
     desc: 'Weekly voice-note coaching for the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent. Real questions, real answers, all week long, straight to your phone.',
     items: [],
     cta: 'Join the Coaching Group',
@@ -148,7 +148,7 @@ const faqs = [
   },
   {
     q: 'How does the coaching group work?',
-    a: 'It is weekly voice-note coaching. You bring me the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent, and I answer them all week long, straight to your phone.',
+    a: 'It is weekly voice-note coaching. You bring me the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent, and I answer them all week long, straight to your phone. It is a one-time payment of $297.',
   },
   {
     q: 'Is there anything bigger coming?',
@@ -156,16 +156,24 @@ const faqs = [
   },
 ];
 
+const beliefs = [
+  'Business gets easier when more of the right people know you exist.',
+  'Relationships over algorithms, every time.',
+  'Your email list is one of the few things in your business you actually own.',
+  'Simple usually beats complicated.',
+  "Consistency isn't about being perfect, it's about showing up often enough that people remember you.",
+];
+
 const marquee = Array.from({ length: 6 });
 ---
 <Layout title="Work With Me | Kylie Kelly" description="Three ways to work with Kylie Kelly, whichever step fits where your business is at right now. No algorithm required.">
 
   <!-- TAG BAR -->
-  <section class="bg-pink-light px-6 py-4">
-    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
-      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+  <section class="bg-black text-white px-6 py-4 border-b border-white/15">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-white text-center">
+      <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
       Three ways to work with me. No algorithm required.
-      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+      <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
     </p>
   </section>
 
@@ -191,6 +199,7 @@ const marquee = Array.from({ length: 6 });
       </div>
       <div class="relative min-h-[340px] md:min-h-full">
         <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="absolute inset-0 h-full w-full object-cover object-[50%_25%]" />
+        <RotatingBadge text="NO ALGORITHM REQUIRED • NO ALGORITHM REQUIRED •" size={118} class="absolute bottom-5 left-5 sm:bottom-8 sm:left-8" />
       </div>
     </div>
   </section>
@@ -253,7 +262,7 @@ const marquee = Array.from({ length: 6 });
   </section>
 
   <!-- RESULTS: tilted cards -->
-  <section class="bg-black text-white px-6 py-20 sm:py-28 overflow-hidden">
+  <section class="relative z-10 bg-black text-white px-6 py-20 sm:py-28 overflow-hidden rounded-t-[2.5rem]">
     <div class="max-w-6xl mx-auto">
       <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3 text-center">&mdash; Happy clients &mdash;</p>
       <h2 class="text-3xl sm:text-4xl font-bold text-center mb-14">Real students. <span class="script-accent italic text-pink">Real results.</span></h2>
@@ -287,20 +296,26 @@ const marquee = Array.from({ length: 6 });
     <section id={o.id} class={`${o.bg} px-6 py-16 sm:py-24 scroll-mt-20`}>
       <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
         <div class={`flex justify-center ${o.flip ? 'md:order-2' : ''}`}>
-          <div class={`bg-white p-3 pb-9 rounded-sm shadow-2xl w-full max-w-sm ${o.tilt}`}>
-            <img src={o.image} alt={o.alt} class="w-full rounded-sm" loading="lazy" />
+          <div class="relative w-full max-w-sm">
+            <img src={o.image} alt={o.alt} class="w-full rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.12)]" loading="lazy" />
+            <span class="absolute -top-5 -left-3 sm:-left-6 grid place-items-center h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-pink text-white font-serif italic text-2xl sm:text-3xl shadow-lg" aria-hidden="true">{o.num}</span>
           </div>
         </div>
         <div class={o.flip ? 'md:order-1' : ''}>
-          <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-3">{o.num}</p>
           <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">{o.eyebrow}</p>
           <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-balance">{o.title}</h2>
           <p class="inline-block rounded-full border border-black px-4 py-1.5 text-xs uppercase tracking-widest font-semibold mb-6">{o.tag}</p>
           <p class="text-black mb-6">{o.desc}</p>
           {o.items.length > 0 && (
-            <ul class="text-sm text-black space-y-2 mb-8">
-              {o.items.map((item) => <li><span class="text-pink">+</span> {item}</li>)}
-            </ul>
+            <details class="group mb-8">
+              <summary class="inline-flex cursor-pointer list-none items-center gap-3 text-[15px] font-semibold [&::-webkit-details-marker]:hidden">
+                The details
+                <span class="grid place-items-center h-9 w-9 rounded-full bg-[#e9d9ec] text-black transition-transform duration-300 group-open:rotate-45"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M8 3v10M3 8h10" /></svg></span>
+              </summary>
+              <ul class="mt-5 text-sm text-black space-y-2">
+                {o.items.map((item) => <li><span class="text-pink">+</span> {item}</li>)}
+              </ul>
+            </details>
           )}
           <a href={o.href} class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
             {o.cta}
@@ -312,7 +327,7 @@ const marquee = Array.from({ length: 6 });
   ))}
 
   <!-- OVERHEARD -->
-  <section class="bg-[#e9d9ec] px-6 py-20 sm:py-28 text-center">
+  <section class="bg-[#e9d9ec] px-6 pt-20 pb-32 sm:pt-28 sm:pb-40 text-center">
     <div class="max-w-3xl mx-auto">
       <p class="text-xs uppercase tracking-widest font-semibold mb-6">Overheard in the Coaching Group</p>
       <blockquote class="font-serif text-2xl sm:text-4xl leading-snug text-balance">
@@ -322,8 +337,20 @@ const marquee = Array.from({ length: 6 });
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="bg-black text-white px-6 py-20 sm:py-28">
+  <!-- BELIEFS + FAQ -->
+  <section class="relative z-10 -mt-14 sm:-mt-20 bg-black text-white px-6 py-20 sm:py-28 rounded-t-[2.5rem]">
+    <div class="max-w-3xl mx-auto mb-20 sm:mb-28">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3 text-center">&mdash; What I believe &mdash;</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">I believe in&hellip;</h2>
+      <ol class="divide-y divide-white/15 border-y border-white/15">
+        {beliefs.map((b, i) => (
+          <li class="flex gap-5 sm:gap-8 py-6 sm:py-7">
+            <span class="font-serif italic text-pink text-2xl sm:text-3xl leading-none pt-1">{String(i + 1).padStart(2, '0')}</span>
+            <span class="font-serif text-xl sm:text-2xl leading-snug text-balance">{b}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
     <div class="max-w-3xl mx-auto">
       <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3 text-center">&mdash; Good to know &mdash;</p>
       <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">Questions you might have.</h2>
