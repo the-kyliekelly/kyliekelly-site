@@ -5,9 +5,11 @@ interface Props {
   title: string;
   description?: string;
   date: string;
+  kind?: 'blog' | 'episode';
 }
 
-const { title, description, date } = Astro.props;
+const { title, description, date, kind = 'episode' } = Astro.props;
+const isBlog = kind === 'blog';
 const formattedDate = new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 <Layout title={`${title} | Kylie Kelly`} description={description}>
@@ -24,7 +26,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', { year: 'numeri
     <div class="max-w-2xl mx-auto">
 
       <header class="text-center mb-12">
-        <a href="/podcast/archive" class="inline-block mb-6 text-sm font-semibold underline underline-offset-2 hover:text-pink">← Back to the episode library</a>
+        <a href={isBlog ? '/blog' : '/podcast/archive'} class="inline-block mb-6 text-sm font-semibold underline underline-offset-2 hover:text-pink">{isBlog ? '← Back to the blog' : '← Back to the episode library'}</a>
         <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">{formattedDate}</p>
         <h1 class="text-3xl sm:text-4xl font-bold leading-tight">{title}</h1>
       </header>
@@ -34,7 +36,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', { year: 'numeri
       </div>
 
       <div class="flex justify-center mt-16 pt-8 border-t border-warmgray/40 text-sm font-semibold">
-        <a href="/podcast/archive" class="underline underline-offset-2 hover:text-pink">Browse all episodes →</a>
+        <a href={isBlog ? '/blog' : '/podcast/archive'} class="underline underline-offset-2 hover:text-pink">{isBlog ? 'Browse all posts →' : 'Browse all episodes →'}</a>
       </div>
 
     </div>

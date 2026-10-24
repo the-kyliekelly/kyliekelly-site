@@ -1,0 +1,204 @@
+---
+import Layout from '../layouts/Layout.astro';
+import RotatingBadge from '../components/RotatingBadge.astro';
+import FreebieReveal from '../components/FreebieReveal.astro';
+import allPosts from '../data/blog-posts.json';
+import { getEpisodes } from '../lib/episodes';
+
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
+const playIcon = 'M5 3.5v9l7.5-4.5z';
+
+// Blog posts are category 35. Podcast episodes (category 36) live in the episode library.
+// Each post gets a cover image (the title graphic from the post) and a topic label.
+const covers: Record<string, { image: string; topic: string }> = {
+  'legal-mistakes-business-owners': {
+    image: '/images/blog/3-Legal-Mistakes-Most-Creatives-Make-Before-They-Hit-100K-and-How-to-Fix-Them-Fast-683x1024.jpg',
+    topic: 'Business',
+  },
+  'website-planet-feature': {
+    image: '/images/blog/Website-Planet-Feature-Kylie-Kelly-Quote-1024x1024.png',
+    topic: 'In the press',
+  },
+  'using-events-to-grow-audience': {
+    image: '/images/blog/7-Powerful-Ways-to-Use-Events-to-Build-Your-Brand-and-Attract-the-Right-People-Kylie-Kelly-Pinterest-683x1024.jpg',
+    topic: 'Visibility',
+  },
+  'how-to-blog-for-business': {
+    image: '/images/blog/How-to-Use-Blogging-to-Attract-Aligned-Clients-and-Grow-Your-Email-List-Eden-from-Maven-Made-Copy-683x1024.jpg',
+    topic: 'Content',
+  },
+  'email-marketing-myths-the-truth-about-what-actually-works-in-2025': {
+    image: '/images/blog/Kylie-Kelly-Blog-Whats-Actually-Working-in-Email-Marketing-in-2025-Pinterest-Pin-683x1024.jpg',
+    topic: 'Email marketing',
+  },
+  'the-rise-framework-explained-how-to-grow-your-audience-without-burning-out': {
+    image: '/images/blog/Kylie-Kelly-Blog-How-To-Grow-Your-Audience-Without-Burning-Out2-791x1024.jpg',
+    topic: 'Audience growth',
+  },
+};
+
+const clean = (html: string) => html.replace(/<[^>]+>/g, ' ').replace(/&[#\w]+;/g, ' ').replace(/\s+/g, ' ').trim();
+const shorten = (text: string, max: number) => {
+  const t = clean(text);
+  if (t.length <= max) return t;
+  return t.slice(0, max).replace(/\s+\S*$/, '') + '…';
+};
+
+const posts = allPosts
+  .filter((p) => p.categories.includes(35) && covers[p.slug])
+  .sort((a, b) => +new Date(b.date) - +new Date(a.date))
+  .map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    href: `/${p.slug}/`,
+    date: new Date(p.date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }),
+    excerpt: shorten(p.excerpt, 190),
+    short: shorten(p.excerpt, 110),
+    ...covers[p.slug],
+  }));
+
+const [featured, ...rest] = posts;
+const wide = rest[0];
+const tiles = rest.slice(1);
+const tileTint = ['bg-[#e9d9ec]', 'bg-[#fbe6f7]', 'bg-pink-light', 'bg-offwhite'];
+
+const pills = [
+  { label: 'The blog', href: '#latest', dot: 'bg-pink text-white', active: true },
+  { label: 'Podcast show notes', href: '/podcast/archive', dot: 'bg-pink-light text-black' },
+  { label: 'Favorites', href: '/resources', dot: 'bg-[#e9d9ec] text-black' },
+  { label: 'Free community', href: 'https://www.skool.com/email-marketing-skool/about', dot: 'bg-black text-white' },
+];
+
+const episodes = (await getEpisodes()).slice(0, 3);
+---
+<Layout title="The Blog | Kylie Kelly" description="Email marketing, visibility and growing a business without living on social media. Practical posts from Kylie Kelly.">
+
+  <section class="bg-pink-light px-6 py-4">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+      Wife. Mom of two boys. Founder of Kylie Kelly. Host of The Email Growth Show.
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+    </p>
+  </section>
+
+  <!-- HERO -->
+  <section class="bg-offwhite px-6 pt-16 pb-24 sm:pt-24 sm:pb-32 text-center">
+    <div class="max-w-4xl mx-auto">
+      <p class="text-xs uppercase tracking-widest font-semibold mb-5">The blog</p>
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] text-balance mb-7">
+        Welcome to the <span class="script-accent italic text-pink">Kylie Kelly</span> blog
+      </h1>
+      <p class="text-black max-w-xl mx-auto mb-10">
+        Email marketing, visibility and growing a business without living on social media. Looking for the podcast? Every episode's show notes live in the episode library.
+      </p>
+      <div class="flex flex-wrap justify-center gap-3">
+        {pills.map((p) => (
+          <a href={p.href} class={`group inline-flex items-center gap-4 rounded-full pl-6 pr-2 py-2 text-[15px] font-semibold shadow-[0_8px_30px_rgba(0,0,0,0.05)] transition-transform duration-300 hover:-translate-y-1 ${p.active ? 'bg-black text-white' : 'bg-white text-black'}`}>
+            {p.label}
+            <span class={`grid place-items-center h-10 w-10 rounded-full transition-colors duration-300 ${p.dot}`}><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED POST -->
+  {featured && (
+    <section class="relative">
+      <div class="grid md:grid-cols-2">
+        <a href={featured.href} class="block bg-[#e9d9ec] overflow-hidden">
+          <img src={featured.image} alt="" class="w-full h-full max-h-[560px] md:max-h-[680px] object-cover object-top" />
+        </a>
+        <div class="bg-black text-white flex flex-col justify-center px-8 sm:px-14 lg:px-20 py-16 sm:py-20">
+          <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-5">{featured.topic} · {featured.date}</p>
+          <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight text-balance mb-6">{featured.title}</h2>
+          <p class="text-warmgray mb-9 max-w-md">{featured.excerpt}</p>
+          <a href={featured.href} class="inline-block self-start rounded-full bg-[#e9d9ec] text-black px-7 py-3.5 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">Read the post</a>
+        </div>
+      </div>
+      <RotatingBadge text="FEATURED POST • FEATURED POST • " size={130} class="absolute -top-16 right-6 md:right-16 z-10" />
+    </section>
+  )}
+
+  <!-- ALL THE LATEST -->
+  <section id="latest" class="bg-white px-6 py-20 sm:py-28 scroll-mt-20">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="font-serif text-4xl sm:text-5xl mb-12">All the latest:</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        {wide && (
+          <a href={wide.href} class="group md:col-span-2 grid sm:grid-cols-2 rounded-[1.75rem] overflow-hidden bg-[#e9d9ec] transition-transform duration-300 hover:-translate-y-1">
+            <div class="relative">
+              <img src={wide.image} alt="" class="h-full w-full max-h-[420px] sm:max-h-none object-cover object-top" loading="lazy" />
+              <span class="absolute top-4 left-4 rounded-full bg-white px-3 py-1 text-xs font-semibold text-pink">New!</span>
+            </div>
+            <div class="flex flex-col p-8">
+              <p class="text-xs uppercase tracking-widest font-semibold mb-3">{wide.topic}</p>
+              <h3 class="font-serif text-2xl sm:text-3xl leading-snug text-balance mb-4">{wide.title}</h3>
+              <p class="text-sm text-black mb-6">{wide.short}</p>
+              <span class="mt-auto self-end grid place-items-center h-11 w-11 rounded-full bg-white text-black transition-colors duration-300 group-hover:bg-pink group-hover:text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>
+            </div>
+          </a>
+        )}
+        {tiles.map((t, i) => (
+          <a href={t.href} class="group block">
+            <div class={`relative aspect-[2/3] overflow-hidden rounded-[1.5rem] ${tileTint[i % tileTint.length]} transition-transform duration-300 group-hover:-translate-y-1`}>
+              <img src={t.image} alt="" class="h-full w-full object-cover object-top" loading="lazy" />
+              <span class="absolute bottom-3 right-3 grid place-items-center h-10 w-10 rounded-full bg-white text-black shadow-md transition-colors duration-300 group-hover:bg-pink group-hover:text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>
+            </div>
+            <p class="text-[11px] uppercase tracking-widest font-semibold text-black/70 mt-4 mb-1.5">{t.topic} · {t.date}</p>
+            <h3 class="font-serif text-lg sm:text-xl leading-snug text-balance group-hover:text-pink transition-colors">{t.title}</h3>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PREFER TO LISTEN -->
+  {episodes.length > 0 && (
+    <section class="relative overflow-hidden bg-black text-white px-6 py-20 sm:py-28">
+      <img src="/images/podcast-cover.jpg" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full scale-125 object-cover opacity-60 blur-2xl" />
+      <div class="absolute inset-0 bg-gradient-to-b from-pink/50 via-black/35 to-black/60" aria-hidden="true"></div>
+      <div class="relative max-w-2xl mx-auto">
+        <p class="text-xs uppercase tracking-widest font-semibold text-center mb-3">Prefer to listen?</p>
+        <h2 class="font-serif text-4xl sm:text-6xl uppercase text-center leading-[0.98] mb-12">Show notes<br />+ episodes</h2>
+        <div class="space-y-4">
+          {episodes.map((ep, i) => (
+            <a href={ep.href} class="group flex items-center gap-4 sm:gap-5 rounded-full bg-white text-black p-3 pr-4 sm:pr-5 shadow-xl transition-transform duration-300 hover:-translate-y-1">
+              <img src="/images/hero-1.jpg" alt="" class="h-16 w-16 sm:h-20 sm:w-20 flex-none rounded-full object-cover" loading="lazy" />
+              <span class="flex-1 min-w-0">
+                <span class="block text-[11px] uppercase tracking-widest font-semibold text-black/70 mb-1">Ep {ep.num}{ep.mins ? ` · ${ep.mins} min listen` : ''}</span>
+                <span class="block font-semibold leading-snug text-[15px] sm:text-base">{ep.title}</span>
+              </span>
+              <span class={`grid place-items-center h-11 w-11 flex-none rounded-full transition-transform duration-300 group-hover:scale-110 ${['bg-pink text-white', 'bg-black text-white', 'bg-pink-light text-black'][i % 3]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+            </a>
+          ))}
+        </div>
+        <p class="text-center mt-12">
+          <a href="/podcast/archive" class="font-serif text-xl underline underline-offset-4 decoration-white/40 hover:decoration-white">All episodes + show notes →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <!-- READ MY STORY -->
+  <section class="bg-offwhite px-6 py-20 sm:py-28">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-[0.8fr_1.2fr] gap-10 md:gap-16 items-center">
+      <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="w-full max-w-sm mx-auto aspect-[4/5] object-cover object-[50%_25%] rounded-[2rem]" loading="lazy" />
+      <div>
+        <p class="font-serif italic text-pink text-2xl mb-2">Hello, I'm</p>
+        <h2 class="font-serif font-bold text-5xl sm:text-6xl mb-6">Kylie.</h2>
+        <p class="text-black mb-8 max-w-lg">
+          Ex international wedding photographer, mom of two boys, and proof that you can grow a real email list without living on social media. I went from 0 to 7,000+ subscribers in 18 months, and I share how right here and on the podcast.
+        </p>
+        <a href="/meet-kylie" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+          Read my story
+          <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
+  <FreebieReveal slot="reveal" />
+
+</Layout>

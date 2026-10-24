@@ -14,6 +14,7 @@ function extractEpisodeNumber(post) {
 }
 
 const archivePosts = allPosts
+  .filter((p) => !p.categories.includes(35)) // 35 = blog posts, they live on /blog
   .filter((p) => !featuredSlugs.has(p.slug))
   .map((p) => ({
     num: extractEpisodeNumber(p),

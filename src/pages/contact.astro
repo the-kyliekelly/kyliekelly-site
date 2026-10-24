@@ -1,5 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FreebieReveal from '../components/FreebieReveal.astro';
+
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
+
+const elsewhere = [
+  { title: 'The Podcast', text: 'The Email Growth Show, every Friday. Real talk on growing your list without social media.', href: '/podcast', image: '/images/hero-1.jpg', dot: 'bg-pink text-white' },
+  { title: 'The Free Community', text: 'Email Marketing Skool: a 90-day growth plan and 1,300+ women doing the same work.', href: 'https://www.skool.com/email-marketing-skool/about', image: '/images/hero-8.jpg', dot: 'bg-pink-light text-black' },
+  { title: 'My Favorites', text: 'The tools and resources I actually use to run my business.', href: '/resources', image: '/images/desk-scene.jpg', dot: 'bg-[#e9d9ec] text-black' },
+  { title: 'The Blog', text: 'Practical posts on email, visibility and growing a business.', href: '/blog', image: '/images/hero-2.jpg', dot: 'bg-black text-white' },
+];
+
+const socials = [
+  { label: 'Instagram', href: 'https://www.instagram.com/the_kyliekelly/', dot: 'bg-pink-light text-black' },
+  { label: 'Apple Podcasts', href: 'https://podcasts.apple.com/podcast/id1550211753', dot: 'bg-[#e9d9ec] text-black' },
+  { label: 'Spotify', href: 'https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3', dot: 'bg-pink text-white' },
+];
+
+const field = 'w-full rounded-full bg-white px-6 py-4 text-[15px] text-black placeholder:text-black/55 shadow-[0_6px_24px_rgba(0,0,0,0.04)] border border-transparent focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink';
 ---
 <Layout title="Contact | Kylie Kelly" description="Questions, collaborations, or podcast invitations? Get in touch with Kylie Kelly. Replies within 48 hours, Monday to Friday AEST.">
 
@@ -12,70 +30,94 @@ import Layout from '../layouts/Layout.astro';
     </p>
   </section>
 
-  <!-- HERO -->
-  <section class="bg-black text-white px-6 py-20 text-center">
-    <div class="max-w-2xl mx-auto">
-      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Get In Touch</p>
-      <h1 class="text-4xl sm:text-5xl font-bold mb-6">Say hey. I'd love to hear from you.</h1>
-      <p class="text-warmgray">
-        Got a question, a collaboration idea, or want to work together? Pop it in the form below and it'll land straight in my inbox <span class="italic">{'{not a chatbot, not a VA, just me}'}</span>.
-      </p>
-    </div>
-  </section>
-
   <!-- GET IN TOUCH -->
-  <section class="px-6 py-20">
-    <div class="max-w-4xl mx-auto grid md:grid-cols-[0.85fr_1.15fr] gap-12 items-start">
+  <section class="bg-[#fbe6f7] px-6 pt-16 pb-24 sm:pt-24 sm:pb-32">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="text-center text-5xl sm:text-7xl font-bold leading-none mb-8">
+        Get in <span class="script-accent italic text-pink">touch</span>
+      </h1>
+      <p class="text-center text-black mb-12 max-w-xl mx-auto leading-relaxed">
+        <strong>Say hey. I'd love to hear from you.</strong> Got a question, a collaboration idea, or a podcast pitch? Pop it in the form below and it lands straight in my inbox <span class="italic">{'{not a chatbot, not a VA, just me}'}</span>. I get back to everyone within 48 hours, Monday to Friday AEST. Or email me at <a href="mailto:hello@kyliekelly.com" class="font-semibold text-pink underline underline-offset-4">hello@kyliekelly.com</a>.
+      </p>
 
-      <!-- info card -->
-      <div class="bg-offwhite rounded-lg p-8">
-        <div class="w-24 h-24 rounded-full overflow-hidden mb-6">
-          <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling" class="w-full h-full object-cover" />
+      <form id="contact-form" class="space-y-4" action="mailto:hello@kyliekelly.com" method="post" enctype="text/plain">
+        <label class="sr-only" for="c-name">Your name</label>
+        <input id="c-name" name="Name" type="text" required placeholder="Your name" autocomplete="name" class={field} />
+        <label class="sr-only" for="c-email">Your email address</label>
+        <input id="c-email" name="Email" type="email" required placeholder="Your email address" autocomplete="email" class={field} />
+        <label class="sr-only" for="c-subject">What is it about?</label>
+        <input id="c-subject" name="Subject" type="text" required placeholder="What's it about?" class={field} />
+        <label class="sr-only" for="c-found">How did you find me?</label>
+        <input id="c-found" name="Found me via" type="text" placeholder="How did you find me? (optional)" class={field} />
+        <label class="sr-only" for="c-message">Any details you'd like to share</label>
+        <textarea id="c-message" name="Message" rows="6" required placeholder="Any details you'd like to share" class="w-full rounded-[1.75rem] bg-white px-6 py-4 text-[15px] text-black placeholder:text-black/55 shadow-[0_6px_24px_rgba(0,0,0,0.04)] border border-transparent focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink"></textarea>
+        <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-5 pt-2">
+          <p id="contact-status" class="text-sm text-black/70" role="status" aria-live="polite">This opens your email app with your message ready to send.</p>
+          <button type="submit" class="group inline-flex items-center justify-between gap-4 self-end rounded-full bg-black text-white pl-8 pr-2 py-2 text-[15px] font-semibold cursor-pointer transition-transform duration-300 hover:-translate-y-1">
+            Send it
+            <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </button>
         </div>
-        <h2 class="text-xl font-bold mb-3">Prefer to email direct?</h2>
-        <p class="text-black text-sm mb-6">That works too. I read every single one myself.</p>
-
-        <div class="mb-6">
-          <p class="text-xs uppercase tracking-widest font-semibold text-muted mb-2">Email</p>
-          <a href="mailto:hello@kyliekelly.com" class="font-semibold hover:text-pink">hello@kyliekelly.com</a>
-          <p class="text-sm text-muted mt-1">I get back to everyone within 48 hours, Monday to Friday AEST.</p>
-        </div>
-
-        <div class="mb-6">
-          <p class="text-xs uppercase tracking-widest font-semibold text-muted mb-2">Elsewhere</p>
-          <a href="https://www.instagram.com/the_kyliekelly/" class="font-semibold underline underline-offset-2 hover:text-pink">Instagram</a>
-        </div>
-
-        <div>
-          <p class="text-xs uppercase tracking-widest font-semibold text-muted mb-2">Free Community</p>
-          <a href="https://www.skool.com/email-marketing-skool/about" class="font-semibold underline underline-offset-2 hover:text-pink">Email Marketing Skool →</a>
-        </div>
-      </div>
-
-      <!-- form -->
-      <div>
-        <h2 class="text-2xl font-bold mb-3">Ask away, I can't wait to connect.</h2>
-        <p class="text-muted mb-8 max-w-md">Got a question about working together, a collaboration, or the podcast? Fill this in and I'll be in your inbox soon.</p>
-
-        <form class="space-y-5" action="mailto:hello@kyliekelly.com" method="post" enctype="text/plain">
-          <div>
-            <label for="name" class="block text-xs uppercase tracking-wide font-semibold mb-2">Name *</label>
-            <input id="name" name="Name" type="text" required class="w-full border border-warmgray rounded-md px-4 py-3 focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
-          </div>
-          <div>
-            <label for="email" class="block text-xs uppercase tracking-wide font-semibold mb-2">Email *</label>
-            <input id="email" name="Email" type="email" required class="w-full border border-warmgray rounded-md px-4 py-3 focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
-          </div>
-          <div>
-            <label for="message" class="block text-xs uppercase tracking-wide font-semibold mb-2">How can I help? *</label>
-            <textarea id="message" name="Message" rows="5" required class="w-full border border-warmgray rounded-md px-4 py-3 focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink"></textarea>
-          </div>
-          <button type="submit" class="btn-pink">Send It →</button>
-          <p class="text-xs text-muted">This opens your email app with your message ready to send to hello@kyliekelly.com.</p>
-        </form>
-      </div>
-
+      </form>
     </div>
   </section>
+
+  <!-- FIND ME ELSEWHERE -->
+  <section class="relative z-10 -mt-12 rounded-t-[2.5rem] bg-white px-6 py-20 sm:py-28">
+    <div class="max-w-5xl mx-auto">
+      <p class="text-xs uppercase tracking-widest font-semibold text-center mb-3">Not ready to write?</p>
+      <h2 class="font-serif text-4xl sm:text-5xl text-center mb-14 sm:mb-20">Find me elsewhere</h2>
+      <div class="grid md:grid-cols-[1fr_0.9fr] gap-12 md:gap-16 items-center">
+        <ul class="space-y-9">
+          {elsewhere.map((e) => (
+            <li>
+              <a href={e.href} class="group flex items-center gap-5">
+                <img src={e.image} alt="" class="h-20 w-20 flex-none rounded-full object-cover" loading="lazy" />
+                <span class="flex-1">
+                  <span class="block font-serif text-2xl mb-1">{e.title}</span>
+                  <span class="block text-sm text-black">{e.text}</span>
+                </span>
+                <span class={`grid place-items-center h-10 w-10 flex-none rounded-full transition-colors duration-300 group-hover:bg-pink group-hover:text-white ${e.dot}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="relative overflow-hidden rounded-[2rem] bg-[#e9d9ec] min-h-[560px] md:min-h-[680px]">
+          <img src="/images/hero-7.jpg" alt="Kylie Kelly laughing, holding a disco ball" class="absolute inset-0 h-full w-full object-cover object-top" loading="lazy" />
+          <div class="absolute inset-x-0 bottom-0 p-6 space-y-3 bg-gradient-to-t from-black/45 to-transparent pt-24">
+            {socials.map((s) => (
+              <a href={s.href} target="_blank" rel="noopener" class="group flex items-center justify-between rounded-full bg-white pl-6 pr-2 py-2 text-[15px] font-semibold text-black transition-transform duration-300 hover:-translate-y-1">
+                {s.label}
+                <span class={`grid place-items-center h-10 w-10 rounded-full transition-colors duration-300 group-hover:bg-black group-hover:text-white ${s.dot}`}><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
+  <FreebieReveal slot="reveal" />
 
 </Layout>
+
+<script>
+  // Build a ready-to-send email from the form, so the message arrives with every field in it.
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('contact-status');
+  if (form) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const get = (key: string) => String(data.get(key) ?? '').trim();
+      const lines = [`Name: ${get('Name')}`, `Email: ${get('Email')}`];
+      if (get('Found me via')) lines.push(`Found me via: ${get('Found me via')}`);
+      lines.push('', get('Message'));
+      const body = lines.join('\n');
+      const subject = get('Subject') || 'Hello from kyliekelly.com';
+      window.location.href = `mailto:hello@kyliekelly.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      if (status) status.textContent = 'Your email app should open with your message ready to send. If nothing happens, email hello@kyliekelly.com.';
+    });
+  }
+</script>

@@ -1,59 +1,175 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Highlight from '../components/Highlight.astro';
+import FreebieReveal from '../components/FreebieReveal.astro';
 
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
+
+// Tools Kylie uses. Links are affiliate links, so they carry rel="sponsored".
 const tools = [
-  { name: 'Kit', desc: 'Still my favourite for easy email marketing. I use it for automation, segmentation, and building out email funnels without the tech headache.', url: 'https://partners.kit.com/kyliekelly' },
-  { name: 'Thrivecart', desc: 'This is what I use to sell my offers, host workshops, and set up sales funnels, super simple to use and it just works.', url: 'https://thepregnantceo--checkout.thrivecart.com/thrivecart-standard-account/673d48af62985/' },
-  { name: 'Try Interact', desc: 'I use Interact to build my visibility strategy quiz, and it\u2019s been a list-building game changer.', url: 'https://get.tryinteract.com/kyliekelly' },
-  { name: 'ConvertBox', desc: 'This little tool helps me show the right message to the right person, without being annoying. Exit pop-ups, time-sensitive CTAs, personalised messages.', url: 'https://thepregnantceo--sslcheckout.thrivecart.com/cb-lifetime/595258cb2d05b/' },
-  { name: 'Buzzsprout', desc: 'This is where all my podcast episodes live. Super easy to use, helps me track downloads, and integrates beautifully with my website.', url: 'https://www.buzzsprout.com/?referrer_id=2046932' },
+  { name: 'Kit', tag: 'Email marketing', desc: 'Still my favourite for easy email marketing. I use it for automation, segmentation, and building out email funnels without the tech headache.', url: 'https://partners.kit.com/kyliekelly', tint: 'bg-[#e9d9ec]' },
+  { name: 'ThriveCart', tag: 'Selling', desc: 'This is what I use to sell my offers, host workshops, and set up sales funnels, super simple to use and it just works.', url: 'https://thepregnantceo--checkout.thrivecart.com/thrivecart-standard-account/673d48af62985/', tint: 'bg-[#fbe6f7]' },
+  { name: 'Interact', tag: 'Quizzes', desc: 'I use Interact to build my visibility strategy quiz, and it’s been a list-building game changer.', url: 'https://get.tryinteract.com/kyliekelly', tint: 'bg-pink-light' },
+  { name: 'ConvertBox', tag: 'On-site messages', desc: 'This little tool helps me show the right message to the right person, without being annoying. Exit pop-ups, time-sensitive CTAs, personalised messages.', url: 'https://thepregnantceo--sslcheckout.thrivecart.com/cb-lifetime/595258cb2d05b/', tint: 'bg-offwhite' },
+  { name: 'Buzzsprout', tag: 'Podcasting', desc: 'This is where all my podcast episodes live. Super easy to use, helps me track downloads, and integrates beautifully with my website.', url: 'https://www.buzzsprout.com/?referrer_id=2046932', tint: 'bg-[#e9d9ec]' },
+];
+
+const stickers = [
+  { label: 'Kit', cls: 'bg-pink text-white -rotate-6 md:absolute md:left-[6%] md:top-[18%]' },
+  { label: 'ThriveCart', cls: 'bg-white text-black rotate-3 md:absolute md:right-[8%] md:top-[12%]' },
+  { label: 'Interact', cls: 'bg-[#e9d9ec] text-black -rotate-3 md:absolute md:left-[12%] md:bottom-[16%]' },
+  { label: 'ConvertBox', cls: 'bg-[#fbe6f7] text-black rotate-6 md:absolute md:right-[10%] md:bottom-[20%]' },
+  { label: 'Buzzsprout', cls: 'bg-pink-light text-black -rotate-2 md:absolute md:right-[2%] md:top-[44%]' },
+];
+
+const places = [
+  { title: 'The KK Digital Product Shop', text: 'Grab-and-go courses, templates and trainings for growing your list without social media.', href: 'https://shop.kyliekelly.com/', image: '/images/shop-mockup.jpg', dot: 'bg-pink-light text-black' },
+  { title: 'Email Marketing Skool', text: 'My free community, with a simple 90-day growth plan and the Email Marketing Starter Kit.', href: 'https://www.skool.com/email-marketing-skool/about', image: '/images/hero-8.jpg', dot: 'bg-[#e9d9ec] text-black' },
+  { title: 'The Email Growth Show', text: 'My podcast, every Friday, with full show notes for every episode.', href: '/podcast', image: '/images/hero-1.jpg', dot: 'bg-[#fbe6f7] text-black' },
+];
+
+const deeper = [
+  {
+    title: 'Ms "Strategic Planner" Sally',
+    text: 'Takes the guesswork out of audience growth by creating a personalised 90-day plan tailored to your business in seconds.',
+    cta: 'Access Sally',
+    href: 'https://kyliekelly.thrivecart.com/strategic-planner-sally/',
+    tint: 'bg-[#e9d9ec]',
+  },
+  {
+    title: 'Your Next 1000 Subscribers',
+    text: '11 strategies to grow your email list fast, broken down by effort level.',
+    cta: 'Grab your guide',
+    href: '/guide',
+    tint: 'bg-[#fbe6f7]',
+  },
+  {
+    title: 'The Audio Summit Case Study',
+    text: 'How I grew my list by 1,100+ subscribers and turned it into $25K in revenue with one simple audio-only event.',
+    cta: 'Watch the case study',
+    href: '/inside',
+    tint: 'bg-pink-light',
+  },
 ];
 ---
-<Layout title="Resources | Kylie Kelly" description="All my favourite resources for business and life.">
+<Layout title="Favorites | Kylie Kelly" description="A few of my favorite things: the tools and resources I actually use to run my business.">
 
-  <section class="bg-black text-white px-6 py-20 text-center">
-    <p class="script-accent text-pink-light text-xl mb-3">everything I love, all in one place</p>
-    <h1 class="text-4xl sm:text-5xl font-bold mb-4">Resources</h1>
-    <p class="text-warmgray max-w-xl mx-auto text-sm">
-      Friendly heads up: some links may be affiliate links. I never recommend anything I don't personally use and love.
+  <section class="bg-pink-light px-6 py-4">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+      Everything I love, all in one place
+      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
     </p>
   </section>
 
-  <section class="px-6 py-16">
-    <div class="max-w-3xl mx-auto">
-      <h2 class="text-2xl font-bold text-center mb-10">Business tools I actually use</h2>
-      <div class="space-y-6">
-        {tools.map((t) => (
-          <a href={t.url} class="block bg-offwhite rounded-lg p-6 hover:shadow-md transition-shadow">
-            <p class="font-serif font-bold text-lg mb-2">{t.name}</p>
-            <p class="text-sm text-muted">{t.desc}</p>
-          </a>
+  <!-- HERO -->
+  <section class="relative bg-black text-white px-6 pt-20 pb-36 sm:pt-28 sm:pb-44 text-center overflow-hidden">
+    <div class="relative max-w-5xl mx-auto md:min-h-[360px] flex flex-col items-center justify-center">
+      <h1 class="font-serif uppercase leading-[0.92] text-6xl sm:text-8xl lg:text-9xl">
+        <span class="block text-pink">Favorites</span>
+        <span class="block">Right now</span>
+      </h1>
+      <p class="mt-6 text-warmgray text-lg">A few of my favorite things</p>
+      <div class="mt-10 flex flex-wrap justify-center gap-3 md:mt-0 md:block" aria-hidden="true">
+        {stickers.map((s) => (
+          <span class={`inline-block rounded-full px-5 py-2.5 text-sm font-semibold shadow-xl ${s.cls}`}>{s.label}</span>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="bg-offwhite px-6 py-16">
-    <div class="max-w-3xl mx-auto text-center">
-      <h2 class="text-2xl font-bold mb-10">Wanna go deeper?</h2>
-      <div class="grid md:grid-cols-3 gap-6 text-left">
-        <div class="bg-white rounded-lg p-6">
-          <p class="font-serif font-bold mb-2">Ms "Strategic Planner" Sally</p>
-          <p class="text-sm text-muted mb-4">Takes the guesswork out of audience growth by creating a personalised 90-day plan tailored to your business in seconds.</p>
-          <a href="https://kyliekelly.thrivecart.com/strategic-planner-sally/" class="btn-outline text-xs !py-2 !px-4">Access Sally →</a>
-        </div>
-        <div class="bg-white rounded-lg p-6">
-          <p class="font-serif font-bold mb-2">Your Next 1000 Subscribers</p>
-          <p class="text-sm text-muted mb-4">11 strategies to grow your email list fast, broken down by effort level.</p>
-          <a href="/guide" class="btn-outline text-xs !py-2 !px-4">Grab Your Guide →</a>
-        </div>
-        <div class="bg-white rounded-lg p-6">
-          <p class="font-serif font-bold mb-2">The Audio Summit Case Study</p>
-          <p class="text-sm text-muted mb-4">How Kylie grew her list by 1,100+ subscribers and turned it into $25K in revenue with one simple audio-only event.</p>
-          <a href="/inside" class="btn-outline text-xs !py-2 !px-4">Watch the Case Study →</a>
-        </div>
+  <!-- THE HOTTEST RECS -->
+  <section class="relative z-10 -mt-14 sm:-mt-20 rounded-t-[2.5rem] bg-white px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 text-center">
+    <div class="max-w-3xl mx-auto">
+      <p class="text-pink font-semibold mb-5">The hottest recs</p>
+      <h2 class="text-3xl sm:text-5xl font-bold leading-tight text-balance">
+        I only recommend what I <Highlight>actually use</Highlight>. Here are a few of my favorites, all in one place.
+      </h2>
+      <p class="mt-6 text-sm text-black/70 max-w-xl mx-auto">
+        Friendly heads up: some links may be affiliate links. I never recommend anything I don't personally use and love.
+      </p>
+    </div>
+
+    <div class="max-w-2xl mx-auto mt-14 space-y-4 text-left">
+      {places.map((p) => (
+        <a href={p.href} class="group flex items-center gap-5 rounded-[1.75rem] bg-offwhite p-4 sm:p-5 transition-transform duration-300 hover:-translate-y-1">
+          <img src={p.image} alt="" class="h-20 w-20 sm:h-24 sm:w-24 flex-none rounded-full object-cover" loading="lazy" />
+          <span class="flex-1">
+            <span class="block font-serif text-xl sm:text-2xl mb-1">{p.title}</span>
+            <span class="block text-sm text-black">{p.text}</span>
+          </span>
+          <span class={`grid place-items-center h-11 w-11 flex-none rounded-full transition-colors duration-300 group-hover:bg-pink group-hover:text-white ${p.dot}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- GO DEEPER -->
+  <section class="bg-white px-6 pb-20 sm:pb-28">
+    <div class="max-w-5xl mx-auto">
+      <p class="text-xs uppercase tracking-widest font-semibold text-center mb-3">Wanna go deeper?</p>
+      <h2 class="font-serif text-4xl sm:text-5xl text-center mb-12">Go a little deeper</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        {deeper.map((d) => (
+          <div class={`flex flex-col rounded-[2rem] p-8 sm:p-9 ${d.tint}`}>
+            <h3 class="font-serif text-2xl sm:text-3xl leading-tight text-balance mb-4">{d.title}</h3>
+            <p class="text-sm text-black mb-8 flex-grow">{d.text}</p>
+            <a href={d.href} class="group inline-flex items-center gap-4 self-start rounded-full bg-black text-white pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+              {d.cta}
+              <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+            </a>
+          </div>
+        ))}
       </div>
     </div>
   </section>
 
+  <!-- MARQUEE -->
+  <section class="overflow-hidden bg-white pb-12 sm:pb-16" aria-hidden="true">
+    <div class="fav-marquee flex w-max">
+      {[0, 1].map(() => (
+        <div class="flex flex-none">
+          {Array.from({ length: 5 }).map(() => (
+            <span class="font-serif text-5xl sm:text-7xl uppercase whitespace-nowrap pr-8">Favorites right now <span class="text-pink">/</span></span>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- TOOLS I USE -->
+  <section class="bg-offwhite px-6 py-20 sm:py-28">
+    <div class="max-w-5xl mx-auto">
+      <p class="text-xs uppercase tracking-widest font-semibold text-center mb-3">Business tools</p>
+      <h2 class="font-serif text-4xl sm:text-5xl text-center mb-14">The ones I actually use</h2>
+      <div class="flex flex-wrap justify-center gap-6">
+        {tools.map((t) => (
+          <article class={`flex flex-col rounded-[2rem] p-8 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] ${t.tint}`}>
+            <p class="inline-block self-start rounded-full bg-white px-4 py-1.5 text-xs uppercase tracking-widest font-semibold mb-6">{t.tag}</p>
+            <h3 class="font-serif text-4xl mb-4">{t.name}</h3>
+            <p class="text-sm text-black mb-8 flex-grow">{t.desc}</p>
+            <a href={t.url} target="_blank" rel="sponsored noopener" class="group inline-flex items-center gap-4 self-start rounded-full bg-white text-black pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1" aria-label={`Visit ${t.name} (affiliate link)`}>
+              Visit now
+              <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
+  <FreebieReveal slot="reveal" />
+
 </Layout>
+
+<style>
+  .fav-marquee { animation: fav-marquee 70s linear infinite; }
+  @keyframes fav-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fav-marquee { animation: none; }
+  }
+</style>
