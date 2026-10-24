@@ -1,0 +1,77 @@
+---
+// Cookie consent banner. Shows once, remembers the choice for 12 months, and can be reopened from
+// the "Cookie settings" link in the footer.
+//
+// To add analytics or an ad pixel that only runs after someone accepts, paste its script like this
+// (it stays inert until "Accept" is chosen):
+//   <script type="text/plain" data-consent="analytics" src="https://example.com/tag.js"></script>
+// Nothing like that is installed yet, so right now the site sets no tracking cookies either way.
+---
+<div id="cookie-banner" class="hidden fixed inset-x-4 bottom-4 z-[60] sm:inset-x-auto sm:left-6 sm:bottom-6 sm:max-w-md rounded-[1.75rem] bg-white p-6 text-black shadow-[0_20px_60px_rgba(0,0,0,0.22)] border border-black/10" role="dialog" aria-modal="false" aria-labelledby="cookie-title" aria-describedby="cookie-text">
+  <p id="cookie-title" class="font-serif italic font-bold text-pink text-xl leading-none mb-2">Cookies, your call.</p>
+  <p id="cookie-text" class="text-sm leading-relaxed mb-5">
+    This site may use cookies and similar tools for analytics and advertising. Accept or decline, the site works the same either way. Details are in the <a href="/privacy-policy#privacy" class="font-semibold underline underline-offset-2 hover:text-pink">Privacy Policy</a>.
+  </p>
+  <div class="flex flex-wrap items-center gap-3">
+    <button type="button" data-cookie-choice="accepted" class="inline-flex items-center rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5 cursor-pointer">Accept</button>
+    <button type="button" data-cookie-choice="declined" class="inline-flex items-center rounded-full border border-black px-6 py-3 text-sm font-semibold text-black transition-colors duration-300 hover:bg-black hover:text-white cursor-pointer">Decline</button>
+  </div>
+</div>
+
+<script>
+  const KEY = 'kk-cookie-consent';
+  const YEAR = 365 * 24 * 60 * 60 * 1000;
+  type Choice = 'accepted' | 'declined';
+
+  const banner = document.getElementById('cookie-banner');
+
+  function stored(): Choice | null {
+    try {
+      const v = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (v && (v.choice === 'accepted' || v.choice === 'declined') && Date.now() - v.at < YEAR) return v.choice;
+    } catch {
+      /* storage blocked: treat as no choice yet */
+    }
+    return null;
+  }
+
+  // Scripts marked type="text/plain" data-consent="..." only run after Accept.
+  function runConsentScripts() {
+    document.querySelectorAll<HTMLScriptElement>('script[type="text/plain"][data-consent]').forEach((old) => {
+      const s = document.createElement('script');
+      Array.from(old.attributes).forEach((a) => {
+        if (a.name !== 'type') s.setAttribute(a.name, a.value);
+      });
+      s.text = old.text;
+      old.replaceWith(s);
+    });
+  }
+
+  function apply(choice: Choice) {
+    document.documentElement.dataset.cookieConsent = choice;
+    if (choice === 'accepted') runConsentScripts();
+  }
+
+  function choose(choice: Choice) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({ choice, at: Date.now() }));
+    } catch {
+      /* storage blocked: the banner will simply show again next visit */
+    }
+    apply(choice);
+    window.dispatchEvent(new CustomEvent('cookie-consent', { detail: { choice } }));
+    banner?.classList.add('hidden');
+  }
+
+  const existing = stored();
+  if (existing) apply(existing);
+  else window.setTimeout(() => banner?.classList.remove('hidden'), 700);
+
+  banner?.querySelectorAll<HTMLButtonElement>('[data-cookie-choice]').forEach((b) =>
+    b.addEventListener('click', () => choose(b.dataset.cookieChoice as Choice))
+  );
+  // Footer "Cookie settings" link reopens the banner.
+  document.querySelectorAll('[data-cookie-settings]').forEach((el) =>
+    el.addEventListener('click', () => banner?.classList.remove('hidden'))
+  );
+</script>

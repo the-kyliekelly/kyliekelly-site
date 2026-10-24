@@ -2,7 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Highlight from '../components/Highlight.astro';
 import CountUpStats from '../components/CountUpStats.astro';
-import FreebieReveal from '../components/FreebieReveal.astro';
+import PodcastFreebieReveal from '../components/PodcastFreebieReveal.astro';
+import CheatSheet from '../components/CheatSheet.astro';
 import EpisodeArt from '../components/EpisodeArt.astro';
 import reviewData from '../data/listener-reviews.json';
 import { getEpisodes } from '../lib/episodes';
@@ -153,6 +154,22 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
     </section>
   )}
 
+  <!-- PODCAST FREEBIE -->
+  <section class="bg-white px-6 pb-20 sm:pb-28">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-[0.8fr_1.2fr] items-center gap-10 md:gap-14 rounded-[2rem] bg-[#e9d9ec] px-8 py-12 sm:px-12 sm:py-14">
+      <CheatSheet class="mx-auto w-[190px] sm:w-[220px] my-2" />
+      <div class="text-center md:text-left">
+        <p class="text-xs uppercase tracking-widest font-semibold mb-3">Free &middot; for every new episode</p>
+        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl leading-tight mb-4 text-balance">Grab the one sheet takeaways.</h2>
+        <p class="text-black mb-7 max-w-lg mx-auto md:mx-0">Podcasts are so easy to listen to and so much harder to act on afterwards. So every new episode gets its own cheat sheet: one page, with the key points, ready for when you finally sit down to do the thing.</p>
+        <a href="https://kyliekelly.myflodesk.com/podcast" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+          Send me the cheat sheets
+          <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ABOUT YOUR HOST -->
   <section class="bg-black text-white px-6 py-20 sm:py-28 rounded-t-[2.5rem]">
     <div class="max-w-5xl mx-auto">
@@ -233,7 +250,7 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
   {latestGrid.length > 0 && (
     <section class="bg-white px-6 py-20 sm:py-28">
       <div class="max-w-5xl mx-auto">
-        <h2 class="font-serif text-4xl sm:text-5xl mb-12">All the latest:</h2>
+        <h2 class="font-serif font-bold italic text-4xl sm:text-5xl mb-12">All the latest:</h2>
         <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-6 pb-4 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 md:overflow-visible md:grid md:grid-cols-3 md:gap-x-6 md:gap-y-10">
           {latestGrid.map((ep) => (
             <a href={ep.href} class="group block w-[68%] max-w-[300px] flex-none snap-start md:w-auto md:max-w-none">
@@ -251,8 +268,8 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
 
   <!-- GUESTS + SPONSORS -->
   <section class="bg-offwhite px-6 py-20 sm:py-28">
-    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
-      <div class="relative overflow-hidden rounded-[2rem] bg-pink text-white min-h-[420px] flex items-center justify-center text-center p-10">
+    <div class="max-w-3xl mx-auto grid md:grid-cols-2 gap-6">
+      <div class="relative overflow-hidden rounded-[2rem] bg-pink text-white min-h-[520px] md:min-h-[640px] flex items-center justify-center text-center p-8 sm:p-10">
         <img src="/images/desk-scene.jpg" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-multiply" loading="lazy" />
         <div class="relative max-w-sm">
           <h2 class="font-serif text-3xl sm:text-4xl leading-tight mb-4 text-balance">Want to come on the show?</h2>
@@ -260,9 +277,9 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
           <a href="/contact" class="inline-block rounded-full bg-white text-black px-7 py-3.5 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">Apply here →</a>
         </div>
       </div>
-      <div class="overflow-hidden rounded-[2rem] bg-white">
-        <img src="/images/kylie-podcast.jpg" alt="Kylie Kelly recording a podcast" class="h-56 w-full object-cover object-[50%_30%]" loading="lazy" />
-        <div class="p-8 sm:p-10">
+      <div class="flex flex-col overflow-hidden rounded-[2rem] bg-white md:min-h-[640px]">
+        <img src="/images/kylie-podcast.jpg" alt="Kylie Kelly recording a podcast" class="h-72 w-full object-cover object-[50%_30%]" loading="lazy" />
+        <div class="flex flex-1 flex-col justify-center p-8 sm:p-10">
           <h2 class="font-serif text-3xl sm:text-4xl leading-tight mb-4 text-balance">Sponsors / media inquiries</h2>
           <p class="mb-7">Interested in sponsoring an episode, or want to feature the show? Say hello and I'll get back to you.</p>
           <a href="/contact" class="inline-block rounded-full bg-pink text-white px-7 py-3.5 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">Contact us</a>
@@ -272,7 +289,7 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
   </section>
 
   <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
-  <FreebieReveal slot="reveal" />
+  <PodcastFreebieReveal slot="reveal" />
 
 </Layout>
 

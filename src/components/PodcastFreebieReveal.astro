@@ -1,0 +1,27 @@
+---
+// Podcast freebie panel that sits behind the footer and is uncovered at the very end of the page.
+// Usage: <PodcastFreebieReveal slot="reveal" />  (Layout.astro places it in the reveal slot)
+import CheatSheet from './CheatSheet.astro';
+
+const link = 'https://kyliekelly.myflodesk.com/podcast';
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
+---
+<section class="bg-[#fbe6f7] px-6 py-12 sm:py-20 lg:py-24">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
+    <div class="relative mx-auto w-full max-w-[210px] sm:max-w-[260px] md:max-w-[280px] py-3">
+      <div class="pointer-events-none absolute inset-x-[-10%] inset-y-[-5%] rounded-full bg-white/90 blur-3xl" aria-hidden="true"></div>
+      <CheatSheet class="relative" />
+    </div>
+    <div class="text-center max-w-md lg:max-w-lg mx-auto w-full">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">For every new episode, just for you</p>
+      <h2 class="font-serif font-bold italic text-3xl sm:text-4xl lg:text-5xl leading-tight text-black mb-4 lg:mb-5 text-balance">Grab the one sheet takeaways.</h2>
+      <p class="text-black lg:text-lg mb-6 lg:mb-8">
+        Podcasts are so easy to listen to and so much harder to act on afterwards. So every new episode gets its own cheat sheet: one page, with the key points, ready for when you finally sit down to do the thing.
+      </p>
+      <a href={link} target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-8 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+        Send me the cheat sheets
+        <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+      </a>
+    </div>
+  </div>
+</section>

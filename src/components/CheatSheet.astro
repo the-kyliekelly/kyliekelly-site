@@ -1,0 +1,32 @@
+---
+// A tilted one-page "cheat sheet" for the podcast freebie. Decorative only: the grey bars stand in for text.
+// Usage: <CheatSheet class="mx-auto w-[220px]" />
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+<div class:list={['relative', className]} aria-hidden="true">
+  <div class="absolute inset-0 translate-x-3 translate-y-3 rotate-[7deg] rounded-md bg-white/70 shadow-md"></div>
+  <div class="absolute inset-0 translate-x-1.5 translate-y-1.5 rotate-[3.5deg] rounded-md bg-white/85 shadow-md"></div>
+  <div class="relative -rotate-[3deg] rounded-md bg-white p-5 shadow-[0_18px_40px_rgba(0,0,0,0.18)]">
+    <p class="font-serif italic font-bold text-pink text-lg leading-none">The Email Growth Show</p>
+    <p class="mt-1 text-[8px] uppercase tracking-[0.18em] font-semibold text-black">One sheet takeaways</p>
+    <div class="mt-4 h-px bg-black/15"></div>
+    <div class="mt-4 space-y-2.5">
+      <div class="h-2 w-11/12 rounded-full bg-black/10"></div>
+      <div class="h-2 w-full rounded-full bg-black/10"></div>
+      <div class="h-2 w-4/5 rounded-full bg-black/10"></div>
+    </div>
+    <div class="mt-5 space-y-2.5">
+      <div class="flex items-center gap-2"><span class="h-2.5 w-2.5 flex-none rounded-full bg-pink"></span><span class="h-2 w-10/12 rounded-full bg-black/10"></span></div>
+      <div class="flex items-center gap-2"><span class="h-2.5 w-2.5 flex-none rounded-full bg-pink"></span><span class="h-2 w-9/12 rounded-full bg-black/10"></span></div>
+      <div class="flex items-center gap-2"><span class="h-2.5 w-2.5 flex-none rounded-full bg-pink"></span><span class="h-2 w-11/12 rounded-full bg-black/10"></span></div>
+      <div class="flex items-center gap-2"><span class="h-2.5 w-2.5 flex-none rounded-full bg-pink"></span><span class="h-2 w-8/12 rounded-full bg-black/10"></span></div>
+    </div>
+    <div class="mt-6 flex items-center justify-between">
+      <span class="rounded-full bg-black px-3 py-1 text-[8px] uppercase tracking-[0.16em] font-semibold text-white">1 page</span>
+      <span class="grid h-7 w-7 place-items-center rounded-full bg-pink text-white"><svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 5" /></svg></span>
+    </div>
+  </div>
+</div>

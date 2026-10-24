@@ -1,6 +1,7 @@
 ---
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -36,6 +37,7 @@ const { title, description = 'Email marketing strategies for women in business w
         <slot name="reveal" />
       </div>
     )}
+    <CookieBanner />
   </body>
 </html>
 
