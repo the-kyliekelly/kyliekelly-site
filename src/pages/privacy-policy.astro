@@ -1,14 +1,316 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+// Policy text carried over word for word from the previous kyliekelly.com site.
+// The one new section is "Contact form messages" under Processing Your Information.
+type Block = string | { lead: string; text: string } | { list: string[] };
+interface Section {
+  id?: string;
+  title: string;
+  blocks: Block[];
+}
+
+const terms: Section[] = [
+  {
+    title: 'General Provisions',
+    blocks: [
+      'This website is owned and operated by Kylie Kelly, under ABN: 76 205 632 387, in New South Wales Australia. You must be at least eighteen years of age to use our website. Use of this website is at your own risk. We host our site on a reputable platform and take reasonable efforts to maintain and host the site. However, we make no explicit representations or warranties as to the safety or your individual use of the website. The terms and conditions contained on this page is subject to change at any time.',
+    ],
+  },
+  {
+    title: 'Intellectual Property Notice',
+    blocks: [
+      'All images, text, designs, graphics, trademarks and service marks are owned by and property of Kylie Kelly, or the properly attributed party. It is a violation of federal law to use any of our intellectual property in whole or in part, and modification of any materials contained on this site is illegal and may be prosecuted to the fullest extent permissible should we choose to do so, including asking for financial penalties (damages) and/or an injunction forcing you to stop using our intellectual property immediately.',
+      'You may use our intellectual property with clear and obvious credit back to our site, as well links back to the page where the materials, designs, images, text, quote or post is located when it is appropriate to do so. You may use up to one image and one paragraph of text. However, you may never claim any of our intellectual property as your own or your unique creation, even with attribution.',
+    ],
+  },
+  {
+    title: 'Your Communications',
+    blocks: [
+      'Any communications made through our ‘contact,’ blog, blog comments, newsletter sign up or other related pages, or directly to our phones or mailing or email addresses is not held privileged or confidential and is subject to viewing and distribution by third parties. We own any and all communications displayed on our website, servers, comments, emails or other media as allowed by Australian law, and will not give credit or pay royalties for unsolicited user-generated content such as blog comments or emails. For more information on when and how we store and use your communications or any data provided by you in those communications, please refer to our Privacy Policy on this page.',
+      'We maintain a right to republish any submission in whole or in part as reasonably necessary in the course of our business. You agree not to submit any content or communications that could be illegal or serve an unlawful purpose, including, but not limited to communications that are potentially libellous or maliciously false, obscene, abusive, negligent or otherwise harmful or inappropriate.',
+    ],
+  },
+  {
+    id: 'disclaimer',
+    title: 'Disclaimers',
+    blocks: [
+      'Our website and related materials are provided for educational and informational use only. You agree to indemnify and hold harmless our website and company for any direct or indirect loss or conduct incurred as a result of your use of our website and any related communications, including as a result of any consequences incurred from technological failures such as a payment processor error(s) or system failure(s).',
+      'While we may reference certain results, outcomes or situations on this website, you understand and acknowledge that we make no guarantee as to the accuracy of third party statements contained herein or the likelihood of success for you as a result of these statements or any other statements anywhere on this website. If you have a medical, legal or financial questions, you should consult a medical professional, lawyer or CPA and/or CFP respectively. We expressly disclaim any and all responsibility for any actions or omissions you choose to make as a result of using this website, related materials, products, courses or the materials contained herein.',
+      'This website is updated on a regular basis and while we try to make accurate statements in a timely and effective manner, we cannot guarantee that all materials and related media contained herein are entirely accurate, complete or up to date. You expressly acknowledge and understand that any information or knowledge you gain as a result of using this website is used at your own risk. If you should see any errors or omissions and would like to let us know, please email us at hello@kyliekelly.com.',
+    ],
+  },
+  {
+    title: 'Affiliates',
+    blocks: [
+      'This site may use affiliate links to sell certain products or services. We disclaim any and all liability as a result of your purchase through one of these links. We will use reasonable efforts to notify you when and where we have placed affiliate links in addition to this disclaimer located in these Terms & Conditions. You accept express liability for any and all consequences or benefits of clicking the affiliate links contained on this website or related communications.',
+    ],
+  },
+  {
+    title: 'Termination',
+    blocks: [
+      'If at any time we feel you have violated these Terms and Conditions, then we shall immediately terminate your use of our website and any related communications as we deem appropriate. It is within our sole discretion to allow any user’s access of our website, and we may revoke this access at any time without notice, and if necessary, block your IP address from further visits to our site(s).',
+    ],
+  },
+  {
+    title: 'Refunds & Payment Collection',
+    blocks: [
+      'We take your investment seriously, and we’d appreciate if you took our investment of time and resources into your success seriously too.',
+      'Due to the nature of the services and/or products provided, refunds will not be given. Kylie Kelly reserves the right to charge $150 interest upon any outstanding sum left unpaid on or after the due date.',
+      'After 30 days of outstanding payment, Kylie Kelly reserves the right to send you to collections, upon which you will owe the total amount of any outstanding payments plus any collection costs including reasonable attorney’s fees.',
+    ],
+  },
+  {
+    title: 'Lifetime Access',
+    blocks: [
+      'As a part of our offers, you may be given “lifetime access” or “ongoing access” to specific material. This material will be available via this website for the lifetime of the website. If the website shuts down, you will be given the chance to download the material before it is removed when possible.',
+    ],
+  },
+  {
+    title: 'Entire Agreement',
+    blocks: [
+      'Before you register with our website or make any purchases therefrom, you will be asked to consent to our Privacy Policy. If you have consented, or once you do consent, the terms of the Privacy Policy together with these Terms and Conditions. The information contained herein constitutes the entire agreement between site users and our company relating to the use of this website.',
+    ],
+  },
+  {
+    title: 'Severability',
+    blocks: [
+      'If any part of these terms and conditions or our privacy policy is deemed unlawful and/or unenforceable, all other provisions contained herein will remain in full force and effect.',
+    ],
+  },
+  {
+    title: 'Law and Jurisdiction',
+    blocks: [
+      'These terms, conditions and privacy policy are governed by and construed in accordance with Australian law. Any dispute arising out of or related to the information contained herein is subject to adjudication in the state of New South Wales, Australia.',
+    ],
+  },
+  {
+    title: 'Consent',
+    blocks: [
+      'By using our website, you hereby consent to our Terms and Conditions of Use.',
+      'If you require any more information or have any questions about our Terms and Conditions of website use, or our Privacy Policy, please feel free to contact us by email at hello@kyliekelly.com.',
+    ],
+  },
+];
+
+const privacyIntro: string[] = [
+  'Kylie Kelly respects your privacy. This Privacy Policy is designed to explain how we collect, use, share, and protect the personal information you provide to us when you access our website, purchase our goods or services, or engage with us on social media, as well as your own rights to the information we collect.',
+  'Please read this Privacy Policy carefully. We will alert you to any changes to this Policy by changing the “last updated” date at the top of this Policy. Any changes become effective immediately upon publication on our website, and you waive specific notice of any changes to the Policy by continuing to use and access our site(s). We encourage you to review this Privacy Policy periodically, when you use our website for any purpose or engage with us on social media. You are deemed to have accepted any changes to any revised Privacy Policy by your continued use of our website after the revised Privacy Policy is posted.',
+];
+
+const privacy: Section[] = [
+  {
+    title: 'Information That We Collect',
+    blocks: [
+      'We collect a variety of information from you when you visit our website, make purchases, or interact with us on social media. By accepting this Privacy Policy, you are specifically consenting to our collection of the data described below, to our use of the data, to the processing of this data, and to our sharing of the data with third party processors as needed for our legitimate business interests. The information we collect may include:',
+      { lead: 'Personal Data', text: 'Personal Data is information that can be used to identify you specifically, including your name, shipping address, email address, telephone number or demographic information like your age, gender, or hometown. You consent to giving us this information by providing it to us voluntarily on our website or any mobile application. You provide some of this information when you register with or make purchases from our website. You may also provide this information by participating in various activities associated with our site, including responding to blogs, contacting us with questions, or participating in group training. Your decision to disclose this data is entirely voluntary. You are under no obligation to provide this information, but your refusal may prevent you from accessing certain benefits from our website or from making purchases.' },
+      { lead: 'Derivative Data', text: 'Derivative data is information that our servers automatically collect about you when you access our website, such as your IP address, browser type, the dates and times that you access our website, and the specific pages you view. If you are using a mobile application, our servers may collect information about your device name and type, your phone number, your country of origin, and other interactions with our application.' },
+      { lead: 'Financial Data', text: 'Financial data is data that is related to your payment method, such as credit card or bank transfer details. We collect financial data in order to allow you to purchase, order, return or exchange products or services from our website and any related mobile apps. We store limited financial data. Most financial data is transferred to our payment processor, Stripe, and you should review these processors’ Privacy Policy to determine how they use, disclose and protect your financial data. As a courtesy, Stripe’s Privacy Policy can be found here: https://stripe.com/us/privacy.' },
+      { lead: 'Social Networking Data', text: 'We may access personal information from social networking sites and apps, including Facebook, Instagram, LinkedIn, Twitter, Snapchat or other social networking sites or apps not named specifically here, which may include your name, your social network username, location, email address, age, gender, profile picture and any other public information. If you do not want us to access this information, please go to the specific social networking site and change your privacy settings.' },
+      { lead: 'Mobile Device Data', text: 'If you use our website via a mobile device or app, we may collect information about your mobile device, including device ID, model and manufacturer, and location information.' },
+      { lead: 'Other data', text: 'On occasion, you may give us additional data in order to enter into a contest or giveaway or to participate in a survey. You will be prompted for this information and it will be clear that you are offering this kind of information in exchange for an entry into such a contest or giveaway.' },
+    ],
+  },
+  {
+    title: 'How We Use Your Information',
+    blocks: [
+      'You information allows us to offer you certain products and services, including the use of our website, to fulfil our obligations to you, to customise your interaction with our company and our website, and to allow us to suggest other products and services we think might interest you. We generally store your data and transmit it to a third party for processing. However, to the extent we process your data, we do so to serve our legitimate business interests (such as providing you with the opportunity to purchase our goods or services and interact with our website or mobile app).',
+      'Specifically, we may use the information and data described above to:',
+      { list: [
+        'Create and administer your account; and',
+        'Deliver any products or services purchased by you to you; and',
+        'Correspond with you; and',
+        'Process payments or refunds; and',
+        'Contact you about new offerings that we think you will be interested in; and',
+        'Interact with you via social media; and',
+        'Send you a newsletter or other updates about our company or website; and',
+        'Deliver targeted advertising; and',
+        'Request feedback from you; and',
+        'Notify you of updates to our product and service offerings; and',
+        'Resolve disputes and troubleshoot any problems; and',
+        'Administer contests or giveaways; and',
+        'Generate a profile that is personalised to you, so that future interactions with our website will be more personal; and',
+        'Compile anonymous statistical data for our own use or for a third party’s use; and',
+        'Assist law enforcement as necessary; and',
+        'Prevent fraudulent activity on our website or mobile app; and',
+        'Analyse trends to improve our website and offerings.',
+      ] },
+      'When you sign up to receive a free resource from a summit speaker, your name and email address will be shared with them. You may unsubscribe at anytime.',
+    ],
+  },
+  {
+    title: 'Why We Disclose Your Information',
+    blocks: [
+      'We may share your information with third parties in certain situations. In particular, we may share your data with third party processors as needed to serve our legitimate business interests, which include administration of our website, administration of your account, entering into contracts with you, communicating with you, taking orders for goods or services, delivering our goods and services, identifying trends, protecting the security of our company and website, and marketing additional goods and services to you. The legal basis for our disclosure of your data is both your Consent to this Privacy Policy and our own right to protect and promote our legitimate business interests.',
+      'The following are specific reasons why we may share your information.',
+      { lead: 'Third Party Processing', text: 'We may disclose your information to third parties who assist us with various tasks, including payment processing, hosting services, email delivery and customer service. For more information, see the “Third Party Processing” Section below.' },
+      { lead: 'By Law', text: 'We may share your data as required by law or to respond to legal process, including a subpoena, or as necessary to protect the rights, property, and safety of others. This includes sharing information with other parties to prevent or address fraud and to avoid credit risks.' },
+      { lead: 'To Protect Our Company', text: 'We may use your information to protect our company, including to investigate and remedy any violations of our rights or policies. We may also disclose your information as reasonably necessary to acquire and maintain insurance coverage, manage risks, obtain financial or legal advice, or to exercise or defend against legal claims.' },
+      { lead: 'Other Third Parties', text: 'We may share information with advertisers, our investors, or other third parties for the purpose of conducting general business analysis. If we do so, we will make reasonable efforts to inform You if required by law.' },
+      { lead: 'Sale or Bankruptcy', text: 'In the event that our company is sold, goes out of business or enters bankruptcy, your information may be an asset that is transferred to a third party successor. Such a successor is not bound by our Privacy Policy and may have its own. You will be notified in the event our Company is sold, goes out of business or enters bankruptcy.' },
+      { lead: 'Interaction with others', text: 'If you interact with others on our website or mobile app, such as participating in a group chat or a group online course, other users may have access to some of your data, including your name, profile picture, and your history of interaction with our website, such as prior comments or posts.' },
+      { lead: 'Online postings', text: 'When you post online, your posts may be viewed by others, and we may distribute your comments outside the website.' },
+      { lead: 'External Links', text: 'Our website may include hyperlinks to other websites not controlled by us. We suggest you exercise caution when clicking on a hyperlink. Although we use reasonable care in including a hyperlink on our own web page, we do not regularly monitor the websites of these third parties, are not responsible for any damage or consequences you suffer by using these hyperlinks. We are not bound by the Privacy Policies of any third party website that you access by a hyperlink, nor are they bound by ours. We encourage you to read the Policies of those third party websites before interacting with them or making purchases. They may collect different information and by using different methods than we do.' },
+      { lead: 'Other purposes', text: 'We may disclose your personal data as necessary to comply with any legal obligation or to protect your interests, or the vital interests of others or our company.' },
+    ],
+  },
+  {
+    title: 'Tracking Technologies',
+    blocks: [
+      { lead: 'Cookies, Log Files and Web Beacons', text: 'Like many other Web sites, we makes use of log files. These files merely logs visitors to the site – usually a standard procedure for hosting companies and a part of hosting services’ analytics. The information inside the log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date/time stamp, referring/exit pages, and possibly the number of clicks. This information is used to analyse trends, administer the site, track user’s movement around the site, and gather demographic information. IP addresses and other such information are not linked to any information that is personally identifiable.' },
+      'We also use cookies – small text files sent to us by your computer – and web beacons to store certain information. We may use cookies to authenticate your identity, to determine if you are logged onto our website, for personalisation, for security, for targeted advertising, or for analysis of the performance of our website and services. For example, cookies allow us to recommend blog posts to you based on what you have read on our site in the past. We use cookies that are not specific to your account but unique enough to allow us to analyse general trends and use, and to customise your interaction with our website.',
+      'Most browsers are set to accept cookies by default. In addition, when you first encounter our website, you will be asked to “consent to cookies.” If you wish to disable cookies, you may do so through your individual browser options. However, this may affect your ability to use or make purchases from our website. More detailed information about cookie management with specific web browsers can be found at the browsers’ respective websites. What Are Cookies? By continuing to use our website and not disabling cookies on your browser, you are consenting to our use of cookies in accordance with the terms of this policy.',
+      'In addition, we may use third-party software to post advertisements on our website or mobile app to oversee marketing or email campaigns, or manage other company initiatives. These third party softwares may use cookies or similar tracking technology. We have no control over these third parties or their use of cookies. For more information on opting out of interest-based ads, visit the Network Advertising Initiative Opt-Out Tool or Digital Advertising Alliance Opt-Out Tool.',
+    ],
+  },
+  {
+    title: 'Website Analytics',
+    blocks: [
+      'We may partner with third party analytic companies, including Google Analytics. The analytic companies may also use cookies or other tracking technologies to analyse visitors’ use of our website or mobile app to determine the popularity of the content, and better understand online activity. We do not transfer personal information to these third party vendors. However, in order to access our website, you must consent to the collection and use of your information by these third party analytic companies. You should review their Privacy Policy and contact them directly if you have questions. If you do not want any information to be collected and used by tracking technologies, visit the Network Advertising Initiative Opt-Out Tool or Digital Advertising Alliance Opt-Out Tool.',
+    ],
+  },
+  {
+    title: 'Processing Your Information',
+    blocks: [
+      'For the most part, we do not process your information in-house, but give it to third party processors for processing. For example, when Stripe takes your payment information, they are a third party processor. They process your payment and remit the funds to us. So in many instances, it will be necessary for us to transmit your information to a third party processor, as we do not have the capability to perform these functions. More detail on third party processing is detailed below.',
+      'However, we may, from time to time, process your data internally. The legal basis for this processing is both your consent to the processing, and our need to conduct our legitimate business interests. Our purposes in processing this information, if we do, is to administer, maintain, and improve our website and offerings, to enter into contracts with you, to fulfil the terms of those contracts, to keep records of our transactions and interactions, to be able to provide you with goods and services, to comply with our legal obligations, to obtain professional advice, and to protect the rights and interests of our company, our customers (including you), and any third parties. We may process the following data:',
+      { list: [
+        'Data associated with your account, such as your name, address, email address and payment information',
+        'Data about your usage of our website, such as your IP address, geographical information, and how long you accessed our website and what you viewed.',
+        'Data related to your personal profile, such as your name, address, profile picture, interests and hobbies, or employment details.',
+        'Data that you provide us in the course of using our services.',
+        'Data that you post on our website, such as comments or responses to blogs.',
+        'Data that you submit to us when you make an inquiry regarding our website or offerings.',
+        'Data related to your transactions with us, including your purchase of our goods or services. This information may include contact details and payment information.',
+        'Data that you provide to us when you subscribe to our emails or newsletters, including your email address and contact information.',
+        'Data that you submit to us via correspondence, such as when you email us with questions.',
+        'Any other data identified in this policy, for the purpose of complying with our legal obligations, or to protect the vital interests of you or any other natural person.',
+      ] },
+    ],
+  },
+  {
+    id: 'contact-form',
+    title: 'Contact Form Messages',
+    blocks: [
+      'When you send a message through the contact form on this website, your name, email address, the subject, how you found us (if you choose to say) and your message are sent through our website host (Vercel) to an automation service (Zapier), which emails them to hello@kyliekelly.com. We use this information to read and respond to your message. We do not add you to our email newsletter unless you separately sign up for it.',
+    ],
+  },
+  {
+    title: 'Data Retention',
+    blocks: [
+      'We retain personal data as long as it is needed to conduct our legitimate business purposes or to comply with our legal obligations, or until you ask us to delete your data. For example, we will retain certain personal information indefinitely for the purposes of maintaining your account, unless and until you delete your account. Data that we gather for a specific and particular purpose, such as assisting law enforcement or analysing trends, will not be kept for longer than is necessary for that particular purpose. Data that is no longer needed by us for any of the purposes listed above will be permanently deleted.',
+      'You may request that we delete your data at any time. However, note that we cannot control the retention policies of third parties. If you wish to have any third parties, including those to whom we’ve transmitted your data, delete that data, you will need to contact those third parties directly. You may request from us a list of all third parties to whom we have transmitted your data.',
+    ],
+  },
+  {
+    title: 'Security of Your Information',
+    blocks: [
+      'We take all reasonable steps to protect your personal data and keep your information secure. We use recognised online secure payment systems and implement generally accepted standards of security to protect against personal data loss or misuse. However, no security measure is foolproof, and no method of data transmission can be guaranteed against interception or misuse. We cannot guarantee complete security of any information you transmit to us.',
+      'By consent to this Privacy Policy, you acknowledge that your personal data may be available, via the internet, around the world. We cannot prevent the use or misuse of your data by other parties.',
+      'We will notify you of promptly any known breach of our security systems or your data which might expose you to serious risk',
+    ],
+  },
+  {
+    title: 'Children',
+    blocks: [
+      'This website or mobile app is not designed for use by children under age 18, and we do not knowingly solicit personal data from anyone under age 18. If you are under age 18, do not access or use our website or related products or services. If you become aware that we have collected data of anyone under the age of 18, please contact us so that we may delete that data.',
+    ],
+  },
+  {
+    title: 'Your Rights',
+    blocks: [
+      'You have certain rights with respect to your personal data, as outlined below. Note that we may charge you a reasonable fee for actions that you ask us to take with respect to your data. In addition, we reserve the right to request that you provide us with evidence of your identity before we take any action with respect to the exercise of your data rights. Further, your rights may be restricted or nullified to the extent they conflict with our compelling business interests, the public interest, or the law.',
+      { lead: 'Update Account Information', text: 'You have the right to update or change any information you have provided to us. To update or delete your information, please contact us at hello@kyliekelly.com.' },
+      { lead: 'Confirm Personal Data and Its Use', text: 'You have the right to request that we confirm what data we hold about you, and for what purposes. You also have the right to confirmation of whether we process your data or deliver your data to third party processors, and for what purposes. We will supply you with copies of your personal data unless doing so would affect the rights and freedoms of others.' },
+      { lead: 'Change Consent', text: 'You have the right to change your consent to our use of your information. In such cases, we may require you to delete your account with us, as described above, and you may not have full access to our website.' },
+      { lead: 'Request a Copy of Data', text: 'You have the right to request a digital copy of the data that we hold about you. Your first request for a copy of your personal data will be provided free of charge; subsequent requests will incur a reasonable fee.' },
+      { lead: 'Transfer Your Data', text: 'You have the right to request that we gather and transfer your data to another controller, in a commonly used and machine readable format, unless doing so would cause us an undue burden.' },
+      { lead: 'Delete All Data', text: 'You have the right to request that we delete all data that we hold about you, and we must delete such data without undue delay. There are exceptions to this right, such as when keeping your data is required by law, is necessary to exercise the right of freedom of expression and information, is required for compliance with a legal obligation, or is necessary for the exercise or defence of legal claims. Such a request may result in a termination of your account with us and you may have limited or no use of our website.' },
+      { lead: 'Emails And Communications', text: 'You may opt out of receiving future email correspondence from us by checking the appropriate box when you register for the account or make a purchase. You may change your communication settings by contacting us at hello@kyliekelly.com.' },
+      { lead: 'Marketing Communications', text: 'You may opt out of receiving any third party marketing communications or having your personal information used for marketing purposes. You may do this by contacting us at hello@kyliekelly.com.' },
+      { lead: 'Processing', text: 'You may, in some circumstances restrict the processing of your data, such as when you contest the accuracy of your data or when you have objected to processing, pending the verification of that objection. When processing has been restricted, we will continue to store your data but will not pass it on to third party processors without your consent, or as necessary to comply with legal obligations or protect your rights or those of others or our company. In addition, you may opt out of any processing of your data altogether. Note however that doing so may result in the termination of your account and loss of access to our website.' },
+      { lead: 'Complaints', text: 'You have the right to complain to a supervising authority if you believe we are misusing your data or have violated any of your rights under this Privacy Policy or applicable law.' },
+      'If You are an EU resident, You have the right to complain to a supervising authority if You believe We are misusing Your data or have violated any of Your rights under this Privacy Policy or applicable law. You may do so in the EU member state in which You reside or have Your place of business or in which the alleged infringement took place. If You are located outside the EU, You may have rights under privacy laws in the jurisdiction where You live.',
+    ],
+  },
+  {
+    title: 'Newsletter Privacy',
+    blocks: [
+      'We offer the opportunity for you to volunteer certain information to us that is used for email and marketing purposes. This information includes, but is not limited to, your name and email. You will have an opportunity to unsubscribe from any future communications via email, but we reserve the right to maintain a database of past email subscribers. We reserve the right to use this information as reasonably necessary in our business and as provided by law. Your information will be shared with reasonably necessary parties for the ordinary course of conducting our business, such as through Facebook ads or Google Pay Per Click marketing campaigns. We do not ever sell your information to third parties.',
+    ],
+  },
+  {
+    title: 'Severability',
+    blocks: [
+      'If any part of these terms, conditions and privacy policy is deemed unlawful and/or unenforceable, all other provisions contained herein will remain in full force and effect.',
+    ],
+  },
+  {
+    title: 'Entire Agreement',
+    blocks: [
+      'The information contained herein constitutes the entire agreement between site users and our company relating to the use of this website.',
+    ],
+  },
+  {
+    title: 'Law and Jurisdiction',
+    blocks: [
+      'These terms, conditions and privacy policy are governed by and construed in accordance with Australian law. Any dispute arising out of or related to the information contained herein is subject to adjudication in the state of New South Wales, Australia.',
+    ],
+  },
+  {
+    title: 'Contact Information',
+    blocks: ['Email: hello@kyliekelly.com'],
+  },
+];
 ---
-<Layout title="Privacy Policy | Kylie Kelly" description="Privacy policy and terms and conditions for kyliekelly.com">
-  <section class="px-6 py-16">
-    <div class="max-w-2xl mx-auto prose">
-      <h1 class="text-3xl font-bold mb-6">Privacy Policy &amp; Terms and Conditions</h1>
-      <p class="text-sm text-muted mb-6">
-        Placeholder page. Port the current policy text over from the Showit site, and this is a good moment for a quick legal review, especially the payment processor reference and business details, since you're rebuilding everything else anyway.
+<Layout title="Privacy Policy & Terms and Conditions | Kylie Kelly" description="Privacy policy and terms and conditions for kyliekelly.com">
+  <section class="px-6 py-16 sm:py-24">
+    <div class="max-w-2xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">The fine print</p>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">Privacy Policy &amp; Terms and Conditions</h1>
+      <p class="text-sm text-black/70 mb-8">Last updated: 25 October 2026</p>
+      <p class="text-black mb-8">
+        By using this website, you agree to the following Terms and Conditions and Privacy Policy. Please read them carefully before using this website.
       </p>
-      <p class="text-sm text-muted">Contact: <a href="mailto:hello@kyliekelly.com" class="text-pink underline">hello@kyliekelly.com</a></p>
+
+      <nav class="flex flex-wrap gap-3 mb-14 text-sm font-semibold" aria-label="On this page">
+        <a href="#terms" class="rounded-full bg-offwhite px-5 py-2.5 hover:text-pink transition-colors">Terms and Conditions</a>
+        <a href="#disclaimer" class="rounded-full bg-offwhite px-5 py-2.5 hover:text-pink transition-colors">Disclaimers</a>
+        <a href="#privacy" class="rounded-full bg-offwhite px-5 py-2.5 hover:text-pink transition-colors">Privacy Policy</a>
+      </nav>
+
+      <h2 id="terms" class="font-serif text-3xl font-bold mb-2 scroll-mt-24">Terms and Conditions</h2>
+      {terms.map((s) => (
+        <section id={s.id} class="scroll-mt-24">
+          <h3 class="font-serif text-xl font-bold mt-10 mb-3">{s.title}</h3>
+          {s.blocks.map((b) =>
+            typeof b === 'string' ? (
+              <p class="text-black leading-relaxed mb-4">{b}</p>
+            ) : 'lead' in b ? (
+              <p class="text-black leading-relaxed mb-4"><strong>{b.lead}:</strong> {b.text}</p>
+            ) : (
+              <ul class="list-disc pl-6 space-y-2 mb-4 text-black leading-relaxed">{b.list.map((li) => <li>{li}</li>)}</ul>
+            )
+          )}
+        </section>
+      ))}
+
+      <h2 id="privacy" class="font-serif text-3xl font-bold mt-20 mb-4 scroll-mt-24">Privacy Policy</h2>
+      {privacyIntro.map((p) => <p class="text-black leading-relaxed mb-4">{p}</p>)}
+      {privacy.map((s) => (
+        <section id={s.id} class="scroll-mt-24">
+          <h3 class="font-serif text-xl font-bold mt-10 mb-3">{s.title}</h3>
+          {s.blocks.map((b) =>
+            typeof b === 'string' ? (
+              <p class="text-black leading-relaxed mb-4">{b}</p>
+            ) : 'lead' in b ? (
+              <p class="text-black leading-relaxed mb-4"><strong>{b.lead}:</strong> {b.text}</p>
+            ) : (
+              <ul class="list-disc pl-6 space-y-2 mb-4 text-black leading-relaxed">{b.list.map((li) => <li>{li}</li>)}</ul>
+            )
+          )}
+        </section>
+      ))}
     </div>
   </section>
 </Layout>
