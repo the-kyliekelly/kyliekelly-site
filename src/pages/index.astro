@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Highlight from '../components/Highlight.astro';
 import CrossingRibbons from '../components/CrossingRibbons.astro';
+import RotatingBadge from '../components/RotatingBadge.astro';
 
 const testimonials = [
   {
@@ -35,6 +36,19 @@ const heroPills = [
   { label: 'Shop the products', href: 'https://shop.kyliekelly.com/', dot: 'border-2 border-transparent bg-pink-light text-black group-hover:border-black group-hover:bg-white group-hover:text-black' },
   { label: 'Work with me', href: '/services', dot: 'border-2 border-black bg-black text-white group-hover:bg-white group-hover:text-black' },
 ];
+
+// Signature course spotlight. Nothing renders until show is true and the copy is filled in.
+const signatureCourse = {
+  show: false,
+  eyebrow: 'My signature course',
+  name: 'The Money Making Email System',
+  tagline: '',
+  description: '',
+  buttonLabel: '',
+  href: '',
+  image: '/images/hero-2.jpg',
+  imageAlt: 'Kylie Kelly',
+};
 
 const tickerItems = [
   "hater of country music {unless it's OG Tay Tay}",
@@ -190,8 +204,8 @@ const tickerItems = [
 
         <div class="space-y-8 md:space-y-10">
 
-          <div class="stack-card rounded-[2rem] bg-white p-7 sm:p-10 lg:p-12 shadow-[0_-12px_40px_rgba(0,0,0,0.08)]" style="--stack-top:6rem;">
-            <div class="grid md:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center">
+          <div class="stack-card md:flex md:items-center rounded-[2rem] bg-white p-7 sm:p-10 lg:p-12 shadow-[0_-12px_40px_rgba(0,0,0,0.08)]" style="--stack-top:6rem;">
+            <div class="grid md:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center w-full">
               <div>
                 <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">01</p>
                 <h3 class="text-2xl sm:text-3xl font-bold mb-1">Start for free.</h3>
@@ -212,8 +226,8 @@ const tickerItems = [
             </div>
           </div>
 
-          <div class="stack-card rounded-[2rem] bg-[#e9d9ec] p-7 sm:p-10 lg:p-12 shadow-[0_-12px_40px_rgba(0,0,0,0.1)]" style="--stack-top:7.5rem;">
-            <div class="grid md:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center">
+          <div class="stack-card md:flex md:items-center rounded-[2rem] bg-[#e9d9ec] p-7 sm:p-10 lg:p-12 shadow-[0_-12px_40px_rgba(0,0,0,0.1)]" style="--stack-top:7.5rem;">
+            <div class="grid md:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center w-full">
               <div>
                 <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">02</p>
                 <h3 class="text-2xl sm:text-3xl font-bold mb-1">Grab what you need, start today.</h3>
@@ -229,8 +243,8 @@ const tickerItems = [
             </div>
           </div>
 
-          <div class="stack-card rounded-[2rem] bg-black text-white p-7 sm:p-10 lg:p-12 shadow-[0_-12px_40px_rgba(0,0,0,0.18)]" style="--stack-top:9rem;">
-            <div class="grid md:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center">
+          <div class="stack-card md:flex md:items-center rounded-[2rem] bg-black text-white p-7 sm:p-10 lg:p-12 shadow-[0_-12px_40px_rgba(0,0,0,0.18)]" style="--stack-top:9rem;">
+            <div class="grid md:grid-cols-[1fr_auto] gap-8 lg:gap-14 items-center w-full">
               <div>
                 <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-4">03</p>
                 <h3 class="text-2xl sm:text-3xl font-bold mb-1">Get my brain in your corner.</h3>
@@ -254,6 +268,27 @@ const tickerItems = [
       </div>
     </div>
   </section>
+
+  <!-- SIGNATURE COURSE SPOTLIGHT (hidden until signatureCourse.show is true) -->
+  {signatureCourse.show && (
+    <section class="bg-pink text-black px-6 py-16 sm:py-24 overflow-hidden">
+      <div class="max-w-5xl mx-auto grid md:grid-cols-[1.15fr_0.85fr] gap-14 md:gap-12 items-center">
+        <div>
+          <p class="text-black text-xs uppercase tracking-widest font-semibold mb-4">{signatureCourse.eyebrow}</p>
+          <h2 class="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.02] text-white mb-5 text-balance">{signatureCourse.name}</h2>
+          {signatureCourse.tagline && <p class="text-xl sm:text-2xl font-bold leading-snug mb-5">{signatureCourse.tagline}</p>}
+          {signatureCourse.description && <p class="text-black text-lg mb-8 max-w-lg">{signatureCourse.description}</p>}
+          {signatureCourse.href && signatureCourse.buttonLabel && (
+            <a href={signatureCourse.href} class="inline-block rounded-full bg-white text-black px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-pink-light">{signatureCourse.buttonLabel} →</a>
+          )}
+        </div>
+        <div class="relative mx-auto w-full max-w-[340px] md:max-w-none pt-6 pl-6 sm:pt-8 sm:pl-8">
+          <img src={signatureCourse.image} alt={signatureCourse.imageAlt} class="block w-full aspect-[2/3] object-cover object-top shadow-2xl" />
+          <div class="absolute top-0 left-0 origin-top-left scale-[0.68] sm:scale-100"><RotatingBadge size={150} text={`${signatureCourse.name.toUpperCase()} •`} /></div>
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- HAPPY CLIENTS / TESTIMONIAL SLIDER -->
   <section class="bg-black text-white px-6 py-20">
@@ -452,4 +487,34 @@ const tickerItems = [
     </div>
   </section>
 
+
+<script>
+  // Give the three offer cards the same height so the stack looks even.
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.stack-card'));
+  if (cards.length) {
+    const wide = window.matchMedia('(min-width: 768px)');
+    const equalise = () => {
+      cards.forEach((c) => (c.style.minHeight = ''));
+      if (!wide.matches) return;
+      const tallest = Math.max(...cards.map((c) => c.offsetHeight));
+      cards.forEach((c) => (c.style.minHeight = `${tallest}px`));
+    };
+    equalise();
+    window.addEventListener('load', equalise);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(equalise);
+    const holder = cards[0].parentElement;
+    if (holder && 'ResizeObserver' in window) {
+      let lastWidth = 0;
+      new ResizeObserver(([entry]) => {
+        const width = Math.round(entry.contentRect.width);
+        if (width !== lastWidth) {
+          lastWidth = width;
+          equalise();
+        }
+      }).observe(holder);
+    } else {
+      window.addEventListener('resize', equalise);
+    }
+  }
+</script>
 </Layout>

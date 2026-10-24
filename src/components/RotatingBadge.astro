@@ -1,0 +1,47 @@
+---
+// A round sticker with text running around its edge that turns slowly. Place it overlapping a corner of an image.
+// Usage: <RotatingBadge text="50 A DAY • THE NO-SOCIAL LIST SYSTEM •" class="absolute -top-8 -left-8" />
+// Props: text (include your own separators), size in px (default 150), seconds per turn (default 14).
+// The text is read once by screen readers through the label. With reduced motion it stays still.
+interface Props {
+  text?: string;
+  size?: number;
+  seconds?: number;
+  class?: string;
+}
+const { text = '50 A DAY • THE NO-SOCIAL LIST SYSTEM •', size = 150, seconds = 14, class: className = '' } = Astro.props;
+const id = `badge-path-${Math.random().toString(36).slice(2, 8)}`;
+const radius = 70;
+const circumference = Math.round(2 * Math.PI * radius) - 4;
+---
+<span class:list={['badge', className]} style={`--size:${size}px; --seconds:${seconds}s;`} role="img" aria-label={text.replace(/•/g, '').replace(/\s+/g, ' ').trim()}>
+  <svg viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+    <defs>
+      <path id={id} d={`M 100,100 m -${radius},0 a ${radius},${radius} 0 1,1 ${radius * 2},0 a ${radius},${radius} 0 1,1 -${radius * 2},0`} />
+    </defs>
+    <circle cx="100" cy="100" r="99" fill="#e9d9ec" />
+    <text font-family="'Work Sans', sans-serif" font-size="13.5" font-weight="600" fill="#000" letter-spacing="1.4">
+      <textPath href={`#${id}`} textLength={circumference} lengthAdjust="spacing">{text}</textPath>
+    </text>
+  </svg>
+</span>
+
+<style>
+  .badge {
+    display: block;
+    width: var(--size);
+    height: var(--size);
+    animation: turn var(--seconds) linear infinite;
+  }
+  .badge svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  @keyframes turn {
+    to { transform: rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .badge { animation: none; }
+  }
+</style>
