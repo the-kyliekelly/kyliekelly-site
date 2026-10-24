@@ -1,60 +1,164 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Highlight from '../components/Highlight.astro';
+import RotatingBadge from '../components/RotatingBadge.astro';
+import FreebieReveal from '../components/FreebieReveal.astro';
+
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
+
+const jumpPills = [
+  { label: '01 Start for free', href: '#step-01', dot: 'bg-pink text-white group-hover:bg-black' },
+  { label: '02 The shop', href: '#step-02', dot: 'bg-pink-light text-black group-hover:bg-black group-hover:text-white' },
+  { label: '03 Coaching', href: '#step-03', dot: 'bg-black text-white group-hover:bg-pink' },
+];
+
+const familiar = [
+  "Maybe you're posting (or not posting) and still wondering where your next client is coming from.",
+  "Maybe your email list doesn't exist yet, has stalled, or it's growing but nobody's buying.",
+  "Maybe you've tried Instagram, then SEO, then Pinterest, and you still don't know what actually works.",
+  'Or maybe you just don’t know which of these three steps is the one to start with.',
+];
+
+const shortcuts = [
+  {
+    dot: 'bg-pink',
+    title: 'Just getting serious about email?',
+    text: 'Start with the free community. Get the 90-day plan and the starter kit before you spend a thing.',
+    link: 'See step 01',
+    href: '#step-01',
+    image: '/images/hero-7.jpg',
+    alt: 'Kylie Kelly holding a disco ball',
+    badge: true,
+  },
+  {
+    dot: 'bg-pink-light',
+    title: 'Know exactly what you need?',
+    text: 'Head to the shop. Grab the training that solves your one specific problem and put it to work today.',
+    link: 'See step 02',
+    href: '#step-02',
+    image: '/images/kylie-podcast.jpg',
+    alt: 'Kylie Kelly recording a podcast',
+    badge: false,
+  },
+  {
+    dot: 'bg-black',
+    title: 'Want eyes on your business weekly?',
+    text: "Join coaching. Bring me the real questions, I'll bring you the next right thing to do about them.",
+    link: 'See step 03',
+    href: '#step-03',
+    image: '/images/hero-2.jpg',
+    alt: 'Kylie Kelly laughing',
+    badge: false,
+  },
+];
+
+// Real client words, taken from what clients sent. The big number is lifted straight from each quote.
+const results = [
+  {
+    big: '122 new subscribers',
+    quote: 'I went from stuck and overwhelmed to 122 new subscribers, in just days of working with Kylie (all without social media!!) She is great at what she does!!',
+    name: 'Erin K.',
+    card: 'bg-[#e9d9ec] text-black -rotate-3',
+  },
+  {
+    big: '45 to nearly 800',
+    quote: "I've gone from 45 to currently just under 800 active subscribers in less than a month!",
+    name: 'Amy G.',
+    card: 'bg-pink text-white rotate-2 md:mt-10',
+  },
+  {
+    big: '231 to 643',
+    quote: 'I started with 231 people before I met you and now my email list is currently 643 with 412 new subscribers 🎉',
+    name: 'Celia V.',
+    card: 'bg-[#fbe6f7] text-black -rotate-2',
+  },
+];
 
 const offers = [
   {
+    id: 'step-01',
     num: '01',
-    eyebrow: 'Start For Free',
+    eyebrow: 'Start for free',
     title: 'Email Marketing Skool',
     tag: 'Free',
-    tagSub: '· Premium from $59/month',
     desc: "For online business owners who want more sales from an email list, without living on social media. Inside, you'll learn how to grow an email list of the right people, find collaborations that bring warm subscribers, turn subscribers into buyers, and build visibility without constant posting.",
     items: [
       'A simple 90-day growth plan',
       'The Email Marketing Starter Kit, free on joining',
-      'Premium: live Q&A, templates, and the Audience Growth Tool Vault',
+      'A free community of 1,300+ women doing the same work',
     ],
-    cta: 'Start My Free Growth Plan →',
+    cta: 'Join Email Marketing Skool',
     href: 'https://www.skool.com/email-marketing-skool/about',
-    quote: null,
+    image: '/images/hero-8.jpg',
+    alt: 'Kylie Kelly',
+    tilt: '-rotate-2',
     flip: false,
-    id: 'door-01',
+    bg: 'bg-white',
   },
   {
+    id: 'step-02',
     num: '02',
-    eyebrow: 'Grab What You Need, Start Today',
+    eyebrow: 'Grab what you need, start today',
     title: 'The KK Digital Product Shop',
     tag: 'From $17',
-    tagSub: '',
     desc: 'Grab-and-go courses, templates and trainings for growing your email list without social media. Start with a $17 collaboration database, or go straight for 50 a Day ($27), my system for growing your list by 50 new subscribers a day, no social media required.',
     items: [
       '50 a Day, the full audience growth system built on my V2 framework',
       'Templates and trainings you can put to work the same day',
       'New tools added as I build them, from $17 up',
     ],
-    cta: 'Help Me Grow My Email List →',
+    cta: 'Shop the products',
     href: 'https://shop.kyliekelly.com/',
-    quote: null,
+    image: '/images/shop-mockup.jpg',
+    alt: 'The KK Digital Product Shop preview',
+    tilt: 'rotate-2',
     flip: true,
-    id: 'door-02',
+    bg: 'bg-offwhite',
   },
   {
+    id: 'step-03',
     num: '03',
-    eyebrow: 'Get My Brain In Your Corner',
+    eyebrow: 'Get my brain in your corner',
     title: 'Coaching Group',
     tag: '$297',
-    tagSub: '',
-    desc: 'Weekly voice-note coaching for the real questions, offer clarity, launch strategy, what to prioritise when everything feels urgent. Real questions, real answers, all week long, straight to your phone.',
+    desc: 'Weekly voice-note coaching for the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent. Real questions, real answers, all week long, straight to your phone.',
     items: [],
-    cta: 'Get Weekly Support & Answers →',
+    cta: 'Join the Coaching Group',
     href: 'https://coaching.kyliekelly.com/checkout',
-    quote: { text: "I legitimately feel my shoulders drop every time I listen to one of your Voxer responses… I don't need to do everything, I just need to do the next right thing.", name: 'Nicole Elliott' },
+    image: '/images/desk-scene.jpg',
+    alt: '',
+    tilt: '-rotate-2',
     flip: false,
-    id: 'door-03',
+    bg: 'bg-white',
   },
 ];
+
+const faqs = [
+  {
+    q: 'Which one should I start with?',
+    a: 'Most people start with step one, the free Email Marketing Skool community. You get the 90-day growth plan and the starter kit before you spend a thing. If you already know exactly what you need, head to the shop. If you want me in your corner every week, join the coaching group.',
+  },
+  {
+    q: 'Do I need to be on social media?',
+    a: 'No. Everything I teach is built around growing your email list and selling to it without relying on social media.',
+  },
+  {
+    q: "What's in the shop?",
+    a: 'Grab-and-go courses, templates and trainings, starting at a $17 collaboration database. The big one is 50 a Day ($27), my system for growing your list by 50 new subscribers a day.',
+  },
+  {
+    q: 'How does the coaching group work?',
+    a: 'It is weekly voice-note coaching. You bring me the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent, and I answer them all week long, straight to your phone.',
+  },
+  {
+    q: 'Is there anything bigger coming?',
+    a: "Yes. Bigger ways to work together are coming in 2027, the kind of offers that take longer to get right. For now these three steps are exactly where I'm putting my energy.",
+  },
+];
+
+const marquee = Array.from({ length: 6 });
 ---
-<Layout title="Work With Me | Kylie Kelly" description="Three ways to work with Kylie Kelly, whichever door fits where your business is at right now. No algorithm required.">
+<Layout title="Work With Me | Kylie Kelly" description="Three ways to work with Kylie Kelly, whichever step fits where your business is at right now. No algorithm required.">
 
   <!-- TAG BAR -->
   <section class="bg-pink-light px-6 py-4">
@@ -65,138 +169,213 @@ const offers = [
     </p>
   </section>
 
-  <!-- HERO -->
-  <section class="bg-black text-white px-6 py-20 text-center">
-    <div class="max-w-3xl mx-auto">
-      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Ways To Work With Me</p>
-      <h1 class="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
-        I don't think you need another strategy. I think you need the <em class="italic text-pink">right</em> one for right now.
-      </h1>
-      <p class="text-warmgray max-w-xl mx-auto mb-10">
-        Three ways to work with me, whichever fits where your business is at today. No wrong door, promise. Most people start with door one.
-      </p>
-      <div class="flex flex-wrap gap-3 justify-center text-xs uppercase tracking-widest font-semibold">
-        <a href="#door-01" class="border border-white/40 text-warmgray hover:border-pink hover:text-pink px-5 py-2.5 transition-colors">01 · Start Free</a>
-        <a href="#door-02" class="border border-white/40 text-warmgray hover:border-pink hover:text-pink px-5 py-2.5 transition-colors">02 · The Shop</a>
-        <a href="#door-03" class="border border-white/40 text-warmgray hover:border-pink hover:text-pink px-5 py-2.5 transition-colors">03 · Coaching</a>
+  <!-- HERO: rounded black panel with a big headline and a photo -->
+  <section class="px-4 sm:px-6 pt-4 sm:pt-6">
+    <div class="max-w-7xl mx-auto overflow-hidden rounded-[2rem] bg-black text-white grid md:grid-cols-[1.25fr_0.75fr]">
+      <div class="px-7 sm:px-12 lg:px-16 py-14 sm:py-20 lg:py-28 flex flex-col justify-center">
+        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-5">&mdash; Ways to work with me &mdash;</p>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.08] text-balance mb-8">
+          I don't think you need another strategy. I think you need the <span class="script-accent italic text-pink">right one</span> for right now.
+        </h1>
+        <p class="text-warmgray max-w-lg mb-9">
+          Three ways to work with me, whichever fits where your business is at today. No wrong step, promise.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          {jumpPills.map((p) => (
+            <a href={p.href} class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+              {p.label}
+              <span class={`grid place-items-center h-10 w-10 rounded-full transition-colors duration-300 ${p.dot}`}><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+            </a>
+          ))}
+        </div>
       </div>
+      <div class="relative min-h-[340px] md:min-h-full">
+        <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="absolute inset-0 h-full w-full object-cover object-[50%_25%]" />
+      </div>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="px-6 py-20 sm:py-28 text-center">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl sm:text-5xl font-bold leading-tight text-balance">
+        Three ways to work with me, whichever fits where your business is at <Highlight>today</Highlight>.
+      </h2>
+      <p class="mt-6 text-black max-w-xl mx-auto">Most people start with step one. There's no pressure to jump to the end.</p>
     </div>
   </section>
 
   <!-- SOUND FAMILIAR -->
-  <section class="px-6 py-20 text-center">
-    <div class="max-w-2xl mx-auto">
-      <h2 class="text-2xl sm:text-3xl font-bold mb-8">Maybe one of these sounds familiar.</h2>
-      <div class="text-left space-y-3 mb-8">
-        <p class="text-black"><span class="text-pink">+</span> Maybe you're posting (or not posting) and still wondering where your next client is coming from.</p>
-        <p class="text-black"><span class="text-pink">+</span> Maybe your email list has stalled, or it's growing but nobody's buying.</p>
-        <p class="text-black"><span class="text-pink">+</span> Maybe you've tried Instagram, then SEO, then Pinterest, and you still don't know what actually works.</p>
-        <p class="text-black"><span class="text-pink">+</span> Or maybe you just don't know which of these three doors is the one to start with.</p>
-      </div>
-      <p class="font-serif italic text-pink text-xl">Good news, there's a place to start no matter which one is true.</p>
+  <section class="bg-offwhite px-6 py-20 sm:py-24">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">&mdash; Sound familiar? &mdash;</p>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-10 text-balance">Maybe one of these is you.</h2>
+      <ul class="space-y-3 text-left">
+        {familiar.map((line) => (
+          <li class="flex gap-4 rounded-2xl bg-white px-6 py-5 shadow-[0_8px_30px_rgba(0,0,0,0.05)]">
+            <span class="text-pink text-xl leading-snug" aria-hidden="true">+</span>
+            <span class="text-black">{line}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="font-serif italic text-pink text-xl sm:text-2xl mt-10">Good news, there's a place to start no matter which one is true.</p>
     </div>
   </section>
 
-  <!-- DOORS INTRO -->
-  <section class="bg-offwhite px-6 py-16 text-center">
-    <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Ways To Work Together</p>
-    <h2 class="text-3xl sm:text-4xl font-bold mb-3">Choose your own adventure.</h2>
-    <p class="text-muted max-w-md mx-auto">Three steps. No pressure to jump to the end, most people start with step one.</p>
+  <!-- SHORTCUT ROWS -->
+  <section class="px-6 py-20 sm:py-28">
+    <div class="max-w-5xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3 text-center">&mdash; Still deciding? &mdash;</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-14 sm:mb-20 text-balance">Not sure which step is yours? Here's a shortcut.</h2>
+      <div class="space-y-16 sm:space-y-24">
+        {shortcuts.map((s, i) => (
+          <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+            <div class={`relative mx-auto w-full max-w-sm ${i % 2 === 1 ? 'md:order-2' : ''}`}>
+              <img src={s.image} alt={s.alt} class="w-full aspect-[4/5] object-cover rounded-[2rem]" loading="lazy" />
+              {s.badge && <RotatingBadge text="MOST PEOPLE START WITH STEP ONE •" size={120} class="absolute -top-6 -right-4 sm:-right-8" />}
+            </div>
+            <div class={i % 2 === 1 ? 'md:order-1' : ''}>
+              <p class="flex items-center gap-3 mb-4">
+                <span class={`h-3 w-3 rounded-full ${s.dot} border border-black/10`}></span>
+                <span class="text-xs uppercase tracking-widest font-semibold">Step {String(i + 1).padStart(2, '0')}</span>
+              </p>
+              <h3 class="text-3xl sm:text-4xl font-bold mb-4 text-balance">{s.title}</h3>
+              <p class="text-black mb-6 max-w-md">{s.text}</p>
+              <a href={s.href} class="group inline-flex items-center gap-4 text-lg font-semibold text-black">
+                {s.link}
+                <span class="grid place-items-center h-12 w-12 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-5 w-5 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   </section>
 
-  <!-- OFFERS -->
-  {offers.map((o, i) => (
-    <section id={o.id} class={`px-6 py-20 ${i % 2 === 1 ? 'bg-offwhite' : 'bg-white'}`}>
-      <div class={`max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center`}>
-        <div class={o.flip ? 'md:order-2 flex justify-center' : 'flex justify-center'}>
-          <div class={`bg-white p-3 pb-8 rounded-sm shadow-2xl max-w-xs ${o.flip ? 'rotate-2' : '-rotate-2'}`}>
-            {o.num === '01' ? (
-              <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="w-full rounded-sm aspect-[4/5] object-cover" />
-            ) : (
-              <div class="w-full aspect-[4/5] rounded-sm flex items-center justify-center text-center p-6" style={o.num === '02' ? 'background:linear-gradient(160deg,#d5b9db,#e040fb);' : 'background:linear-gradient(200deg,#e040fb,#d5b9db);'}>
-                <span class="font-serif italic text-white text-2xl leading-snug">{o.num === '02' ? '50 a Day & more' : 'Weekly Voxer Coaching'}</span>
-              </div>
-            )}
+  <!-- RESULTS: tilted cards -->
+  <section class="bg-black text-white px-6 py-20 sm:py-28 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3 text-center">&mdash; Happy clients &mdash;</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-14">Real students. <span class="script-accent italic text-pink">Real results.</span></h2>
+      <div class="grid md:grid-cols-3 gap-8 md:gap-6 items-start">
+        {results.map((r) => (
+          <figure class={`rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.35)] ${r.card}`}>
+            <p class="font-serif font-bold text-2xl sm:text-3xl leading-tight mb-4">{r.big}</p>
+            <blockquote class="text-[15px] leading-relaxed">&ldquo;{r.quote}&rdquo;</blockquote>
+            <figcaption class="mt-6 text-xs uppercase tracking-widest font-semibold">{r.name}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <section class="overflow-hidden py-10 sm:py-14" aria-hidden="true">
+    <div class="svc-marquee flex w-max">
+      {[0, 1].map(() => (
+        <div class="flex flex-none">
+          {marquee.map(() => (
+            <span class="font-serif text-5xl sm:text-7xl uppercase whitespace-nowrap pr-8">Ways to work together <span class="text-pink">/</span></span>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- THE THREE STEPS -->
+  {offers.map((o) => (
+    <section id={o.id} class={`${o.bg} px-6 py-16 sm:py-24 scroll-mt-20`}>
+      <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+        <div class={`flex justify-center ${o.flip ? 'md:order-2' : ''}`}>
+          <div class={`bg-white p-3 pb-9 rounded-sm shadow-2xl w-full max-w-sm ${o.tilt}`}>
+            <img src={o.image} alt={o.alt} class="w-full rounded-sm" loading="lazy" />
           </div>
         </div>
         <div class={o.flip ? 'md:order-1' : ''}>
-          <p class="font-serif italic text-pink text-5xl mb-2">{o.num}</p>
-          <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-2">{o.eyebrow}</p>
-          <h2 class="text-3xl font-bold mb-2">{o.title}</h2>
-          <p class="text-xs uppercase tracking-wide font-semibold mb-5">
-            <span class="text-pink">{o.tag}</span> {o.tagSub}
-          </p>
-          <p class="text-black mb-5">{o.desc}</p>
+          <p class="font-serif italic text-pink text-6xl sm:text-7xl mb-3">{o.num}</p>
+          <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">{o.eyebrow}</p>
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-balance">{o.title}</h2>
+          <p class="inline-block rounded-full border border-black px-4 py-1.5 text-xs uppercase tracking-widest font-semibold mb-6">{o.tag}</p>
+          <p class="text-black mb-6">{o.desc}</p>
           {o.items.length > 0 && (
-            <ul class="text-sm text-black space-y-2 mb-6">
+            <ul class="text-sm text-black space-y-2 mb-8">
               {o.items.map((item) => <li><span class="text-pink">+</span> {item}</li>)}
             </ul>
           )}
-          {o.quote && (
-            <blockquote class="font-typewriter border-l-2 border-pink pl-4 mb-6 text-sm not-italic text-black">
-              "{o.quote.text}"
-              <footer class="text-xs uppercase tracking-wide text-black mt-2">— {o.quote.name}</footer>
-            </blockquote>
-          )}
-          <a href={o.href} class="btn-pink">{o.cta}</a>
+          <a href={o.href} class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+            {o.cta}
+            <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
         </div>
       </div>
     </section>
   ))}
 
-  <!-- DECIDER -->
-  <section class="bg-black text-white px-6 py-20 text-center">
-    <div class="max-w-5xl mx-auto">
-      <p class="text-pink-light text-xs uppercase tracking-widest font-semibold mb-3">Still Deciding?</p>
-      <h2 class="text-3xl sm:text-4xl font-bold mb-14">Not sure which door is yours? Here's a shortcut.</h2>
-      <div class="grid md:grid-cols-3 gap-6 text-left">
-        <div class="border border-white/20 p-7">
-          <p class="font-serif italic text-lg mb-3">Just getting serious about email?</p>
-          <p class="text-warmgray text-sm">Start with the free community. Get the 90-day plan and the starter kit before you spend a thing.</p>
-        </div>
-        <div class="border border-white/20 p-7">
-          <p class="font-serif italic text-lg mb-3">Know exactly what you need?</p>
-          <p class="text-warmgray text-sm">Head to the shop. Grab the training that solves your one specific problem and put it to work today.</p>
-        </div>
-        <div class="border border-white/20 p-7">
-          <p class="font-serif italic text-lg mb-3">Want eyes on your business weekly?</p>
-          <p class="text-warmgray text-sm">Join coaching. Bring me the real questions, I'll bring you the next right thing to do about them.</p>
+  <!-- OVERHEARD -->
+  <section class="bg-[#e9d9ec] px-6 py-20 sm:py-28 text-center">
+    <div class="max-w-3xl mx-auto">
+      <p class="text-xs uppercase tracking-widest font-semibold mb-6">Overheard in the Coaching Group</p>
+      <blockquote class="font-serif text-2xl sm:text-4xl leading-snug text-balance">
+        &ldquo;I legitimately feel my shoulders drop every time I listen to one of your Voxer responses&hellip; I don't need to do everything, <Highlight>I just need to do the next right thing.</Highlight>&rdquo;
+      </blockquote>
+      <p class="mt-8 text-xs uppercase tracking-widest font-semibold">Nicole Elliott</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-black text-white px-6 py-20 sm:py-28">
+    <div class="max-w-3xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3 text-center">&mdash; Good to know &mdash;</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">Questions you might have.</h2>
+      <div class="space-y-3">
+        {faqs.map((f) => (
+          <details class="group rounded-[1.75rem] border border-white/30 open:border-pink transition-colors">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 font-semibold [&::-webkit-details-marker]:hidden">
+              <span>{f.q}</span>
+              <span class="grid place-items-center h-9 w-9 flex-none rounded-full bg-pink text-white transition-transform duration-300 group-open:rotate-90"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
+            </summary>
+            <p class="px-6 pb-6 text-warmgray">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING CTA -->
+  <section class="px-4 sm:px-6 py-16 sm:py-24">
+    <div class="max-w-6xl mx-auto overflow-hidden rounded-[2rem] bg-[#e9d9ec] grid md:grid-cols-[0.8fr_1.2fr] items-center">
+      <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="w-full h-full max-h-[420px] md:max-h-none object-cover object-[50%_30%] aspect-square md:aspect-auto" loading="lazy" />
+      <div class="px-7 sm:px-12 py-12 sm:py-16">
+        <p class="text-xs uppercase tracking-widest font-semibold mb-3">This feel like your vibe?</p>
+        <h2 class="text-3xl sm:text-4xl font-bold mb-5 text-balance">Whichever step you pick, you don't have to figure this out alone anymore.</h2>
+        <p class="text-black mb-3">I built these three ways to work together because I know business doesn't look the same for everyone, and it shouldn't have to. Start where you're at. Move to the next step when you're ready, not before.</p>
+        <p class="font-serif italic text-pink text-lg mb-8">Cheering you on always, Kylie xx</p>
+        <div class="flex flex-wrap gap-3">
+          <a href="https://www.skool.com/email-marketing-skool/about" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+            Start for free
+            <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
+          <a href="https://shop.kyliekelly.com/" class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+            Browse the shop
+            <span class="grid place-items-center h-11 w-11 rounded-full bg-pink-light text-black transition-colors duration-300 group-hover:bg-black group-hover:text-white"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- WHAT'S NEXT -->
-  <section class="px-6 py-16 text-center">
-    <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">What's Next</p>
-    <h2 class="text-2xl sm:text-3xl font-bold mb-4 max-w-xl mx-auto">Bigger ways to work together are coming in 2027.</h2>
-    <p class="text-muted max-w-xl mx-auto">I'm building toward more signature programs and deeper support, the kind of offers that take longer to get right. For now, these three doors are exactly where I'm putting my energy, and honestly, I think that's exactly where they should be.</p>
-  </section>
-
-  <!-- TESTIMONIAL -->
-  <section class="bg-pink-light px-6 py-16 text-center">
-    <div class="max-w-2xl mx-auto">
-      <p class="font-serif italic text-xl leading-relaxed mb-5">"I went from stuck and overwhelmed to 122 new subscribers, in just days of working with Kylie (all without social media!!) She is great at what she does!!"</p>
-      <p class="text-xs uppercase tracking-widest font-semibold">— Erin K.</p>
-    </div>
-  </section>
-
-  <!-- CLOSING NOTE -->
-  <section class="px-6 py-20 text-center">
-    <div class="max-w-xl mx-auto">
-      <h2 class="text-2xl sm:text-3xl font-bold mb-5">Whichever door you pick, you don't have to figure this out alone anymore.</h2>
-      <p class="text-black mb-1">I built these three ways to work together because I know business doesn't look the same for everyone, and it shouldn't have to. Start where you're at. Move to the next door when you're ready, not before.</p>
-      <p class="font-serif italic text-pink text-lg mt-5">Cheering you on always, Kylie xx</p>
-    </div>
-  </section>
-
-  <!-- FINAL CTA -->
-  <section class="bg-black text-white px-6 py-20 text-center">
-    <h2 class="text-3xl sm:text-4xl font-bold mb-8 max-w-xl mx-auto">Ready to stop guessing and pick a door?</h2>
-    <div class="flex flex-wrap gap-4 justify-center">
-      <a href="https://www.skool.com/email-marketing-skool/about" class="btn-pink">Start Free →</a>
-      <a href="https://shop.kyliekelly.com/" class="btn-outline !border-white text-white">Browse The Shop →</a>
-    </div>
-  </section>
+  <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
+  <FreebieReveal slot="reveal" />
 
 </Layout>
+
+<style>
+  .svc-marquee { animation: svc-marquee 60s linear infinite; }
+  @keyframes svc-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .svc-marquee { animation: none; }
+  }
+</style>

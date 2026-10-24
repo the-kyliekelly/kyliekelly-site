@@ -4,6 +4,7 @@ import Highlight from '../components/Highlight.astro';
 import CrossingRibbons from '../components/CrossingRibbons.astro';
 import RotatingBadge from '../components/RotatingBadge.astro';
 import CountUpStats from '../components/CountUpStats.astro';
+import FreebieReveal from '../components/FreebieReveal.astro';
 import episodePosts from '../data/blog-posts.json';
 import reviewData from '../data/listener-reviews.json';
 
@@ -198,14 +199,14 @@ const tickerItems = [
       </div>
     </div>
 
-    <div class="flex justify-center items-start mt-16 sm:mt-20 h-[210px] sm:h-[260px] lg:h-[330px]">
-      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl -rotate-6 translate-y-3 -mr-[10px] sm:-mr-[14px] lg:-mr-[18px]">
+    <div class="flex justify-center items-start mt-16 sm:mt-20 h-[230px] sm:h-[285px] lg:h-[360px]">
+      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl -rotate-[12deg] translate-y-6 -mr-[16px] sm:-mr-[26px] lg:-mr-[38px]">
         <img src="/images/hero-1.jpg" alt="Kylie Kelly" class="block w-full" />
       </div>
-      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl rotate-2 z-10">
+      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl rotate-[3deg] -translate-y-3 z-10">
         <img src="/images/hero-2.jpg" alt="Kylie Kelly laughing" class="block w-full" />
       </div>
-      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl -rotate-2 translate-y-2 -ml-[10px] sm:-ml-[14px] lg:-ml-[18px] z-20">
+      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl rotate-[11deg] translate-y-5 -ml-[16px] sm:-ml-[26px] lg:-ml-[38px] z-20">
         <img src="/images/hero-7.jpg" alt="Kylie Kelly holding a disco ball" class="block w-full" />
       </div>
     </div>
@@ -322,7 +323,6 @@ const tickerItems = [
                 <ul class="text-black text-sm space-y-2 mb-6">
                   <li><span class="text-pink">+</span> A simple 90-day growth plan</li>
                   <li><span class="text-pink">+</span> The Email Marketing Starter Kit, free on joining</li>
-                  <li><span class="text-pink">+</span> Premium: live Q&amp;A, templates, and the Audience Growth Tool Vault</li>
                 </ul>
               </div>
               <div class="flex justify-center order-first md:order-none">
@@ -651,31 +651,7 @@ const tickerItems = [
   </section>
 
   <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
-  <section slot="reveal" class="bg-[#fbe6f7] px-6 py-12 sm:py-20 lg:py-24">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
-      <div class="relative mx-auto w-full max-w-[230px] sm:max-w-sm md:max-w-none">
-        <div class="pointer-events-none absolute inset-x-[6%] inset-y-[8%] rounded-full bg-white/90 blur-3xl" aria-hidden="true"></div>
-        <img src="/images/freebie-mockup.png" alt="The Your Next 1000 Subscribers quiz on a desktop monitor" class="relative block w-full h-auto drop-shadow-[0_0_26px_rgba(255,255,255,0.95)]" />
-        <span class="absolute bottom-[14%] right-0 sm:bottom-[16%] md:bottom-auto md:top-2 md:right-2 inline-flex items-center gap-2 rounded-full bg-white text-black px-4 py-2 text-xs sm:text-sm font-semibold shadow-lg">
-          <span class="h-2.5 w-2.5 rounded-full bg-pink"></span>
-          Free &middot; 60 seconds
-        </span>
-      </div>
-      <div class="text-center max-w-md lg:max-w-lg mx-auto w-full">
-        <p class="text-black text-lg sm:text-xl lg:text-2xl mb-1">Oh hey!</p>
-        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl lg:text-5xl leading-tight text-black mb-4 lg:mb-5 text-balance">You almost left without this freebie?</h2>
-        <p class="text-black lg:text-lg mb-6 lg:mb-8">
-          Answer 6 quick questions and get the list-building strategy most likely to work for your business right now. It takes about 60 seconds.
-        </p>
-        <form action="https://form.flodesk.com/forms/6a389632c69dbd7193980270/submit" method="post" class="text-left">
-          <input type="text" name="firstName" placeholder="First name" required class="w-full mb-3 lg:mb-4 px-6 py-3 lg:py-4 lg:text-lg border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
-          <input type="text" name="email" placeholder="Email address" required class="w-full mb-3 lg:mb-4 px-6 py-3 lg:py-4 lg:text-lg border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
-          <input type="text" name="confirm_email_address" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
-          <button type="submit" class="btn-primary w-full text-center cursor-pointer lg:!py-[18px]">Yes, Build My Plan →</button>
-        </form>
-      </div>
-    </div>
-  </section>
+  <FreebieReveal slot="reveal" />
 
 
 <script>
