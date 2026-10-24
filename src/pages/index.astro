@@ -133,8 +133,8 @@ const tickerItems = [
   <!-- STATEMENT -->
   <section class="bg-white px-6 pt-12 pb-14 sm:pt-14 sm:pb-16 text-center border-t border-black/10">
     <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">The Kylie Kelly Promise</p>
-    <p class="font-serif font-bold italic text-[21px] sm:text-[26px] lg:text-[30px] leading-[1.4] max-w-[36em] mx-auto text-black text-balance">
-      I'm on a mission to help you get known, trusted, and selling to the right people. Built on the system that took me from 0 to 7,000 subscribers in 18 months - I want you to have <span class="whitespace-nowrap"><Highlight>consistent sales</Highlight></span> from visibility systems that keep working long after you build them.
+    <p class="font-serif font-normal italic text-[18px] sm:text-[22px] lg:text-[25px] leading-[1.45] max-w-[38em] mx-auto text-black text-balance">
+      I'm on a mission to help you get known, trusted, and selling to the right people. Built on the system that took me from 0 to 7,000 subscribers in 18 months - <span class="whitespace-nowrap"><Highlight>I want you to have consistent sales</Highlight></span> from visibility systems that keep working long after you build them.
     </p>
   </section>
 
@@ -171,7 +171,7 @@ const tickerItems = [
         </li>
       </ul>
 
-      <p class="text-black font-bold text-2xl sm:text-3xl leading-snug text-center mt-12 sm:mt-14">
+      <p class="text-black font-normal uppercase tracking-wide text-xl sm:text-2xl leading-snug text-center mt-12 sm:mt-14">
         One of those hit? All five?<br />
         I've got you my love.<br />
         <span class="text-pink">You're in the right place.</span>
@@ -226,7 +226,7 @@ const tickerItems = [
                   <li><span class="text-pink">+</span> The Email Marketing Starter Kit, free on joining</li>
                   <li><span class="text-pink">+</span> Premium: live Q&amp;A, templates, and the Audience Growth Tool Vault</li>
                 </ul>
-                <a href="https://www.skool.com/email-marketing-skool/about" class="btn-pink">Start My Free Growth Plan →</a>
+                <a href="https://www.skool.com/email-marketing-skool/about" class="btn-pink">Join Email Marketing Skool →</a>
               </div>
               <div class="flex justify-center order-first md:order-none">
                 <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 w-[190px] sm:w-[230px] max-w-full">
@@ -243,7 +243,7 @@ const tickerItems = [
                 <h3 class="text-2xl sm:text-3xl font-bold mb-1">Grab what you need, start today.</h3>
                 <p class="text-xs uppercase tracking-wide text-black mb-4">The KK Digital Product Shop</p>
                 <p class="text-black mb-6">Grab-and-go courses, templates and trainings for growing your email list without social media, from a $17 collaboration database to a full no-social growth system.</p>
-                <a href="https://shop.kyliekelly.com/" class="btn-pink">Help me grow my email list →</a>
+                <a href="https://shop.kyliekelly.com/" class="inline-block rounded-full bg-black text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-pink">Help me grow my email list →</a>
               </div>
               <div class="flex justify-center order-first md:order-none">
                 <div class="bg-white p-2 pb-6 rounded-sm shadow-xl rotate-3 w-[240px] sm:w-[320px] max-w-full">
@@ -408,23 +408,23 @@ const tickerItems = [
           One builds the strategy. The others are why school pickup never moves.
         </p>
         <ul class="text-black text-sm space-y-2 mb-4">
-          <li><span class="text-pink">+</span> From 0 to 7,000+ email subscribers in 18 months, no ads, no algorithm.</li>
+          <li><span class="text-pink">+</span> From 0 to 7,000+ email subscribers in 18 months, no algorithm.</li>
           <li><span class="text-pink">+</span> A Skool community of 1,300+.</li>
           <li><span class="text-pink">+</span> A podcast ranked in the top 1.5% globally.</li>
         </ul>
         <p class="text-black mb-8">
           Built around nap times, school runs, and a genuine belief that business gets to be fun.
         </p>
-        <a href="/meet-kylie" class="btn-pink">Get to Know Kylie →</a>
+        <a href="/meet-kylie" class="btn-primary">Get to Know Kylie →</a>
       </div>
       <div class="grid grid-cols-2 gap-6 items-start">
-        <div class="bg-white p-3 rounded-sm shadow-2xl -rotate-3">
+        <div class="dev-polaroid bg-white p-3 rounded-sm shadow-2xl" style="--rest:-3deg;">
           <img src="/images/kylie-podcast.jpg" alt="Kylie Kelly" class="w-full rounded-sm" />
           <div class="h-16 flex items-center justify-center">
             <p class="text-center font-typewriter text-base uppercase tracking-wide text-black">Kylie</p>
           </div>
         </div>
-        <div class="bg-white p-3 rounded-sm shadow-2xl rotate-3 mt-10">
+        <div class="dev-polaroid bg-white p-3 rounded-sm shadow-2xl mt-10" style="--rest:3deg;">
           <img src="/images/little-fam.jpg" alt="Kylie with Nick, Spencer and Sammy" class="w-full rounded-sm" />
           <div class="h-16 flex items-center justify-center">
             <p class="text-center font-typewriter text-base uppercase tracking-wide text-black">Nick, Spencer &amp; Sammy</p>
@@ -547,6 +547,29 @@ const tickerItems = [
       { threshold: 0.2 }
     );
     io.observe(group);
+  }
+</script>
+
+<script>
+  // Polaroids drop in and "develop" the first time they scroll into view.
+  const polaroids = Array.from(document.querySelectorAll<HTMLElement>('.dev-polaroid'));
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (polaroids.length && !calm && 'IntersectionObserver' in window) {
+    polaroids.forEach((el, i) => {
+      el.dataset.dev = 'pending';
+      el.style.setProperty('--dev-delay', `${i * 240}ms`);
+    });
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          (entry.target as HTMLElement).dataset.dev = 'in';
+          io.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.3 }
+    );
+    polaroids.forEach((el) => io.observe(el));
   }
 </script>
 </Layout>
