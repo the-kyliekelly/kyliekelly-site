@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import Highlight from '../components/Highlight.astro';
 import CrossingRibbons from '../components/CrossingRibbons.astro';
 import RotatingBadge from '../components/RotatingBadge.astro';
+import CountUpStats from '../components/CountUpStats.astro';
+import episodePosts from '../data/blog-posts.json';
 
 const testimonials = [
   {
@@ -49,6 +51,30 @@ const signatureCourse = {
   image: '/images/hero-2.jpg',
   imageAlt: 'Kylie Kelly',
 };
+
+// Latest three episodes, read from the episode library at build time.
+const handBuiltEpisodes = new Set([
+  'low-lift-email-list-growth',
+  'claude-claude-code-chrome-extension-delegate',
+  'plan-rest-of-year-without-burning-out',
+]);
+const latestEpisodes = episodePosts
+  .map((p) => {
+    const ep = p.excerpt.match(/EP\s*(\d+)/i);
+    if (!ep) return null;
+    const mins = p.excerpt.match(/(\d+)\s*MIN\s*LISTEN/i);
+    return {
+      num: ep[1],
+      mins: mins ? mins[1] : null,
+      title: p.title,
+      date: new Date(p.date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }),
+      href: handBuiltEpisodes.has(p.slug) ? `/podcast/episodes/${p.slug}/` : `/${p.slug}/`,
+    };
+  })
+  .filter(Boolean)
+  .sort((x, y) => Number(y.num) - Number(x.num))
+  .slice(0, 3);
+const episodeCount = latestEpisodes.length ? Number(latestEpisodes[0].num) : 265;
 
 const tickerItems = [
   "hater of country music {unless it's OG Tay Tay}",
@@ -171,7 +197,7 @@ const tickerItems = [
         </li>
       </ul>
 
-      <p class="font-serif font-bold text-3xl sm:text-4xl leading-tight text-black text-center mt-12 sm:mt-14">
+      <p class="font-serif font-bold text-2xl sm:text-3xl leading-tight text-black text-center mt-12 sm:mt-14">
         One of those hit? All five?<br />
         I've got you my love.<br />
         <span class="text-pink italic">You're in the right place.</span>
@@ -226,7 +252,7 @@ const tickerItems = [
                   <li><span class="text-pink">+</span> The Email Marketing Starter Kit, free on joining</li>
                   <li><span class="text-pink">+</span> Premium: live Q&amp;A, templates, and the Audience Growth Tool Vault</li>
                 </ul>
-                <a href="https://www.skool.com/email-marketing-skool/about" class="btn-pink">Join Email Marketing Skool →</a>
+                <a href="https://www.skool.com/email-marketing-skool/about" class="inline-block rounded-full bg-pink text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-black">Join Email Marketing Skool →</a>
               </div>
               <div class="flex justify-center order-first md:order-none">
                 <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 w-[190px] sm:w-[230px] max-w-full">
@@ -434,53 +460,74 @@ const tickerItems = [
     </div>
   </section>
 
-  <!-- PODCAST PROMO -->
-  <section class="bg-white text-black px-6 py-20 relative overflow-hidden">
-    <p class="absolute inset-0 flex items-center justify-center font-serif italic text-[5rem] sm:text-[8rem] whitespace-nowrap pointer-events-none select-none" style="color:rgba(0,0,0,0.04);">
+  <!-- PODCAST PROMO: white section, brand-styled latest episodes, proof numbers -->
+  <section class="bg-white text-black px-6 py-20 sm:py-24 relative overflow-hidden">
+    <p class="absolute inset-0 flex items-center justify-center font-serif italic text-[5rem] sm:text-[9rem] whitespace-nowrap pointer-events-none select-none" style="color:rgba(0,0,0,0.04);" aria-hidden="true">
       PODCAST PODCAST
     </p>
-    <div class="max-w-5xl mx-auto relative">
-      <div class="grid md:grid-cols-2 gap-10 items-center mb-24">
+    <div class="max-w-6xl mx-auto relative">
+      <div class="grid md:grid-cols-2 gap-10 items-center mb-14">
         <div>
-          <p class="text-pink text-xs uppercase tracking-widest font-normal mb-4">The Email Growth Show ⭐️⭐️⭐️⭐️⭐️</p>
-          <h2 class="font-serif text-4xl sm:text-5xl leading-tight text-black">
+          <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">The Email Growth Show ⭐️⭐️⭐️⭐️⭐️</p>
+          <h2 class="font-serif text-4xl sm:text-5xl leading-tight text-black text-balance">
             The top 1.5% podcast for women growing an email list <em class="italic font-bold text-pink">without social media</em><span class="text-pink">.</span>
           </h2>
         </div>
         <div>
-          <p class="text-black mb-6">
-            Your go-to podcast for coaches, course creators and online business owners who want to grow an email list and make consistent sales, without relying on social media or paid ads.
-            <br /><br />
-            New episodes every Friday.
+          <p class="text-black mb-3">
+            Your go-to podcast for coaches, course creators and online business owners who want to grow an email list and make consistent sales, without relying on social media.
           </p>
-          <a href="/podcast" class="btn-pink">Listen to All Episodes →</a>
+          <p class="text-black font-semibold mb-7">New episodes every Friday.</p>
+          <div class="flex flex-wrap gap-3">
+            <a href="https://podcasts.apple.com/podcast/id1550211753" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+              Apple Podcasts
+              <span class="grid place-items-center h-10 w-10 rounded-full border-2 border-transparent bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg></span>
+            </a>
+            <a href="https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+              Spotify
+              <span class="grid place-items-center h-10 w-10 rounded-full border-2 border-transparent bg-pink-light text-black transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg></span>
+            </a>
+          </div>
         </div>
       </div>
-      <p class="text-center text-pink text-xs uppercase tracking-widest font-semibold mb-4">↓ Scroll The Player To Browse Every Episode &amp; Hit Play ↓</p>
-      <div class="relative max-w-4xl mx-auto">
-        <div class="absolute -inset-6 rounded-3xl blur-2xl opacity-50 bg-pink"></div>
-        <div class="relative bg-offwhite rounded-sm shadow-2xl p-2 sm:p-3">
-        <iframe
-          title="The Email Growth Show"
-          allowtransparency="true"
-          height="380"
-          width="100%"
-          style="border: none; min-width: 100%; overflow-y: auto;"
-          scrolling="yes"
-          data-name="pb-iframe-player"
-          src="https://www.buzzsprout.com/2065148?client_source=small_player&iframe=true"
-          loading="lazy"
-        ></iframe>
-        </div>
+
+      <ul class="grid md:grid-cols-3 gap-5">
+        {latestEpisodes.map((ep) => (
+          <li>
+            <a href={ep.href} class="group flex h-full flex-col rounded-3xl border border-black/5 bg-offwhite p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Ep {ep.num}{ep.mins && ` · ${ep.mins} min listen`}</p>
+              <h3 class="font-serif text-2xl leading-snug text-black mb-8 text-balance">{ep.title}</h3>
+              <div class="mt-auto flex items-center justify-between gap-4">
+                <span class="text-xs uppercase tracking-widest text-black/70">{ep.date}</span>
+                <span class="grid h-12 w-12 flex-none place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black group-hover:text-white" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" class="h-4 w-4 translate-x-[1px]" fill="currentColor"><path d="M4.5 2.5v11l9-5.5z" /></svg>
+                </span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-12 flex flex-wrap items-center justify-center gap-6">
+        <a href="/podcast" class="inline-block rounded-full bg-black text-white px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-pink">Listen to all episodes →</a>
+      </div>
+
+      <div class="mt-16 sm:mt-20 border-t border-black/10 pt-12 sm:pt-14">
+        <CountUpStats stats={[
+          { value: episodeCount, label: 'Episodes' },
+          { value: 54000, suffix: '+', label: 'Downloads' },
+          { prefix: 'Top ', value: 1.5, suffix: '%', label: 'Podcasts globally' },
+        ]} />
       </div>
     </div>
   </section>
 
   <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
-  <section slot="reveal" class="bg-[#e9d9ec] px-6 py-12 sm:py-20 lg:py-24">
+  <section slot="reveal" class="bg-pink px-6 py-12 sm:py-20 lg:py-24" style="background-image: radial-gradient(rgba(255,255,255,0.28) 1.5px, rgba(255,255,255,0) 1.7px); background-size: 22px 22px;">
     <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
       <div class="relative mx-auto w-full max-w-[230px] sm:max-w-sm md:max-w-none">
-        <img src="/images/freebie-mockup.png" alt="The Your Next 1000 Subscribers quiz on a desktop monitor" class="block w-full h-auto drop-shadow-[0_26px_26px_rgba(70,20,80,0.28)]" />
+        <div class="pointer-events-none absolute inset-x-[6%] inset-y-[8%] rounded-full bg-white/45 blur-3xl" aria-hidden="true"></div>
+        <img src="/images/freebie-mockup.png" alt="The Your Next 1000 Subscribers quiz on a desktop monitor" class="relative block w-full h-auto drop-shadow-[0_0_26px_rgba(255,255,255,0.9)]" />
         <span class="absolute bottom-[14%] right-0 sm:bottom-[16%] md:bottom-auto md:top-2 md:right-2 inline-flex items-center gap-2 rounded-full bg-white text-black px-4 py-2 text-xs sm:text-sm font-semibold shadow-lg">
           <span class="h-2.5 w-2.5 rounded-full bg-pink"></span>
           Free &middot; 60 seconds
@@ -488,7 +535,7 @@ const tickerItems = [
       </div>
       <div class="text-center max-w-md lg:max-w-lg mx-auto w-full">
         <p class="text-black text-lg sm:text-xl lg:text-2xl mb-1">Oh hey!</p>
-        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl lg:text-5xl leading-tight text-black mb-4 lg:mb-5 text-balance">You almost left without this freebie?</h2>
+        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl lg:text-5xl leading-tight text-white mb-4 lg:mb-5 text-balance">You almost left without this freebie?</h2>
         <p class="text-black lg:text-lg mb-6 lg:mb-8">
           Answer 6 quick questions and get the list-building strategy most likely to work for your business right now. It takes about 60 seconds.
         </p>
