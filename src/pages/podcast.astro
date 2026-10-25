@@ -233,10 +233,10 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
     </div>
     <div class="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 -mt-[62vh] sm:-mt-[58vh]">
       {praise.map((r, i) => (
-        <figure data-praise class={`praise-card w-[88%] sm:w-[420px] lg:w-[430px] rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.1)] ${praiseStyle[i]} ${praisePlace[i]}`}>
+        <figure data-praise class={`praise-card w-[92%] sm:w-[500px] lg:w-[540px] rounded-[2.25rem] p-8 sm:p-10 lg:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.1)] ${praiseStyle[i]} ${praisePlace[i]}`}>
           <p class="tracking-[0.2em] mb-4" role="img" aria-label="5 out of 5 stars">★★★★★</p>
-          <blockquote class="text-[15px] leading-relaxed">&ldquo;{r.body}&rdquo;</blockquote>
-          <figcaption class="mt-6 text-xs uppercase tracking-widest font-semibold">{r.name}</figcaption>
+          <blockquote class="text-base sm:text-lg lg:text-xl leading-relaxed">&ldquo;{r.body}&rdquo;</blockquote>
+          <figcaption class="mt-7 text-xs uppercase tracking-widest font-semibold">{r.name}</figcaption>
         </figure>
       ))}
     </div>
@@ -248,19 +248,19 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
     <section class="relative overflow-hidden bg-black text-white px-6 py-24 sm:py-32">
       <img src="/images/stock-top-episodes.jpg" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full object-cover object-[50%_40%] opacity-90" width="2000" height="1239" loading="lazy" />
       <div class="absolute inset-0 bg-black/35" aria-hidden="true"></div>
-      <div class="relative max-w-2xl mx-auto">
+      <div class="relative max-w-3xl mx-auto">
         <h2 class="font-serif text-6xl sm:text-8xl uppercase text-center leading-[0.95] mb-12 sm:mb-16">Top<br />episodes</h2>
-        <div class="space-y-4">
+        <div class="space-y-5">
           {topEpisodes.map((ep, i) => (
-            <a href={ep.href} class="group flex items-center gap-4 sm:gap-5 rounded-full bg-white text-black p-3 pr-4 sm:pr-5 shadow-xl transition-transform duration-300 hover:-translate-y-1">
+            <a href={ep.href} class="group flex items-center gap-4 sm:gap-6 rounded-full bg-white text-black p-3.5 pr-4 sm:p-5 sm:pr-7 shadow-xl transition-transform duration-300 hover:-translate-y-1">
               {topPhotos.length > 0 && (
-                <Image src={topPhotos[(Number(ep.num) * 5) % topPhotos.length]} alt="" widths={[160, 240]} sizes="80px" class="h-16 w-16 sm:h-20 sm:w-20 flex-none rounded-full object-cover object-[50%_22%]" loading="lazy" />
+                <Image src={topPhotos[(Number(ep.num) * 5) % topPhotos.length]} alt="" widths={[200, 300]} sizes="112px" class="h-[84px] w-[84px] sm:h-28 sm:w-28 flex-none rounded-full object-cover object-[50%_22%]" loading="lazy" />
               )}
               <span class="flex-1 min-w-0">
-                <span class="block text-[11px] uppercase tracking-widest font-semibold text-black/70 mb-1">Ep {ep.num}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</span>
-                <span class="block font-semibold leading-snug text-[15px] sm:text-base">{ep.title}</span>
+                <span class="block text-[11px] sm:text-xs uppercase tracking-widest font-semibold text-black/70 mb-1.5">Ep {ep.num}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</span>
+                <span class="block font-semibold leading-snug text-[15px] sm:text-xl">{ep.title}</span>
               </span>
-              <span class={`grid place-items-center h-11 w-11 flex-none rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+              <span class={`grid place-items-center h-12 w-12 sm:h-16 sm:w-16 flex-none rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4 sm:h-5 sm:w-5" fill="currentColor"><path d={playIcon} /></svg></span>
             </a>
           ))}
         </div>
@@ -284,12 +284,39 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
             </a>
           ))}
         </div>
-        <p class="text-right mt-12">
-          <a href="/podcast/archive" class="font-serif text-lg uppercase tracking-[0.12em] underline underline-offset-4 decoration-black/30 hover:decoration-pink">All episodes →</a>
-        </p>
+        <!-- Episode library banner -->
+        <div class="relative mt-16 sm:mt-20 grid items-center gap-10 overflow-hidden rounded-[2rem] bg-pink px-7 py-12 text-white shadow-[0_30px_70px_rgba(224,64,251,0.25)] sm:px-12 md:grid-cols-[0.8fr_1.2fr] md:gap-14 md:py-16">
+          <div class="mx-auto w-[78%] max-w-[300px] -rotate-3 bg-white p-3 pb-12 shadow-[0_20px_40px_rgba(0,0,0,0.25)] md:w-full">
+            <img src="/images/kylie-podcast.jpg" alt="Kylie Kelly recording an episode of The Email Growth Show" class="aspect-[4/5] w-full object-cover object-[50%_30%]" width="600" height="750" loading="lazy" />
+          </div>
+          <div class="text-center md:text-left">
+            <p class="mb-4 font-serif italic text-lg text-white/90">Looking for a past episode?</p>
+            <h2 class="mb-5 font-serif text-4xl leading-[1.08] text-balance sm:text-5xl">Every episode, every show note: <span class="italic">one library.</span></h2>
+            <p class="mx-auto mb-8 max-w-md leading-relaxed md:mx-0">Binge the whole back catalogue of The Email Growth Show, newest first, with the show notes one click away.</p>
+            <a href="/podcast/archive" class="group inline-flex items-center gap-4 rounded-full bg-black pl-7 pr-2 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-transform duration-300 hover:-translate-y-1">
+              Browse the episode library
+              <span class="grid h-11 w-11 place-items-center rounded-full bg-white text-black transition-colors duration-300 group-hover:bg-pink group-hover:text-white"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   )}
+
+  <!-- ASK KYLIE -->
+  <section class="bg-white px-6 pb-20 sm:pb-28">
+    <div class="max-w-5xl mx-auto flex flex-col items-center gap-6 rounded-[2rem] bg-black px-8 py-12 text-center text-white sm:flex-row sm:justify-between sm:gap-10 sm:px-14 sm:py-14 sm:text-left">
+      <div class="max-w-xl">
+        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Listener questions</p>
+        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl leading-tight mb-3 text-balance">Got a question for the show?</h2>
+        <p class="text-warmgray leading-relaxed">Record it in your own voice. I may answer it on a future episode.</p>
+      </div>
+      <a href="/ask-kylie" class="group inline-flex flex-none items-center gap-4 rounded-full bg-white text-black pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+        Ask Kylie
+        <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+      </a>
+    </div>
+  </section>
 
   <!-- GUESTS + SPONSORS -->
   <section class="bg-offwhite px-6 py-20 sm:py-28">
