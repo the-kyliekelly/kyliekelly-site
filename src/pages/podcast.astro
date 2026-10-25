@@ -145,17 +145,6 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
         ))}
       </ul>
     </div>
-    <div class="max-w-5xl mx-auto mt-16 sm:mt-20 flex flex-col items-center gap-6 rounded-[2rem] bg-black px-8 py-12 text-center text-white sm:flex-row sm:justify-between sm:gap-10 sm:px-14 sm:py-14 sm:text-left">
-      <div class="max-w-xl">
-        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Listener questions</p>
-        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl leading-tight mb-3 text-balance">Got a question for the show?</h2>
-        <p class="text-warmgray leading-relaxed">Record it in your own voice. I may answer it on a future episode.</p>
-      </div>
-      <a href="/ask-kylie" class="group inline-flex flex-none items-center gap-4 rounded-full bg-white text-black pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-        Ask Kylie
-        <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-      </a>
-    </div>
   </section>
 
   <!-- MARQUEE -->
@@ -202,6 +191,17 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
         <PodcastSignup uid="band" class="max-w-md mx-auto md:mx-0" />
       </div>
     </div>
+    <div class="max-w-5xl mx-auto mt-6 sm:mt-8 flex flex-col items-center gap-6 rounded-[2rem] bg-black px-8 py-12 text-center text-white sm:flex-row sm:justify-between sm:gap-10 sm:px-14 sm:py-14 sm:text-left">
+      <div class="max-w-xl">
+        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Listener questions</p>
+        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl leading-tight mb-3 text-balance">Got a question for the show?</h2>
+        <p class="text-warmgray leading-relaxed">Record it in your own voice. I may answer it on a future episode.</p>
+      </div>
+      <a href="/ask-kylie" class="group inline-flex flex-none items-center gap-4 rounded-full bg-white text-black pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+        Ask Kylie
+        <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+      </a>
+    </div>
   </section>
 
   <!-- ABOUT YOUR HOST -->
@@ -239,7 +239,7 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
   <!-- PRAISE: the heading stays pinned while the review cards slide up over it -->
   <section class="praise relative bg-offwhite px-6 pb-20 sm:pb-28">
     <div class="sticky top-0 z-0 flex h-screen flex-col items-center justify-center text-center pointer-events-none">
-      <p class="text-sm sm:text-base uppercase tracking-[0.25em] font-semibold mb-4 sm:mb-6">Praise for</p>
+      <p class="font-serif text-[11vw] leading-none sm:text-[min(6vw,7rem)] uppercase tracking-[0.04em] text-black mb-3 sm:mb-5">Praise for</p>
       <h2 class="font-serif text-[30vw] leading-[0.88] sm:text-[min(16vw,19rem)] sm:leading-none uppercase text-pink">The<br class="sm:hidden" /> Show</h2>
     </div>
     <div class="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 -mt-[8vh]">
