@@ -26,15 +26,23 @@ let cached: Promise<PodcastStats> | null = null;
 
 async function load(): Promise<PodcastStats> {
   const fallback: PodcastStats = { downloads: { value: FALLBACK_DOWNLOADS, live: false }, plays: new Map() };
-  const token = import.meta.env.BUZZSPROUT_API_TOKEN ?? (typeof process !== 'undefined' ? process.env.BUZZSPROUT_API_TOKEN : undefined);
-  if (!token) return fallback;
+  const raw = import.meta.env.BUZZSPROUT_API_TOKEN ?? (typeof process !== 'undefined' ? process.env.BUZZSPROUT_API_TOKEN : undefined);
+  // Pasted tokens often carry a stray space or line break, which would break the request header.
+  const token = typeof raw === 'string' ? raw.trim() : '';
+  if (!token) {
+    console.warn('[stats] BUZZSPROUT_API_TOKEN is not set; using the last known downloads figure.');
+    return fallback;
+  }
 
   try {
     const res = await fetch(`https://www.buzzsprout.com/api/${PODCAST_ID}/episodes.json`, {
       headers: { Authorization: `Token token=${token}` },
       signal: AbortSignal.timeout(10000),
     });
-    if (!res.ok) return fallback;
+    if (!res.ok) {
+      console.warn(`[stats] Buzzsprout answered ${res.status}; using the last known downloads figure.`);
+      return fallback;
+    }
     const episodes: Array<{ episode_number?: number | null; total_plays?: number }> = await res.json();
     const plays = new Map<number, number>();
     let total = 0;
@@ -43,9 +51,14 @@ async function load(): Promise<PodcastStats> {
       total += n;
       if (ep.episode_number) plays.set(Number(ep.episode_number), n);
     }
-    if (!total) return fallback;
+    if (!total) {
+      console.warn(`[stats] Buzzsprout returned ${episodes.length} episodes with no plays; using the last known downloads figure.`);
+      return fallback;
+    }
+    console.log(`[stats] Buzzsprout: ${episodes.length} episodes, ${total} total plays.`);
     return { downloads: { value: total, live: true }, plays };
-  } catch {
+  } catch (err) {
+    console.warn(`[stats] Could not reach Buzzsprout (${err instanceof Error ? err.message : 'unknown error'}); using the last known downloads figure.`);
     return fallback;
   }
 }
