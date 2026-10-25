@@ -43,11 +43,12 @@ async function load(): Promise<PodcastStats> {
       console.warn(`[stats] Buzzsprout answered ${res.status}; using the last known downloads figure.`);
       return fallback;
     }
-    const episodes: Array<{ episode_number?: number | null; total_plays?: number }> = await res.json();
+    // Buzzsprout calls an episode's lifetime downloads "total_downloads".
+    const episodes: Array<{ episode_number?: number | null; total_downloads?: number }> = await res.json();
     const plays = new Map<number, number>();
     let total = 0;
     for (const ep of episodes) {
-      const n = Number(ep.total_plays) || 0;
+      const n = Number(ep.total_downloads) || 0;
       total += n;
       if (ep.episode_number) plays.set(Number(ep.episode_number), n);
     }
