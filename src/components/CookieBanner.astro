@@ -2,10 +2,9 @@
 // Cookie consent banner. Shows once, remembers the choice for 12 months, and can be reopened from
 // the "Cookie settings" link in the footer.
 //
-// To add analytics or an ad pixel that only runs after someone accepts, paste its script like this
-// (it stays inert until "Accept" is chosen):
-//   <script type="text/plain" data-consent="analytics" src="https://example.com/tag.js"></script>
-// Nothing like that is installed yet, so right now the site sets no tracking cookies either way.
+// Google Analytics and the Meta Pixel are installed in Tracking.astro. They stay switched off until
+// "Accept" is chosen. To add another tool that should wait for consent, paste its script like this:
+//   <script is:inline type="text/plain" data-consent="analytics"> ...code... </script>
 ---
 <div id="cookie-banner" class="hidden fixed inset-x-4 bottom-4 z-[60] sm:inset-x-auto sm:left-6 sm:bottom-6 sm:max-w-md rounded-[1.75rem] bg-white p-6 text-black shadow-[0_20px_60px_rgba(0,0,0,0.22)] border border-black/10" role="dialog" aria-modal="false" aria-labelledby="cookie-title" aria-describedby="cookie-text">
   <p id="cookie-title" class="font-serif italic font-bold text-pink text-xl leading-none mb-2">Cookies, your call.</p>

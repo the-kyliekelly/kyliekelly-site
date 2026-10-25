@@ -1,0 +1,137 @@
+---
+// Sign-up for the podcast "one sheet takeaways" freebie.
+// Flodesk draws the form itself (so its settings, like the thank-you message and the redirect to the
+// cheat sheets, are always current). The CSS below restyles it to match the rest of the site.
+// Usage: <PodcastSignup uid="band" />   (uid must be unique for each placement on a page)
+interface Props {
+  uid: string;
+  class?: string;
+}
+const { uid, class: className = '' } = Astro.props;
+
+const FORM_ID = '6add3e8dd6cecc680802807e'; // Flodesk form "Podcast Cheat Sheet Opt In - Website"
+const PAGE_LINK = 'https://kyliekelly.myflodesk.com/podcast'; // shown if the form cannot load
+const boxId = `fd-form-${FORM_ID}-${uid}`;
+---
+<div class:list={['podcast-signup text-left', className]}>
+  <div id={boxId} data-fd-box data-form-id={FORM_ID}></div>
+  <noscript>
+    <a href={PAGE_LINK} class="inline-flex rounded-full bg-black px-7 py-3.5 text-[15px] font-semibold text-white">Send me the cheat sheets</a>
+  </noscript>
+</div>
+
+<script is:inline define:vars={{ boxId, FORM_ID }}>
+  // Load Flodesk's form script once per page, then ask it to draw this form.
+  (function (w, d, t, h, s, n) {
+    if (!w.FlodeskObject) {
+      w.FlodeskObject = n;
+      var fn = function () { (w[n].q = w[n].q || []).push(arguments); };
+      w[n] = w[n] || fn;
+      var f = d.getElementsByTagName(t)[0];
+      var v = '?v=' + Math.floor(new Date().getTime() / (120 * 1000)) * 60;
+      var sm = d.createElement(t); sm.async = true; sm.type = 'module'; sm.src = h + s + '.mjs' + v; f.parentNode.insertBefore(sm, f);
+      var sn = d.createElement(t); sn.async = true; sn.noModule = true; sn.src = h + s + '.js' + v; f.parentNode.insertBefore(sn, f);
+    }
+  })(window, document, 'script', 'https://assets.flodesk.com', '/universal', 'fd');
+  window.fd('form', { formId: FORM_ID, containerEl: '#' + boxId });
+</script>
+
+<style is:global>
+  /* Make Flodesk's form look like the rest of the site: pill fields, black pill button. */
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__container { max-width: none !important; overflow: visible !important; }
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__form { padding: 0 !important; font-family: inherit !important; }
+  /* the section around the form already has its own heading */
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__title,
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__subtitle { display: none !important; }
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__fields { margin: 0 0 12px !important; }
+  .podcast-signup [data-ff-el="root"] .fd-form-group { margin: 0 0 12px !important; }
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__control {
+    height: 54px !important;
+    padding: 0 26px !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: #000 !important;
+    font-family: 'Work Sans', sans-serif !important;
+    font-size: 15px !important;
+  }
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__control:focus { border-color: #e040fb !important; box-shadow: 0 0 0 1px #e040fb !important; }
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__label {
+    padding: 0 28px !important;
+    line-height: 54px !important;
+    color: rgba(0, 0, 0, 0.55) !important;
+    font-family: 'Work Sans', sans-serif !important;
+    font-size: 15px !important;
+  }
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__button {
+    position: relative;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    min-height: 58px;
+    padding: 8px 64px 8px 32px !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: #000 !important;
+    color: #fff !important;
+    font-family: 'Work Sans', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    text-align: left !important;
+    text-transform: none !important;
+    transition: transform 0.3s ease;
+  }
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__button:hover { transform: translateY(-4px); }
+  /* Show the label in the site's own style, whatever case the Flodesk text is typed in. */
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__button > div {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__button::before {
+    content: 'Send me the cheat sheets';
+    white-space: nowrap;
+    flex: none;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  /* the pink arrow circle, same as the other site buttons */
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__button::after {
+    content: '\2197';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    background: #e040fb;
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__button:hover::after { background: #fff; color: #000; }
+  /* thank-you and error messages */
+  .podcast-signup [data-ff-el="root"] .ff-6add3e8dd6cecc680802807e__success-message {
+    padding: 22px 26px;
+    border-radius: 28px;
+    background: #fff;
+    color: #000 !important;
+    font-family: 'Work Sans', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    text-align: center;
+  }
+  .podcast-signup [data-ff-el="root"] .fd-form-feedback { font-family: 'Work Sans', sans-serif; margin-left: 20px; }
+</style>

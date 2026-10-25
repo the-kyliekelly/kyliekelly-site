@@ -6,6 +6,7 @@ import RotatingBadge from '../components/RotatingBadge.astro';
 import CountUpStats from '../components/CountUpStats.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
 import { getEpisodes } from '../lib/episodes';
+import { getDownloads } from '../lib/stats';
 import reviewData from '../data/listener-reviews.json';
 
 const testimonials = [
@@ -60,6 +61,7 @@ const wave = (seed) =>
   Array.from({ length: 36 }, (_, i) => Number((0.22 + 0.78 * Math.abs(Math.sin(i * 0.6 + seed) * Math.cos(i * 0.27 + seed * 1.7))).toFixed(2)));
 const latestEpisodes = allEpisodes.slice(0, 3).map((ep, i) => ({ ...ep, bars: wave(i * 2.3 + (Number(ep.num) % 7)) }));
 const episodeCount = allEpisodes.length ? Number(allEpisodes[0].num) : 266;
+const downloads = await getDownloads();
 
 // The phone mockup always shows the newest episode.
 const phoneEpisode = latestEpisodes[0];
@@ -495,7 +497,7 @@ const tickerItems = [
           <div class="mt-10 max-w-lg border-t border-black/10 pt-7">
             <CountUpStats compact left stats={[
               { value: episodeCount, label: 'Episodes' },
-              { value: 54000, suffix: '+', label: 'Downloads' },
+              { value: downloads.value, suffix: downloads.live ? '' : '+', label: 'Downloads' },
               { prefix: 'TOP ', value: 1.5, suffix: '%', label: 'Podcasts globally' },
             ]} />
           </div>

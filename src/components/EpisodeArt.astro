@@ -42,8 +42,8 @@ const band = bands[(n + Math.floor(n / Math.max(photos.length, 1))) % bands.leng
         <Image src={photo} alt="" widths={[320, 480, 640]} sizes="(min-width: 768px) 300px, 70vw" class="absolute inset-0 h-full w-full object-cover object-top" loading="lazy" />
       )}
     </div>
-    <div class:list={['flex h-[104px] flex-col items-center justify-center px-3 text-center', band]}>
-      <p class="font-serif leading-tight text-[13px] sm:text-[14px] line-clamp-3 text-balance">EP {num}: {title}</p>
+    <div class:list={['flex h-[124px] flex-col items-center justify-center px-3 text-center', band]}>
+      <p class="font-serif leading-tight text-[15px] sm:text-[17px] line-clamp-3 text-balance">EP {num}: {title}</p>
       <p class="mt-2 text-[8px] sm:text-[9px] uppercase tracking-[0.16em] font-semibold opacity-90">With Kylie Kelly</p>
     </div>
   </div>

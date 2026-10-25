@@ -2,9 +2,8 @@
 // Podcast freebie panel that sits behind the footer and is uncovered at the very end of the page.
 // Usage: <PodcastFreebieReveal slot="reveal" />  (Layout.astro places it in the reveal slot)
 import CheatSheet from './CheatSheet.astro';
+import PodcastSignup from './PodcastSignup.astro';
 
-const link = 'https://kyliekelly.myflodesk.com/podcast';
-const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 ---
 <section class="bg-[#fbe6f7] px-6 py-12 sm:py-20 lg:py-24">
   <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
@@ -18,10 +17,7 @@ const arrow = 'M4 12L12 4M5.5 4H12v6.5';
       <p class="text-black lg:text-lg mb-6 lg:mb-8">
         Podcasts are so easy to listen to and so much harder to act on afterwards. So every new episode gets its own cheat sheet: one page, with the key points, ready for when you finally sit down to do the thing.
       </p>
-      <a href={link} target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-8 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-        Send me the cheat sheets
-        <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-      </a>
+      <PodcastSignup uid="reveal" class="max-w-md mx-auto" />
     </div>
   </div>
 </section>
