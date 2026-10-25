@@ -58,11 +58,20 @@ const praiseOrder = [4, 0, 6, 7, 2, 1];
 const praise = praiseOrder.map((i) => reviewData[i]);
 const praiseStyle = [
   'bg-[#e9d9ec] text-black -rotate-2',
-  'bg-pink text-white rotate-1 lg:mt-12',
+  'bg-pink text-white rotate-1',
   'bg-[#fbe6f7] text-black rotate-2',
   'bg-pink-light text-black rotate-1',
-  'bg-white text-black -rotate-2 lg:mt-12',
+  'bg-white text-black -rotate-2',
   'bg-[#e9d9ec] text-black rotate-2',
+];
+// Where each card sits as it slides up over the pinned heading (phone first, then wide screens).
+const praisePlace = [
+  'self-start ml-0 lg:ml-[6%]',
+  'self-end mr-0 lg:mr-[8%] -mt-6 lg:-mt-24',
+  'self-start ml-2 lg:ml-[24%] mt-6 lg:mt-4',
+  'self-end mr-2 lg:mr-[2%] -mt-4 lg:-mt-28',
+  'self-start ml-0 lg:ml-[3%] mt-6 lg:mt-8',
+  'self-end mr-0 lg:mr-[22%] -mt-4 lg:-mt-20',
 ];
 const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light text-black'];
 ---
@@ -216,22 +225,22 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
     </div>
   </section>
 
-  <!-- PRAISE -->
-  <section class="bg-offwhite px-6 py-20 sm:py-28 overflow-hidden">
-    <div class="max-w-6xl mx-auto">
-      <p class="text-xs uppercase tracking-widest font-semibold mb-3 text-center">Praise for</p>
-      <h2 class="font-serif text-5xl sm:text-7xl uppercase text-pink text-center mb-14 sm:mb-20">The Show</h2>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
-        {praise.map((r, i) => (
-          <figure class={`rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.08)] ${praiseStyle[i]}`}>
-            <p class="tracking-[0.2em] mb-4" role="img" aria-label="5 out of 5 stars">★★★★★</p>
-            <blockquote class="text-[15px] leading-relaxed">&ldquo;{r.body}&rdquo;</blockquote>
-            <figcaption class="mt-6 text-xs uppercase tracking-widest font-semibold">{r.name}</figcaption>
-          </figure>
-        ))}
-      </div>
-      <p class="text-center text-sm text-black/70 mt-12">5-star reviews from Apple Podcasts</p>
+  <!-- PRAISE: the heading stays pinned while the review cards slide up over it -->
+  <section class="praise relative bg-offwhite px-6 pb-20 sm:pb-28">
+    <div class="sticky top-0 z-0 flex h-screen flex-col items-center justify-center text-center pointer-events-none">
+      <p class="text-xs uppercase tracking-widest font-semibold mb-3">Praise for</p>
+      <h2 class="font-serif text-6xl sm:text-8xl uppercase text-pink">The Show</h2>
     </div>
+    <div class="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 -mt-[62vh] sm:-mt-[58vh]">
+      {praise.map((r, i) => (
+        <figure data-praise class={`praise-card w-[88%] sm:w-[420px] lg:w-[430px] rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.1)] ${praiseStyle[i]} ${praisePlace[i]}`}>
+          <p class="tracking-[0.2em] mb-4" role="img" aria-label="5 out of 5 stars">★★★★★</p>
+          <blockquote class="text-[15px] leading-relaxed">&ldquo;{r.body}&rdquo;</blockquote>
+          <figcaption class="mt-6 text-xs uppercase tracking-widest font-semibold">{r.name}</figcaption>
+        </figure>
+      ))}
+    </div>
+    <p class="relative z-10 text-center text-sm text-black/70 mt-16">5-star reviews from Apple Podcasts</p>
   </section>
 
   <!-- TOP EPISODES -->
@@ -364,6 +373,13 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
     50% { opacity: 1; transform: scale(1.18); }
   }
 
+  /* Review cards rise and settle as they scroll into view */
+  .praise-card { transition: opacity 0.8s ease, translate 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .praise-card.is-waiting { opacity: 0; translate: 0 70px; }
+  @media (prefers-reduced-motion: reduce) {
+    .praise-card.is-waiting { opacity: 1; translate: 0 0; }
+  }
+
   .pod-marquee { animation: pod-marquee 70s linear infinite; }
   @keyframes pod-marquee {
     from { transform: translateX(0); }
@@ -373,3 +389,22 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
     .pod-hero, .pod-cover, .pod-flare, .pod-marquee { animation: none; }
   }
 </style>
+
+<script>
+  // Cards below the fold start lowered and faded, then settle as they come into view.
+  const cards = document.querySelectorAll<HTMLElement>('[data-praise]');
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.remove('is-waiting');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    cards.forEach((c) => {
+      if (c.getBoundingClientRect().top > window.innerHeight) c.classList.add('is-waiting');
+      io.observe(c);
+    });
+  }
+</script>
