@@ -2,6 +2,7 @@
 // "Ask Kylie": listeners record a voice question for The Email Growth Show.
 // The recorder is SpeakPipe. Its loader script is added in the browser (see the script at the bottom),
 // and the recorder itself is drawn inline in the "Record your question" card.
+// Its colours and wording are set in the SpeakPipe account (Settings > Widget), not on this page.
 import Layout from '../layouts/Layout.astro';
 
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
@@ -10,18 +11,11 @@ const SPEAKPIPE_TOKEN = 'xfaqwaa1sa5oaxahjizgb5e8zk59zw8d'; // SpeakPipe public 
 const recorderSrc = `https://www.speakpipe.com/apps/dialog/${SPEAKPIPE_TOKEN}`;
 const MAX_SECONDS = 90; // Matches the maximum recording length set in SpeakPipe
 
-const steps = [
-  { n: '1', title: 'Press record', text: 'Ask your question out loud, the way you would if we were having a coffee.' },
-  { n: '2', title: 'Send it to me', text: 'It lands straight with me, no sign-up and no account needed.' },
-  { n: '3', title: 'Listen for it', text: 'Questions I can help with may be answered on a future episode of The Email Growth Show.' },
-];
-
 const tips = [
-  'Find somewhere quiet, and hold your phone close like you are leaving a voice note for a friend.',
-  'One question per recording. Want to ask two? Record twice.',
-  'Be specific about where you are at. Your list size, what you sell and what you have already tried.',
   `Keep it short. You have up to ${MAX_SECONDS} seconds, and under a minute is the sweet spot.`,
-  'Say your first name at the start so I can say it back to you.',
+  'One question per recording. Got another one? Record again.',
+  'Record somewhere quiet. Your phone is plenty.',
+  'Get specific about where you are at, like your list size and what you have already tried.',
 ];
 ---
 <Layout
@@ -40,9 +34,8 @@ const tips = [
   <!-- HERO -->
   <section class="bg-offwhite px-6 pt-14 pb-14 sm:pt-24 sm:pb-20 text-center">
     <div class="max-w-3xl mx-auto">
-      <p class="text-xs uppercase tracking-widest font-semibold mb-5">Your question, in your own voice</p>
       <h1 class="text-5xl sm:text-7xl font-bold leading-[1.05] text-balance mb-7">
-        Ask <span class="script-accent italic text-pink">Kylie</span>
+        Ask <span class="script-accent italic text-pink">Kylie</span> your question
       </h1>
       <p class="text-lg sm:text-xl leading-relaxed text-black max-w-xl mx-auto mb-9">
         Stuck on your email list, your visibility, or how to grow without living on social media? Record your question and I may answer it on a future episode of The Email Growth Show.
@@ -54,62 +47,54 @@ const tips = [
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="bg-white px-6 py-16 sm:py-24">
-    <div class="max-w-5xl mx-auto">
-      <p class="text-xs uppercase tracking-widest font-semibold mb-10 text-center">How it works</p>
-      <ol class="grid gap-5 md:grid-cols-3 md:gap-6">
-        {steps.map((s) => (
-          <li class="flex items-start gap-5 rounded-[2rem] bg-offwhite p-7 md:flex-col md:gap-4 md:p-8">
-            <span class="grid h-12 w-12 flex-none place-items-center rounded-full bg-pink font-serif text-xl text-white" aria-hidden="true">{s.n}</span>
-            <div>
-              <h2 class="font-serif text-2xl leading-tight mb-2">{s.title}</h2>
-              <p class="text-[15px] leading-relaxed">{s.text}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
   <!-- SAY IT LIKE THIS -->
-  <section class="bg-white px-6 pb-16 sm:pb-24">
-    <div class="max-w-3xl mx-auto">
-      <div class="relative overflow-hidden rounded-[2rem] bg-black text-white px-7 py-10 sm:px-14 sm:py-14 shadow-[0_30px_70px_rgba(0,0,0,0.18)]">
-        <span class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-pink/30 blur-3xl" aria-hidden="true"></span>
-        <p class="relative text-pink text-xs uppercase tracking-widest font-semibold mb-4">Not sure what to say?</p>
-        <h2 class="relative font-serif font-bold italic text-4xl sm:text-5xl leading-tight mb-8">Say it like this</h2>
-        <blockquote class="relative font-serif text-2xl sm:text-3xl leading-snug sm:leading-snug text-balance">
-          &ldquo;Hi Kylie, it&rsquo;s <span class="text-pink">[your first name]</span>. I <span class="text-pink">[what you do]</span>, and my email list is <span class="text-pink">[where it is at right now]</span>. My question is: <span class="text-pink">[your one question]</span>. Thank you!&rdquo;
-        </blockquote>
-        <p class="relative mt-8 text-sm leading-relaxed text-warmgray">One question per recording, and just fill in the pink bits in your own words. No script reading required.</p>
+  <section class="bg-white px-6 py-16 sm:py-24">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="font-serif font-bold italic text-pink text-4xl sm:text-5xl leading-tight mb-10">Say it like this</h2>
+      <div class="relative mx-auto max-w-xl rounded-[2rem] bg-[#e9d9ec] px-8 py-10 sm:px-12 sm:py-12 text-left">
+        <span class="absolute -left-2 -top-5 font-serif text-8xl leading-none text-pink" aria-hidden="true">&ldquo;</span>
+        <p class="font-serif text-2xl sm:text-3xl leading-snug sm:leading-snug">
+          Hi Kylie, my name is <span class="text-pink">[first name]</span>.<br />
+          My business is <span class="text-pink">[what you do]</span>.<br />
+          My question is <span class="text-pink">[your question]</span>.
+        </p>
       </div>
+      <p class="mt-6 text-sm">Fill in the pink bits in your own words. No script reading needed.</p>
     </div>
   </section>
 
   <!-- A FEW THINGS THAT HELP -->
   <section class="bg-offwhite px-6 py-16 sm:py-24">
-    <div class="max-w-2xl mx-auto">
-      <h2 class="font-serif text-3xl sm:text-4xl leading-tight text-center mb-10">A few things that help</h2>
-      <ul class="space-y-4">
-        {tips.map((tip) => (
-          <li class="flex items-start gap-4">
-            <span class="mt-1 grid h-6 w-6 flex-none place-items-center rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h9M8.5 4l4 4-4 4" /></svg></span>
-            <span class="text-[17px] leading-relaxed">{tip}</span>
-          </li>
-        ))}
-      </ul>
+    <div class="max-w-5xl mx-auto grid items-center gap-12 md:grid-cols-[1.15fr_1fr] md:gap-16">
+      <div>
+        <p class="text-xs uppercase tracking-widest font-semibold mb-8">A few things that help</p>
+        <ul class="space-y-6">
+          {tips.map((tip) => (
+            <li class="flex items-start gap-5 border-b border-black/10 pb-6 last:border-0 last:pb-0">
+              <span class="mt-1 grid h-7 w-7 flex-none place-items-center rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8" /></svg></span>
+              <span class="font-serif text-xl sm:text-2xl leading-snug">{tip}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <img
+        src="/images/kylie-podcast.jpg"
+        alt="Kylie Kelly holding her podcast microphone"
+        class="mx-auto aspect-[3/4] w-full max-w-xs rounded-[999px] object-cover object-[50%_30%] md:max-w-none"
+        width="1000"
+        height="1000"
+        loading="lazy"
+      />
     </div>
   </section>
 
   <!-- RECORD YOUR QUESTION -->
-  <section id="record" class="scroll-mt-20 bg-white px-6 py-16 sm:py-24">
+  <section id="record" class="scroll-mt-20 bg-[#e9d9ec] px-6 py-16 sm:py-24">
     <div class="max-w-xl mx-auto text-center">
-      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Ready when you are</p>
       <h2 class="font-serif font-bold italic text-4xl sm:text-5xl leading-tight mb-4">Record your question</h2>
       <p class="mb-8 leading-relaxed">Tap the microphone, allow access when your phone asks, and talk. You can listen back before you send it.</p>
 
-      <div class="rounded-[2rem] bg-offwhite p-4 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.08)]">
+      <div class="rounded-[2rem] bg-white p-4 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.08)]">
         <iframe
           id="ask-recorder"
           title="Record your question for Kylie"
@@ -123,7 +108,7 @@ const tips = [
 
       <p class="mt-5 text-sm">
         Recorder not loading?
-        <button type="button" id="ask-open-recorder" class="font-semibold text-pink underline underline-offset-4 cursor-pointer">Open it in a pop-up instead</button>.
+        <button type="button" id="ask-open-recorder" class="font-semibold underline underline-offset-4 hover:text-pink cursor-pointer">Open it in a pop-up instead</button>.
       </p>
 
       <p class="mt-8 text-xs leading-relaxed text-black/70 max-w-md mx-auto">
@@ -133,24 +118,43 @@ const tips = [
   </section>
 
   <!-- WHAT HAPPENS NEXT -->
-  <section class="bg-black text-white px-6 py-16 sm:py-24 rounded-t-[2.5rem]">
-    <div class="max-w-3xl mx-auto text-center">
-      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">What happens next</p>
-      <h2 class="font-serif text-3xl sm:text-5xl leading-tight text-balance mb-6">I can&rsquo;t answer every question on air, but I do want to hear it.</h2>
-      <p class="text-warmgray leading-relaxed max-w-xl mx-auto mb-10">
-        Questions that I think will help the most listeners may be answered on a future episode. If yours is one of them, keep an ear out for your first name. New episodes land every Friday.
-      </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="https://podcasts.apple.com/podcast/id1550211753" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-          Listen on Apple
-          <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-        </a>
-        <a href="https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-          Listen on Spotify
-          <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-        </a>
+  <section class="bg-white px-6 py-16 sm:py-24 overflow-hidden">
+    <div class="max-w-5xl mx-auto grid items-center gap-12 md:grid-cols-[1.1fr_1fr] md:gap-16">
+      <div class="text-center md:text-left">
+        <h2 class="font-serif font-bold italic text-pink text-4xl sm:text-5xl leading-tight mb-6">What happens next</h2>
+        <p class="leading-relaxed text-[17px] mb-4">Every recording comes straight to me. I can&rsquo;t answer every question on air, but I&rsquo;m listening for the ones that will help the most people.</p>
+        <p class="leading-relaxed text-[17px] mb-9">If yours is chosen, keep an ear out for your first name. New episodes land every Friday.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3">
+          <a href="https://podcasts.apple.com/podcast/id1550211753" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+            Listen on Apple
+            <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
+          <a href="https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+            Listen on Spotify
+            <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
+        </div>
       </div>
-      <p class="mt-8 text-sm"><a href="/podcast" class="font-serif text-lg uppercase tracking-[0.12em] underline underline-offset-4 decoration-white/40 hover:decoration-white">Back to the podcast &rarr;</a></p>
+
+      <!-- Phone showing the podcast player -->
+      <div class="mx-auto w-[250px] sm:w-[270px] rotate-[5deg]" aria-hidden="true">
+        <div class="relative rounded-[2.8rem] border-[9px] border-black bg-black shadow-[0_35px_70px_rgba(0,0,0,0.25)]">
+          <span class="absolute left-1/2 top-2 z-10 h-5 w-20 -translate-x-1/2 rounded-full bg-black"></span>
+          <div class="overflow-hidden rounded-[2.1rem] bg-gradient-to-b from-[#3a1a44] to-black px-5 pb-6 pt-9 text-white">
+            <div class="mb-5 flex items-center justify-between text-[10px] font-semibold"><span>9:41</span><span class="tracking-widest">&bull;&bull;&bull;</span></div>
+            <img src="/images/podcast-cover.jpg" alt="" class="mx-auto mb-5 aspect-square w-full rounded-2xl object-cover shadow-[0_12px_30px_rgba(0,0,0,0.5)]" width="900" height="900" loading="lazy" />
+            <p class="text-sm font-semibold leading-tight">Your question could be next</p>
+            <p class="mb-4 text-xs text-white/60">The Email Growth Show with Kylie Kelly</p>
+            <div class="mb-1.5 h-1 rounded-full bg-white/25"><div class="h-1 w-2/5 rounded-full bg-pink"></div></div>
+            <div class="mb-5 flex justify-between text-[10px] text-white/60"><span>0:00</span><span>-22:00</span></div>
+            <div class="flex items-center justify-between px-3">
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1M3.5 4v4.5H8" /></svg>
+              <span class="grid h-14 w-14 place-items-center rounded-full bg-pink"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor"><rect x="6.5" y="5" width="4" height="14" rx="1" /><rect x="13.5" y="5" width="4" height="14" rx="1" /></svg></span>
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1M20.5 4v4.5H16" /></svg>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
