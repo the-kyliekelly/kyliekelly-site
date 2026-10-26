@@ -1,0 +1,239 @@
+{
+  "redirects": [
+    {
+      "source": "/category/podcast",
+      "destination": "/podcast",
+      "permanent": true
+    },
+    {
+      "source": "/category/podcast/",
+      "destination": "/podcast",
+      "permanent": true
+    },
+    {
+      "source": "/category/blog",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/category/blog/",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/all-articles",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/all-articles/",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/author/hellokyliekelly-com",
+      "destination": "/meet-kylie",
+      "permanent": true
+    },
+    {
+      "source": "/author/hellokyliekelly-com/",
+      "destination": "/meet-kylie",
+      "permanent": true
+    },
+    {
+      "source": "/sample-page",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/sample-page/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/email-marketing-101-understanding-email-analytics",
+      "destination": "/email-analytics-101",
+      "permanent": true
+    },
+    {
+      "source": "/email-marketing-101-understanding-email-analytics/",
+      "destination": "/email-analytics-101",
+      "permanent": true
+    },
+    {
+      "source": "/why-you-should-overdeliver-how-to-do-that-in-your-free-paid-offers",
+      "destination": "/why-you-should-overdeliver-in-your-free-paid-offers",
+      "permanent": true
+    },
+    {
+      "source": "/why-you-should-overdeliver-how-to-do-that-in-your-free-paid-offers/",
+      "destination": "/why-you-should-overdeliver-in-your-free-paid-offers",
+      "permanent": true
+    },
+    {
+      "source": "/triple-income-strategic-support-julie-case-study",
+      "destination": "/julie-empress-case-study",
+      "permanent": true
+    },
+    {
+      "source": "/triple-income-strategic-support-julie-case-study/",
+      "destination": "/julie-empress-case-study",
+      "permanent": true
+    },
+    {
+      "source": "/my-honest-thoughts-on-templates-swipe-files-generic-funnels",
+      "destination": "/best-email-templates-or-funnels",
+      "permanent": true
+    },
+    {
+      "source": "/my-honest-thoughts-on-templates-swipe-files-generic-funnels/",
+      "destination": "/best-email-templates-or-funnels",
+      "permanent": true
+    },
+    {
+      "source": "/4-steps-im-taking-this-month-to-intentionally-plan-for-2025",
+      "destination": "/plan-for-2025",
+      "permanent": true
+    },
+    {
+      "source": "/4-steps-im-taking-this-month-to-intentionally-plan-for-2025/",
+      "destination": "/plan-for-2025",
+      "permanent": true
+    },
+    {
+      "source": "/how-to-create-a-freebie-that-actually-converters-without-the-fluff",
+      "destination": "/how-to-create-a-freebie-that-actually-converts",
+      "permanent": true
+    },
+    {
+      "source": "/how-to-create-a-freebie-that-actually-converters-without-the-fluff/",
+      "destination": "/how-to-create-a-freebie-that-actually-converts",
+      "permanent": true
+    },
+    {
+      "source": "/low-lift-email-list-growth",
+      "destination": "/podcast/episodes/low-lift-email-list-growth",
+      "permanent": true
+    },
+    {
+      "source": "/low-lift-email-list-growth/",
+      "destination": "/podcast/episodes/low-lift-email-list-growth",
+      "permanent": true
+    },
+    {
+      "source": "/plan-rest-of-year-without-burning-out",
+      "destination": "/podcast/episodes/plan-rest-of-year-without-burning-out",
+      "permanent": true
+    },
+    {
+      "source": "/plan-rest-of-year-without-burning-out/",
+      "destination": "/podcast/episodes/plan-rest-of-year-without-burning-out",
+      "permanent": true
+    },
+    {
+      "source": "/claude-claude-code-chrome-extension-delegate",
+      "destination": "/podcast/episodes/claude-claude-code-chrome-extension-delegate",
+      "permanent": true
+    },
+    {
+      "source": "/claude-claude-code-chrome-extension-delegate/",
+      "destination": "/podcast/episodes/claude-claude-code-chrome-extension-delegate",
+      "permanent": true
+    },
+    {
+      "source": "/the-email-growth-club",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/the-email-growth-club/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/empress",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/empress/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/event",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/event/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/headliner",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/headliner/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/breakthrough",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/breakthrough/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/bundle",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/bundle/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/birthday-bash-2026",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/birthday-bash-2026/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/pitch-like-a-pro",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/pitch-like-a-pro/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/insidetheinbox",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/insidetheinbox/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/tag/:path*",
+      "destination": "/blog",
+      "permanent": true
+    }
+  ]
+}
