@@ -1,129 +1,105 @@
 ---
+// Episode library: every episode as a cover card, newest first.
+// Episodes come from the Buzzsprout feed at build time (see src/lib/episodes.ts), so a new episode
+// appears here by itself. Each card's photo is a guest headshot when one has been added
+// (src/assets/guest-photos), otherwise one of Kylie's photos.
 import Layout from '../../layouts/Layout.astro';
-import allPosts from '../../data/blog-posts.json';
+import EpisodeArt from '../../components/EpisodeArt.astro';
+import { getEpisodes } from '../../lib/episodes';
 
-const featuredSlugs = new Set([
-  'low-lift-email-list-growth',
-  'claude-claude-code-chrome-extension-delegate',
-  'plan-rest-of-year-without-burning-out',
-]);
-
-function extractEpisodeNumber(post) {
-  const match = post.content.match(/EPISODE\s+(\d+)/i) || post.title.match(/\[?Ep\.?\s*#?(\d+)\]?/i) || post.content.match(/\[?Ep\.?\s*#?(\d+)\]?/i);
-  return match ? match[1] : null;
-}
-
-const archivePosts = allPosts
-  .filter((p) => !p.categories.includes(35)) // 35 = blog posts, they live on /blog
-  .filter((p) => !featuredSlugs.has(p.slug))
-  .map((p) => ({
-    num: extractEpisodeNumber(p),
-    title: p.title,
-    date: new Date(p.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
-    href: `/${p.slug}/`,
-  }));
-
-const episodes = [
-  {
-    num: '265',
-    meta: 'Solo Episode · 26 Min Listen · 4 Min Read',
-    title: "The Low-Lift Way I'm Growing My List Right Now",
-    desc: "Back in 2022, tiny audio pop-up events grew my list by 100–150 people at a time. I brought them back this year, small and low-lift, one a month. Here's what actually happened with the first one, including the $97 offer that sold exactly once.",
-    href: '/podcast/episodes/low-lift-email-list-growth/',
-  },
-  {
-    num: '264',
-    meta: 'With Anita Mack · 28 Min Listen · 5 Min Read',
-    title: 'Claude, Claude Code, and the Chrome Extension: How to Actually Delegate to Claude',
-    desc: 'My biz bestie Anita Mack breaks down Claude.ai vs Claude Code vs the Chrome extension, the "human-AI sandwich," and how she built a full sales page with Claude in under two hours.',
-    href: '/podcast/episodes/claude-claude-code-chrome-extension-delegate/',
-  },
-  {
-    num: '260',
-    meta: 'With Katherine Mackenzie-Smith',
-    title: 'How to Plan the Rest of Your Year Without Burning Out',
-    desc: "Katherine Mackenzie-Smith on why copying someone else's business system rarely works, how to review the first half of your year before planning the second, and why a 90-day plan beats a 12-month one.",
-    href: '/podcast/episodes/plan-rest-of-year-without-burning-out/',
-  },
-];
+const episodes = await getEpisodes();
+// Same figure the podcast page shows: the newest episode's number.
+const episodeCount = episodes.length ? Number(episodes[0].num) : 0;
+const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light text-black'];
+const playIcon = 'M5 3.5v9l7.5-4.5z';
+const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min listen` : '');
 ---
 <Layout title="Episode Library | The Email Growth Show | Kylie Kelly" description="Every episode of The Email Growth Show, newest first, with full show notes one click away.">
 
-  <section class="bg-pink-light px-6 py-4">
-    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
-      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
-      Wife. Mom of two boys. Founder of Kylie Kelly. Host of The Email Growth Show.
-      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
+  <section class="bg-black text-white px-6 py-4">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-center">
+      <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
+      The Email Growth Show &middot; Episode library
+      <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
     </p>
   </section>
 
-  <section class="bg-offwhite px-6 py-16 text-center">
-    <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Episode Library</p>
-    <h1 class="text-3xl sm:text-4xl font-bold mb-4">Every episode. Every show note. One place.</h1>
-    <p class="text-muted max-w-md mx-auto mb-6">Looking for a past episode? Newest first, full show notes one click away.</p>
-    <a href="/podcast" class="text-sm font-semibold underline underline-offset-2 hover:text-pink">← Back to the podcast home</a>
-  </section>
-
-  <section class="px-6 py-16">
-    <div class="max-w-3xl mx-auto">
-      {episodes.map((ep) => (
-        <div class="grid sm:grid-cols-[90px_1fr] gap-6 py-8 border-b border-warmgray/40 first:pt-0">
-          <p class="font-serif italic text-3xl text-pink">{ep.num}</p>
-          <div>
-            <p class="text-xs uppercase tracking-widest font-semibold text-muted mb-2">{ep.meta}</p>
-            <h3 class="text-xl font-bold mb-3">{ep.title}</h3>
-            <p class="text-black text-sm mb-4 max-w-xl">{ep.desc}</p>
-            <a href={ep.href} class="text-sm font-semibold underline underline-offset-2 hover:text-pink">Read the show notes →</a>
-          </div>
-        </div>
-      ))}
-
-      <div class="bg-offwhite rounded-lg p-8 text-center mt-10 mb-16">
-        <p class="text-muted">New episodes every Friday. This library grows every week, come back for more.</p>
-      </div>
-
-      <h2 class="text-2xl font-bold text-center mb-10">The Full Archive</h2>
+  <section class="bg-offwhite px-6 pt-14 pb-12 sm:pt-20 sm:pb-16 text-center">
+    <div class="max-w-2xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Episode Library</p>
+      <h1 class="font-serif font-bold text-4xl sm:text-6xl leading-[1.08] text-balance mb-5">
+        Every episode. Every show note. <span class="script-accent italic text-pink">One place.</span>
+      </h1>
+      <p class="text-black max-w-md mx-auto mb-8">
+        {episodeCount} episodes, newest first, with the show notes one click away. A new one lands every Friday.
+      </p>
+      <label class="sr-only" for="archive-search">Search episodes</label>
+      <input id="archive-search" type="search" placeholder="Search episodes by title or number" autocomplete="off" class="w-full max-w-md rounded-full bg-white px-6 py-4 text-[15px] text-black placeholder:text-black/55 shadow-[0_6px_24px_rgba(0,0,0,0.04)] border border-transparent focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+      <p class="mt-6"><a href="/podcast" class="text-sm font-semibold underline underline-offset-4 hover:text-pink">&larr; Back to the podcast home</a></p>
     </div>
   </section>
 
-  <section class="bg-black text-white px-6 py-16">
+  <section class="bg-white px-6 py-14 sm:py-20">
     <div class="max-w-5xl mx-auto">
-      <div id="archive-grid" class="grid sm:grid-cols-2">
-        {archivePosts.map((p, i) => (
-          <a href={p.href} class="archive-item flex gap-5 py-7 sm:px-6 border-b border-white/15 hover:opacity-70 transition-opacity" data-index={i}>
-            <span class="font-serif italic text-pink text-3xl shrink-0 w-10">{p.num ?? '—'}</span>
-            <span>
-              <span class="block font-semibold leading-snug mb-2">{p.title}</span>
-              <span class="block text-xs uppercase tracking-widest text-warmgray">{p.date}</span>
-            </span>
+      <div id="archive-grid" class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        {episodes.map((ep, i) => (
+          <a href={ep.href} class="archive-card group block" data-title={`${ep.num} ${ep.title}`.toLowerCase()} {...(ep.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+            <EpisodeArt num={ep.num} title={ep.title} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
+            <div class="mt-5 flex items-center justify-between gap-3 px-1">
+              <span class="text-[11px] uppercase tracking-widest font-semibold text-black/70">{ep.date}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</span>
+              <span class={`grid place-items-center h-10 w-10 flex-none rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+            </div>
           </a>
         ))}
       </div>
-      <div class="text-center mt-12">
-        <button id="load-more-btn" class="btn-pink">See More Episodes →</button>
+
+      <p id="archive-empty" class="hidden text-center text-black py-10">No episodes match that search. Try a different word or an episode number.</p>
+
+      <div class="text-center mt-14">
+        <button id="load-more-btn" type="button" class="btn-pink">See more episodes &rarr;</button>
       </div>
     </div>
   </section>
 
   <style>
-    .archive-item.hidden { display: none; }
+    .archive-card.is-hidden { display: none; }
   </style>
 
   <script>
-    const PAGE_SIZE = 20;
-    const items = Array.from(document.querySelectorAll('.archive-item'));
+    const PAGE_SIZE = 12;
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.archive-card'));
     const btn = document.getElementById('load-more-btn');
+    const search = document.getElementById('archive-search') as HTMLInputElement | null;
+    const empty = document.getElementById('archive-empty');
     let shown = 0;
 
-    function showNext() {
-      items.slice(shown, shown + PAGE_SIZE).forEach((el) => el.classList.remove('hidden'));
-      shown += PAGE_SIZE;
-      if (shown >= items.length && btn) btn.style.display = 'none';
+    function render() {
+      const q = (search?.value ?? '').trim().toLowerCase();
+      if (q) {
+        // Searching looks through every episode, not just the ones already shown.
+        let matches = 0;
+        cards.forEach((c) => {
+          const hit = (c.dataset.title ?? '').includes(q);
+          c.classList.toggle('is-hidden', !hit);
+          if (hit) matches++;
+        });
+        empty?.classList.toggle('hidden', matches > 0);
+        if (btn) btn.style.display = 'none';
+        return;
+      }
+      empty?.classList.add('hidden');
+      cards.forEach((c, i) => c.classList.toggle('is-hidden', i >= shown));
+      if (btn) btn.style.display = shown >= cards.length ? 'none' : '';
     }
 
-    items.forEach((el) => el.classList.add('hidden'));
-    showNext();
-    btn?.addEventListener('click', showNext);
+    function showMore() {
+      shown = Math.min(shown + PAGE_SIZE, cards.length);
+      render();
+    }
+
+    showMore();
+    btn?.addEventListener('click', showMore);
+    search?.addEventListener('input', render);
   </script>
 
 </Layout>
