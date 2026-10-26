@@ -9,6 +9,7 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { guestPhotoFor } from '../lib/guestPhotos';
+import { isOldShow, showName } from '../lib/show';
 
 interface Props {
   num: string;
@@ -42,8 +43,8 @@ const band = bands[(n + Math.floor(n / Math.max(photos.length, 1))) % bands.leng
 <div class:list={['bg-white p-2 sm:p-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.12)]', className]}>
   <div class="epi-card flex flex-col overflow-hidden bg-white">
     <div class="epi-head flex min-h-[58px] flex-col items-center justify-center px-3 py-2 text-center">
-      <p class="epi-show font-serif italic font-bold leading-none text-pink">The Email Growth Show</p>
-      <p class="epi-tag mt-1.5 uppercase font-semibold text-black">Grow your list without social media</p>
+      <p class:list={['epi-show font-serif italic font-bold leading-none', isOldShow(num) ? 'text-black' : 'text-pink']}>{showName(num)}</p>
+      {!isOldShow(num) && <p class="epi-tag mt-1.5 uppercase font-semibold text-black">Grow your list without social media</p>}
     </div>
     <div class="relative aspect-[0.88] bg-[#dcd7dc]">
       {photo && (

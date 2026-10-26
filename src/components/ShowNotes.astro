@@ -15,6 +15,7 @@ import AskKylieBand from './AskKylieBand.astro';
 import { parseShowNotes, type ParsedNotes } from '../lib/showNotes';
 import { guestPhotoFor } from '../lib/guestPhotos';
 import { waveBars } from '../lib/wave';
+import { showName } from '../lib/show';
 import type { Episode } from '../lib/episodes';
 
 interface Props {
@@ -92,7 +93,7 @@ const playIcon = 'M5 3.5v9l7.5-4.5z';
 const site = Astro.site ?? new URL('https://kyliekelly.com');
 const pageUrl = new URL(pagePath, site).toString();
 const coverUrl = new URL('/images/podcast-cover.jpg', site).toString();
-const show = { '@type': 'PodcastSeries', name: 'The Email Growth Show', url: new URL('/podcast/', site).toString() };
+const show = { '@type': 'PodcastSeries', name: showName(num), url: new URL('/podcast/', site).toString() };
 const kylie = { '@type': 'Person', name: 'Kylie Kelly', url: new URL('/meet-kylie/', site).toString() };
 
 const graph: Record<string, unknown>[] = [
@@ -125,7 +126,7 @@ const graph: Record<string, unknown>[] = [
   {
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'The Email Growth Show', item: new URL('/podcast/', site).toString() },
+      { '@type': 'ListItem', position: 1, name: showName(num), item: new URL('/podcast/', site).toString() },
       { '@type': 'ListItem', position: 2, name: 'Episode library', item: new URL('/podcast/archive/', site).toString() },
       { '@type': 'ListItem', position: 3, name: title, item: pageUrl },
     ],
@@ -144,13 +145,13 @@ const pinUrl = notes.pin
 const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
 const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}"></div><script src="${notes.player.src}" type="text/javascript"></` + `script>` : '';
 ---
-<Layout title={`${seoTitle} | The Email Growth Show`} description={extra.metaDescription}>
+<Layout title={`${seoTitle} | ${showName(num)}`} description={extra.metaDescription}>
   <script type="application/ld+json" slot="head" set:html={jsonLd} />
 
   <section class="bg-black text-white px-6 py-4">
     <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-center">
       <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
-      The Email Growth Show &middot; Show notes
+      {showName(num)} &middot; Show notes
       <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
     </p>
   </section>
@@ -160,7 +161,7 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
     <header class="bg-offwhite px-6 pt-10 pb-14 sm:pt-14 sm:pb-20">
       <div class="max-w-6xl mx-auto">
         <nav aria-label="Breadcrumb" class="mb-8 text-xs uppercase tracking-widest font-semibold text-black/70">
-          <a href="/podcast" class="hover:text-pink">The Email Growth Show</a>
+          <a href="/podcast" class="hover:text-pink">{showName(num)}</a>
           <span aria-hidden="true" class="mx-2">/</span>
           <a href="/podcast/archive" class="hover:text-pink">Episode library</a>
           {num && (<><span aria-hidden="true" class="mx-2">/</span><span class="text-black">Episode {num}</span></>)}
@@ -288,9 +289,9 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
               <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">About {guest}</h2>
               <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
                 {guestPhoto ? (
-                  <Image src={guestPhoto} alt={`${guest}, guest on The Email Growth Show`} widths={[200, 360]} sizes="160px" class="h-40 w-40 flex-none rounded-2xl object-cover object-[50%_22%]" loading="lazy" />
+                  <Image src={guestPhoto} alt={`${guest}, guest on ${showName(num)}`} widths={[200, 360]} sizes="160px" class="h-40 w-40 flex-none rounded-2xl object-cover object-[50%_22%]" loading="lazy" />
                 ) : notes.guestImage ? (
-                  <img src={notes.guestImage} alt={`${guest}, guest on The Email Growth Show`} class="h-40 w-40 flex-none rounded-2xl object-cover object-[50%_22%]" width="160" height="160" loading="lazy" />
+                  <img src={notes.guestImage} alt={`${guest}, guest on ${showName(num)}`} class="h-40 w-40 flex-none rounded-2xl object-cover object-[50%_22%]" width="160" height="160" loading="lazy" />
                 ) : null}
                 <div class="notes-body notes-body--tight min-w-0 break-words" set:html={notes.guestSection.html} />
               </div>
