@@ -68,7 +68,7 @@ const older = idx >= 0 && idx < episodes.length - 1 ? episodes[idx + 1] : null;
 const elsewhere = [
   { icon: '🛍️', label: 'The Shop', href: 'https://shop.kyliekelly.com/' },
   { icon: '👯‍♀️', label: 'Free Community', href: 'https://www.skool.com/email-marketing-skool/about' },
-  { icon: '✲', label: 'Find CoLab', href: 'https://findcolab.com/' },
+  { icon: '✲', label: 'Find CoLab', href: 'https://findcolab.com/?utm_source=podcast' },
   { icon: '🎥', label: 'YouTube', href: 'https://www.youtube.com/@KylieKelly' },
 ];
 const showToc = isFull && notes.sections.length >= 4;
@@ -130,6 +130,10 @@ if (isFull && extra.faqs.length) {
     mainEntity: extra.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   });
 }
+// Pinterest "save" address: this page, the episode's Pinterest graphic and the title.
+const pinUrl = notes.pin
+  ? `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(pageUrl)}&media=${encodeURIComponent(new URL(notes.pin, site).toString())}&description=${encodeURIComponent(title)}`
+  : '';
 const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
 const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}"></div><script src="${notes.player.src}" type="text/javascript"></` + `script>` : '';
 ---
@@ -302,7 +306,7 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
           <!-- TRANSCRIPT -->
           {notes.transcript.length > 0 && (
             <details class="group rounded-[1.5rem] border border-black/10 p-6 sm:p-8">
-              <summary class="cursor-pointer list-none flex items-center justify-between gap-4 font-serif font-bold text-xl">
+              <summary class="cursor-pointer list-none flex items-center justify-between gap-4 font-serif font-bold text-lg uppercase tracking-[0.1em]">
                 Read the full transcript
                 <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-black text-white text-lg leading-none transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
               </summary>
@@ -357,11 +361,14 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
 
           <AskKylieBand />
 
-          <!-- PINTEREST -->
-          {notes.pin && (
-            <section class="pt-6 text-center">
-              <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">Love this episode? Save it for later</h2>
-              <img src={notes.pin} alt={`Pinterest graphic for ${title}`} class="mx-auto w-full max-w-[320px] rounded-2xl shadow-[0_18px_40px_rgba(0,0,0,0.12)]" width="683" height="1024" loading="lazy" />
+          <!-- PINTEREST: a small save button (opens Pinterest with this episode's graphic ready to pin) -->
+          {pinUrl && (
+            <section class="pt-2 text-center">
+              <p class="font-serif font-bold italic text-xl mb-4">Love this episode?</p>
+              <a href={pinUrl} target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-black pl-7 pr-2 py-2 text-[15px] font-semibold text-white transition-transform duration-300 hover:-translate-y-1">
+                Save to Pinterest
+                <span class="grid h-10 w-10 place-items-center rounded-full bg-pink text-white"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+              </a>
             </section>
           )}
         </div>
