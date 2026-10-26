@@ -11,6 +11,7 @@ import AskKylieBand from '../../components/AskKylieBand.astro';
 import { getEpisodes } from '../../lib/episodes';
 import { pickClassics } from '../../lib/classics';
 import { photoFor } from '../../lib/kyliePhotos';
+import { waveBars } from '../../lib/wave';
 import topicRules from '../../data/topic-rules.json';
 
 const episodes = await getEpisodes();
@@ -21,9 +22,6 @@ const startHere = pickClassics(episodes);
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const playIcon = 'M5 3.5v9l7.5-4.5z';
 const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light text-black'];
-// A gently moving waveform for the Start here cards (same style as the homepage podcast cards).
-const waveBars = (seed: number) =>
-  Array.from({ length: 24 }, (_, i) => Number((0.22 + 0.78 * Math.abs(Math.sin(i * 0.6 + seed) * Math.cos(i * 0.27 + seed * 1.7))).toFixed(2)));
 const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min listen` : '');
 // Only show a topic filter if at least one episode is in it.
 const topics = topicRules.topics.filter((t) => episodes.some((ep) => ep.topics.includes(t.id)));

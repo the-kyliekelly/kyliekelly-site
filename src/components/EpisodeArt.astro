@@ -40,10 +40,10 @@ const withName = guestPhoto && guest ? guest : 'Kylie Kelly';
 const band = bands[(n + Math.floor(n / Math.max(photos.length, 1))) % bands.length];
 ---
 <div class:list={['bg-white p-2 sm:p-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.12)]', className]}>
-  <div class="flex flex-col overflow-hidden bg-white">
-    <div class="flex h-[58px] flex-col items-center justify-center px-3 text-center">
-      <p class="font-serif italic font-bold leading-none text-pink text-[16px] md:text-[21px]">The Email Growth Show</p>
-      <p class="mt-1.5 text-[7.5px] sm:text-[8.5px] uppercase tracking-[0.16em] font-semibold text-black">Grow your list without social media</p>
+  <div class="epi-card flex flex-col overflow-hidden bg-white">
+    <div class="epi-head flex min-h-[58px] flex-col items-center justify-center px-3 py-2 text-center">
+      <p class="epi-show font-serif italic font-bold leading-none text-pink">The Email Growth Show</p>
+      <p class="epi-tag mt-1.5 uppercase font-semibold text-black">Grow your list without social media</p>
     </div>
     <div class="relative aspect-[0.88] bg-[#dcd7dc]">
       {photo && (
@@ -56,3 +56,10 @@ const band = bands[(n + Math.floor(n / Math.max(photos.length, 1))) % bands.leng
     </div>
   </div>
 </div>
+
+<style is:global>
+  /* The banner text scales with the card, so it fits on one line whatever size the card is. */
+  .epi-card { container-type: inline-size; }
+  .epi-show { font-size: clamp(12px, 8.2cqw, 21px); white-space: nowrap; }
+  .epi-tag { font-size: clamp(5.5px, 3.3cqw, 8.5px); letter-spacing: 0.16em; white-space: nowrap; }
+</style>
