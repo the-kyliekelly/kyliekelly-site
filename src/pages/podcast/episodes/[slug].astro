@@ -1,0 +1,19 @@
+---
+// Show notes pages for episodes that have no write-up of their own. Each is built from the show notes
+// in Buzzsprout (see src/lib/feedNotes.ts). The hand-built episode pages in this folder take priority.
+import ShowNotes from '../../../components/ShowNotes.astro';
+import { getEpisodes } from '../../../lib/episodes';
+import { parseFeedNotes } from '../../../lib/feedNotes';
+
+export async function getStaticPaths() {
+  const episodes = await getEpisodes();
+  return episodes
+    .filter((e) => e.newPage && e.href.startsWith('/podcast/episodes/'))
+    .map((ep) => ({ params: { slug: ep.href.split('/').filter(Boolean).pop() as string }, props: { ep } }));
+}
+
+const { ep } = Astro.props;
+const episodes = await getEpisodes();
+const { notes, extra } = parseFeedNotes(ep);
+---
+<ShowNotes post={{ slug: ep.href, title: ep.title, date: ep.iso, excerpt: '', content: '' }} path={ep.href} notes={notes} extra={extra} episodes={episodes} />

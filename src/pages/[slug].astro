@@ -4,6 +4,7 @@ import ShowNotes from '../components/ShowNotes.astro';
 import posts from '../data/blog-posts.json';
 import showNotes from '../data/show-notes.json';
 import { getEpisodes } from '../lib/episodes';
+import { parseFeedNotes } from '../lib/feedNotes';
 
 export async function getStaticPaths() {
   // These already have a hand-built, richer page under /podcast/episodes/ —
@@ -13,20 +14,29 @@ export async function getStaticPaths() {
     'claude-claude-code-chrome-extension-delegate',
     'plan-rest-of-year-without-burning-out',
   ]);
-  return posts
+  const writeUps = posts
     .filter((post) => !handBuiltSlugs.has(post.slug))
     .map((post) => ({
       params: { slug: post.slug },
-      props: { post },
+      props: { post, ep: null },
     }));
+  // Episodes with no write-up whose old address was a root address keep that exact address.
+  const episodes = await getEpisodes();
+  const fromFeed = episodes
+    .filter((e) => e.newPage && /^\/[^/]+\/$/.test(e.href))
+    .map((ep) => ({ params: { slug: ep.href.replace(/\//g, '') }, props: { post: null, ep } }));
+  return [...writeUps, ...fromFeed];
 }
 
-const { post } = Astro.props;
+const { post, ep } = Astro.props;
 // Episodes listed in src/data/show-notes.json use the new show notes template.
-const extra = (showNotes as Record<string, any>)[post.slug];
-const episodes = extra ? await getEpisodes() : [];
+const extra = post ? (showNotes as Record<string, any>)[post.slug] : null;
+const episodes = extra || ep ? await getEpisodes() : [];
+const feedPage = ep ? parseFeedNotes(ep) : null;
 ---
-{extra ? (
+{feedPage ? (
+  <ShowNotes post={{ slug: ep.href, title: ep.title, date: ep.iso, excerpt: '', content: '' }} path={ep.href} notes={feedPage.notes} extra={feedPage.extra} episodes={episodes} />
+) : extra ? (
   <ShowNotes post={post} extra={extra} episodes={episodes} />
 ) : (
   <BlogPostLayout title={post.title} description={post.excerpt} date={post.date} kind={post.categories.includes(35) ? 'blog' : 'episode'}>

@@ -38,6 +38,10 @@ const feedTag = (item: string, name: string) => {
   const m = item.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`));
   return m ? decodeText(m[1]) : null;
 };
+const rawTag = (item: string, name: string) => {
+  const m = item.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`));
+  return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, '').trim() : '';
+};
 const formatDate = (d: string) => new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
 
 async function loadFeedEpisodes() {
@@ -67,12 +71,18 @@ async function loadFeedEpisodes() {
           iso: feedTag(item, 'pubDate'),
           date: formatDate(feedTag(item, 'pubDate')),
           // The episode's own page on this site: by the address in the feed, or failing that by episode number.
+          // Episodes with no write-up get a show notes page built from the feed (see getEpisodes below).
           href: siteSlug && knownEpisodePages.has(siteSlug)
             ? (handBuiltEpisodes.has(siteSlug) ? `/podcast/episodes/${siteSlug}/` : `/${siteSlug}/`)
-            : siteHrefByNumber.get(Number(num)) ?? listenPage,
+            : siteHrefByNumber.get(Number(num)) ?? '',
+          notesHtml: rawTag(item, 'description'),
+          listenPage,
+          buzzId: listenPage.match(/\/episodes\/(\d+)/)?.[1] ?? null,
+          feedSlug: siteSlug ?? null,
+          newPage: false,
         };
       })
-      .filter((e) => e && e.href);
+      .filter((e) => e);
   } catch {
     return [];
   }
@@ -111,17 +121,67 @@ export interface Episode {
   iso: string;
   date: string;
   href: string;
+  /** The show notes as written in Buzzsprout (HTML). Only for episodes loaded from the feed. */
+  notesHtml?: string;
+  /** Buzzsprout's page for the episode, and its id (used for the audio player). */
+  listenPage?: string;
+  buzzId?: string | null;
+  /** The address the old site used for this episode, if the feed names one. */
+  feedSlug?: string | null;
+  /** True when this episode's page is built from the feed (it has no write-up of its own). */
+  newPage?: boolean;
 }
 
 // Newest first.
-export async function getEpisodes(): Promise<Episode[]> {
+// A short, readable page address from an episode title. It stops at a whole word and never ends on a
+// small joining word like "the" or "that".
+const SLUG_END_WORDS = new Set(['a', 'an', 'the', 'that', 'of', 'to', 'and', 'for', 'in', 'on', 'with', 'is', 'are', 'your', 'my', 'i', 'it']);
+const slugFromTitle = (title: string) => {
+  const words = title
+    .toLowerCase()
+    .replace(/[’']/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(' ');
+  const kept: string[] = [];
+  for (const w of words) {
+    if ([...kept, w].join('-').length > 80 && kept.length) break;
+    kept.push(w);
+  }
+  while (kept.length > 3 && SLUG_END_WORDS.has(kept[kept.length - 1])) kept.pop();
+  return kept.join('-');
+};
+
+let cachedEpisodes: Promise<Episode[]> | null = null;
+
+// The feed is read once per build and shared by every page.
+export function getEpisodes(): Promise<Episode[]> {
+  cachedEpisodes ??= loadEpisodes();
+  return cachedEpisodes;
+}
+
+async function loadEpisodes(): Promise<Episode[]> {
   const feedEpisodes: Episode[] = await loadFeedEpisodes();
   const list = (feedEpisodes.length ? feedEpisodes : libraryEpisodes) as Array<Omit<Episode, 'guest' | 'topics'>>;
+  const used = new Set(list.map((e) => e.href).filter(Boolean));
   return list
-    .map((ep) => ({
-      ...ep,
-      guest: guestFromTitle(ep.title),
-      topics: topicsFor(ep.num, ep.title, ep.summary, topicRules as TopicRules),
-    }))
+    .map((ep) => {
+      const full = ep as Episode;
+      // No write-up: give the episode a page of its own, at the address the old site used if it had one.
+      if (!full.href && full.notesHtml) {
+        let href = full.feedSlug ? `/${full.feedSlug}/` : `/podcast/episodes/${slugFromTitle(full.title)}/`;
+        if (used.has(href)) href = href.replace(/\/$/, `-${full.num}/`);
+        used.add(href);
+        full.href = href;
+        full.newPage = true;
+      }
+      return {
+        ...full,
+        guest: guestFromTitle(full.title),
+        topics: topicsFor(full.num, full.title, full.summary, topicRules as TopicRules),
+      };
+    })
+    .filter((ep) => ep.href)
     .sort((x, y) => Number(y.num) - Number(x.num));
 }

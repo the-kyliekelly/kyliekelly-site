@@ -12,32 +12,38 @@ import Layout from '../layouts/Layout.astro';
 import EpisodeArt from './EpisodeArt.astro';
 import PodcastFreebieBand from './PodcastFreebieBand.astro';
 import AskKylieBand from './AskKylieBand.astro';
-import { parseShowNotes, slugify } from '../lib/showNotes';
+import { parseShowNotes, type ParsedNotes } from '../lib/showNotes';
 import { guestPhotoFor } from '../lib/guestPhotos';
 import { waveBars } from '../lib/wave';
 import type { Episode } from '../lib/episodes';
 
 interface Props {
   post: { slug: string; title: string; date: string; excerpt: string; content: string };
+  /** The page's own address, when it is not simply /<slug>/. */
+  path?: string;
+  /** Already-parsed notes (for episodes built from the Buzzsprout feed). Otherwise the write-up is parsed. */
+  notes?: ParsedNotes;
   extra: {
     level: 'full' | 'simple';
     quickAnswer: string;
+    quickAnswerLabel?: string;
     metaDescription: string;
     keyMoments: Array<{ time: string; label: string }>;
     faqs: Array<{ q: string; a: string }>;
   };
   episodes: Episode[];
 }
-const { post, extra, episodes } = Astro.props;
+const { post, extra, episodes, path } = Astro.props;
+const pagePath = path ?? `/${post.slug}/`;
 
 const decode = (s: string) =>
   s
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&');
-const notes = parseShowNotes(post.content);
+const notes = Astro.props.notes ?? parseShowNotes(post.content);
 const numInContent = post.content.match(/EP\w*\s*(\d+)/i)?.[1] ?? '';
-const episode = episodes.find((e) => e.href === `/${post.slug}/`) ?? episodes.find((e) => e.num === numInContent);
+const episode = episodes.find((e) => e.href === pagePath) ?? (numInContent ? episodes.find((e) => e.num === numInContent) : undefined);
 const num = episode?.num ?? numInContent;
 const seoTitle = decode(post.title); // the title Google already knows this page by
 const title = episode?.title ?? seoTitle; // what the page shows, matching the episode library, Apple and Spotify
@@ -83,7 +89,7 @@ const links = !isFull && notes.guestSection
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const playIcon = 'M5 3.5v9l7.5-4.5z';
 const site = Astro.site ?? new URL('https://kyliekelly.com');
-const pageUrl = new URL(`/${post.slug}/`, site).toString();
+const pageUrl = new URL(pagePath, site).toString();
 const coverUrl = new URL('/images/podcast-cover.jpg', site).toString();
 const show = { '@type': 'PodcastSeries', name: 'The Email Growth Show', url: new URL('/podcast/', site).toString() };
 const kylie = { '@type': 'Person', name: 'Kylie Kelly', url: new URL('/meet-kylie/', site).toString() };
@@ -172,7 +178,7 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
             </p>
 
             <div class="mb-8 rounded-[1.5rem] bg-white p-6 shadow-[0_12px_30px_rgba(0,0,0,0.06)]">
-              <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-2">The quick answer</p>
+              <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-2">{extra.quickAnswerLabel ?? 'The quick answer'}</p>
               <p class="text-[17px] leading-relaxed text-black">{extra.quickAnswer}</p>
             </div>
 
