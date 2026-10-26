@@ -12,7 +12,7 @@ import Layout from '../layouts/Layout.astro';
 import EpisodeArt from './EpisodeArt.astro';
 import PodcastFreebieBand from './PodcastFreebieBand.astro';
 import AskKylieBand from './AskKylieBand.astro';
-import { parseShowNotes, type ParsedNotes } from '../lib/showNotes';
+import { parseShowNotes, tagFindCoLab, tagFindCoLabUrl, type ParsedNotes } from '../lib/showNotes';
 import { guestPhotoFor } from '../lib/guestPhotos';
 import { waveBars } from '../lib/wave';
 import { showName } from '../lib/show';
@@ -42,7 +42,16 @@ const decode = (s: string) =>
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
     .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&');
-const notes = Astro.props.notes ?? parseShowNotes(post.content, post.slug);
+const parsedNotes = Astro.props.notes ?? parseShowNotes(post.content, post.slug);
+// Find CoLab links are tagged with the episode and the spot on the page (see tagFindCoLab)
+const campaign = pagePath.replace(/^\/+|\/+$/g, '').split('/').pop() || post.slug;
+const notes: ParsedNotes = {
+  ...parsedNotes,
+  intro: tagFindCoLab(parsedNotes.intro ?? '', campaign, 'article'),
+  sections: (parsedNotes.sections ?? []).map((s) => ({ ...s, html: tagFindCoLab(s.html, campaign, 'article') })),
+  links: (parsedNotes.links ?? []).map((l) => tagFindCoLab(l, campaign, 'links-mentioned')),
+  cta: parsedNotes.cta ? { ...parsedNotes.cta, href: tagFindCoLabUrl(parsedNotes.cta.href, campaign, 'cta-box') } : parsedNotes.cta,
+};
 const numInContent = post.content.match(/EP\w*\s*(\d+)/i)?.[1] ?? '';
 const episode = episodes.find((e) => e.href === pagePath) ?? (numInContent ? episodes.find((e) => e.num === numInContent) : undefined);
 const num = episode?.num ?? numInContent;
@@ -76,7 +85,7 @@ const older = idx >= 0 && idx < episodes.length - 1 ? episodes[idx + 1] : null;
 const elsewhere = [
   { icon: '🛍️', label: 'The Shop', href: 'https://shop.kyliekelly.com/' },
   { icon: '👯‍♀️', label: 'Free Community', href: 'https://www.skool.com/email-marketing-skool/about' },
-  { icon: '✲', label: 'Find CoLab', href: 'https://findcolab.com/?utm_source=podcast' },
+  { icon: '✲', label: 'Find CoLab', href: tagFindCoLabUrl('https://findcolab.com/', campaign, 'sidebar') },
   { icon: '🎥', label: 'YouTube', href: 'https://www.youtube.com/@KylieKelly' },
 ];
 const showToc = isFull && notes.sections.length >= 4;

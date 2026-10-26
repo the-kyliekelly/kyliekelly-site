@@ -119,6 +119,26 @@ const isRetiredCta = (c: { headline: string; text: string; label: string; href: 
 // A sentence that opens a quote which closes in the next sentence is an example being quoted.
 const opensQuote = (t: string) => (t.match(/“/g) ?? []).length > (t.match(/”/g) ?? []).length;
 
+// Find CoLab links on show notes pages carry tags, so Find CoLab can see which episode and which spot on the page
+// sent each visitor: source = podcast, medium = show-notes, campaign = the episode's address, content = where on the page.
+export function tagFindCoLabUrl(url: string, campaign: string, placement: string): string {
+  try {
+    const u = new URL(url);
+    if (!/^(?:www\.)?findcolab\.com$/i.test(u.hostname)) return url;
+    u.searchParams.set('utm_source', 'podcast');
+    u.searchParams.set('utm_medium', 'show-notes');
+    u.searchParams.set('utm_campaign', campaign);
+    u.searchParams.set('utm_content', placement);
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+/** The same, for every Find CoLab link (href="...") inside a piece of HTML. */
+export function tagFindCoLab(html: string, campaign: string, placement: string): string {
+  return html.replace(/href="(https?:\/\/(?:www\.)?findcolab\.com[^"]*)"/gi, (_, href: string) => `href="${tagFindCoLabUrl(href.replace(/&amp;|&#038;/g, '&'), campaign, placement).replace(/&/g, '&amp;')}"`);
+}
+
 /** True for a piece of text that pitches a retired offer (and is not an example of a pitch, in quotes or "for example"). */
 function pitchesRetiredOffer(text: string, html: string): boolean {
   const retired = RETIRED_OFFER.test(text) || RETIRED_HREF.test(html.match(/href="[^"]*"/g)?.join(' ') ?? '');
@@ -508,14 +528,16 @@ export function summariseIntro(paragraphs: string[], fallback: string) {
   for (const para of paragraphs) {
     first += `${first ? ' ' : ''}${stripTags(para.replace(/<br\s*\/?>/gi, ' '))}`;
     used += 1;
-    if (first.length >= 80) break;
+    if (first.length >= 220) break;
   }
   if (!first) first = fallback;
+  // Two or three sentences (about 220 to 380 characters), so the box reads as a proper summary
   const sentences = first.match(/[^.!?]+[.!?]+["”’']?(\s|$)/g) ?? [first];
   let quickAnswer = '';
   for (const sentence of sentences) {
-    if ((quickAnswer + sentence).length > 340 && quickAnswer) break;
+    if ((quickAnswer + sentence).length > 380 && quickAnswer) break;
     quickAnswer += sentence;
+    if (quickAnswer.length >= 220) break;
   }
   quickAnswer = (quickAnswer || first).trim();
   const metaDescription = quickAnswer.length > 155 ? `${quickAnswer.slice(0, 152).replace(/\s+\S*$/, '')}…` : quickAnswer;
