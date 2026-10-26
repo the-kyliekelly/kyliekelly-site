@@ -1,12 +1,14 @@
 ---
 // Cover art for an episode: a white banner with the show title, a photo of Kylie, and a colour band
 // with the episode number and title.
-// Photos live in src/assets/episode-photos. Each one is cropped so her face is the same size and
+// Guest headshots (src/assets/guest-photos) are used for their episodes; other covers use the photos
+// in src/assets/episode-photos. Each one is cropped so her face is the same size and
 // in the same spot, which keeps every cover consistent. Add more photos there and they appear on
 // the next build, so new episodes always get their own cover.
 // Usage: <EpisodeArt num="272" title="Why Some People Get Invited to Everything" />
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import { guestPhotoFor } from '../lib/guestPhotos';
 
 interface Props {
   num: string;
@@ -27,7 +29,8 @@ const bands = [
   'bg-[#fbe6f7] text-black',
 ];
 const n = Number(num) || 0;
-const photo = photos.length ? photos[n % photos.length] : null;
+// A guest episode uses the guest's headshot when one has been added, otherwise one of Kylie's photos.
+const photo = guestPhotoFor(num) ?? (photos.length ? photos[n % photos.length] : null);
 // Shift the band colour each time the photos cycle round, so a repeated photo gets a new colour.
 const band = bands[(n + Math.floor(n / Math.max(photos.length, 1))) % bands.length];
 ---

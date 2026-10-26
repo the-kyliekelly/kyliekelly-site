@@ -3,3 +3,6 @@ dist/
 .astro/
 .env
 .DS_Store
+
+# Full-size guest photos stay on this computer; the cropped copies in src/assets/guest-crops are what the site uses
+src/assets/guest-photos/

@@ -9,6 +9,7 @@ import EpisodeArt from '../components/EpisodeArt.astro';
 import reviewData from '../data/listener-reviews.json';
 import { getEpisodes } from '../lib/episodes';
 import { getDownloads } from '../lib/stats';
+import { guestPhotoFor } from '../lib/guestPhotos';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -275,11 +276,11 @@ const classicsTint = ['text-pink', 'text-black', 'text-[#a21cb8]', 'text-[#6b3a8
                 <a href={ep.href} class="group flex items-center gap-4 sm:gap-8 py-6 sm:py-8">
                   <span class={`font-serif font-bold leading-none text-5xl sm:text-8xl w-[1.25em] sm:w-[1.4em] flex-none tabular-nums ${classicsTint[i % classicsTint.length]}`}>{String(i + 1).padStart(2, '0')}</span>
                   <span class="flex-1 min-w-0">
-                    <span class={`block font-serif font-bold leading-[1.12] text-lg sm:text-3xl text-balance transition-opacity duration-300 group-hover:opacity-70 ${classicsTint[i % classicsTint.length]}`}>{ep.title}</span>
+                    <span class={`block font-serif font-bold leading-[1.12] text-base sm:text-2xl text-balance transition-opacity duration-300 group-hover:opacity-70 ${classicsTint[i % classicsTint.length]}`}>{ep.title}</span>
                     <span class="mt-2 block text-[11px] sm:text-xs uppercase tracking-widest font-semibold text-black/60">Ep {ep.num}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</span>
                   </span>
-                  {topPhotos.length > 0 && (
-                    <Image src={topPhotos[(Number(ep.num) * 5) % topPhotos.length]} alt="" widths={[200, 300]} sizes="(min-width: 640px) 140px, 84px" class="h-[84px] w-[84px] sm:h-[140px] sm:w-[140px] flex-none object-cover object-[50%_22%] transition-transform duration-300 group-hover:scale-[1.04]" loading="lazy" />
+                  {(topPhotos.length > 0 || guestPhotoFor(ep.num)) && (
+                    <Image src={guestPhotoFor(ep.num) ?? topPhotos[(Number(ep.num) * 5) % topPhotos.length]} alt="" widths={[200, 300]} sizes="(min-width: 640px) 140px, 84px" class="h-[84px] w-[84px] sm:h-[140px] sm:w-[140px] flex-none object-cover object-[50%_22%] transition-transform duration-300 group-hover:scale-[1.04]" loading="lazy" />
                   )}
                 </a>
               </li>
