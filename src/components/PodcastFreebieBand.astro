@@ -1,0 +1,20 @@
+---
+// The lilac "one sheet takeaways" sign-up bar. Used on the podcast page and the episode library.
+// Usage: <PodcastFreebieBand uid="band" />   (uid must be unique for each placement on a page)
+import CheatSheet from './CheatSheet.astro';
+import PodcastSignup from './PodcastSignup.astro';
+
+interface Props {
+  uid: string;
+}
+const { uid } = Astro.props;
+---
+<div class="max-w-5xl mx-auto grid md:grid-cols-[0.8fr_1.2fr] items-center gap-10 md:gap-14 rounded-[2rem] bg-[#e9d9ec] px-8 py-12 sm:px-12 sm:py-14">
+  <CheatSheet class="mx-auto w-[190px] sm:w-[220px] my-2" />
+  <div class="text-center md:text-left">
+    <p class="text-xs uppercase tracking-widest font-semibold mb-3">Free &middot; for every new episode</p>
+    <h2 class="font-serif font-bold italic text-3xl sm:text-4xl leading-tight mb-4 text-balance">Grab the one sheet takeaways.</h2>
+    <p class="text-black mb-7 max-w-lg mx-auto md:mx-0">Podcasts are so easy to listen to and so much harder to act on afterwards. So every new episode gets its own cheat sheet: one page, with the key points, ready for when you finally sit down to do the thing.</p>
+    <PodcastSignup uid={uid} class="max-w-md mx-auto md:mx-0" />
+  </div>
+</div>

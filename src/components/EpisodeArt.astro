@@ -13,9 +13,11 @@ import { guestPhotoFor } from '../lib/guestPhotos';
 interface Props {
   num: string;
   title: string;
+  /** The guest's name, when the episode has one. Shown only if their headshot is on the cover. */
+  guest?: string | null;
   class?: string;
 }
-const { num, title, class: className = '' } = Astro.props;
+const { num, title, guest = null, class: className = '' } = Astro.props;
 
 const found = import.meta.glob<{ default: ImageMetadata }>('../assets/episode-photos/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
 const photos = Object.entries(found)
@@ -30,7 +32,10 @@ const bands = [
 ];
 const n = Number(num) || 0;
 // A guest episode uses the guest's headshot when one has been added, otherwise one of Kylie's photos.
-const photo = guestPhotoFor(num) ?? (photos.length ? photos[n % photos.length] : null);
+const guestPhoto = guestPhotoFor(num);
+const photo = guestPhoto ?? (photos.length ? photos[n % photos.length] : null);
+// Name the guest only when their own headshot is on the cover, so the photo and the name always match.
+const withName = guestPhoto && guest ? guest : 'Kylie Kelly';
 // Shift the band colour each time the photos cycle round, so a repeated photo gets a new colour.
 const band = bands[(n + Math.floor(n / Math.max(photos.length, 1))) % bands.length];
 ---
@@ -47,7 +52,7 @@ const band = bands[(n + Math.floor(n / Math.max(photos.length, 1))) % bands.leng
     </div>
     <div class:list={['flex h-[124px] flex-col items-center justify-center px-3 text-center', band]}>
       <p class="font-serif leading-tight text-[15px] sm:text-[17px] line-clamp-3 text-balance">EP {num}: {title}</p>
-      <p class="mt-2 text-[8px] sm:text-[9px] uppercase tracking-[0.16em] font-semibold opacity-90">With Kylie Kelly</p>
+      <p class="mt-2 text-[8px] sm:text-[9px] uppercase tracking-[0.16em] font-semibold opacity-90">With {withName}</p>
     </div>
   </div>
 </div>

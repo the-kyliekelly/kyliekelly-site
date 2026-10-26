@@ -1,6 +1,9 @@
 // Episodes for the homepage and the podcast page.
 // Read from the podcast feed at build time, with the episode library as a backup.
 import episodePosts from '../data/blog-posts.json';
+import topicRules from '../data/topic-rules.json';
+import { guestFromTitle } from './guests';
+import { topicsFor, type TopicRules } from './topics';
 
 const handBuiltEpisodes = new Set([
   'low-lift-email-list-growth',
@@ -38,6 +41,7 @@ async function loadFeedEpisodes() {
         const seconds = rawDuration.includes(':')
           ? rawDuration.split(':').reduce((acc, part) => acc * 60 + Number(part), 0)
           : Number(rawDuration);
+        const summary = (feedTag(item, 'description') ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 1500);
         const siteSlug = (feedTag(item, 'link') ?? '').match(/kyliekelly\.com\/([^/]+)\/?$/)?.[1];
         const audio = item.match(/<enclosure[^>]*url="([^"]+)"/)?.[1] ?? '';
         const listenPage = audio.replace(/\.(mp3|m4a)(\?.*)?$/, '');
@@ -46,6 +50,7 @@ async function loadFeedEpisodes() {
           mins: seconds ? String(Math.round(seconds / 60)) : null,
           seconds: seconds || null,
           title,
+          summary,
           iso: feedTag(item, 'pubDate'),
           date: formatDate(feedTag(item, 'pubDate')),
           href: siteSlug && knownEpisodePages.has(siteSlug)
@@ -69,6 +74,7 @@ const libraryEpisodes = episodePosts
       mins: mins ? mins[1] : null,
       seconds: mins ? Number(mins[1]) * 60 : null,
       title: p.title,
+      summary: String(p.excerpt ?? ''),
       iso: p.date,
       date: formatDate(p.date),
       href: handBuiltEpisodes.has(p.slug) ? `/podcast/episodes/${p.slug}/` : `/${p.slug}/`,
@@ -82,6 +88,12 @@ export interface Episode {
   mins: string | null;
   seconds: number | null;
   title: string;
+  /** Plain-text show notes, used for sorting episodes into topics. */
+  summary: string;
+  /** The guest's name when the title names one, otherwise null (a solo episode). */
+  guest: string | null;
+  /** Topic ids from src/data/topic-rules.json. */
+  topics: string[];
   iso: string;
   date: string;
   href: string;
@@ -90,6 +102,12 @@ export interface Episode {
 // Newest first.
 export async function getEpisodes(): Promise<Episode[]> {
   const feedEpisodes: Episode[] = await loadFeedEpisodes();
-  const list: Episode[] = feedEpisodes.length ? feedEpisodes : (libraryEpisodes as Episode[]);
-  return list.sort((x, y) => Number(y.num) - Number(x.num));
+  const list = (feedEpisodes.length ? feedEpisodes : libraryEpisodes) as Array<Omit<Episode, 'guest' | 'topics'>>;
+  return list
+    .map((ep) => ({
+      ...ep,
+      guest: guestFromTitle(ep.title),
+      topics: topicsFor(ep.num, ep.title, ep.summary, topicRules as TopicRules),
+    }))
+    .sort((x, y) => Number(y.num) - Number(x.num));
 }

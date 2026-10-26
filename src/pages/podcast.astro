@@ -3,13 +3,14 @@ import Layout from '../layouts/Layout.astro';
 import Highlight from '../components/Highlight.astro';
 import CountUpStats from '../components/CountUpStats.astro';
 import PodcastFreebieReveal from '../components/PodcastFreebieReveal.astro';
-import CheatSheet from '../components/CheatSheet.astro';
-import PodcastSignup from '../components/PodcastSignup.astro';
+import PodcastFreebieBand from '../components/PodcastFreebieBand.astro';
+import AskKylieBand from '../components/AskKylieBand.astro';
 import EpisodeArt from '../components/EpisodeArt.astro';
 import reviewData from '../data/listener-reviews.json';
 import { getEpisodes } from '../lib/episodes';
 import { getDownloads } from '../lib/stats';
 import { guestPhotoFor } from '../lib/guestPhotos';
+import { pickClassics } from '../lib/classics';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -25,19 +26,8 @@ const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min li
 const newest = allEpisodes.slice(0, 3);
 const latestGrid = allEpisodes.slice(3, 9);
 
-// Classics: hand-picked episodes, in this order. To change one, swap its entry:
-//   { slug: '...' } matches the page address, { num: '243' } matches the episode number.
-const classicsPicks = [
-  { slug: 'low-lift-email-list-growth' }, // Ep 265
-  { slug: 'grow-email-list-without-instagram-ads' },
-  { slug: 'why-i-dont-send-welcome-sequences-anymore' },
-  { num: '243' }, // The Only 4 Emails You Need to Stay Consistent
-];
-const topEpisodes = classicsPicks
-  .map((pick) =>
-    allEpisodes.find((ep) => ('slug' in pick ? ep.href.includes(pick.slug) : ep.num === pick.num))
-  )
-  .filter((ep): ep is NonNullable<typeof ep> => Boolean(ep));
+// Classics: hand-picked episodes (edit the list in src/lib/classics.ts).
+const topEpisodes = pickClassics(allEpisodes);
 
 // Round photos for the Top Episodes rows: the same face-matched shoot photos the covers use.
 const photoModules = import.meta.glob<{ default: ImageMetadata }>('../assets/episode-photos/*.{jpg,jpeg,png,webp}', { eager: true });
@@ -169,7 +159,7 @@ const classicsTint = ['text-pink', 'text-black', 'text-[#a21cb8]', 'text-[#6b3a8
         <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-6 pb-4 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 md:overflow-visible md:grid md:grid-cols-3 md:gap-x-6 md:gap-y-12">
           {newest.map((ep, i) => (
             <a href={ep.href} class="group block w-[68%] max-w-[300px] flex-none snap-start md:w-auto md:max-w-none">
-              <EpisodeArt num={ep.num} title={ep.title} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
+              <EpisodeArt num={ep.num} title={ep.title} guest={ep.guest} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
               <div class="mt-5 flex items-center justify-between gap-3 px-1">
                 <span class="text-[11px] uppercase tracking-widest font-semibold text-black/70">{ep.date}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</span>
                 <span class={`grid place-items-center h-10 w-10 flex-none rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
@@ -183,26 +173,8 @@ const classicsTint = ['text-pink', 'text-black', 'text-[#a21cb8]', 'text-[#6b3a8
 
   <!-- PODCAST FREEBIE -->
   <section class="bg-white px-6 pb-20 sm:pb-28">
-    <div class="max-w-5xl mx-auto grid md:grid-cols-[0.8fr_1.2fr] items-center gap-10 md:gap-14 rounded-[2rem] bg-[#e9d9ec] px-8 py-12 sm:px-12 sm:py-14">
-      <CheatSheet class="mx-auto w-[190px] sm:w-[220px] my-2" />
-      <div class="text-center md:text-left">
-        <p class="text-xs uppercase tracking-widest font-semibold mb-3">Free &middot; for every new episode</p>
-        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl leading-tight mb-4 text-balance">Grab the one sheet takeaways.</h2>
-        <p class="text-black mb-7 max-w-lg mx-auto md:mx-0">Podcasts are so easy to listen to and so much harder to act on afterwards. So every new episode gets its own cheat sheet: one page, with the key points, ready for when you finally sit down to do the thing.</p>
-        <PodcastSignup uid="band" class="max-w-md mx-auto md:mx-0" />
-      </div>
-    </div>
-    <div class="max-w-5xl mx-auto mt-6 sm:mt-8 flex flex-col items-center gap-6 rounded-[2rem] bg-black px-8 py-12 text-center text-white sm:flex-row sm:justify-between sm:gap-10 sm:px-14 sm:py-14 sm:text-left">
-      <div class="max-w-xl">
-        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Listener questions</p>
-        <h2 class="font-serif font-bold italic text-3xl sm:text-4xl leading-tight mb-3 text-balance">Got a question for the show?</h2>
-        <p class="text-warmgray leading-relaxed">Record it in your own voice. I may answer it on a future episode.</p>
-      </div>
-      <a href="/ask-kylie" class="group inline-flex flex-none items-center gap-4 rounded-full bg-white text-black pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-        Ask Kylie
-        <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-      </a>
-    </div>
+    <PodcastFreebieBand uid="band" />
+    <div class="mt-6 sm:mt-8"><AskKylieBand /></div>
   </section>
 
   <!-- ABOUT YOUR HOST -->
@@ -298,7 +270,7 @@ const classicsTint = ['text-pink', 'text-black', 'text-[#a21cb8]', 'text-[#6b3a8
         <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-6 pb-4 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 md:overflow-visible md:grid md:grid-cols-3 md:gap-x-6 md:gap-y-10">
           {latestGrid.map((ep) => (
             <a href={ep.href} class="group block w-[68%] max-w-[300px] flex-none snap-start md:w-auto md:max-w-none">
-              <EpisodeArt num={ep.num} title={ep.title} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
+              <EpisodeArt num={ep.num} title={ep.title} guest={ep.guest} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
               <p class="text-[11px] uppercase tracking-widest font-semibold text-black/70 mt-4 px-1">{ep.date}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</p>
             </a>
           ))}

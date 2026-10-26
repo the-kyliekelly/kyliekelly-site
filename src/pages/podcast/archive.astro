@@ -1,20 +1,31 @@
 ---
-// Episode library: every episode as a cover card, newest first.
-// Episodes come from the Buzzsprout feed at build time (see src/lib/episodes.ts), so a new episode
-// appears here by itself. Each card's photo is a guest headshot when one has been added
-// (src/assets/guest-photos), otherwise one of Kylie's photos.
+// Episode library: every episode as a cover card, newest first, with a Start here strip, topic
+// filters and search. Episodes come from the Buzzsprout feed at build time (src/lib/episodes.ts), so a
+// new episode appears here by itself. Topics are set in src/data/topic-rules.json, the Start here
+// picks in src/lib/classics.ts.
+import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import EpisodeArt from '../../components/EpisodeArt.astro';
+import PodcastFreebieBand from '../../components/PodcastFreebieBand.astro';
+import AskKylieBand from '../../components/AskKylieBand.astro';
 import { getEpisodes } from '../../lib/episodes';
+import { pickClassics } from '../../lib/classics';
+import { photoFor } from '../../lib/kyliePhotos';
+import topicRules from '../../data/topic-rules.json';
 
 const episodes = await getEpisodes();
 // Same figure the podcast page shows: the newest episode's number.
 const episodeCount = episodes.length ? Number(episodes[0].num) : 0;
-const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light text-black'];
+const startHere = pickClassics(episodes);
+
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const playIcon = 'M5 3.5v9l7.5-4.5z';
+const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light text-black'];
 const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min listen` : '');
+// Only show a topic filter if at least one episode is in it.
+const topics = topicRules.topics.filter((t) => episodes.some((ep) => ep.topics.includes(t.id)));
 ---
-<Layout title="Episode Library | The Email Growth Show | Kylie Kelly" description="Every episode of The Email Growth Show, newest first, with full show notes one click away.">
+<Layout title="Episode Library | The Email Growth Show | Kylie Kelly" description="Every episode of The Email Growth Show, newest first. Search, browse by topic and open the full show notes for any episode.">
 
   <section class="bg-black text-white px-6 py-4">
     <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-center">
@@ -24,7 +35,8 @@ const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min li
     </p>
   </section>
 
-  <section class="bg-offwhite px-6 pt-14 pb-12 sm:pt-20 sm:pb-16 text-center">
+  <!-- HERO -->
+  <section class="bg-offwhite px-6 pt-14 pb-14 sm:pt-20 sm:pb-16 text-center">
     <div class="max-w-2xl mx-auto">
       <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Episode Library</p>
       <h1 class="font-serif font-bold text-4xl sm:text-6xl leading-[1.08] text-balance mb-5">
@@ -33,18 +45,71 @@ const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min li
       <p class="text-black max-w-md mx-auto mb-8">
         {episodeCount} episodes, newest first, with the show notes one click away. A new one lands every Friday.
       </p>
-      <label class="sr-only" for="archive-search">Search episodes</label>
-      <input id="archive-search" type="search" placeholder="Search episodes by title or number" autocomplete="off" class="w-full max-w-md rounded-full bg-white px-6 py-4 text-[15px] text-black placeholder:text-black/55 shadow-[0_6px_24px_rgba(0,0,0,0.04)] border border-transparent focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
-      <p class="mt-6"><a href="/podcast" class="text-sm font-semibold underline underline-offset-4 hover:text-pink">&larr; Back to the podcast home</a></p>
+      <div class="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
+        <a href="https://podcasts.apple.com/podcast/id1550211753" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-6 pr-2 py-2 text-[15px] font-semibold shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-transform duration-300 hover:-translate-y-1">
+          Listen on Apple
+          <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+        </a>
+        <a href="https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-6 pr-2 py-2 text-[15px] font-semibold shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-transform duration-300 hover:-translate-y-1">
+          Listen on Spotify
+          <span class="grid place-items-center h-10 w-10 rounded-full bg-black text-white transition-colors duration-300 group-hover:bg-pink"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+        </a>
+        <a href="https://emailgrowthshow.buzzsprout.com/share" target="_blank" rel="noopener" class="inline-flex items-center gap-3 px-3 py-3 text-[15px] font-semibold underline underline-offset-4 decoration-black/30 hover:decoration-pink">
+          All platforms <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+      <p class="mt-8"><a href="/podcast" class="text-sm font-semibold underline underline-offset-4 hover:text-pink">&larr; Back to the podcast home</a></p>
     </div>
   </section>
 
+  <!-- START HERE -->
+  {startHere.length > 0 && (
+    <section class="bg-[#e9d9ec] px-6 py-14 sm:py-20">
+      <div class="max-w-5xl mx-auto">
+        <p class="text-center text-xs uppercase tracking-[0.3em] font-semibold mb-3">New here?</p>
+        <h2 class="text-center font-serif font-bold italic text-4xl sm:text-5xl leading-tight mb-10 sm:mb-12">Start with these.</h2>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+          {startHere.map((ep, i) => {
+            const photo = photoFor(ep.num, 5);
+            return (
+              <a href={ep.href} class="group flex items-center gap-4 rounded-[1.75rem] bg-white p-4 shadow-[0_12px_30px_rgba(0,0,0,0.06)] transition-transform duration-300 hover:-translate-y-1 lg:flex-col lg:items-stretch lg:gap-5 lg:p-5" {...(ep.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+                {photo && (
+                  <Image src={photo} alt="" widths={[200, 400]} sizes="(min-width: 1024px) 240px, 96px" class="h-24 w-24 flex-none rounded-2xl object-cover object-[50%_22%] lg:h-auto lg:w-full lg:aspect-square" loading="lazy" />
+                )}
+                <span class="flex min-w-0 flex-1 items-center justify-between gap-3 lg:items-start">
+                  <span class="font-serif font-bold leading-snug text-base lg:text-lg">{ep.title}</span>
+                  <span class={`grid h-10 w-10 flex-none place-items-center rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- BROWSE -->
   <section class="bg-white px-6 py-14 sm:py-20">
     <div class="max-w-5xl mx-auto">
+      <h2 class="font-serif font-bold italic text-3xl sm:text-4xl text-center mb-8">Browse every episode</h2>
+
+      <div class="max-w-xl mx-auto mb-6">
+        <label class="sr-only" for="archive-search">Search episodes</label>
+        <input id="archive-search" type="search" placeholder="Search by title, guest or number" autocomplete="off" class="w-full rounded-full bg-offwhite px-6 py-4 text-[15px] text-black placeholder:text-black/55 border border-transparent focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+      </div>
+
+      <div class="mb-3 flex flex-wrap justify-center gap-2" role="group" aria-label="Filter by topic">
+        <button type="button" data-topic="all" aria-pressed="true" class="topic-pill is-active">All episodes</button>
+        {topics.map((t) => (
+          <button type="button" data-topic={t.id} aria-pressed="false" class="topic-pill">{t.label}</button>
+        ))}
+      </div>
+      <p id="archive-status" class="mb-10 text-center text-xs uppercase tracking-widest font-semibold text-black/60" aria-live="polite"></p>
+
       <div id="archive-grid" class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {episodes.map((ep, i) => (
-          <a href={ep.href} class="archive-card group block" data-title={`${ep.num} ${ep.title}`.toLowerCase()} {...(ep.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
-            <EpisodeArt num={ep.num} title={ep.title} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
+          <a href={ep.href} class="archive-card group block" data-topics={ep.topics.join(' ')} data-search={`${ep.num} ${ep.title} ${ep.guest ?? ''}`.toLowerCase()} {...(ep.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+            <EpisodeArt num={ep.num} title={ep.title} guest={ep.guest} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
             <div class="mt-5 flex items-center justify-between gap-3 px-1">
               <span class="text-[11px] uppercase tracking-widest font-semibold text-black/70">{ep.date}{ep.mins ? ` · ${minsLabel(ep)}` : ''}</span>
               <span class={`grid place-items-center h-10 w-10 flex-none rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
@@ -53,7 +118,7 @@ const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min li
         ))}
       </div>
 
-      <p id="archive-empty" class="hidden text-center text-black py-10">No episodes match that search. Try a different word or an episode number.</p>
+      <p id="archive-empty" class="hidden text-center text-black py-10">No episodes match that. Try a different word, topic or episode number.</p>
 
       <div class="text-center mt-14">
         <button id="load-more-btn" type="button" class="btn-pink">See more episodes &rarr;</button>
@@ -61,45 +126,83 @@ const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min li
     </div>
   </section>
 
-  <style>
+  <!-- SIGN UP + ASK -->
+  <section class="bg-white px-6 pb-20 sm:pb-28">
+    <PodcastFreebieBand uid="archive" />
+    <div class="mt-6 sm:mt-8"><AskKylieBand /></div>
+  </section>
+
+  <style is:global>
     .archive-card.is-hidden { display: none; }
+    .topic-pill {
+      border-radius: 9999px;
+      border: 1px solid rgba(0, 0, 0, 0.18);
+      background: #fff;
+      padding: 0.6rem 1.15rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    .topic-pill:hover { border-color: #e040fb; }
+    .topic-pill.is-active { background: #000; border-color: #000; color: #fff; }
   </style>
 
   <script>
     const PAGE_SIZE = 12;
     const cards = Array.from(document.querySelectorAll<HTMLElement>('.archive-card'));
+    const pills = Array.from(document.querySelectorAll<HTMLButtonElement>('.topic-pill'));
     const btn = document.getElementById('load-more-btn');
     const search = document.getElementById('archive-search') as HTMLInputElement | null;
     const empty = document.getElementById('archive-empty');
-    let shown = 0;
+    const status = document.getElementById('archive-status');
+    let topic = 'all';
+    let shown = PAGE_SIZE;
+
+    function matches(card: HTMLElement) {
+      const q = (search?.value ?? '').trim().toLowerCase();
+      const topicOk = topic === 'all' || (card.dataset.topics ?? '').split(' ').includes(topic);
+      const searchOk = !q || (card.dataset.search ?? '').includes(q);
+      return topicOk && searchOk;
+    }
 
     function render() {
-      const q = (search?.value ?? '').trim().toLowerCase();
-      if (q) {
-        // Searching looks through every episode, not just the ones already shown.
-        let matches = 0;
-        cards.forEach((c) => {
-          const hit = (c.dataset.title ?? '').includes(q);
-          c.classList.toggle('is-hidden', !hit);
-          if (hit) matches++;
-        });
-        empty?.classList.toggle('hidden', matches > 0);
-        if (btn) btn.style.display = 'none';
-        return;
+      const hits = cards.filter(matches);
+      const visible = new Set(hits.slice(0, shown));
+      cards.forEach((c) => c.classList.toggle('is-hidden', !visible.has(c)));
+      empty?.classList.toggle('hidden', hits.length > 0);
+      if (btn) btn.style.display = hits.length > shown ? '' : 'none';
+      if (status) {
+        const filtered = topic !== 'all' || (search?.value ?? '').trim() !== '';
+        status.textContent = hits.length
+          ? filtered ? `${hits.length} episode${hits.length === 1 ? '' : 's'}` : ''
+          : '';
       }
-      empty?.classList.add('hidden');
-      cards.forEach((c, i) => c.classList.toggle('is-hidden', i >= shown));
-      if (btn) btn.style.display = shown >= cards.length ? 'none' : '';
     }
 
-    function showMore() {
-      shown = Math.min(shown + PAGE_SIZE, cards.length);
+    pills.forEach((p) =>
+      p.addEventListener('click', () => {
+        topic = p.dataset.topic ?? 'all';
+        shown = PAGE_SIZE;
+        pills.forEach((o) => {
+          const on = o === p;
+          o.classList.toggle('is-active', on);
+          o.setAttribute('aria-pressed', String(on));
+        });
+        render();
+      })
+    );
+    search?.addEventListener('input', () => {
+      shown = PAGE_SIZE;
       render();
-    }
+    });
+    btn?.addEventListener('click', () => {
+      shown += PAGE_SIZE;
+      render();
+    });
 
-    showMore();
-    btn?.addEventListener('click', showMore);
-    search?.addEventListener('input', render);
+    render();
   </script>
 
 </Layout>
