@@ -160,12 +160,17 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
     <!-- HERO -->
     <header class="bg-offwhite px-6 pt-10 pb-14 sm:pt-14 sm:pb-20">
       <div class="max-w-6xl mx-auto">
-        <nav aria-label="Breadcrumb" class="mb-8 text-xs uppercase tracking-widest font-semibold text-black/70">
-          <a href="/podcast" class="hover:text-pink">{showName(num)}</a>
-          <span aria-hidden="true" class="mx-2">/</span>
-          <a href="/podcast/archive" class="hover:text-pink">Episode library</a>
-          {num && (<><span aria-hidden="true" class="mx-2">/</span><span class="text-black">Episode {num}</span></>)}
-        </nav>
+        <div class="mb-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+          <a href="/podcast/archive" class="inline-flex items-center gap-2 rounded-full border border-black/20 bg-white px-4 py-2 text-xs uppercase tracking-widest font-semibold text-black hover:border-pink hover:text-pink transition-colors">
+            <span aria-hidden="true">&larr;</span> All episodes
+          </a>
+          <nav aria-label="Breadcrumb" class="text-xs uppercase tracking-widest font-semibold text-black/70">
+            <a href="/podcast" class="hover:text-pink">{showName(num)}</a>
+            <span aria-hidden="true" class="mx-2">/</span>
+            <a href="/podcast/archive" class="hover:text-pink">Episode library</a>
+            {num && (<><span aria-hidden="true" class="mx-2">/</span><span class="text-black">Episode {num}</span></>)}
+          </nav>
+        </div>
 
         <div class="grid items-center gap-10 md:grid-cols-[1.25fr_0.75fr] md:gap-14">
           <div>
