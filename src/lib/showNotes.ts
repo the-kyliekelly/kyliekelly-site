@@ -24,6 +24,9 @@ export interface ParsedNotes {
   transcript: Array<{ time: string; speaker?: string; text: string }>;
 }
 
+// The kinds of block that make up an intro, in order.
+const BLOCK = /<p[^>]*>[\s\S]*?<\/p>|<(?:ul|ol)[^>]*>[\s\S]*?<\/(?:ul|ol)>|<h[3-6][^>]*>[\s\S]*?<\/h[3-6]>|<blockquote[\s\S]*?<\/blockquote>/g;
+
 const decode = (s: string) =>
   s
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
@@ -75,11 +78,13 @@ export function parseShowNotes(raw: string): ParsedNotes {
 
   // The "EP 262 · WITH NAME · 32 MIN LISTEN" line: keep only the guest's website, if there is one.
   let guestUrl: string | null = null;
-  const statLine = [...html.matchAll(/<p[^>]*>\s*(?:EP\b|EPISODE\b|THE EMAIL GROWTH SHOW)[\s\S]*?<\/p>/gi)].find((m) => (m.index ?? 0) < 2500);
+  const statLine = [...html.matchAll(/<p[^>]*>\s*(?:<[^>]+>\s*)*(?:EP\b|EPISODE\b|THE EMAIL GROWTH SHOW)[\s\S]*?<\/p>/gi)].find((m) => (m.index ?? 0) < 2500);
   if (statLine) {
     guestUrl = statLine[0].match(/href="([^"]+)"/)?.[1] ?? null;
     html = html.replace(statLine[0], '');
   }
+
+  html = html.replace(/<h[1-6][^>]*>\s*(?:<[^>]+>\s*)*(?:THE EMAIL GROWTH SHOW\s+)?EPISODE\s+\d+(?:\s|<[^>]+>)*<\/h[1-6]>/gi, '');
 
   // Audio player
   let player: ParsedNotes['player'] = null;
@@ -162,17 +167,18 @@ export function parseShowNotes(raw: string): ParsedNotes {
   const intro = firstH2 === -1 ? html : html.slice(0, firstH2).trim();
   const rest = firstH2 === -1 ? '' : html.slice(firstH2);
   // The intro, tidied: drop "TL:DR" and "Episode duration" lines, and lift a plain-paragraph "What you'll learn" list
-  const introBlocks = [...intro.matchAll(/<p[^>]*>[\s\S]*?<\/p>|<ul[\s\S]*?<\/ul>/g)].map((m) => m[0]);
+  const introBlocks = [...intro.matchAll(BLOCK)].map((m) => m[0]);
   const introKept: string[] = [];
   for (let i = 0; i < introBlocks.length; i++) {
     const t = stripTags(introBlocks[i]);
-    if (/^tl:?\s*dr:?$/i.test(t) || /^\*+\s*(episode duration|read time|listen time)/i.test(t)) continue;
-    if (!takeaways.length && /^(what you.ll learn|in this episode)(?: in this episode)?:?$/i.test(t) && introBlocks[i + 1]) {
+    if ((t.length < 160 && /^(if you want to listen|press play|listen (to|in) |you can listen|to listen)/i.test(t)) || /^tl:?\s*dr:?$/i.test(t) || /^\*+\s*(episode duration|read time|listen time)/i.test(t)) continue;
+    if (!takeaways.length && /^(what you.ll learn|in this episode|today we covered|we covered|what we covered)(?: in this episode)?:?$/i.test(t) && introBlocks[i + 1]) {
       const next = introBlocks[i + 1];
       const items = /^<ul/i.test(next)
         ? [...next.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/g)].map((m) => stripTags(m[1]))
         : next.replace(/<\/?p[^>]*>/g, '').split(/<br\s*\/?>/i).map((x) => stripTags(x).replace(/^[–—•\-✅✔️*]+\s*/u, '')).filter(Boolean);
-      if (items.length) {
+      // Long, paragraph-length items read better as part of the text than as a short checklist.
+      if (items.length && items.reduce((n, x) => n + x.length, 0) / items.length < 170) {
         takeaways = items;
         i += 1;
         continue;
@@ -191,6 +197,13 @@ export function parseShowNotes(raw: string): ParsedNotes {
     const body = part.replace(h[0], '').trim();
     if (/^listen to this episode/i.test(title)) continue; // the player is shown separately
     if (/^(feat\.?|featuring)\b/i.test(title)) continue; // a guest credit line, shown in the hero instead
+    if (!takeaways.length && /^(what we (covered|cover|chat about|talk about)|what you.ll learn|in this episode)/i.test(title)) {
+      const items = [...body.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/g)].map((m) => stripTags(m[1])).filter(Boolean);
+      if (items.length) {
+        takeaways = items;
+        continue;
+      }
+    }
     const section = { id: slugify(title), title, html: body };
     if (/^guest spotlight/i.test(title)) {
       guestImage = body.match(/<img[^>]*src="([^"]+)"/i)?.[1] ?? null;
@@ -237,10 +250,10 @@ export function parseShowNotes(raw: string): ParsedNotes {
  * "what you'll learn" boxes.
  */
 export function isStructuredWriteUp(html: string): boolean {
-  const hasTranscript = /<details/i.test(html) || /<h2[^>]*>(?:(?!<\/h2>)[\s\S])*full transcript/i.test(html);
+  const hasTranscript = /<details/i.test(html) || /<h[1-6][^>]*>(?:(?!<\/h[1-6]>)[\s\S])*full transcript/i.test(html);
   const hasBlocks = /LINKS MENTIONED|LEARN IN THIS EPISODE/i.test(html);
-  const hasPlayerHeading = /<h2[^>]*>(?:(?!<\/h2>)[\s\S])*listen to this episode here/i.test(html);
-  return (hasTranscript || hasBlocks) && (hasBlocks || hasPlayerHeading);
+  const hasPlayer = /buzzsprout-player-\d+/.test(html);
+  return (hasTranscript || hasBlocks) && hasPlayer;
 }
 
 /**
@@ -270,11 +283,14 @@ export function summariseIntro(paragraphs: string[], fallback: string) {
 /** Builds the full-version page for a standard write-up, using the opening of the write-up itself. */
 export function autoFullPage(html: string, title: string) {
   const notes = parseShowNotes(html);
-  const introParas = [...notes.intro.matchAll(/<p[^>]*>[\s\S]*?<\/p>/g)].map((m) => m[0]);
+  const blocks = [...notes.intro.matchAll(BLOCK)].map((m) => m[0]);
+  const introParas = blocks.filter((b) => /^<p[\s>]/i.test(b));
   // If the opening is only a line or two, borrow the start of the first section so the box says something useful.
   const firstSection = [...(notes.sections[0]?.html ?? '').matchAll(/<p[^>]*>[\s\S]*?<\/p>/g)].map((m) => m[0]);
   const { quickAnswer, metaDescription, used } = summariseIntro([...introParas, ...firstSection], title);
-  notes.intro = introParas.slice(Math.min(used, introParas.length)).join('');
+  // The paragraphs the box used come out of the intro; lists, headings and quotes stay where they were.
+  let toRemove = Math.min(used, introParas.length);
+  notes.intro = blocks.filter((b) => !(toRemove > 0 && /^<p[\s>]/i.test(b) && (toRemove--, true))).join('');
   return {
     notes,
     extra: {
