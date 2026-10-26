@@ -3,6 +3,19 @@
 // numbered sections, the call to action, the Pinterest pin and the timestamped transcript.
 // It only reads the HTML. Nothing is added or invented.
 
+import pageOverrides from '../data/page-overrides.json';
+
+export interface PageOverride {
+  quickAnswer?: string;
+  metaDescription?: string;
+  cta?: { eyebrow: string; headline: string; text: string; label: string; href: string };
+  replaceLinks?: Array<{ match: string; html: string }>;
+  cutHtml?: Array<{ find: string; replace?: string }>;
+  highlights?: string[];
+  pullQuotes?: string[];
+}
+export const overridesFor = (slug?: string): PageOverride => ((slug && (pageOverrides as Record<string, unknown>)[slug]) as PageOverride) || {};
+
 export interface NotesSection {
   id: string;
   title: string;
@@ -72,8 +85,107 @@ function parseTranscript(chunk: string): ParsedNotes['transcript'] {
   return out;
 }
 
-export function parseShowNotes(raw: string): ParsedNotes {
+
+// ---------------------------------------------------------------------------------------------
+// Making long copy easier to read
+
+// The Start Here template now lives in Flodesk (Kylie has left Kit). Old write-ups still point at the Kit address.
+const ADDRESS_FIXES: Array<[RegExp, string]> = [[/https?:\/\/kyliekelly\.kit\.com\/starthere/g, 'https://kyliekelly.myflodesk.com/starthere']];
+
+// A "how I can help" pitch near the start or end of an old write-up. The one-sheet sign-up and the call to action
+// have replaced these, so they are left out.
+const OFFER_PITCH = /book (?:a|your) (?:\$?\d+ )?business breakthrough|business breakthrough (?:audit|session)|here.s how i can (?:help|support)|how i can support you/i;
+
+const INLINE_TAGS = /<(\/?)(a|strong|em|b|i|mark|span|u)\b[^>]*>/gi;
+function tagsBalanced(fragment: string): boolean {
+  let depth = 0;
+  for (const m of fragment.matchAll(INLINE_TAGS)) depth += m[1] ? -1 : 1;
+  return depth === 0;
+}
+
+/** Splits one long paragraph, at sentence ends, into paragraphs of a comfortable length. */
+function splitLong(inner: string): string[] {
+  const text = stripTags(inner);
+  if (text.length <= 520) return [inner];
+  const middle = text.length / 2;
+  let best: { at: number; gap: number } | null = null;
+  const sentenceEnd = /[.!?](?:&#8221;|&#8217;|["”’'])?\s+(?=(?:&#8220;|&#8216;|[A-Z“"‘'(]))/g;
+  for (const m of inner.matchAll(sentenceEnd)) {
+    const at = (m.index ?? 0) + m[0].length;
+    const before = inner.slice(0, at);
+    if (/\b(?:Mr|Mrs|Ms|Dr|St|vs|e\.g|i\.e|etc)\.\s*$/i.test(before)) continue;
+    if (!tagsBalanced(before)) continue;
+    const left = stripTags(before).length;
+    const right = text.length - left;
+    if (left < 170 || right < 170) continue;
+    const gap = Math.abs(left - middle);
+    if (!best || gap < best.gap) best = { at, gap };
+  }
+  if (!best) return [inner];
+  return [...splitLong(inner.slice(0, best.at).trim()), ...splitLong(inner.slice(best.at).trim())];
+}
+export function splitLongParagraphs(html: string): string {
+  return html.replace(/<p([^>]*)>([\s\S]*?)<\/p>/g, (whole, attrs, inner) => {
+    if (/<br/i.test(inner)) return whole;
+    return splitLong(inner).map((part) => `<p${attrs}>${part}</p>`).join('');
+  });
+}
+
+// A phrase copied from the episode, found whatever way the old write-up wrote its quotes, dashes and ampersands.
+function phrasePattern(phrase: string): RegExp {
+  const esc = phrase
+    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    .replace(/[’'‘]/g, "(?:’|'|‘|&#8217;|&#8216;|&#039;|&#x27;)")
+    .replace(/[“”"]/g, '(?:“|”|"|&#8220;|&#8221;|&quot;)')
+    .replace(/[–—]/g, '(?:–|—|-|&#8211;|&#8212;)')
+    .replace(/…/g, '(?:…|&#8230;|\\.\\.\\.)')
+    .replace(/&/g, '(?:&amp;|&#038;|&)')
+    .replace(/\s+/g, '\\s+');
+  return new RegExp(esc);
+}
+
+/** Wraps the first appearance of each phrase in a <mark> (the marker highlight). Text only, never inside a tag. */
+export function highlightPhrases(html: string, phrases: string[], where = ''): string {
+  let parts = html.split(/(<[^>]+>)/);
+  for (const phrase of phrases) {
+    const re = phrasePattern(phrase);
+    let done = false;
+    parts = parts.map((part, i) => {
+      if (done || part.startsWith('<')) return part;
+      // not inside a <mark> already
+      const m = part.match(re);
+      if (!m || m.index === undefined) return part;
+      done = true;
+      return `${part.slice(0, m.index)}<mark>${m[0]}</mark>${part.slice(m.index + m[0].length)}`;
+    });
+    if (!done) console.warn(`[highlight] not found${where ? ` in ${where}` : ''}: "${phrase}"`);
+  }
+  return parts.join('');
+}
+
+/** Repeats a sentence from the episode as a pull quote straight after the paragraph it comes from. */
+export function addPullQuotes(html: string, quotes: string[], where = ''): string {
+  let out = html;
+  for (const quote of quotes) {
+    const re = phrasePattern(quote);
+    let done = false;
+    out = out.replace(/<p[^>]*>[\s\S]*?<\/p>/g, (para) => {
+      if (done) return para;
+      const m = para.match(re);
+      if (!m) return para;
+      done = true;
+      return `${para}<aside class="pull-quote"><p>${m[0]}</p></aside>`;
+    });
+    if (!done) console.warn(`[pull quote] not found${where ? ` in ${where}` : ''}: "${quote}"`);
+  }
+  return out;
+}
+
+export function parseShowNotes(raw: string, slug?: string): ParsedNotes {
+  const override = overridesFor(slug);
   let html = raw.replace(/<!--[\s\S]*?-->/g, '');
+  for (const [from, to] of ADDRESS_FIXES) html = html.replace(from, to);
+  for (const cut of override.cutHtml ?? []) html = html.replace(new RegExp(cut.find, 'gis'), cut.replace ?? '');
   html = html.replace(/<div style="height:\d+px"[^>]*class="wp-block-spacer"><\/div>/g, '').replace(/<hr[^>]*\/?>/g, '');
 
   // The "EP 262 · WITH NAME · 32 MIN LISTEN" line: keep only the guest's website, if there is one.
@@ -222,7 +334,22 @@ export function parseShowNotes(raw: string): ParsedNotes {
     return hasLink && text.length < 700 && titled;
   };
   const promos = sections.filter(isPromo);
-  const body = sections.filter((sec) => !isPromo(sec));
+  // Offer pitches at the very start or end of the write-up: the call to action and the one-sheet replace them.
+  // If the section opens with real writing before the pitch begins, that writing stays.
+  const withoutPitch = (sec: NotesSection, i: number): NotesSection | null => {
+    if (isPromo(sec)) return null;
+    if (i !== 0 && i !== sections.length - 1) return sec;
+    const text = stripTags(sec.html);
+    if (!(text.length < 800 && /<a\s/i.test(sec.html) && (OFFER_PITCH.test(text) || OFFER_PITCH.test(sec.title)))) return sec;
+    if (OFFER_PITCH.test(sec.title)) return null;
+    const blocks = sec.html.match(BLOCK) ?? [];
+    const first = blocks.findIndex((blk) => OFFER_PITCH.test(stripTags(blk)));
+    const keep = first > 0 ? blocks.slice(0, first) : [];
+    while (keep.length && /(?::|…|\.\.\.)$/.test(stripTags(keep[keep.length - 1]))) keep.pop(); // a line that only led into the pitch
+    const kept = keep.join('');
+    return stripTags(kept).length >= 150 ? { ...sec, html: kept } : null;
+  };
+  const body = sections.map(withoutPitch).filter((sec): sec is NotesSection => sec !== null);
   if (!cta && promos.length) {
     const sec = promos[0];
     const a = sec.html.match(/<a[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/);
@@ -238,7 +365,26 @@ export function parseShowNotes(raw: string): ParsedNotes {
     }
   }
 
-  return { intro: introClean, guestUrl, player, links, takeaways, sections: body, guestSection, guestImage, cta, pin, transcript };
+  // Per-episode changes (src/data/page-overrides.json)
+  if (override.cta) cta = override.cta;
+  for (const swap of override.replaceLinks ?? []) {
+    const re = new RegExp(swap.match, 'i');
+    links = links.map((l) => (re.test(stripTags(l)) ? swap.html : l));
+  }
+
+  // Easier to read: long paragraphs broken up, then the marker highlight and pull quotes chosen for the episode
+  let introOut = splitLongParagraphs(introClean);
+  const sectionsOut = body.map((sec) => ({ ...sec, html: splitLongParagraphs(sec.html) }));
+  if (override.pullQuotes?.length) {
+    introOut = addPullQuotes(introOut, override.pullQuotes.filter((q) => phrasePattern(q).test(introOut)), slug);
+    for (const sec of sectionsOut) sec.html = addPullQuotes(sec.html, override.pullQuotes.filter((q) => phrasePattern(q).test(sec.html)), slug);
+  }
+  if (override.highlights?.length) {
+    introOut = highlightPhrases(introOut, override.highlights.filter((q) => phrasePattern(q).test(introOut)), slug);
+    for (const sec of sectionsOut) sec.html = highlightPhrases(sec.html, override.highlights.filter((q) => phrasePattern(q).test(sec.html)), slug);
+  }
+
+  return { intro: introOut, guestUrl, player, links, takeaways, sections: sectionsOut, guestSection, guestImage, cta, pin, transcript };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -281,23 +427,24 @@ export function summariseIntro(paragraphs: string[], fallback: string) {
 }
 
 /** Builds the full-version page for a standard write-up, using the opening of the write-up itself. */
-export function autoFullPage(html: string, title: string) {
-  const notes = parseShowNotes(html);
+export function autoFullPage(html: string, title: string, slug?: string) {
+  const notes = parseShowNotes(html, slug);
+  const override = overridesFor(slug);
   const blocks = [...notes.intro.matchAll(BLOCK)].map((m) => m[0]);
   const introParas = blocks.filter((b) => /^<p[\s>]/i.test(b));
   // If the opening is only a line or two, borrow the start of the first section so the box says something useful.
   const firstSection = [...(notes.sections[0]?.html ?? '').matchAll(/<p[^>]*>[\s\S]*?<\/p>/g)].map((m) => m[0]);
   const { quickAnswer, metaDescription, used } = summariseIntro([...introParas, ...firstSection], title);
   // The paragraphs the box used come out of the intro; lists, headings and quotes stay where they were.
-  let toRemove = Math.min(used, introParas.length);
+  let toRemove = override.quickAnswer ? 0 : Math.min(used, introParas.length); // a written-out answer leaves the opening where it is
   notes.intro = blocks.filter((b) => !(toRemove > 0 && /^<p[\s>]/i.test(b) && (toRemove--, true))).join('');
   return {
     notes,
     extra: {
       level: 'full' as const,
-      quickAnswer,
+      quickAnswer: override.quickAnswer ?? quickAnswer,
       quickAnswerLabel: 'About this episode',
-      metaDescription,
+      metaDescription: override.metaDescription ?? metaDescription,
       keyMoments: [] as Array<{ time: string; label: string }>,
       faqs: [] as Array<{ q: string; a: string }>,
     },

@@ -209,6 +209,16 @@
       "source": "/tag/:path*/",
       "destination": "/blog",
       "permanent": true
+    },
+    {
+      "source": "/free",
+      "destination": "https://kyliekelly.myflodesk.com/audience",
+      "permanent": false
+    },
+    {
+      "source": "/free/",
+      "destination": "https://kyliekelly.myflodesk.com/audience",
+      "permanent": false
     }
   ]
 }

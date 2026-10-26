@@ -1,0 +1,71 @@
+{
+  "note": "Per-episode changes to a show notes page, keyed by the episode's address. quickAnswer / metaDescription replace the About this episode box. cta replaces the dark call-to-action box. replaceLinks swaps a Links mentioned item (matched by text). cutHtml removes or rewrites a piece of the old write-up before it is read (find is a regular expression). highlights are phrases, copied word for word from the episode, that get the marker highlight. pullQuotes are sentences, copied word for word from the episode, that are repeated as a pull quote right after the paragraph they come from.",
+  "low-lift-email-list-growth": {
+    "cta": {
+      "eyebrow": "your next step…",
+      "headline": "Join Find CoLab",
+      "text": "Find new list growth opportunities, like the pop-up summits I've been hosting.",
+      "label": "Join Find CoLab →",
+      "href": "https://findcolab.com/?utm_source=podcast"
+    },
+    "replaceLinks": [
+      {
+        "match": "Black Friday Case Files",
+        "html": "Find CoLab, new list growth opportunities like my pop-up summits: <a href=\"https://findcolab.com/?utm_source=podcast\" target=\"_blank\" rel=\"noopener\">findcolab.com</a>"
+      }
+    ],
+    "highlights": [
+      "I sold one. Just one.",
+      "mostly, it didn't. That doesn't mean the event failed.",
+      "about 30% of the people who bought the mini-course had listened to the event first",
+      "I deliberately avoid working with the same 15 people over and over",
+      "that's how a list actually compounds"
+    ],
+    "pullQuotes": [
+      "I could have left that number out and just told you about the 303 signups."
+    ]
+  },
+  "why-i-dont-send-welcome-sequences-anymore": {
+    "quickAnswer": "Why I stopped sending a traditional welcome sequence, and what I send instead: one Start Here email. In this solo episode I explain why welcome sequences started to feel off for my audience, what is changing in the inbox heading into 2026, and why the delivery email is usually the most-opened email you will ever send. Then I walk through what goes into a Start Here email (a human introduction, clear expectations, a few places to explore and an invitation to reply) so new subscribers feel welcomed instead of marched through a funnel. You can grab the free Start Here email template and run it as a 30-day test.",
+    "metaDescription": "Why I replaced my welcome email sequence with one Start Here email, what to include in it, and how to test it for 30 days. Free template included.",
+    "cutHtml": [
+      {
+        "find": "<p[^>]*>You can grab the Start Here email template I talk about in this episode for free here:(?:(?!</p>).)*</p>"
+      },
+      {
+        "find": "<h2[^>]*>(?:(?!</h2>).)*?A different way to welcome people(?:(?!</h2>).)*?</h2>\\s*<p[^>]*>Email works best(?:(?!</p>).)*</p>\\s*<p[^>]*>If you want your inbox(?:(?!</p>).)*</p>\\s*<p[^>]*>→(?:(?!</p>).)*?use email instead\\.\\s*<br\\s*/?>\\s*<br\\s*/?>(You don’t need more emails(?:(?!</p>).)*)</p>",
+        "replace": "<p class=\"wp-block-paragraph\">$1</p>"
+      },
+      {
+        "find": "<h2[^>]*>(?:(?!</h2>).)*?A different way to welcome people(?:(?!</h2>).)*?</h2>\\s*<p[^>]*>Email works best(?:(?!</p>).)*</p>\\s*<p[^>]*>If you want your inbox(?:(?!</p>).)*</p>\\s*<p[^>]*>→(?:(?!</p>).)*?use email instead\\.\\s*</p>"
+      }
+    ],
+    "highlights": [
+      "They just don’t fit how I want to show up anymore.",
+      "A Start Here email can answer all of that without pressure.",
+      "And because it lives in one place, it becomes an anchor.",
+      "Predictability builds safety.",
+      "They have agency from the very first email.",
+      "Track it for 30 days."
+    ],
+    "pullQuotes": [
+      "Even if most people never reply, that invitation alone changes how the inbox feels."
+    ]
+  },
+  "grow-email-list-without-instagram-ads": {
+    "highlights": [
+      "social media is one visibility strategy. One.",
+      "two lanes, one destination",
+      "one borrowed audience strategy and one evergreen discovery strategy",
+      "Pitch the conversation instead.",
+      "We need to stop looking for the lottery-ticket strategy and start respecting what consistency can compound into.",
+      "visibility on its own does not create an email list",
+      "Your lead magnet is the bridge between the two.",
+      "Pick your two. Give them the full 90 days."
+    ],
+    "pullQuotes": [
+      "This is your opportunity to move borrowed attention onto something you actually own.",
+      "You could be featured on 20 podcasts, rank number one on Google, get 100,000 Pinterest views or appear in Forbes, but if there is no useful, relevant next step for someone to take, you’re basically renting attention and handing it straight back."
+    ]
+  }
+}

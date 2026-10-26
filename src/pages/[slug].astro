@@ -25,7 +25,7 @@ const { post, ep } = Astro.props;
 // Episodes listed in src/data/show-notes.json use the new show notes template.
 const extra = post ? (showNotes as Record<string, any>)[post.slug] : null;
 // A write-up in the standard format, with no entry of its own in show-notes.json, still gets the full template.
-const auto = post && !extra && isStructuredWriteUp(post.content) ? autoFullPage(post.content, post.title) : null;
+const auto = post && !extra && isStructuredWriteUp(post.content) ? autoFullPage(post.content, post.title, post.slug) : null;
 const episodes = extra || auto || ep ? await getEpisodes() : [];
 const feedPage = ep ? parseFeedNotes(ep) : null;
 ---
