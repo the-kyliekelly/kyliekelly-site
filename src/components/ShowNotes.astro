@@ -47,7 +47,8 @@ const episode = episodes.find((e) => e.href === pagePath) ?? (numInContent ? epi
 const num = episode?.num ?? numInContent;
 const seoTitle = decode(post.title); // the title Google already knows this page by
 const title = episode?.title ?? seoTitle; // what the page shows, matching the episode library, Apple and Spotify
-const guest = episode?.guest ?? null;
+// The guest: named in the title ("... with Name"), or failing that in the write-up's "Guest Spotlight: Name" section.
+const guest = episode?.guest ?? notes.guestSection?.title.replace(/^(guest spotlight|about)\s*:?\s*/i, '').trim() ?? null;
 const guestPhoto = num ? guestPhotoFor(num) : undefined;
 const isFull = extra.level === 'full';
 
