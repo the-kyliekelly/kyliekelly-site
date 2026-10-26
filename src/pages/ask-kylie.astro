@@ -32,18 +32,32 @@ const tips = [
   </section>
 
   <!-- HERO -->
-  <section class="bg-offwhite px-6 pt-14 pb-14 sm:pt-24 sm:pb-20 text-center">
-    <div class="max-w-3xl mx-auto">
-      <h1 class="text-5xl sm:text-7xl font-bold leading-[1.05] text-balance mb-7">
-        Ask <span class="script-accent italic text-pink">Kylie</span> your question
-      </h1>
-      <p class="text-lg sm:text-xl leading-relaxed text-black max-w-xl mx-auto mb-9">
-        Stuck on your email list, your visibility, or how to grow without living on social media? Record your question and I may answer it on a future episode of The Email Growth Show.
-      </p>
-      <a href="#record" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-        Record my question
-        <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v10M3.5 8.5L8 13l4.5-4.5" /></svg></span>
-      </a>
+  <section class="relative overflow-hidden bg-[#e9d9ec] px-6 pt-14 pb-16 sm:pt-20 sm:pb-24">
+    <span class="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-white/50" aria-hidden="true"></span>
+    <span class="pointer-events-none absolute -bottom-32 right-[38%] hidden h-80 w-80 rounded-full bg-pink/10 md:block" aria-hidden="true"></span>
+    <div class="relative max-w-5xl mx-auto grid items-center gap-12 md:grid-cols-[1.1fr_0.9fr] md:gap-14">
+      <div class="text-center md:text-left">
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] text-balance mb-7">
+          Ask <span class="script-accent italic text-pink">Kylie</span> your question
+        </h1>
+        <p class="text-lg sm:text-xl leading-relaxed text-black max-w-xl mx-auto md:mx-0 mb-9">
+          Stuck on your email list, your visibility, or how to grow without living on social media? Record your question and I may answer it on a future episode of The Email Growth Show.
+        </p>
+        <a href="#record" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+          Record my question
+          <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v10M3.5 8.5L8 13l4.5-4.5" /></svg></span>
+        </a>
+      </div>
+      <div class="relative mx-auto w-full max-w-[300px] sm:max-w-sm md:max-w-none">
+        <img
+          src="/images/podcast-cover.jpg"
+          alt="The Email Growth Show podcast cover, with host Kylie Kelly holding a microphone"
+          class="block w-full rotate-[3deg] rounded-[1.75rem] shadow-[0_30px_70px_rgba(0,0,0,0.2)]"
+          width="900"
+          height="900"
+        />
+        <span class="absolute -left-3 -bottom-4 sm:-left-6 sm:-bottom-5 -rotate-3 rounded-full bg-pink px-5 py-2.5 text-xs sm:text-sm font-semibold uppercase tracking-widest text-white shadow-lg">Your question here</span>
+      </div>
     </div>
   </section>
 
@@ -67,7 +81,7 @@ const tips = [
   <section class="bg-offwhite px-6 py-16 sm:py-24">
     <div class="max-w-5xl mx-auto grid items-center gap-12 md:grid-cols-[1.15fr_1fr] md:gap-16">
       <div>
-        <p class="text-xs uppercase tracking-widest font-semibold mb-8">A few things that help</p>
+        <p class="text-base sm:text-xl uppercase tracking-widest font-semibold mb-8">A few things that help</p>
         <ul class="space-y-6">
           {tips.map((tip) => (
             <li class="flex items-start gap-5 border-b border-black/10 pb-6 last:border-0 last:pb-0">
@@ -121,7 +135,7 @@ const tips = [
   <section class="bg-white px-6 py-16 sm:py-24 overflow-hidden">
     <div class="max-w-5xl mx-auto grid items-center gap-12 md:grid-cols-[1.1fr_1fr] md:gap-16">
       <div class="text-center md:text-left">
-        <h2 class="font-serif font-bold italic text-pink text-4xl sm:text-5xl leading-tight mb-6">What happens next</h2>
+        <h2 class="font-serif font-bold italic text-pink text-4xl sm:text-5xl leading-tight mb-6">What happens next&hellip;</h2>
         <p class="leading-relaxed text-[17px] mb-4">Every recording comes straight to me. I can&rsquo;t answer every question on air, but I&rsquo;m listening for the ones that will help the most people.</p>
         <p class="leading-relaxed text-[17px] mb-9">If yours is chosen, keep an ear out for your first name. New episodes land every Friday.</p>
         <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3">
