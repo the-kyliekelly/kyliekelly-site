@@ -17,9 +17,11 @@ export interface ParsedNotes {
   takeaways: string[];
   sections: NotesSection[];
   guestSection: NotesSection | null;
+  /** The guest's photo from the old write-up, used when there is no cropped headshot for them. */
+  guestImage: string | null;
   cta: { eyebrow: string; headline: string; text: string; label: string; href: string } | null;
   pin: string | null;
-  transcript: Array<{ time: string; text: string }>;
+  transcript: Array<{ time: string; speaker?: string; text: string }>;
 }
 
 const decode = (s: string) =>
@@ -57,7 +59,7 @@ export function parseShowNotes(raw: string): ParsedNotes {
 
   // The "EP 262 · WITH NAME · 32 MIN LISTEN" line: keep only the guest's website, if there is one.
   let guestUrl: string | null = null;
-  const statLine = html.match(/^\s*<p[^>]*>(?:EP\b|THE EMAIL GROWTH SHOW)[\s\S]*?<\/p>/i);
+  const statLine = [...html.matchAll(/<p[^>]*>\s*(?:EP\b|EPISODE\b|THE EMAIL GROWTH SHOW)[\s\S]*?<\/p>/gi)].find((m) => (m.index ?? 0) < 2500);
   if (statLine) {
     guestUrl = statLine[0].match(/href="([^"]+)"/)?.[1] ?? null;
     html = html.replace(statLine[0], '');
@@ -102,14 +104,19 @@ export function parseShowNotes(raw: string): ParsedNotes {
     html = html.replace(ctaBox[0], '');
   }
 
-  // Transcript
+  // Transcript: "[00:00:20] text" or "Speaker Name [00:00:20]: text"; a paragraph with no time carries on from the last
   const transcript: ParsedNotes['transcript'] = [];
   const details = html.match(/<details[\s\S]*?<\/details>/);
   if (details) {
     for (const m of details[0].matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)) {
-      const t = stripTags(m[1]);
-      const tm = t.match(/^\[(\d\d:\d\d:\d\d)\]\s*([\s\S]*)$/);
-      if (tm) transcript.push({ time: tm[1], text: tm[2].replace(/\s*\[\d\d:\d\d:\d\d\]\s*/g, ' ').trim() });
+      const t = stripTags(m[1].replace(/<br\s*\/?>/gi, ' '));
+      if (!t) continue;
+      const tm = t.match(/^(?:([A-Za-z][\w .'’-]{0,40}?)\s*)?\[(\d\d:\d\d:\d\d)\]:?\s*([\s\S]*)$/);
+      if (tm) {
+        transcript.push({ time: tm[2], speaker: tm[1]?.trim() || undefined, text: tm[3].replace(/\s*\[\d\d:\d\d:\d\d\]\s*/g, ' ').trim() });
+      } else if (transcript.length) {
+        transcript[transcript.length - 1].text += ` ${t}`;
+      }
     }
     html = html.replace(details[0], '');
   }
@@ -133,15 +140,100 @@ export function parseShowNotes(raw: string): ParsedNotes {
   const rest = firstH2 === -1 ? '' : html.slice(firstH2);
   const sections: NotesSection[] = [];
   let guestSection: NotesSection | null = null;
+  let guestImage: string | null = null;
   for (const part of rest.split(/(?=<h2)/)) {
     const h = part.match(/<h2[^>]*>([\s\S]*?)<\/h2>/);
     if (!h) continue;
     const title = stripTags(h[1]);
     const body = part.replace(h[0], '').trim();
+    if (/^listen to this episode/i.test(title)) continue; // the player is shown separately
+    if (/^(feat\.?|featuring)\b/i.test(title)) continue; // a guest credit line, shown in the hero instead
     const section = { id: slugify(title), title, html: body };
-    if (/^guest spotlight/i.test(title)) guestSection = section;
+    if (/^guest spotlight/i.test(title)) {
+      guestImage = body.match(/<img[^>]*src="([^"]+)"/i)?.[1] ?? null;
+      section.html = body.replace(/<figure[\s\S]*?<\/figure>/gi, '').replace(/<img[^>]*>/gi, '').trim();
+      guestSection = section;
+    }
     else sections.push(section);
   }
 
-  return { intro, guestUrl, player, links, takeaways, sections, guestSection, cta, pin, transcript };
+  // Offer blocks written as headings (a short section with a link, usually first or last, or titled "Ready to…" /
+  // "Your next step…"): show them as the call to action instead of as chapters of the episode.
+  const isPromo = (sec: NotesSection, i: number) => {
+    const text = stripTags(sec.html);
+    const hasLink = /<a\s/i.test(sec.html);
+    const titled = /^(?:\p{Extended_Pictographic}|ready\b|your next step|a (?:grounded|supportive|simple)\b|need someone|let.?s build|it.?s time to|want to know how)/iu.test(sec.title);
+    return hasLink && text.length < 700 && (titled || i === 0 || i === sections.length - 1);
+  };
+  const promos = sections.filter(isPromo);
+  const body = sections.filter((sec, i) => !isPromo(sec, i));
+  if (!cta && promos.length) {
+    const sec = promos[0];
+    const a = sec.html.match(/<a[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/);
+    const text = stripTags(sec.html.replace(/<a[\s\S]*?<\/a>/g, ' ')).replace(/\s+/g, ' ').trim();
+    if (a) {
+      cta = {
+        eyebrow: 'your next step…',
+        headline: sec.title.replace(/^\p{Extended_Pictographic}+\s*/u, '').replace(/\s*\[[^\]]*\]/g, '').trim(),
+        text: text.length > 260 ? `${text.slice(0, 257).replace(/\s+\S*$/, '')}…` : text,
+        label: /^(click here|here|link|read more)$/i.test(stripTags(a[2])) ? 'Find out more →' : `${stripTags(a[2])} →`,
+        href: decode(a[1]),
+      };
+    }
+  }
+
+  return { intro, guestUrl, player, links, takeaways, sections: body, guestSection, guestImage, cta, pin, transcript };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Pages made from a write-up that has no entry in src/data/show-notes.json
+
+/** True for write-ups in the standard format (links box, "what you'll learn", transcript). */
+export function isStructuredWriteUp(html: string): boolean {
+  return /<details/i.test(html) && /LINKS MENTIONED|LEARN IN THIS EPISODE/i.test(html);
+}
+
+/**
+ * The "About this episode" box: the opening paragraph, or the first few if the opener is only a line,
+ * cut at a sentence end. `used` is how many paragraphs it took, so the rest can follow as the intro.
+ */
+export function summariseIntro(paragraphs: string[], fallback: string) {
+  let used = 0;
+  let first = '';
+  for (const para of paragraphs) {
+    first += `${first ? ' ' : ''}${stripTags(para.replace(/<br\s*\/?>/gi, ' '))}`;
+    used += 1;
+    if (first.length >= 80) break;
+  }
+  if (!first) first = fallback;
+  const sentences = first.match(/[^.!?]+[.!?]+["”’']?(\s|$)/g) ?? [first];
+  let quickAnswer = '';
+  for (const sentence of sentences) {
+    if ((quickAnswer + sentence).length > 340 && quickAnswer) break;
+    quickAnswer += sentence;
+  }
+  quickAnswer = (quickAnswer || first).trim();
+  const metaDescription = quickAnswer.length > 155 ? `${quickAnswer.slice(0, 152).replace(/\s+\S*$/, '')}…` : quickAnswer;
+  return { quickAnswer, metaDescription, used };
+}
+
+/** Builds the full-version page for a standard write-up, using the opening of the write-up itself. */
+export function autoFullPage(html: string, title: string) {
+  const notes = parseShowNotes(html);
+  const introParas = [...notes.intro.matchAll(/<p[^>]*>[\s\S]*?<\/p>/g)].map((m) => m[0]);
+  // If the opening is only a line or two, borrow the start of the first section so the box says something useful.
+  const firstSection = [...(notes.sections[0]?.html ?? '').matchAll(/<p[^>]*>[\s\S]*?<\/p>/g)].map((m) => m[0]);
+  const { quickAnswer, metaDescription, used } = summariseIntro([...introParas, ...firstSection], title);
+  notes.intro = introParas.slice(Math.min(used, introParas.length)).join('');
+  return {
+    notes,
+    extra: {
+      level: 'full' as const,
+      quickAnswer,
+      quickAnswerLabel: 'About this episode',
+      metaDescription,
+      keyMoments: [] as Array<{ time: string; label: string }>,
+      faqs: [] as Array<{ q: string; a: string }>,
+    },
+  };
 }

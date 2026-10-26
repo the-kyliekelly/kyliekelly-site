@@ -286,9 +286,11 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
             <section class="rounded-[1.75rem] bg-offwhite p-7 sm:p-8">
               <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">About {guest}</h2>
               <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
-                {guestPhoto && (
+                {guestPhoto ? (
                   <Image src={guestPhoto} alt={`${guest}, guest on The Email Growth Show`} widths={[200, 360]} sizes="160px" class="h-40 w-40 flex-none rounded-2xl object-cover object-[50%_22%]" loading="lazy" />
-                )}
+                ) : notes.guestImage ? (
+                  <img src={notes.guestImage} alt={`${guest}, guest on The Email Growth Show`} class="h-40 w-40 flex-none rounded-2xl object-cover object-[50%_22%]" width="160" height="160" loading="lazy" />
+                ) : null}
                 <div class="notes-body notes-body--tight min-w-0 break-words" set:html={notes.guestSection.html} />
               </div>
             </section>
@@ -328,7 +330,7 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
               </summary>
               <div class="mt-6 space-y-4 text-[15px] leading-relaxed text-black/85">
                 {notes.transcript.map((t) => (
-                  <p><span class="mr-2 font-semibold tabular-nums text-pink">{t.time.replace(/^00:/, '')}</span>{t.text}</p>
+                  <p><span class="mr-2 font-semibold tabular-nums text-pink">{t.time.replace(/^00:/, '')}</span>{t.speaker && <strong class="mr-1">{t.speaker}:</strong>}{t.text}</p>
                 ))}
               </div>
             </details>

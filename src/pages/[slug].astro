@@ -5,6 +5,7 @@ import posts from '../data/blog-posts.json';
 import showNotes from '../data/show-notes.json';
 import { getEpisodes } from '../lib/episodes';
 import { parseFeedNotes } from '../lib/feedNotes';
+import { autoFullPage, isStructuredWriteUp } from '../lib/showNotes';
 
 export async function getStaticPaths() {
   // These already have a hand-built, richer page under /podcast/episodes/ —
@@ -31,13 +32,17 @@ export async function getStaticPaths() {
 const { post, ep } = Astro.props;
 // Episodes listed in src/data/show-notes.json use the new show notes template.
 const extra = post ? (showNotes as Record<string, any>)[post.slug] : null;
-const episodes = extra || ep ? await getEpisodes() : [];
+// A write-up in the standard format, with no entry of its own in show-notes.json, still gets the full template.
+const auto = post && !extra && isStructuredWriteUp(post.content) ? autoFullPage(post.content, post.title) : null;
+const episodes = extra || auto || ep ? await getEpisodes() : [];
 const feedPage = ep ? parseFeedNotes(ep) : null;
 ---
 {feedPage ? (
   <ShowNotes post={{ slug: ep.href, title: ep.title, date: ep.iso, excerpt: '', content: '' }} path={ep.href} notes={feedPage.notes} extra={feedPage.extra} episodes={episodes} />
 ) : extra ? (
   <ShowNotes post={post} extra={extra} episodes={episodes} />
+) : auto ? (
+  <ShowNotes post={post} notes={auto.notes} extra={auto.extra} episodes={episodes} />
 ) : (
   <BlogPostLayout title={post.title} description={post.excerpt} date={post.date} kind={post.categories.includes(35) ? 'blog' : 'episode'}>
     <Fragment set:html={post.content} />

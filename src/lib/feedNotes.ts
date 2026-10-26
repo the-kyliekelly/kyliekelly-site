@@ -4,7 +4,7 @@
 // same parts the show notes template uses. Nothing is added or invented: the first paragraph becomes
 // the "About this episode" box, and the same promo block that ends every episode is left out.
 import type { Episode } from './episodes';
-import type { ParsedNotes } from './showNotes';
+import { summariseIntro, type ParsedNotes } from './showNotes';
 
 const decode = (s: string) =>
   s
@@ -105,23 +105,7 @@ export function parseFeedNotes(ep: Episode): FeedPage {
     }
   }
 
-  // The "About this episode" box: the opening paragraph, or the first few if the opener is only a line.
-  let used = 0;
-  let first = '';
-  for (const para of introParas) {
-    first += `${first ? ' ' : ''}${plain(para)}`;
-    used += 1;
-    if (first.length >= 80) break;
-  }
-  if (!first) first = ep.title;
-  const sentences = first.match(/[^.!?]+[.!?]+(\s|$)/g) ?? [first];
-  let quickAnswer = '';
-  for (const sentence of sentences) {
-    if ((quickAnswer + sentence).length > 340 && quickAnswer) break;
-    quickAnswer += sentence;
-  }
-  quickAnswer = (quickAnswer || first).trim();
-  const metaDescription = quickAnswer.length > 155 ? `${quickAnswer.slice(0, 152).replace(/\s+\S*$/, '')}…` : quickAnswer;
+  const { quickAnswer, metaDescription, used } = summariseIntro(introParas, ep.title);
 
   const name = ep.guest ?? guestName;
   const guestHtml = [...guestBio.map((p) => `<p>${p}</p>`), ...guestLines.map((l) => `<p>${l}</p>`)].join('');
@@ -138,6 +122,7 @@ export function parseFeedNotes(ep: Episode): FeedPage {
       takeaways,
       sections: [],
       guestSection: guestHtml ? { id: 'guest', title: `About ${name}`, html: guestHtml } : null,
+      guestImage: null,
       cta: null,
       pin: null,
       transcript: [],
