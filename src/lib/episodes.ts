@@ -5,11 +5,6 @@ import topicRules from '../data/topic-rules.json';
 import { guestFromTitle } from './guests';
 import { topicsFor, type TopicRules } from './topics';
 
-const handBuiltEpisodes = new Set([
-  'low-lift-email-list-growth',
-  'claude-claude-code-chrome-extension-delegate',
-  'plan-rest-of-year-without-burning-out',
-]);
 const knownEpisodePages = new Set(episodePosts.map((p) => p.slug));
 
 // Episode number -> the episode's own page on this site, from the episode write-ups.
@@ -21,7 +16,7 @@ for (const p of episodePosts) {
     p.content.match(/EPISODE\s+(\d+)/i)?.[1] ??
     p.content.match(/\bEP\.?\s*#?(\d+)\b/i)?.[1];
   if (n && !p.categories.includes(35)) {
-    siteHrefByNumber.set(Number(n), handBuiltEpisodes.has(p.slug) ? `/podcast/episodes/${p.slug}/` : `/${p.slug}/`);
+    siteHrefByNumber.set(Number(n), `/${p.slug}/`);
   }
 }
 
@@ -73,7 +68,7 @@ async function loadFeedEpisodes() {
           // The episode's own page on this site: by the address in the feed, or failing that by episode number.
           // Episodes with no write-up get a show notes page built from the feed (see getEpisodes below).
           href: siteSlug && knownEpisodePages.has(siteSlug)
-            ? (handBuiltEpisodes.has(siteSlug) ? `/podcast/episodes/${siteSlug}/` : `/${siteSlug}/`)
+            ? `/${siteSlug}/`
             : siteHrefByNumber.get(Number(num)) ?? '',
           notesHtml: rawTag(item, 'description'),
           listenPage,
@@ -101,7 +96,7 @@ const libraryEpisodes = episodePosts
       summary: String(p.excerpt ?? ''),
       iso: p.date,
       date: formatDate(p.date),
-      href: handBuiltEpisodes.has(p.slug) ? `/podcast/episodes/${p.slug}/` : `/${p.slug}/`,
+      href: `/${p.slug}/`,
     };
   })
   .filter(Boolean);

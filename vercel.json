@@ -111,36 +111,6 @@
       "permanent": true
     },
     {
-      "source": "/low-lift-email-list-growth",
-      "destination": "/podcast/episodes/low-lift-email-list-growth",
-      "permanent": true
-    },
-    {
-      "source": "/low-lift-email-list-growth/",
-      "destination": "/podcast/episodes/low-lift-email-list-growth",
-      "permanent": true
-    },
-    {
-      "source": "/plan-rest-of-year-without-burning-out",
-      "destination": "/podcast/episodes/plan-rest-of-year-without-burning-out",
-      "permanent": true
-    },
-    {
-      "source": "/plan-rest-of-year-without-burning-out/",
-      "destination": "/podcast/episodes/plan-rest-of-year-without-burning-out",
-      "permanent": true
-    },
-    {
-      "source": "/claude-claude-code-chrome-extension-delegate",
-      "destination": "/podcast/episodes/claude-claude-code-chrome-extension-delegate",
-      "permanent": true
-    },
-    {
-      "source": "/claude-claude-code-chrome-extension-delegate/",
-      "destination": "/podcast/episodes/claude-claude-code-chrome-extension-delegate",
-      "permanent": true
-    },
-    {
       "source": "/the-email-growth-club",
       "destination": "/services",
       "permanent": true

@@ -8,15 +8,7 @@ import { parseFeedNotes } from '../lib/feedNotes';
 import { autoFullPage, isStructuredWriteUp } from '../lib/showNotes';
 
 export async function getStaticPaths() {
-  // These already have a hand-built, richer page under /podcast/episodes/ —
-  // skip them here so we don't publish duplicate content at two URLs.
-  const handBuiltSlugs = new Set([
-    'low-lift-email-list-growth',
-    'claude-claude-code-chrome-extension-delegate',
-    'plan-rest-of-year-without-burning-out',
-  ]);
   const writeUps = posts
-    .filter((post) => !handBuiltSlugs.has(post.slug))
     .map((post) => ({
       params: { slug: post.slug },
       props: { post, ep: null },
