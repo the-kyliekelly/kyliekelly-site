@@ -1,6 +1,9 @@
 ---
 import BlogPostLayout from '../layouts/BlogPostLayout.astro';
+import ShowNotes from '../components/ShowNotes.astro';
 import posts from '../data/blog-posts.json';
+import showNotes from '../data/show-notes.json';
+import { getEpisodes } from '../lib/episodes';
 
 export async function getStaticPaths() {
   // These already have a hand-built, richer page under /podcast/episodes/ —
@@ -19,7 +22,14 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+// Episodes listed in src/data/show-notes.json use the new show notes template.
+const extra = (showNotes as Record<string, any>)[post.slug];
+const episodes = extra ? await getEpisodes() : [];
 ---
-<BlogPostLayout title={post.title} description={post.excerpt} date={post.date} kind={post.categories.includes(35) ? 'blog' : 'episode'}>
-  <Fragment set:html={post.content} />
-</BlogPostLayout>
+{extra ? (
+  <ShowNotes post={post} extra={extra} episodes={episodes} />
+) : (
+  <BlogPostLayout title={post.title} description={post.excerpt} date={post.date} kind={post.categories.includes(35) ? 'blog' : 'episode'}>
+    <Fragment set:html={post.content} />
+  </BlogPostLayout>
+)}

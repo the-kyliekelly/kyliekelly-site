@@ -24,6 +24,7 @@ const { title, description = 'Email marketing strategies for women in business w
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <slot name="head" />
   </head>
   <body>
     <div class="reveal-page" data-reveal-page>

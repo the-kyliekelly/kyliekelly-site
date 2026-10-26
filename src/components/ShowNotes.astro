@@ -1,0 +1,425 @@
+---
+// Show notes page for one episode.
+//
+// The page is assembled from the episode's existing write-up (parsed in src/lib/showNotes.ts) plus the
+// extra content in src/data/show-notes.json: a quick answer, key moments and FAQs.
+// Two levels share this template:
+//   "full"   : quick answer, what you'll learn, table of contents, the full write-up, FAQs and transcript
+//   "simple" : quick answer, what you'll learn, key moments, links and guest
+// Sections only appear when there is content for them, so a page is never left with an empty box.
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import EpisodeArt from './EpisodeArt.astro';
+import PodcastFreebieBand from './PodcastFreebieBand.astro';
+import AskKylieBand from './AskKylieBand.astro';
+import { parseShowNotes, slugify } from '../lib/showNotes';
+import { guestPhotoFor } from '../lib/guestPhotos';
+import type { Episode } from '../lib/episodes';
+
+interface Props {
+  post: { slug: string; title: string; date: string; excerpt: string; content: string };
+  extra: {
+    level: 'full' | 'simple';
+    quickAnswer: string;
+    metaDescription: string;
+    keyMoments: Array<{ time: string; label: string }>;
+    faqs: Array<{ q: string; a: string }>;
+  };
+  episodes: Episode[];
+}
+const { post, extra, episodes } = Astro.props;
+
+const decode = (s: string) =>
+  s
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&');
+const notes = parseShowNotes(post.content);
+const numInContent = post.content.match(/EP\w*\s*(\d+)/i)?.[1] ?? '';
+const episode = episodes.find((e) => e.href === `/${post.slug}/`) ?? episodes.find((e) => e.num === numInContent);
+const num = episode?.num ?? numInContent;
+const title = decode(post.title);
+const guest = episode?.guest ?? null;
+const guestPhoto = num ? guestPhotoFor(num) : undefined;
+const isFull = extra.level === 'full';
+
+const published = new Date(post.date);
+const dateLabel = published.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+const words = [notes.intro, ...notes.sections.map((s) => s.html)].join(' ').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+const readMins = Math.max(1, Math.round(words / 220));
+
+// Related episodes: the ones sharing the most topics with this one, newest first.
+const related = episode
+  ? episodes
+      .filter((e) => e.num !== episode.num)
+      .map((e) => ({ e, overlap: e.topics.filter((t) => episode.topics.includes(t)).length }))
+      .filter((r) => r.overlap > 0)
+      .sort((a, b) => b.overlap - a.overlap || Number(b.e.num) - Number(a.e.num))
+      .slice(0, 3)
+      .map((r) => r.e)
+  : [];
+const idx = episode ? episodes.findIndex((e) => e.num === episode.num) : -1;
+const newer = idx > 0 ? episodes[idx - 1] : null;
+const older = idx >= 0 && idx < episodes.length - 1 ? episodes[idx + 1] : null;
+
+const showToc = isFull && notes.sections.length >= 4;
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
+const playIcon = 'M5 3.5v9l7.5-4.5z';
+const site = Astro.site ?? new URL('https://kyliekelly.com');
+const pageUrl = new URL(`/${post.slug}/`, site).toString();
+const coverUrl = new URL('/images/podcast-cover.jpg', site).toString();
+const show = { '@type': 'PodcastSeries', name: 'The Email Growth Show', url: new URL('/podcast/', site).toString() };
+const kylie = { '@type': 'Person', name: 'Kylie Kelly', url: new URL('/meet-kylie/', site).toString() };
+
+const graph: Record<string, unknown>[] = [
+  {
+    '@type': 'PodcastEpisode',
+    '@id': `${pageUrl}#episode`,
+    url: pageUrl,
+    name: title,
+    description: extra.metaDescription,
+    datePublished: published.toISOString(),
+    ...(num ? { episodeNumber: Number(num) } : {}),
+    ...(episode?.mins ? { timeRequired: `PT${episode.mins}M` } : {}),
+    image: coverUrl,
+    partOfSeries: show,
+    author: kylie,
+    ...(guest ? { actor: { '@type': 'Person', name: guest, ...(notes.guestUrl ? { url: notes.guestUrl } : {}) } } : {}),
+  },
+  {
+    '@type': 'BlogPosting',
+    '@id': `${pageUrl}#article`,
+    headline: title,
+    description: extra.metaDescription,
+    datePublished: published.toISOString(),
+    dateModified: published.toISOString(),
+    mainEntityOfPage: pageUrl,
+    image: coverUrl,
+    author: kylie,
+    publisher: kylie,
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'The Email Growth Show', item: new URL('/podcast/', site).toString() },
+      { '@type': 'ListItem', position: 2, name: 'Episode library', item: new URL('/podcast/archive/', site).toString() },
+      { '@type': 'ListItem', position: 3, name: title, item: pageUrl },
+    ],
+  },
+];
+if (isFull && extra.faqs.length) {
+  graph.push({
+    '@type': 'FAQPage',
+    mainEntity: extra.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  });
+}
+const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}"></div><script src="${notes.player.src}" type="text/javascript"></` + `script>` : '';
+---
+<Layout title={`${title} | The Email Growth Show`} description={extra.metaDescription}>
+  <script type="application/ld+json" slot="head" set:html={jsonLd} />
+
+  <section class="bg-black text-white px-6 py-4">
+    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-center">
+      <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
+      The Email Growth Show &middot; Show notes
+      <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
+    </p>
+  </section>
+
+  <article>
+    <!-- HERO -->
+    <header class="bg-offwhite px-6 pt-10 pb-14 sm:pt-14 sm:pb-20">
+      <div class="max-w-5xl mx-auto">
+        <nav aria-label="Breadcrumb" class="mb-8 text-xs uppercase tracking-widest font-semibold text-black/70">
+          <a href="/podcast" class="hover:text-pink">The Email Growth Show</a>
+          <span aria-hidden="true" class="mx-2">/</span>
+          <a href="/podcast/archive" class="hover:text-pink">Episode library</a>
+          {num && (<><span aria-hidden="true" class="mx-2">/</span><span class="text-black">Episode {num}</span></>)}
+        </nav>
+
+        <div class="grid items-center gap-10 md:grid-cols-[1.25fr_0.75fr] md:gap-14">
+          <div>
+            <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">
+              {num ? `Episode ${num}` : 'Episode'} &middot; {guest ? `With ${guest}` : 'Solo episode'}
+            </p>
+            <h1 class="font-serif font-bold text-3xl sm:text-5xl leading-[1.1] text-balance mb-5">{title}</h1>
+            <p class="text-[11px] sm:text-xs uppercase tracking-widest font-semibold text-black/70 mb-7">
+              <time datetime={published.toISOString().slice(0, 10)}>{dateLabel}</time>
+              {episode?.mins && <span> &middot; {episode.mins} min listen</span>}
+              {isFull && <span> &middot; {readMins} min read</span>}
+            </p>
+
+            <div class="mb-8 rounded-[1.5rem] bg-white p-6 shadow-[0_12px_30px_rgba(0,0,0,0.06)]">
+              <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-2">The quick answer</p>
+              <p class="text-[17px] leading-relaxed text-black">{extra.quickAnswer}</p>
+            </div>
+
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <a href="https://podcasts.apple.com/podcast/id1550211753" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-6 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+                Listen on Apple
+                <span class="grid place-items-center h-10 w-10 rounded-full bg-pink text-white"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+              </a>
+              <a href="https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3" target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-6 pr-2 py-2 text-[15px] font-semibold shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-transform duration-300 hover:-translate-y-1">
+                Listen on Spotify
+                <span class="grid place-items-center h-10 w-10 rounded-full bg-black text-white"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+              </a>
+            </div>
+          </div>
+
+          {num && (
+            <div class="mx-auto w-[72%] max-w-[320px] md:w-full">
+              <EpisodeArt num={num} title={title.replace(/\s*\[Ep\.?\s*#?\d+\]\s*$/i, '')} guest={guest} />
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <!-- PLAYER -->
+    {playerHtml && (
+      <section class="bg-white px-6 pt-12">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="sr-only">Listen to the episode</h2>
+          <div class="rounded-[1.5rem] border border-black/10 bg-white p-4 sm:p-5" set:html={playerHtml} />
+        </div>
+      </section>
+    )}
+
+    <!-- WHAT YOU'LL LEARN + TABLE OF CONTENTS -->
+    {(notes.takeaways.length > 0 || showToc) && (
+      <section class="bg-white px-6 pt-12">
+        <div class={`max-w-5xl mx-auto grid gap-6 ${notes.takeaways.length > 0 && showToc ? 'md:grid-cols-2' : 'max-w-3xl'}`}>
+          {notes.takeaways.length > 0 && (
+            <div class="rounded-[1.75rem] bg-[#e9d9ec] p-7 sm:p-9">
+              <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-5">What you'll learn</h2>
+              <ul class="space-y-3">
+                {notes.takeaways.map((t) => (
+                  <li class="flex items-start gap-3">
+                    <span class="mt-1 grid h-5 w-5 flex-none place-items-center rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h9M8.5 4l4 4-4 4" /></svg></span>
+                    <span class="leading-relaxed">{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {showToc && (
+            <nav aria-labelledby="toc-title" class="rounded-[1.75rem] border border-black/10 p-7 sm:p-9">
+              <h2 id="toc-title" class="font-serif font-bold italic text-2xl sm:text-3xl mb-5">In this episode</h2>
+              <ol class="space-y-3">
+                {notes.sections.map((s, i) => (
+                  <li class="flex items-baseline gap-3">
+                    <span class="font-serif text-pink text-lg w-6 flex-none">{String(i + 1).padStart(2, '0')}</span>
+                    <a href={`#${s.id}`} class="leading-snug underline-offset-4 hover:text-pink hover:underline">{s.title}</a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
+        </div>
+      </section>
+    )}
+
+    <!-- KEY MOMENTS (timestamps) -->
+    {!isFull && extra.keyMoments.length > 0 && (
+      <section class="bg-white px-6 pt-6">
+        <div class="max-w-3xl mx-auto rounded-[1.75rem] border border-black/10 p-7 sm:p-9">
+          <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">Key moments</h2>
+          <ul class="divide-y divide-black/10">
+            {extra.keyMoments.map((m) => (
+              <li class="flex items-baseline gap-4 py-3">
+                <span class="w-14 flex-none font-semibold tabular-nums text-pink">{m.time}</span>
+                <span class="leading-snug">{m.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <!-- LINKS MENTIONED -->
+    {notes.links.length > 0 && (
+      <section class="bg-white px-6 pt-6">
+        <div class="max-w-3xl mx-auto rounded-[1.75rem] border-[1.5px] border-black p-7 sm:p-9">
+          <h2 class="text-pink text-xs uppercase tracking-[0.18em] font-semibold mb-4">Links mentioned</h2>
+          <ul class="space-y-3 links-list">
+            {notes.links.map((l) => (
+              <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&rarr;</span><span set:html={l} /></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <!-- INTRO + THE WRITE-UP -->
+    <section class="bg-white px-6 pt-14 pb-6">
+      <div class="max-w-3xl mx-auto notes-body">
+        {notes.intro && <div set:html={notes.intro} />}
+        {isFull && notes.sections.map((s) => (
+          <section class="scroll-mt-24">
+            <h2 id={s.id}>{s.title}</h2>
+            <div set:html={s.html} />
+          </section>
+        ))}
+      </div>
+    </section>
+
+    <!-- GUEST -->
+    {guest && notes.guestSection && (
+      <section class="bg-white px-6 pb-6 pt-8">
+        <div class="max-w-3xl mx-auto rounded-[1.75rem] bg-offwhite p-7 sm:p-9">
+          <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">About {guest}</h2>
+          <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
+            {guestPhoto && (
+              <Image src={guestPhoto} alt={`${guest}, guest on The Email Growth Show`} widths={[200, 360]} sizes="160px" class="h-40 w-40 flex-none rounded-2xl object-cover object-[50%_22%]" loading="lazy" />
+            )}
+            <div class="notes-body notes-body--tight" set:html={notes.guestSection.html} />
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CALL TO ACTION -->
+    {notes.cta && (
+      <section class="bg-white px-6 pb-6 pt-8">
+        <div class="max-w-3xl mx-auto rounded-[1.75rem] bg-black px-7 py-12 text-center text-white sm:px-12">
+          <p class="font-serif italic text-pink text-xl mb-2">{notes.cta.eyebrow}</p>
+          <h2 class="font-serif font-bold text-2xl sm:text-3xl leading-tight mb-4 text-balance">{notes.cta.headline}</h2>
+          <p class="mx-auto mb-7 max-w-md text-warmgray leading-relaxed">{notes.cta.text}</p>
+          <a href={notes.cta.href} class="inline-block rounded-full bg-pink px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-white transition-transform duration-300 hover:-translate-y-1">{notes.cta.label}</a>
+        </div>
+      </section>
+    )}
+
+    <!-- FAQ -->
+    {isFull && extra.faqs.length > 0 && (
+      <section class="bg-white px-6 pt-16">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="font-serif font-bold italic text-3xl sm:text-4xl mb-8">Frequently asked questions</h2>
+          <dl class="divide-y divide-black/10 border-y border-black/10">
+            {extra.faqs.map((f) => (
+              <div class="py-6">
+                <dt class="font-serif font-bold text-xl leading-snug mb-2">{f.q}</dt>
+                <dd class="text-[17px] leading-relaxed text-black">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    )}
+
+    <!-- TRANSCRIPT -->
+    {isFull && notes.transcript.length > 0 && (
+      <section class="bg-white px-6 pt-12">
+        <div class="max-w-3xl mx-auto">
+          <details class="group rounded-[1.5rem] border border-black/10 p-6 sm:p-8">
+            <summary class="cursor-pointer list-none flex items-center justify-between gap-4 font-serif font-bold text-xl">
+              Read the full transcript
+              <span class="grid h-9 w-9 place-items-center rounded-full bg-black text-white text-lg leading-none transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <div class="mt-6 space-y-4 text-[15px] leading-relaxed text-black/85">
+              {notes.transcript.map((t) => (
+                <p><span class="mr-2 font-semibold tabular-nums text-pink">{t.time.replace(/^00:/, '')}</span>{t.text}</p>
+              ))}
+            </div>
+          </details>
+        </div>
+      </section>
+    )}
+
+    <!-- PINTEREST + FREEBIE -->
+    {notes.pin && (
+      <section class="bg-white px-6 pt-14 text-center">
+        <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">Love this episode? Save it for later</h2>
+        <img src={notes.pin} alt={`Pinterest graphic for ${title}`} class="mx-auto w-full max-w-[320px] rounded-2xl shadow-[0_18px_40px_rgba(0,0,0,0.12)]" width="683" height="1024" loading="lazy" />
+      </section>
+    )}
+    <section class="bg-white px-6 pt-16">
+      <PodcastFreebieBand uid="notes" />
+    </section>
+
+    <!-- RELATED -->
+    {related.length > 0 && (
+      <section class="bg-white px-6 pt-20">
+        <div class="max-w-5xl mx-auto">
+          <h2 class="font-serif font-bold italic text-3xl sm:text-4xl mb-10">More to listen to</h2>
+          <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-3">
+            {related.map((e) => (
+              <a href={e.href} class="group block" {...(e.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+                <EpisodeArt num={e.num} title={e.title} guest={e.guest} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
+                <div class="mt-4 flex items-center justify-between gap-3 px-1">
+                  <span class="text-[11px] uppercase tracking-widest font-semibold text-black/70">{e.date}</span>
+                  <span class="grid place-items-center h-10 w-10 flex-none rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- NEWER / OLDER -->
+    {(newer || older) && (
+      <nav aria-label="More episodes" class="bg-white px-6 pt-14">
+        <div class="max-w-3xl mx-auto grid gap-4 sm:grid-cols-2">
+          {older ? (
+            <a href={older.href} class="rounded-[1.5rem] border border-black/10 p-6 transition-colors hover:border-pink" {...(older.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+              <p class="text-xs uppercase tracking-widest font-semibold text-black/60 mb-2">&larr; Previous episode</p>
+              <p class="font-serif font-bold leading-snug">{older.title}</p>
+            </a>
+          ) : <span></span>}
+          {newer ? (
+            <a href={newer.href} class="rounded-[1.5rem] border border-black/10 p-6 text-left transition-colors hover:border-pink sm:text-right" {...(newer.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+              <p class="text-xs uppercase tracking-widest font-semibold text-black/60 mb-2">Next episode &rarr;</p>
+              <p class="font-serif font-bold leading-snug">{newer.title}</p>
+            </a>
+          ) : <span></span>}
+        </div>
+      </nav>
+    )}
+
+    <!-- ABOUT KYLIE -->
+    <section class="bg-white px-6 pt-16">
+      <div class="max-w-3xl mx-auto flex flex-col items-center gap-6 rounded-[1.75rem] bg-offwhite p-7 text-center sm:flex-row sm:items-center sm:gap-8 sm:p-9 sm:text-left">
+        <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly" class="h-28 w-28 flex-none rounded-full object-cover object-[50%_20%]" width="933" height="1400" loading="lazy" />
+        <div>
+          <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-2">Your host</p>
+          <p class="leading-relaxed">Kylie Kelly is an ex international wedding photographer turned email marketing educator and the host of The Email Growth Show. She grew her list from 0 to 7,000+ subscribers in 18 months without social media, and shares how, every Friday.</p>
+          <a href="/meet-kylie" class="mt-3 inline-block text-sm font-semibold underline underline-offset-4 hover:text-pink">More about Kylie &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white px-6 py-16 sm:py-20"><AskKylieBand /></section>
+  </article>
+</Layout>
+
+<style is:global>
+  .notes-body p,
+  .notes-body li {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin: 0 0 1.25rem;
+  }
+  .notes-body h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(1.7rem, 4vw, 2.25rem);
+    line-height: 1.15;
+    margin: 3.25rem 0 1.25rem;
+  }
+  .notes-body h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    margin: 2rem 0 0.75rem;
+  }
+  .notes-body strong { font-weight: 700; }
+  .notes-body a, .links-list a { color: #c01fd8; text-decoration: underline; text-underline-offset: 3px; }
+  .notes-body a:hover, .links-list a:hover { color: #000; }
+  .notes-body--tight p { font-size: 1rem; line-height: 1.65; margin-bottom: 0.9rem; }
+  .notes-body > section:first-child h2 { margin-top: 0.5rem; }
+  details > summary::-webkit-details-marker { display: none; }
+</style>

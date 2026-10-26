@@ -12,6 +12,19 @@ const handBuiltEpisodes = new Set([
 ]);
 const knownEpisodePages = new Set(episodePosts.map((p) => p.slug));
 
+// Episode number -> the episode's own page on this site, from the episode write-ups.
+const siteHrefByNumber = new Map<number, string>();
+for (const p of episodePosts) {
+  const n =
+    p.excerpt.match(/EP\s*(\d+)/i)?.[1] ??
+    p.title.match(/\[?Ep\.?\s*#?(\d+)\]?/i)?.[1] ??
+    p.content.match(/EPISODE\s+(\d+)/i)?.[1] ??
+    p.content.match(/\bEP\.?\s*#?(\d+)\b/i)?.[1];
+  if (n && !p.categories.includes(35)) {
+    siteHrefByNumber.set(Number(n), handBuiltEpisodes.has(p.slug) ? `/podcast/episodes/${p.slug}/` : `/${p.slug}/`);
+  }
+}
+
 const decodeText = (text: string) =>
   text
     .replace(/<!\[CDATA\[|\]\]>/g, '')
@@ -53,9 +66,10 @@ async function loadFeedEpisodes() {
           summary,
           iso: feedTag(item, 'pubDate'),
           date: formatDate(feedTag(item, 'pubDate')),
+          // The episode's own page on this site: by the address in the feed, or failing that by episode number.
           href: siteSlug && knownEpisodePages.has(siteSlug)
             ? (handBuiltEpisodes.has(siteSlug) ? `/podcast/episodes/${siteSlug}/` : `/${siteSlug}/`)
-            : listenPage,
+            : siteHrefByNumber.get(Number(num)) ?? listenPage,
         };
       })
       .filter((e) => e && e.href);

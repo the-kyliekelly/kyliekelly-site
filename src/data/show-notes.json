@@ -1,0 +1,66 @@
+{
+  "note": "Extra content for episodes that use the new show notes template. Everything else on the page comes from the episode's existing write-up. level: 'full' shows the table of contents, FAQs and transcript; 'simple' shows the quick answer, takeaways, key moments, links and guest. Drafts marked needsReview are written from the episode's own transcript and need Kylie's OK before they go live.",
+  "grow-email-list-without-instagram-ads": {
+    "level": "full",
+    "needsReview": true,
+    "quickAnswer": "If Instagram stopped working tomorrow, you could still grow your email list without paying for ads. Kylie Kelly recommends choosing two growth lanes, one borrowed-audience strategy (podcast guesting, summits, bundles or freebie swaps) and one evergreen discovery strategy (SEO, Pinterest, PR or your own podcast), then connecting both to a lead magnet that gives people a reason to join your list.",
+    "metaDescription": "How to grow your email list without Instagram or paid ads: two growth lanes, a lead magnet that turns visibility into subscribers, and a simple 90-day plan.",
+    "keyMoments": [
+      { "time": "00:00", "label": "The 150,000-follower question: how do you grow your list when Instagram stops working?" },
+      { "time": "03:20", "label": "Visibility is not the same as social media" },
+      { "time": "05:15", "label": "A house full of front doors" },
+      { "time": "06:28", "label": "The two growth lanes" },
+      { "time": "07:02", "label": "Lane one: borrowed audiences" },
+      { "time": "12:00", "label": "Freebie swaps" },
+      { "time": "14:53", "label": "Lane two: evergreen discovery" },
+      { "time": "15:41", "label": "Stop creating content, start creating assets" },
+      { "time": "22:01", "label": "Can you repeat it for 90 days?" },
+      { "time": "25:04", "label": "Your lead magnet is the bridge" },
+      { "time": "27:52", "label": "Your simple two-column plan" }
+    ],
+    "faqs": [
+      {
+        "q": "How can I grow my email list if Instagram isn't working?",
+        "a": "Choose two growth lanes instead of trying to be everywhere. Pick one borrowed-audience strategy, such as podcast guesting, summits, bundles or freebie swaps, and one evergreen discovery strategy, such as SEO, Pinterest, PR or your own podcast. Then connect both to a lead magnet that solves one clear problem for the person you want more of."
+      },
+      {
+        "q": "What are borrowed audiences?",
+        "a": "Borrowed audiences are audiences someone else has already built, like a podcast, newsletter or community, that you reach through collaboration. They skip one of the hardest parts of marketing, which is distribution. The question to ask is, \"Who already has a relationship with the kind of people I'd love to meet?\""
+      },
+      {
+        "q": "Do freebie swaps work if they only bring in a few subscribers?",
+        "a": "Yes. Thirty perfect-fit subscribers from a swap is still valuable. Two swaps a month adds 60 subscribers, and over a year that is 720 people who already had a reason to be interested in what you do."
+      },
+      {
+        "q": "What is evergreen discovery?",
+        "a": "Evergreen discovery is anything you create once that can keep introducing new people to your work months later, such as SEO, blogging, Pinterest, YouTube, PR or your own podcast. The test is whether something you create today could still bring someone into your world six months from now."
+      },
+      {
+        "q": "Why do I need a lead magnet?",
+        "a": "Visibility on its own does not build an email list. A lead magnet is the bridge between the people who discover you and your list. It should solve one clear problem for the exact person you want more of, rather than being a 45-page ebook nobody reads."
+      },
+      {
+        "q": "How do I choose a 90-day growth plan?",
+        "a": "Draw two columns, Borrowed Audiences and Evergreen Discovery, and choose one strategy for each. Then ask where your ideal person already spends time, what kind of visibility you are actually good at, and whether you can realistically repeat it for 90 days. Track where your subscribers really come from and do more of what works."
+      }
+    ]
+  },
+  "turn-sales-emails-into-evergreen-content": {
+    "level": "simple",
+    "needsReview": true,
+    "quickAnswer": "Email strategist Dama Jue explains how to stop your best launch emails disappearing after cart close. Remove the deadlines, repurpose them into an evergreen weekly series, and add a footer to every email that points to ways to work with you.",
+    "metaDescription": "How to turn your best sales emails into evergreen assets that keep making sales, with email strategist Dama Jue: repurposed launch emails, a footer in every email and writing live.",
+    "keyMoments": [
+      { "time": "00:00", "label": "What happens to your sales emails once the launch is over?" },
+      { "time": "01:24", "label": "Meet Dama Jue" },
+      { "time": "03:23", "label": "Dama's footer: a way to work with her in every email" },
+      { "time": "05:54", "label": "The one-sentence upsell" },
+      { "time": "09:52", "label": "Why Dama writes her sales emails live instead of batching them" },
+      { "time": "13:27", "label": "Turning launch emails into an evergreen Saturday series" },
+      { "time": "17:17", "label": "Podcast guesting as an evergreen source of leads" },
+      { "time": "20:59", "label": "Conditional content and starting conversations in the inbox" },
+      { "time": "26:33", "label": "Dama's free Airtable training" }
+    ],
+    "faqs": []
+  }
+}
