@@ -96,6 +96,83 @@ const ADDRESS_FIXES: Array<[RegExp, string]> = [[/https?:\/\/kyliekelly\.kit\.co
 // have replaced these, so they are left out.
 const OFFER_PITCH = /book (?:a|your) (?:\$?\d+ )?business breakthrough|business breakthrough (?:audit|session)|here.s how i can (?:help|support)|how i can support you/i;
 
+// Offers Kylie no longer sells. Old write-ups still end with "join The Email Growth Club" style pitches; the free
+// Skool community call to action replaces them. Past-tense mentions ("my members in the Club") are left alone.
+const RETIRED_OFFER = /email growth club|emailgrowthclub|headliner|empress|spotlight club/i;
+const RETIRED_HREF = /emailgrowthclub|headliner|empress|email-growth-club/i;
+const PITCH_WORDS = /\b(?:join(?:ing)?|come (?:and )?join|check out|hop into|sign up|click here|learn more|find out more|more info|apply|waitlist|book a)\b|\$27 a month|inside (?:the )?(?:email growth club|headliner mastermind),?\s+(?:we|i|you)\b|support you inside|what.s waiting inside|(?:what we.re all about|what we (?:do|focus on)|what we.re working on) inside/i;
+// Words that are a pitch on their own once the paragraph around them is about a retired offer.
+const STRONG_PITCH = /click here|\$27 a month|more info|learn more|find out more|waitlist|\bjoin(?:ing)?\b/i;
+const NOT_A_PITCH = /for (?:example|instance)|try something like|let.s say|imagine (?:instead )?you|you could say|you might say|ways i can help you/i;
+// Episodes that are about a retired offer itself: left as they are.
+const KEEP_AS_IS = new Set(['grow-your-email-list-without-social-media-inside-the-email-growth-club']);
+const SKOOL_CTA = {
+  eyebrow: 'your next step…',
+  headline: 'Join Email Marketing Skool',
+  text: 'It’s my free community for business owners who want to grow their audience, build their email list and create a business that doesn’t rely on feeding the social media machine every bloody day.',
+  label: 'Join for free today →',
+  href: 'https://www.skool.com/email-marketing-skool/about',
+};
+const isRetiredCta = (c: { headline: string; text: string; label: string; href: string }) =>
+  RETIRED_OFFER.test(`${c.headline} ${c.text} ${c.label}`) || RETIRED_HREF.test(c.href);
+
+// A sentence that opens a quote which closes in the next sentence is an example being quoted.
+const opensQuote = (t: string) => (t.match(/“/g) ?? []).length > (t.match(/”/g) ?? []).length;
+
+/** True for a piece of text that pitches a retired offer (and is not an example of a pitch, in quotes or "for example"). */
+function pitchesRetiredOffer(text: string, html: string): boolean {
+  const retired = RETIRED_OFFER.test(text) || RETIRED_HREF.test(html.match(/href="[^"]*"/g)?.join(' ') ?? '');
+  if (!retired || !PITCH_WORDS.test(text) || NOT_A_PITCH.test(text)) return false;
+  if (opensQuote(text)) return false;
+  // a pitch quoted as an example ("…come join my Email Growth Club…") is teaching, not a pitch
+  return !(text.match(/[“"][^”"]*[”"]/g) ?? []).some((q) => RETIRED_OFFER.test(q));
+}
+
+/**
+ * Takes out what pitches a retired offer: whole blocks, or just the pitching sentences of a paragraph that also has
+ * real writing in it. A "click here" line (or a list) that only followed a pitch goes with it.
+ */
+function dropRetiredPitches(html: string, slug = ''): { html: string; removed: string[] } {
+  const removed: string[] = [];
+  let prevRemoved = false;
+  let prevColon = false;
+  const out = html.replace(BLOCK, (block) => {
+    const text = stripTags(block);
+    const follows = prevRemoved && ((text.length < 100 && /click here|join|learn more|link|more info|apply|waitlist/i.test(text)) || (/^<(?:ul|ol)/i.test(block) && prevColon));
+    let result: string | null = null; // null: remove the whole block
+    if (!follows) {
+      if (/^<p[\s>]/i.test(block) && text.length < 1500 && !NOT_A_PITCH.test(text)) {
+        const open = block.match(/^<p[^>]*>/)![0];
+        const inner = block.slice(open.length, -4);
+        const sentences = inner.split(/(?<=[.!?…:])(?:\s|<br\s*\/?>)+(?![^<]*>)/);
+        const blockRetired = RETIRED_OFFER.test(text) || RETIRED_HREF.test(block.match(/href="[^"]*"/g)?.join(' ') ?? '');
+        const kept: string[] = [];
+        let drop = false;
+        for (const sentence of sentences) {
+          const t = stripTags(sentence);
+          const pitch = pitchesRetiredOffer(t, sentence) || (blockRetired && STRONG_PITCH.test(t) && !NOT_A_PITCH.test(t) && !opensQuote(t)) || (drop && t.length < 100 && /click here|join|learn more|link|more info|apply|waitlist/i.test(t));
+          if (pitch) { drop = true; removed.push(t.slice(0, 110)); } else { drop = false; kept.push(sentence); }
+        }
+        if (kept.length === sentences.length) result = block;
+        else {
+          // a "Links mentioned:" lead-in or a bare name left hanging where the pitch was
+          while (kept.length && /:$/.test(stripTags(kept[kept.length - 1])) && (RETIRED_OFFER.test(stripTags(kept[kept.length - 1])) || stripTags(kept[kept.length - 1]).length < 90)) kept.pop();
+          const joined = kept.join(' ').replace(/(?:<br\s*\/?>\s*)?links mentioned:?\s*$/i, '').trim();
+          result = stripTags(joined).replace(/[…\s,.:]/g, '').length >= 25 ? `${open}${joined}</p>` : null;
+        }
+      } else if (pitchesRetiredOffer(text, block) && text.length < 700) {
+        result = null;
+        removed.push(text.slice(0, 110));
+      } else result = block;
+    } else removed.push(text.slice(0, 110));
+    prevRemoved = result === null || result !== block;
+    prevColon = result === null && /:$/.test(text);
+    return result ?? '';
+  });
+  if (removed.length && process.env.PITCH_DEBUG) console.log(`[pitch] ${slug} :: ${removed.join(' || ')}`);
+  return { html: out, removed };
+}
+
 const INLINE_TAGS = /<(\/?)(a|strong|em|b|i|mark|span|u)\b[^>]*>/gi;
 function tagsBalanced(fragment: string): boolean {
   let depth = 0;
@@ -365,6 +442,25 @@ export function parseShowNotes(raw: string, slug?: string): ParsedNotes {
     }
   }
 
+  // Retired offers: pitches come out, and a retired call to action becomes the free Skool community
+  let introNoPitch = introClean;
+  let bodyNoPitch = body;
+  let pitchesRemoved = 0;
+  if (!KEEP_AS_IS.has(slug ?? '')) {
+    const cleanedIntro = dropRetiredPitches(introClean, slug);
+    introNoPitch = cleanedIntro.html;
+    pitchesRemoved += cleanedIntro.removed.length;
+    bodyNoPitch = body
+      .map((sec) => {
+        const r = dropRetiredPitches(sec.html, slug);
+        pitchesRemoved += r.removed.length;
+        return { ...sec, html: r.html };
+      })
+      .filter((sec) => stripTags(sec.html).length > 0);
+    links = links.filter((l) => !RETIRED_OFFER.test(stripTags(l)) && !RETIRED_HREF.test(l.match(/href="[^"]*"/g)?.join(' ') ?? ''));
+    if ((cta && isRetiredCta(cta)) || (!cta && pitchesRemoved)) cta = SKOOL_CTA;
+  }
+
   // Per-episode changes (src/data/page-overrides.json)
   if (override.cta) cta = override.cta;
   for (const swap of override.replaceLinks ?? []) {
@@ -373,8 +469,8 @@ export function parseShowNotes(raw: string, slug?: string): ParsedNotes {
   }
 
   // Easier to read: long paragraphs broken up, then the marker highlight and pull quotes chosen for the episode
-  let introOut = splitLongParagraphs(introClean);
-  const sectionsOut = body.map((sec) => ({ ...sec, html: splitLongParagraphs(sec.html) }));
+  let introOut = splitLongParagraphs(introNoPitch);
+  const sectionsOut = bodyNoPitch.map((sec) => ({ ...sec, html: splitLongParagraphs(sec.html) }));
   if (override.pullQuotes?.length) {
     introOut = addPullQuotes(introOut, override.pullQuotes.filter((q) => phrasePattern(q).test(introOut)), slug);
     for (const sec of sectionsOut) sec.html = addPullQuotes(sec.html, override.pullQuotes.filter((q) => phrasePattern(q).test(sec.html)), slug);
