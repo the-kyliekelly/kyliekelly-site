@@ -38,7 +38,8 @@ const notes = parseShowNotes(post.content);
 const numInContent = post.content.match(/EP\w*\s*(\d+)/i)?.[1] ?? '';
 const episode = episodes.find((e) => e.href === `/${post.slug}/`) ?? episodes.find((e) => e.num === numInContent);
 const num = episode?.num ?? numInContent;
-const title = decode(post.title);
+const seoTitle = decode(post.title); // the title Google already knows this page by
+const title = episode?.title ?? seoTitle; // what the page shows, matching the episode library, Apple and Spotify
 const guest = episode?.guest ?? null;
 const guestPhoto = num ? guestPhotoFor(num) : undefined;
 const isFull = extra.level === 'full';
@@ -63,6 +64,14 @@ const newer = idx > 0 ? episodes[idx - 1] : null;
 const older = idx >= 0 && idx < episodes.length - 1 ? episodes[idx + 1] : null;
 
 const showToc = isFull && notes.sections.length >= 4;
+const norm = (u: string) => u.toLowerCase().replace(/^https?:\/\/(www\.)?/, '').replace(/\/+$/, '');
+const guestHrefs = new Set([...(notes.guestSection?.html ?? '').matchAll(/href="([^"]+)"/g)].map((m) => norm(m[1])));
+const links = !isFull && notes.guestSection
+  ? notes.links.filter((l) => {
+      const h = l.match(/href="([^"]+)"/)?.[1];
+      return !h || !guestHrefs.has(norm(h));
+    })
+  : notes.links;
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const playIcon = 'M5 3.5v9l7.5-4.5z';
 const site = Astro.site ?? new URL('https://kyliekelly.com');
@@ -116,7 +125,7 @@ if (isFull && extra.faqs.length) {
 const jsonLd = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
 const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}"></div><script src="${notes.player.src}" type="text/javascript"></` + `script>` : '';
 ---
-<Layout title={`${title} | The Email Growth Show`} description={extra.metaDescription}>
+<Layout title={`${seoTitle} | The Email Growth Show`} description={extra.metaDescription}>
   <script type="application/ld+json" slot="head" set:html={jsonLd} />
 
   <section class="bg-black text-white px-6 py-4">
@@ -130,7 +139,7 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
   <article>
     <!-- HERO -->
     <header class="bg-offwhite px-6 pt-10 pb-14 sm:pt-14 sm:pb-20">
-      <div class="max-w-5xl mx-auto">
+      <div class="max-w-6xl mx-auto">
         <nav aria-label="Breadcrumb" class="mb-8 text-xs uppercase tracking-widest font-semibold text-black/70">
           <a href="/podcast" class="hover:text-pink">The Email Growth Show</a>
           <span aria-hidden="true" class="mx-2">/</span>
@@ -176,222 +185,211 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
       </div>
     </header>
 
-    <!-- PLAYER -->
-    {playerHtml && (
-      <section class="bg-white px-6 pt-12">
-        <div class="max-w-3xl mx-auto">
-          <h2 class="sr-only">Listen to the episode</h2>
-          <div class="rounded-[1.5rem] border border-black/10 bg-white p-4 sm:p-5" set:html={playerHtml} />
-        </div>
-      </section>
-    )}
+    <!-- BODY: one main column and a sidebar, so every block lines up -->
+    <div class="bg-white px-6 pt-12 pb-16 sm:pb-20">
+      <div class="max-w-6xl mx-auto grid gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-14">
 
-    <!-- WHAT YOU'LL LEARN + TABLE OF CONTENTS -->
-    {(notes.takeaways.length > 0 || showToc) && (
-      <section class="bg-white px-6 pt-12">
-        <div class={`max-w-5xl mx-auto grid gap-6 ${notes.takeaways.length > 0 && showToc ? 'md:grid-cols-2' : 'max-w-3xl'}`}>
-          {notes.takeaways.length > 0 && (
-            <div class="rounded-[1.75rem] bg-[#e9d9ec] p-7 sm:p-9">
-              <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-5">What you'll learn</h2>
-              <ul class="space-y-3">
-                {notes.takeaways.map((t) => (
-                  <li class="flex items-start gap-3">
-                    <span class="mt-1 grid h-5 w-5 flex-none place-items-center rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h9M8.5 4l4 4-4 4" /></svg></span>
-                    <span class="leading-relaxed">{t}</span>
-                  </li>
+        <div class="min-w-0 space-y-8">
+
+          {playerHtml && (
+            <section>
+              <h2 class="sr-only">Listen to the episode</h2>
+              <div class="rounded-[1.5rem] border border-black/10 bg-white p-4 sm:p-5" set:html={playerHtml} />
+            </section>
+          )}
+
+          <!-- WHAT YOU'LL LEARN beside the contents (full) or the links mentioned (simple) -->
+          {(notes.takeaways.length > 0 || showToc || (!isFull && links.length > 0)) && (
+            <div class={`grid items-start gap-6 ${notes.takeaways.length > 0 && (showToc || (!isFull && links.length > 0)) ? 'md:grid-cols-2' : ''}`}>
+              {notes.takeaways.length > 0 && (
+                <section class="rounded-[1.75rem] bg-[#e9d9ec] p-7 sm:p-8">
+                  <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-5">What you'll learn</h2>
+                  <ul class="space-y-3">
+                    {notes.takeaways.map((t) => (
+                      <li class="flex items-start gap-3">
+                        <span class="mt-1 grid h-5 w-5 flex-none place-items-center rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h9M8.5 4l4 4-4 4" /></svg></span>
+                        <span class="leading-relaxed">{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+              {showToc && (
+                <nav aria-labelledby="toc-title" class="rounded-[1.75rem] border border-black/10 p-7 sm:p-8">
+                  <h2 id="toc-title" class="font-serif font-bold italic text-2xl sm:text-3xl mb-5">In this episode</h2>
+                  <ol class="space-y-3">
+                    {notes.sections.map((s, i) => (
+                      <li class="flex items-baseline gap-3">
+                        <span class="font-serif text-pink text-lg w-6 flex-none">{String(i + 1).padStart(2, '0')}</span>
+                        <a href={`#${s.id}`} class="leading-snug underline-offset-4 hover:text-pink hover:underline">{s.title}</a>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              )}
+              {!isFull && links.length > 0 && (
+                <section class="rounded-[1.75rem] border-[1.5px] border-black p-7 sm:p-8">
+                  <h2 class="text-pink text-xs uppercase tracking-[0.18em] font-semibold mb-4">Links mentioned</h2>
+                  <ul class="space-y-3 links-list">
+                    {links.map((l) => (
+                      <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&rarr;</span><span class="min-w-0 break-words" set:html={l} /></li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+            </div>
+          )}
+
+          <!-- LINKS MENTIONED (full version, full width) -->
+          {isFull && links.length > 0 && (
+            <section class="rounded-[1.75rem] border-[1.5px] border-black p-7 sm:p-8">
+              <h2 class="text-pink text-xs uppercase tracking-[0.18em] font-semibold mb-4">Links mentioned</h2>
+              <ul class="space-y-3 links-list">
+                {links.map((l) => (
+                  <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&rarr;</span><span class="min-w-0 break-words" set:html={l} /></li>
                 ))}
               </ul>
-            </div>
+            </section>
           )}
-          {showToc && (
-            <nav aria-labelledby="toc-title" class="rounded-[1.75rem] border border-black/10 p-7 sm:p-9">
-              <h2 id="toc-title" class="font-serif font-bold italic text-2xl sm:text-3xl mb-5">In this episode</h2>
-              <ol class="space-y-3">
-                {notes.sections.map((s, i) => (
-                  <li class="flex items-baseline gap-3">
-                    <span class="font-serif text-pink text-lg w-6 flex-none">{String(i + 1).padStart(2, '0')}</span>
-                    <a href={`#${s.id}`} class="leading-snug underline-offset-4 hover:text-pink hover:underline">{s.title}</a>
-                  </li>
+
+          <!-- INTRO + THE WRITE-UP -->
+          <div class="notes-body pt-2">
+            {notes.intro && <div set:html={notes.intro} />}
+            {isFull && notes.sections.map((s) => (
+              <section class="scroll-mt-24">
+                <h2 id={s.id}>{s.title}</h2>
+                <div set:html={s.html} />
+              </section>
+            ))}
+          </div>
+
+          <!-- GUEST -->
+          {guest && notes.guestSection && (
+            <section class="rounded-[1.75rem] bg-offwhite p-7 sm:p-8">
+              <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">About {guest}</h2>
+              <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
+                {guestPhoto && (
+                  <Image src={guestPhoto} alt={`${guest}, guest on The Email Growth Show`} widths={[200, 360]} sizes="160px" class="h-40 w-40 flex-none rounded-2xl object-cover object-[50%_22%]" loading="lazy" />
+                )}
+                <div class="notes-body notes-body--tight min-w-0 break-words" set:html={notes.guestSection.html} />
+              </div>
+            </section>
+          )}
+
+          <!-- CALL TO ACTION (full version only; the simple version uses the cheat-sheet signup instead) -->
+          {isFull && notes.cta && (
+            <section class="rounded-[1.75rem] bg-black px-7 py-12 text-center text-white sm:px-12">
+              <p class="font-serif italic text-pink text-xl mb-2">{notes.cta.eyebrow}</p>
+              <h2 class="font-serif font-bold text-2xl sm:text-3xl leading-tight mb-4 text-balance">{notes.cta.headline}</h2>
+              <p class="mx-auto mb-7 max-w-md text-warmgray leading-relaxed">{notes.cta.text}</p>
+              <a href={notes.cta.href} class="inline-block rounded-full bg-pink px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-white transition-transform duration-300 hover:-translate-y-1">{notes.cta.label}</a>
+            </section>
+          )}
+
+          <!-- FAQ -->
+          {isFull && extra.faqs.length > 0 && (
+            <section class="pt-8">
+              <h2 class="font-serif font-bold italic text-3xl sm:text-4xl mb-8">Frequently asked questions</h2>
+              <dl class="divide-y divide-black/10 border-y border-black/10">
+                {extra.faqs.map((f) => (
+                  <div class="py-6">
+                    <dt class="font-serif font-bold text-xl leading-snug mb-2">{f.q}</dt>
+                    <dd class="text-[17px] leading-relaxed text-black">{f.a}</dd>
+                  </div>
                 ))}
-              </ol>
+              </dl>
+            </section>
+          )}
+
+          <!-- TRANSCRIPT -->
+          {isFull && notes.transcript.length > 0 && (
+            <details class="group rounded-[1.5rem] border border-black/10 p-6 sm:p-8">
+              <summary class="cursor-pointer list-none flex items-center justify-between gap-4 font-serif font-bold text-xl">
+                Read the full transcript
+                <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-black text-white text-lg leading-none transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+              </summary>
+              <div class="mt-6 space-y-4 text-[15px] leading-relaxed text-black/85">
+                {notes.transcript.map((t) => (
+                  <p><span class="mr-2 font-semibold tabular-nums text-pink">{t.time.replace(/^00:/, '')}</span>{t.text}</p>
+                ))}
+              </div>
+            </details>
+          )}
+
+          <!-- CHEAT SHEET SIGN-UP -->
+          <PodcastFreebieBand uid="notes" />
+
+          <!-- PINTEREST -->
+          {notes.pin && (
+            <section class="pt-6 text-center">
+              <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">Love this episode? Save it for later</h2>
+              <img src={notes.pin} alt={`Pinterest graphic for ${title}`} class="mx-auto w-full max-w-[320px] rounded-2xl shadow-[0_18px_40px_rgba(0,0,0,0.12)]" width="683" height="1024" loading="lazy" />
+            </section>
+          )}
+
+          <!-- RELATED -->
+          {related.length > 0 && (
+            <section class="pt-10">
+              <h2 class="font-serif font-bold italic text-3xl sm:text-4xl mb-8">More to listen to</h2>
+              <div class="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-3">
+                {related.map((e) => (
+                  <a href={e.href} class="group block" {...(e.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+                    <EpisodeArt num={e.num} title={e.title} guest={e.guest} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
+                    <div class="mt-4 flex items-center justify-between gap-3 px-1">
+                      <span class="text-[11px] uppercase tracking-widest font-semibold text-black/70">{e.date}</span>
+                      <span class="grid place-items-center h-10 w-10 flex-none rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- NEWER / OLDER -->
+          {(newer || older) && (
+            <nav aria-label="More episodes" class="grid gap-4 pt-4 sm:grid-cols-2">
+              {older ? (
+                <a href={older.href} class="rounded-[1.5rem] border border-black/10 p-6 transition-colors hover:border-pink" {...(older.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+                  <p class="text-xs uppercase tracking-widest font-semibold text-black/60 mb-2">&larr; Previous episode</p>
+                  <p class="font-serif font-bold leading-snug">{older.title}</p>
+                </a>
+              ) : <span></span>}
+              {newer ? (
+                <a href={newer.href} class="rounded-[1.5rem] border border-black/10 p-6 text-left transition-colors hover:border-pink sm:text-right" {...(newer.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
+                  <p class="text-xs uppercase tracking-widest font-semibold text-black/60 mb-2">Next episode &rarr;</p>
+                  <p class="font-serif font-bold leading-snug">{newer.title}</p>
+                </a>
+              ) : <span></span>}
             </nav>
           )}
+
+          <AskKylieBand />
         </div>
-      </section>
-    )}
 
-    <!-- KEY MOMENTS (timestamps) -->
-    {!isFull && extra.keyMoments.length > 0 && (
-      <section class="bg-white px-6 pt-6">
-        <div class="max-w-3xl mx-auto rounded-[1.75rem] border border-black/10 p-7 sm:p-9">
-          <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">Key moments</h2>
-          <ul class="divide-y divide-black/10">
-            {extra.keyMoments.map((m) => (
-              <li class="flex items-baseline gap-4 py-3">
-                <span class="w-14 flex-none font-semibold tabular-nums text-pink">{m.time}</span>
-                <span class="leading-snug">{m.label}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    )}
-
-    <!-- LINKS MENTIONED -->
-    {notes.links.length > 0 && (
-      <section class="bg-white px-6 pt-6">
-        <div class="max-w-3xl mx-auto rounded-[1.75rem] border-[1.5px] border-black p-7 sm:p-9">
-          <h2 class="text-pink text-xs uppercase tracking-[0.18em] font-semibold mb-4">Links mentioned</h2>
-          <ul class="space-y-3 links-list">
-            {notes.links.map((l) => (
-              <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&rarr;</span><span set:html={l} /></li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    )}
-
-    <!-- INTRO + THE WRITE-UP -->
-    <section class="bg-white px-6 pt-14 pb-6">
-      <div class="max-w-3xl mx-auto notes-body">
-        {notes.intro && <div set:html={notes.intro} />}
-        {isFull && notes.sections.map((s) => (
-          <section class="scroll-mt-24">
-            <h2 id={s.id}>{s.title}</h2>
-            <div set:html={s.html} />
-          </section>
-        ))}
-      </div>
-    </section>
-
-    <!-- GUEST -->
-    {guest && notes.guestSection && (
-      <section class="bg-white px-6 pb-6 pt-8">
-        <div class="max-w-3xl mx-auto rounded-[1.75rem] bg-offwhite p-7 sm:p-9">
-          <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">About {guest}</h2>
-          <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
-            {guestPhoto && (
-              <Image src={guestPhoto} alt={`${guest}, guest on The Email Growth Show`} widths={[200, 360]} sizes="160px" class="h-40 w-40 flex-none rounded-2xl object-cover object-[50%_22%]" loading="lazy" />
-            )}
-            <div class="notes-body notes-body--tight" set:html={notes.guestSection.html} />
+        <!-- SIDEBAR: about Kylie -->
+        <aside class="lg:sticky lg:top-24 lg:self-start" aria-label="About Kylie">
+          <div class="rounded-[1.75rem] bg-offwhite p-7 text-center">
+            <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly" class="mx-auto mb-5 h-36 w-36 rounded-full object-cover object-[50%_20%]" width="933" height="1400" loading="lazy" />
+            <p class="font-serif font-bold text-2xl leading-tight mb-3">Hey there! I'm Kylie Kelly.</p>
+            <p class="text-[15px] leading-relaxed mb-5">I'm an ex international wedding photographer turned email marketing educator and the host of The Email Growth Show. I grew my list from 0 to 7,000+ subscribers in 18 months without social media, and I share how, every Friday.</p>
+            <a href="/meet-kylie" class="group inline-flex items-center gap-3 rounded-full border-[1.5px] border-black px-6 py-3 text-xs font-semibold uppercase tracking-[0.14em] transition-colors duration-300 hover:bg-black hover:text-white">More about me <span aria-hidden="true">&rarr;</span></a>
           </div>
-        </div>
-      </section>
-    )}
-
-    <!-- CALL TO ACTION -->
-    {notes.cta && (
-      <section class="bg-white px-6 pb-6 pt-8">
-        <div class="max-w-3xl mx-auto rounded-[1.75rem] bg-black px-7 py-12 text-center text-white sm:px-12">
-          <p class="font-serif italic text-pink text-xl mb-2">{notes.cta.eyebrow}</p>
-          <h2 class="font-serif font-bold text-2xl sm:text-3xl leading-tight mb-4 text-balance">{notes.cta.headline}</h2>
-          <p class="mx-auto mb-7 max-w-md text-warmgray leading-relaxed">{notes.cta.text}</p>
-          <a href={notes.cta.href} class="inline-block rounded-full bg-pink px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-white transition-transform duration-300 hover:-translate-y-1">{notes.cta.label}</a>
-        </div>
-      </section>
-    )}
-
-    <!-- FAQ -->
-    {isFull && extra.faqs.length > 0 && (
-      <section class="bg-white px-6 pt-16">
-        <div class="max-w-3xl mx-auto">
-          <h2 class="font-serif font-bold italic text-3xl sm:text-4xl mb-8">Frequently asked questions</h2>
-          <dl class="divide-y divide-black/10 border-y border-black/10">
-            {extra.faqs.map((f) => (
-              <div class="py-6">
-                <dt class="font-serif font-bold text-xl leading-snug mb-2">{f.q}</dt>
-                <dd class="text-[17px] leading-relaxed text-black">{f.a}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-    )}
-
-    <!-- TRANSCRIPT -->
-    {isFull && notes.transcript.length > 0 && (
-      <section class="bg-white px-6 pt-12">
-        <div class="max-w-3xl mx-auto">
-          <details class="group rounded-[1.5rem] border border-black/10 p-6 sm:p-8">
-            <summary class="cursor-pointer list-none flex items-center justify-between gap-4 font-serif font-bold text-xl">
-              Read the full transcript
-              <span class="grid h-9 w-9 place-items-center rounded-full bg-black text-white text-lg leading-none transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
-            </summary>
-            <div class="mt-6 space-y-4 text-[15px] leading-relaxed text-black/85">
-              {notes.transcript.map((t) => (
-                <p><span class="mr-2 font-semibold tabular-nums text-pink">{t.time.replace(/^00:/, '')}</span>{t.text}</p>
-              ))}
-            </div>
-          </details>
-        </div>
-      </section>
-    )}
-
-    <!-- PINTEREST + FREEBIE -->
-    {notes.pin && (
-      <section class="bg-white px-6 pt-14 text-center">
-        <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-6">Love this episode? Save it for later</h2>
-        <img src={notes.pin} alt={`Pinterest graphic for ${title}`} class="mx-auto w-full max-w-[320px] rounded-2xl shadow-[0_18px_40px_rgba(0,0,0,0.12)]" width="683" height="1024" loading="lazy" />
-      </section>
-    )}
-    <section class="bg-white px-6 pt-16">
-      <PodcastFreebieBand uid="notes" />
-    </section>
-
-    <!-- RELATED -->
-    {related.length > 0 && (
-      <section class="bg-white px-6 pt-20">
-        <div class="max-w-5xl mx-auto">
-          <h2 class="font-serif font-bold italic text-3xl sm:text-4xl mb-10">More to listen to</h2>
-          <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-3">
-            {related.map((e) => (
-              <a href={e.href} class="group block" {...(e.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
-                <EpisodeArt num={e.num} title={e.title} guest={e.guest} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
-                <div class="mt-4 flex items-center justify-between gap-3 px-1">
-                  <span class="text-[11px] uppercase tracking-widest font-semibold text-black/70">{e.date}</span>
-                  <span class="grid place-items-center h-10 w-10 flex-none rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
-                </div>
-              </a>
-            ))}
+          <div class="mt-8 px-2">
+            <p class="font-serif font-bold text-xl mb-3">Find me elsewhere:</p>
+            <ul class="divide-y divide-black/15 border-y border-black/15 text-xs font-semibold uppercase tracking-[0.14em]">
+              <li><a class="flex items-center justify-between py-3.5 hover:text-pink" href="https://www.instagram.com/the_kyliekelly/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">&rarr;</span></a></li>
+              <li><a class="flex items-center justify-between py-3.5 hover:text-pink" href="https://podcasts.apple.com/podcast/id1550211753" target="_blank" rel="noopener">Apple Podcasts <span aria-hidden="true">&rarr;</span></a></li>
+              <li><a class="flex items-center justify-between py-3.5 hover:text-pink" href="https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3" target="_blank" rel="noopener">Spotify <span aria-hidden="true">&rarr;</span></a></li>
+              <li><a class="flex items-center justify-between py-3.5 hover:text-pink" href="https://www.skool.com/email-marketing-skool/about" target="_blank" rel="noopener">Free community <span aria-hidden="true">&rarr;</span></a></li>
+              <li><a class="flex items-center justify-between py-3.5 hover:text-pink" href="https://shop.kyliekelly.com/" target="_blank" rel="noopener">The shop <span aria-hidden="true">&rarr;</span></a></li>
+            </ul>
           </div>
-        </div>
-      </section>
-    )}
+        </aside>
 
-    <!-- NEWER / OLDER -->
-    {(newer || older) && (
-      <nav aria-label="More episodes" class="bg-white px-6 pt-14">
-        <div class="max-w-3xl mx-auto grid gap-4 sm:grid-cols-2">
-          {older ? (
-            <a href={older.href} class="rounded-[1.5rem] border border-black/10 p-6 transition-colors hover:border-pink" {...(older.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
-              <p class="text-xs uppercase tracking-widest font-semibold text-black/60 mb-2">&larr; Previous episode</p>
-              <p class="font-serif font-bold leading-snug">{older.title}</p>
-            </a>
-          ) : <span></span>}
-          {newer ? (
-            <a href={newer.href} class="rounded-[1.5rem] border border-black/10 p-6 text-left transition-colors hover:border-pink sm:text-right" {...(newer.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
-              <p class="text-xs uppercase tracking-widest font-semibold text-black/60 mb-2">Next episode &rarr;</p>
-              <p class="font-serif font-bold leading-snug">{newer.title}</p>
-            </a>
-          ) : <span></span>}
-        </div>
-      </nav>
-    )}
-
-    <!-- ABOUT KYLIE -->
-    <section class="bg-white px-6 pt-16">
-      <div class="max-w-3xl mx-auto flex flex-col items-center gap-6 rounded-[1.75rem] bg-offwhite p-7 text-center sm:flex-row sm:items-center sm:gap-8 sm:p-9 sm:text-left">
-        <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly" class="h-28 w-28 flex-none rounded-full object-cover object-[50%_20%]" width="933" height="1400" loading="lazy" />
-        <div>
-          <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-2">Your host</p>
-          <p class="leading-relaxed">Kylie Kelly is an ex international wedding photographer turned email marketing educator and the host of The Email Growth Show. She grew her list from 0 to 7,000+ subscribers in 18 months without social media, and shares how, every Friday.</p>
-          <a href="/meet-kylie" class="mt-3 inline-block text-sm font-semibold underline underline-offset-4 hover:text-pink">More about Kylie &rarr;</a>
-        </div>
       </div>
-    </section>
-
-    <section class="bg-white px-6 py-16 sm:py-20"><AskKylieBand /></section>
+    </div>
   </article>
+
 </Layout>
 
 <style is:global>
