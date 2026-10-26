@@ -234,6 +234,11 @@
       "source": "/tag/:path*",
       "destination": "/blog",
       "permanent": true
+    },
+    {
+      "source": "/tag/:path*/",
+      "destination": "/blog",
+      "permanent": true
     }
   ]
 }
