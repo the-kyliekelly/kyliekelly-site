@@ -151,16 +151,6 @@
       "permanent": true
     },
     {
-      "source": "/breakthrough",
-      "destination": "/services",
-      "permanent": true
-    },
-    {
-      "source": "/breakthrough/",
-      "destination": "/services",
-      "permanent": true
-    },
-    {
       "source": "/bundle",
       "destination": "/services",
       "permanent": true
@@ -218,6 +208,86 @@
     {
       "source": "/free/",
       "destination": "https://kyliekelly.myflodesk.com/audience",
+      "permanent": false
+    },
+    {
+      "source": "/breakthrough",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": false
+    },
+    {
+      "source": "/breakthrough/",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": false
+    },
+    {
+      "source": "/guide",
+      "destination": "https://kyliekelly.myflodesk.com/audience",
+      "permanent": false
+    },
+    {
+      "source": "/guide/",
+      "destination": "https://kyliekelly.myflodesk.com/audience",
+      "permanent": false
+    },
+    {
+      "source": "/emailgrowthclub",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
+      "permanent": false
+    },
+    {
+      "source": "/emailgrowthclub/",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
+      "permanent": false
+    },
+    {
+      "source": "/inbox",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": false
+    },
+    {
+      "source": "/inbox/",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": false
+    },
+    {
+      "source": "/group",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
+      "permanent": false
+    },
+    {
+      "source": "/group/",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
+      "permanent": false
+    },
+    {
+      "source": "/evergreen-email",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": false
+    },
+    {
+      "source": "/evergreen-email/",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": false
+    },
+    {
+      "source": "/evergreen",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": false
+    },
+    {
+      "source": "/evergreen/",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": false
+    },
+    {
+      "source": "/empire-expansion",
+      "destination": "/services",
+      "permanent": false
+    },
+    {
+      "source": "/empire-expansion/",
+      "destination": "/services",
       "permanent": false
     }
   ]

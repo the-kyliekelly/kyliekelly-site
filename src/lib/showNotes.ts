@@ -151,8 +151,8 @@ export function highlightPhrases(html: string, phrases: string[], where = ''): s
     const re = phrasePattern(phrase);
     let done = false;
     parts = parts.map((part, i) => {
-      if (done || part.startsWith('<')) return part;
-      // not inside a <mark> already
+      // split() with a capture group puts the tags at the odd positions
+      if (done || i % 2 === 1) return part;
       const m = part.match(re);
       if (!m || m.index === undefined) return part;
       done = true;
