@@ -21,6 +21,9 @@ const startHere = pickClassics(episodes);
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const playIcon = 'M5 3.5v9l7.5-4.5z';
 const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light text-black'];
+// A gently moving waveform for the Start here cards (same style as the homepage podcast cards).
+const waveBars = (seed: number) =>
+  Array.from({ length: 24 }, (_, i) => Number((0.22 + 0.78 * Math.abs(Math.sin(i * 0.6 + seed) * Math.cos(i * 0.27 + seed * 1.7))).toFixed(2)));
 const minsLabel = (ep: { mins: string | null }) => (ep.mins ? `${ep.mins} min listen` : '');
 // Only show a topic filter if at least one episode is in it.
 const topics = topicRules.topics.filter((t) => episodes.some((ep) => ep.topics.includes(t.id)));
@@ -71,14 +74,20 @@ const topics = topicRules.topics.filter((t) => episodes.some((ep) => ep.topics.i
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
           {startHere.map((ep, i) => {
             const photo = photoFor(ep.num, 5);
+            const bars = waveBars(i * 2.3 + (Number(ep.num) % 7));
             return (
               <a href={ep.href} class="group flex items-center gap-4 rounded-[1.75rem] bg-white p-4 shadow-[0_12px_30px_rgba(0,0,0,0.06)] transition-transform duration-300 hover:-translate-y-1 lg:flex-col lg:items-stretch lg:gap-5 lg:p-5" {...(ep.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}>
                 {photo && (
                   <Image src={photo} alt="" widths={[200, 400]} sizes="(min-width: 1024px) 240px, 96px" class="h-24 w-24 flex-none rounded-2xl object-cover object-[50%_22%] lg:h-auto lg:w-full lg:aspect-square" loading="lazy" />
                 )}
-                <span class="flex min-w-0 flex-1 items-center justify-between gap-3 lg:items-start">
-                  <span class="font-serif font-bold leading-snug text-base lg:text-lg">{ep.title}</span>
-                  <span class={`grid h-10 w-10 flex-none place-items-center rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+                <span class="flex min-w-0 flex-1 flex-col gap-3 lg:gap-4">
+                  <span class="flex items-center gap-3">
+                    <span class={`grid h-11 w-11 flex-none place-items-center rounded-full transition-transform duration-300 group-hover:scale-110 ${playTint[i % playTint.length]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4 translate-x-[1px]" fill="currentColor"><path d={playIcon} /></svg></span>
+                    <span class="wave min-w-0 flex-1" style="height:28px" aria-hidden="true">
+                      {bars.map((h, j) => <i style={`--h:${h};--d:${((j * 7) % 11) * 0.1}s`}></i>)}
+                    </span>
+                  </span>
+                  <span class="font-serif font-bold leading-snug text-base lg:text-lg">{ep.shortTitle}</span>
                 </span>
               </a>
             );
