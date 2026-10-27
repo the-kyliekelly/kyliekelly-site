@@ -18,6 +18,7 @@ export default {
         sans: ['Work Sans', 'Helvetica Neue', 'sans-serif'],
         script: ['Playfair Display', 'Georgia', 'serif'],
         typewriter: ['Courier New', 'Courier', 'monospace'],
+        hand: ['Caveat', 'Segoe Script', 'cursive'],
       },
       borderRadius: {
         pill: '50px',

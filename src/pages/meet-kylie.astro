@@ -1,5 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Highlight from '../components/Highlight.astro';
+import EpisodeArt from '../components/EpisodeArt.astro';
+import { getEpisodes } from '../lib/episodes';
 
 const timeline = [
   { label: '10+ years', text: "I was an international wedding photographer. I loved the work. I did not love wondering when the next booking would land." },
@@ -10,7 +13,7 @@ const timeline = [
   { label: 'Right now', text: "I'm building toward a business that can help thousands of women whether I'm online that day or not. Fewer hours on calls. More simple tools that keep working after I've done the school run." },
 ];
 
-const listicle = [
+const believe = [
   {
     title: 'I believe in...',
     items: [
@@ -22,25 +25,35 @@ const listicle = [
     ],
   },
   {
-    title: 'Daily rituals:',
-    items: [
-      'English Breakfast tea within 5 minutes of waking.',
-      'An oat milk latte before lunch, non negotiable.',
-      'Checking my email metrics the way other people check the weather.',
-    ],
-  },
-  {
-    title: 'At school pickup you can find me:',
-    items: ['Slightly late.', 'Somehow still uncoordinated.', "Already thinking about tomorrow's voice note to my coaching group."],
-  },
-  {
     title: "I don't have time for:",
     items: [
-      "An algorithm that changes its mind every six months.",
+      'An algorithm that changes its mind every six months.',
       "Content for content's sake.",
       'Pretending a business has to be complicated to be taken seriously.',
     ],
   },
+];
+
+// "A few of the things I answer to": photo lives in public/images/about/<file>. No file yet = a placeholder tile.
+const answerTo = [
+  { label: 'Mama', photo: null, text: 'Mum to Spencer and Sammy, and the reason school pickup never moves.' },
+  { label: 'Podcast Host', photo: '/images/about/podcast-host.jpg', text: 'Host of The Email Growth Show, a top 1.5% podcast globally, with a new episode every Friday.' },
+  { label: 'Email Nerd', photo: null, text: 'I check my email stats the way other people check the weather.' },
+  { label: 'Babe', photo: null, text: 'Wife to Nick.' },
+];
+
+// The quiz. `pick` = the options (by position) that are Kylie's answers; `answer` = a typed-out answer instead.
+const quiz = [
+  { q: 'The best title I have:', opts: ['Female Founder', 'Clean Freak', 'Podcast Host', 'Email Nerd', 'Other: Mummy'], pick: [4], written: 'Mummy' },
+  { q: 'My drink of choice is:', opts: ['Black coffee', 'Matcha', 'English Breakfast tea', 'Oat milk latte'], pick: [2, 3], written: 'English Breakfast tea, then an oat milk latte', note: 'Tea within five minutes of waking, latte before lunch. Non negotiable.' },
+  { q: 'Most likely to binge watch:', opts: ['The Bachelor', 'The Office', 'Love Is Blind', 'True Crime Documentary'], pick: [2], written: 'Love Is Blind', note: "Don't judge me." },
+  { q: 'Deathly afraid of:', opts: ['Spiders', 'Public Speaking', 'Heights', 'Clowns'], pick: [2], written: 'Heights', note: 'A mountaintop is fine. A cable car? Absolutely not.' },
+  { q: 'My favourite flowers:', answer: 'Pink dahlias.' },
+  { q: 'My favourite food:', answer: 'Thai green curry. Spicy, please.' },
+  { q: 'My current obsession:', answer: 'Cold plunging and breathwork.' },
+  { q: 'The first thing I check each morning:', opts: ['Instagram', 'The weather', 'Overnight sales', 'My email inbox'], pick: [2], written: 'Overnight sales' },
+  { q: "At school pickup I'm usually:", opts: ['Early', 'On time', 'Slightly late', 'Unsure what day it is'], pick: [3], written: 'Unsure what day it is' },
+  { q: 'Someday I want to:', answer: "Ride in a hot air balloon. (Yes, even though I'm scared of heights!)" },
 ];
 
 const paths = [
@@ -66,54 +79,60 @@ const paths = [
     href: '/services',
   },
 ];
+const latest = (await getEpisodes()).slice(0, 3);
+const playIcon = 'M5 3.5v9l7.5-4.5z';
+const bigWord = 'MEET KYLIE';
 ---
 <Layout title="Meet Kylie Kelly | Email Marketing Educator & Podcast Host" description="From burnt-out wedding photographer to a multi six-figure business built entirely on email. Meet Kylie Kelly, host of The Email Growth Show.">
 
-  <!-- TAG BAR -->
-  <section class="bg-pink-light px-6 py-4">
-    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
-      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
-      Wife. Mom of two boys. Email marketing educator. Host of The Email Growth Show.
-      <span class="hidden sm:block h-px flex-1 bg-black/30"></span>
-    </p>
-  </section>
+  <link slot="head" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" />
 
   <!-- HERO -->
-  <section class="bg-black text-white px-6 py-20">
-    <div class="max-w-5xl mx-auto grid md:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
-      <div>
-        <p class="script-accent text-pink text-xl mb-3">hi, I'm Kylie</p>
-        <h1 class="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
-          I help women get known, trusted, and <em class="italic text-pink">selling</em>, without living on social media.
-        </h1>
-        <p class="text-warmgray mb-4">
-          I spent ten years chasing wedding bookings, then a few more chasing likes for a business that wasn't paying the bills. And honestly? I'm done chasing anything now.
-        </p>
-        <p class="text-warmgray mb-8">
-          These days I build audiences the slower, sturdier way. Email lists. Real relationships. Rooms worth being in. No algorithm required.
-        </p>
-        <div class="flex flex-wrap gap-4">
+  <section class="relative isolate overflow-hidden bg-black text-white">
+    <div class="pointer-events-none absolute inset-x-0 top-[4%] -z-10 select-none whitespace-nowrap font-serif text-[13.5vw] font-normal leading-none tracking-tight text-pink sm:top-[5%] sm:text-[19vw] lg:top-[7%] lg:text-[15.5vw]" style="margin-left:-2vw" aria-hidden="true">
+      <span>{bigWord}</span> <span>{bigWord}</span> <span>{bigWord}</span>
+    </div>
+    <div class="relative mx-auto flex max-w-6xl flex-col px-6 pt-16 lg:block lg:h-[800px] lg:pt-0">
+      <img
+        src="/images/about/kylie-hero-cutout.webp"
+        alt="Kylie Kelly sitting in an armchair in a lilac outfit, holding a disco ball up high and a glass of pink bubbles"
+        class="relative z-10 mx-auto h-[500px] w-auto sm:h-[620px] lg:absolute lg:bottom-0 lg:left-[19%] lg:mx-0 lg:h-[780px]"
+        width="1000"
+        height="1500"
+        fetchpriority="high"
+      />
+      <p class="absolute left-6 top-6 z-20 hidden max-w-[11rem] text-[11px] font-semibold uppercase leading-relaxed tracking-widest text-white/70 lg:block">
+        Wife. Mum of two boys. Email marketing educator. Host of The Email Growth Show.
+      </p>
+      <div class="relative z-20 mt-6 pb-16 text-center lg:absolute lg:right-0 lg:top-[46%] lg:mt-0 lg:w-[30%] lg:pb-0 lg:text-left">
+        <p class="font-serif text-4xl italic text-pink sm:text-5xl">Kylie Kelly</p>
+        <p class="mt-4 text-lg leading-relaxed text-white">Ex wedding photographer turned email nerd. Mum of two. Will talk you out of posting daily.</p>
+        <div class="mt-7 flex flex-wrap justify-center gap-3 lg:justify-start">
           <a href="/services" class="btn-pink">Work With Me →</a>
           <a href="https://www.skool.com/email-marketing-skool/about" class="btn-outline !border-white text-white">Join The Free Community</a>
         </div>
       </div>
-      <div class="bg-white p-3 pb-8 rounded-sm shadow-2xl rotate-2 max-w-xs mx-auto">
-        <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="w-full rounded-sm aspect-[4/5] object-cover" />
-      </div>
     </div>
   </section>
 
-  <!-- HONEST SECTION -->
-  <section class="px-6 py-16 text-center">
-    <div class="max-w-2xl mx-auto">
-      <h2 class="text-2xl sm:text-3xl font-bold mb-8">You didn't start a business to live on your phone.</h2>
-      <div class="text-left space-y-3 mb-8">
-        <p class="text-black"><span class="text-pink">+</span> Maybe you're posting (or not posting) and still wondering where your next client is coming from.</p>
-        <p class="text-black"><span class="text-pink">+</span> Maybe your list has stalled, or it's growing and nobody's buying.</p>
-        <p class="text-black"><span class="text-pink">+</span> Maybe you've tried Instagram, then SEO, then Pinterest, and you still don't know what actually works.</p>
-        <p class="text-black">I've asked myself every single one of those questions. More than once.</p>
+  <!-- THE BIG STATEMENT -->
+  <section class="bg-white px-6 py-20 sm:py-28">
+    <div class="mx-auto max-w-5xl">
+      <p class="mb-8 text-center text-xs font-semibold uppercase tracking-widest text-pink">A little about me</p>
+      <h2 class="mx-auto max-w-4xl text-center font-sans text-3xl font-medium leading-snug text-balance sm:text-5xl sm:leading-snug">
+        I spent ten years chasing wedding bookings, then a few more chasing likes for a business that wasn't paying the bills. And honestly? <Highlight>I'm done chasing anything now.</Highlight>
+      </h2>
+      <div class="mx-auto mt-14 grid max-w-4xl items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
+        <div class="space-y-5 text-lg leading-relaxed">
+          <p>These days I build audiences the slower, sturdier way. <strong>Email lists. Real relationships. Rooms worth being in.</strong> No algorithm required.</p>
+          <p>Maybe you're posting (or not posting) and still wondering where your next client is coming from. Maybe your list has stalled, or it's growing and nobody's buying. I've asked myself every single one of those questions. More than once.</p>
+          <p class="font-serif text-xl italic text-pink">Here's the short version of how I found some answers.</p>
+        </div>
+        <div class="relative mx-auto w-full max-w-xs">
+          <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="aspect-[4/5] w-full rounded-[1.75rem] object-cover shadow-[0_24px_50px_rgba(0,0,0,0.15)]" loading="lazy" />
+          <span class="absolute -bottom-4 -left-3 -rotate-3 rounded-full bg-pink px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-white shadow-lg sm:-left-6">Done chasing</span>
+        </div>
       </div>
-      <p class="font-serif italic text-pink text-xl">Here's the short version of how I found some answers.</p>
     </div>
   </section>
 
@@ -151,19 +170,77 @@ const paths = [
     </div>
   </section>
 
-  <!-- BIO LISTICLE -->
-  <section class="px-6 py-20">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-14">
-        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">A few more things about me</p>
-        <h2 class="text-3xl sm:text-4xl font-bold">Because a bio never tells the whole story.</h2>
+  <!-- THINGS I ANSWER TO -->
+  <section class="bg-white px-6 py-20 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-14 text-center">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">A few of the things I answer to</p>
+        <h2 class="font-serif text-3xl font-bold italic sm:text-4xl">Titles I'm actually proud of.</h2>
       </div>
-      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {listicle.map((card) => (
-          <div class="bg-offwhite rounded-lg p-6">
-            <h3 class="font-serif italic text-lg mb-4">{card.title}</h3>
-            <ul class="text-sm text-black space-y-3">
-              {card.items.map((item) => <li>{item}</li>)}
+      <div class="grid grid-cols-2 gap-x-5 gap-y-12 lg:grid-cols-4">
+        {answerTo.map((a, i) => (
+          <div class={i % 2 ? 'lg:mt-12' : ''}>
+            <div class="relative">
+              {a.photo ? (
+                <img src={a.photo} alt={`Kylie Kelly: ${a.label}`} class="aspect-[4/5] w-full rounded-[1.5rem] object-cover" loading="lazy" />
+              ) : (
+                <div class="grid aspect-[4/5] w-full place-items-center rounded-[1.5rem] bg-[#e9d9ec] p-4 text-center">
+                  <span class="font-serif text-xl italic text-black/50">photo coming</span>
+                </div>
+              )}
+              <span class="absolute -left-2 top-5 rounded-full border border-black bg-white px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest sm:-left-3">{a.label}</span>
+            </div>
+            <p class="mt-4 text-sm leading-relaxed sm:text-base">{a.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- THE QUIZ -->
+  <section class="bg-offwhite px-6 py-20 sm:py-28">
+    <div class="mx-auto max-w-5xl">
+      <div class="mb-14 text-center">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">Quick-fire round</p>
+        <h2 class="text-3xl font-bold sm:text-4xl">Oh yeah, we're doing this Cosmo girl style.</h2>
+        <p class="mx-auto mt-4 max-w-xl text-muted">Ten questions. No wrong answers (although a couple of mine are questionable).</p>
+      </div>
+      <div class="grid gap-x-12 gap-y-10 md:grid-cols-2">
+        {quiz.map((item, n) => (
+          <div class="border-b border-black/10 pb-8">
+            <p class="mb-4 text-xs font-semibold uppercase tracking-widest"><span class="mr-2 font-serif text-lg font-bold italic normal-case tracking-normal text-pink">{n + 1}.</span>{item.q}</p>
+            {item.answer ? (
+              <p class="font-hand text-4xl font-bold leading-[1.05] sm:text-[2.6rem]"><span class="quiz-ink">{item.answer}</span></p>
+            ) : (
+              <>
+                <ul class="space-y-1 text-[16px] text-black/65">
+                  {item.opts!.map((o, i) => (
+                    <li class="flex gap-3"><span class="w-5 flex-none text-black/35">{'abcde'[i]}.</span><span>{o}</span></li>
+                  ))}
+                </ul>
+                <p class="mt-4 font-hand text-4xl font-bold leading-[1.05] sm:text-[2.6rem]"><span class="quiz-ink">{item.written}</span></p>
+              </>
+            )}
+            {item.note && <p class="mt-2 font-hand text-2xl font-bold text-pink">{item.note}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT I BELIEVE -->
+  <section class="px-6 py-20">
+    <div class="mx-auto max-w-4xl">
+      <div class="mb-12 text-center">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">A few more things about me</p>
+        <h2 class="text-3xl font-bold sm:text-4xl">Because a bio never tells the whole story.</h2>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2">
+        {believe.map((card) => (
+          <div class="rounded-lg bg-offwhite p-8">
+            <h3 class="mb-5 font-serif text-xl italic">{card.title}</h3>
+            <ul class="space-y-3 text-black">
+              {card.items.map((item) => <li class="flex gap-3"><span class="text-pink">+</span><span>{item}</span></li>)}
             </ul>
           </div>
         ))}
@@ -180,6 +257,25 @@ const paths = [
       <p class="text-black mb-3">One of us builds the strategy. The other three are why school pickup never moves.</p>
       <p class="text-black mb-6">This business is built around nap times, school runs, and a genuine belief that it gets to be fun. If it doesn't fit around my real life, it's not a plan I'm interested in running.</p>
       <p class="font-serif italic text-lg">Cheering you on always, Kylie xx</p>
+    </div>
+  </section>
+
+  <!-- LATEST FROM THE PODCAST -->
+  <section class="bg-white px-6 py-20">
+    <div class="mx-auto max-w-5xl">
+      <p class="mb-10 text-center text-base font-semibold uppercase tracking-[0.2em] sm:text-lg">Fresh off the podcast</p>
+      <div class="grid gap-8 md:grid-cols-3">
+        {latest.map((ep) => (
+          <a href={ep.href} class="group block">
+            <EpisodeArt num={ep.num} title={ep.title} guest={ep.guest} class="transition-transform duration-300 group-hover:-translate-y-1.5" />
+            <div class="mt-4 flex items-center justify-between gap-3 px-1">
+              <span class="text-[11px] font-semibold uppercase tracking-widest text-black/70">{ep.date}</span>
+              <span class="grid h-9 w-9 flex-none place-items-center rounded-full bg-black text-white transition-transform duration-300 group-hover:scale-110" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
+            </div>
+          </a>
+        ))}
+      </div>
+      <p class="mt-10 text-center"><a href="/podcast" class="font-semibold underline underline-offset-4 hover:text-pink">See every episode →</a></p>
     </div>
   </section>
 
@@ -203,3 +299,15 @@ const paths = [
   </section>
 
 </Layout>
+<style>
+  .quiz-ink {
+    background-image: linear-gradient(rgba(224, 64, 251, 0.28), rgba(224, 64, 251, 0.28));
+    background-repeat: no-repeat;
+    background-position: 0 88%;
+    background-size: 100% 42%;
+    padding: 0 0.12em;
+    margin: 0 -0.12em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+</style>
