@@ -66,6 +66,12 @@
     "pullQuotes": [
       "This is your opportunity to move borrowed attention onto something you actually own.",
       "You could be featured on 20 podcasts, rank number one on Google, get 100,000 Pinterest views or appear in Forbes, but if there is no useful, relevant next step for someone to take, you’re basically renting attention and handing it straight back."
+    ],
+    "cutHtml": [
+      {
+        "find": "<h2[^>]*>(?:(?!</h2>).)*?Lane One: Borrowed Audiences(?:(?!</h2>).)*?</h2>",
+        "replace": "<figure data-figure=\"kk\"><img loading=\"lazy\" decoding=\"async\" width=\"1920\" height=\"1080\" src=\"/images/blog/v2-visibility-framework-2026-update.png\" alt=\"The V2 Visibility Framework: grow without social media. Relationship-based strategies (summits, bundles, freebie swaps, guest speaking, podcast guesting and networking) on one side and search and SEO strategies (long form content, social media, YouTube, Pinterest, TikTok and traditional PR) on the other, both leading down to your email list.\" /></figure>$&"
+      }
     ]
   },
   "plan-for-2025": {

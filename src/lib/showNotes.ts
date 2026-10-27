@@ -39,7 +39,7 @@ export interface ParsedNotes {
 }
 
 // The kinds of block that make up an intro, in order.
-const BLOCK = /<p[^>]*>[\s\S]*?<\/p>|<(?:ul|ol)[^>]*>[\s\S]*?<\/(?:ul|ol)>|<h[3-6][^>]*>[\s\S]*?<\/h[3-6]>|<blockquote[\s\S]*?<\/blockquote>/g;
+const BLOCK = /<p[^>]*>[\s\S]*?<\/p>|<(?:ul|ol)[^>]*>[\s\S]*?<\/(?:ul|ol)>|<h[3-6][^>]*>[\s\S]*?<\/h[3-6]>|<blockquote[\s\S]*?<\/blockquote>|<figure data-figure="kk"[\s\S]*?<\/figure>/g;
 
 const decode = (s: string) =>
   s
@@ -354,7 +354,7 @@ export function parseShowNotes(raw: string, slug?: string): ParsedNotes {
   const pinHeading = html.match(/<h2[^>]*>(?:(?!<\/h2>)[\s\S])*Love this post[\s\S]*?<\/h2>/i);
   if (pinHeading) {
     html = html.replace(pinHeading[0], '');
-    const fig = html.match(/<figure[\s\S]*?<\/figure>/);
+    const fig = html.match(/<figure(?![^>]*data-figure="kk")[\s\S]*?<\/figure>/);
     if (fig) {
       pin = fig[0].match(/src="([^"]+)"/)?.[1] ?? null;
       html = html.replace(fig[0], '');
