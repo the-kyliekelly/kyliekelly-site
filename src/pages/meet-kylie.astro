@@ -7,7 +7,7 @@ import { getEpisodes } from '../lib/episodes';
 const timeline = [
   { label: '10+ years', photo: '/images/about/t1-wedding.jpg', alt: 'Kylie with a groom and a bride in a lace gown holding a bouquet, at one of her wedding shoots', text: "I was an international wedding photographer. I loved the work. I did not love the feast and famine that came with it, through the highs and lows of the wedding seasons." },
   { label: '2020', photo: '/images/about/t2-nick-baby.jpg', alt: 'Kylie and her husband Nick grinning in a car park, with their baby in a carrier', text: "Two kids under two and a global pause I did not see coming. After refunding two years' worth of wedding bookings and almost going bankrupt because of it, I hung up my straps. I knew I didn't want to build a business that depended on being online every single day, but I had no idea what that looked like. So I did what everyone does. Started a new Instagram account. Build it and they will come... right?!" },
-  { label: 'The moment', photo: '/images/about/t3-glasses.jpg', alt: 'Kylie in blue-light glasses with her hand on her cheek, in the middle of a workday', text: "Wrong. After months of daily Instagram posts and a beautifully curated grid (A+ for effort), I sat down and looked at how many people were actually clicking through to my new website. Almost none. All that effort, and nothing to show for it. Not sales. Not clients. Not even clicks. <strong>That was the moment I stopped chasing the algorithm</strong> and knew I had to find a better way." },
+  { label: 'The moment', photo: '/images/about/t3-glasses.jpg', alt: 'Kylie in blue-light glasses with her hand on her cheek, in the middle of a workday', text: "Wrong. After months of daily Instagram posts and a beautifully curated grid (A+ for effort), I sat down and looked at how many people were actually clicking through to my new website. Almost none. All that effort, and nothing to show for it. Not sales. Not clients. Not even clicks. <strong>That was the moment I stopped chasing the algorithm</strong> and knew I had to find a better way.<br /><br />I'd always heard the power was in the list. I had no idea what list they were talking about, but I was desperate to find out." },
   { label: '18 months later', photo: '/images/about/t4-headphones.jpg', alt: 'Kylie smiling at the camera with white headphones around her neck', text: "0 to 7,000+ email subscribers, without social media. Just email, collaborations, and relationships that actually work, and six figures in revenue coming in." },
   { label: 'Since then', photo: '/images/about/t5-disco.jpg', alt: 'Kylie laughing out loud in a lilac top, holding a disco ball in the air', text: "I started The Email Growth Show (now a top 1.5% podcast globally), built Email Marketing Skool (1,400+ women and counting), and helped hundreds of women grow their own lists the same simple way." },
   { label: 'Right now', photo: '/images/about/t6-boys.jpg', alt: 'Kylie laughing with her two boys on her lap', text: "I'm building toward a business that can help thousands of women whether I'm online that day or not. Fewer hours on calls. More simple tools that keep working after I've done the school run, available in my digital shop that's open 24/7. My driving forces: <strong>FREEDOM + IMPACT.</strong>" },
@@ -34,6 +34,20 @@ const quiz = [
   { q: 'The first thing I check each morning:', opts: ['Instagram', 'The weather', 'Overnight $$$', 'My email inbox'], pick: [2] },
   { q: "At school pickup I'm usually:", opts: ['Early', 'On time', 'Slightly late', 'Unsure what day it is'], pick: [3] },
   { q: 'Someday I want to:', answer: "Ride in a hot air balloon. (Yes, even though I'm scared of heights!)" },
+];
+
+const receipts = [
+  { num: '7,000+', label: 'email subscribers in 18 months, without social media' },
+  { num: '1,400+', label: 'women in Email Marketing Skool' },
+  { num: 'Top 1.5%', label: 'podcast globally, The Email Growth Show' },
+  { num: '130+', label: 'collaborations pitched, run or hosted since 2022' },
+];
+
+const beliefs = [
+  { title: 'Relationships over algorithms.', text: 'A list you own and people who actually know you will outlast any platform change.' },
+  { title: 'Fast learning over fast hype.', text: 'Test it, learn from it, tweak it. Then do it again. The next shiny thing can wait.' },
+  { title: 'Women on the same team.', text: "130+ collaborations in, and opening the door has never once been the mistake." },
+  { title: 'Doing the uncomfortable thing.', text: "The clear ask, the honest conversation, the 'no' you actually mean. It's usually where the shift happens." },
 ];
 
 const paths = [
@@ -127,7 +141,7 @@ const arrowIcon = 'M4 12L12 4M5.5 4H12v6.5';
       </h2>
       <div class="mx-auto mt-14 grid max-w-4xl items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
         <div class="space-y-5 text-lg leading-relaxed">
-          <p>These days I build audiences the slower, sturdier way. <strong class="uppercase tracking-wide">Email lists. Real relationships. Rooms worth being in.</strong> No algorithm required.</p>
+          <p>These days I build audiences the slower, sturdier way. <strong class="uppercase tracking-wide">Email lists. Real relationships. Rooms worth being in.</strong> No algorithm required. No content treadmill. No pretending you enjoy showing up every day.</p>
           <p>Maybe you're posting (or not posting) and still wondering where your next client is coming from. Maybe your list has stalled, or it's growing and nobody's buying. I've asked myself every single one of those questions. More than once.</p>
           <p class="font-serif text-2xl font-bold italic leading-snug text-pink sm:text-3xl">Here's the short version of how I found some answers.</p>
         </div>
@@ -158,6 +172,21 @@ const arrowIcon = 'M4 12L12 4M5.5 4H12v6.5';
               <p class="mb-3 text-sm font-semibold uppercase tracking-widest text-pink-light">{t.label}</p>
               <p class="timeline-text text-xl leading-relaxed text-white/90 sm:text-2xl sm:leading-relaxed" set:html={t.text} />
             </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- BY THE NUMBERS -->
+  <section class="bg-offwhite px-6 py-20 sm:py-24">
+    <div class="mx-auto max-w-6xl">
+      <p class="mb-12 text-center text-sm font-semibold uppercase tracking-widest text-pink sm:text-base">By the numbers</p>
+      <div class="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
+        {receipts.map((r) => (
+          <div class="text-center">
+            <p class="font-serif text-4xl font-bold text-pink sm:text-5xl xl:text-6xl">{r.num}</p>
+            <p class="mx-auto mt-3 max-w-[14rem] text-sm leading-relaxed sm:text-base">{r.label}</p>
           </div>
         ))}
       </div>
@@ -229,6 +258,30 @@ const arrowIcon = 'M4 12L12 4M5.5 4H12v6.5';
     </div>
   </section>
 
+  <!-- WHAT I BELIEVE -->
+  <section class="bg-offwhite px-6 py-20 sm:py-28">
+    <div class="mx-auto max-w-5xl">
+      <div class="mb-14 text-center">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-widest text-pink sm:text-base">What I believe</p>
+        <h2 class="text-3xl font-bold sm:text-5xl">The short list of things I won't budge on.</h2>
+      </div>
+      <div class="grid gap-x-16 gap-y-12 md:grid-cols-2">
+        {beliefs.map((b, i) => (
+          <div class="flex gap-6">
+            <span class="w-16 flex-none font-serif text-5xl italic leading-none text-pink">{`0${i + 1}`}</span>
+            <div>
+              <h3 class="text-xl font-bold sm:text-2xl">{b.title}</h3>
+              <p class="mt-2 text-base leading-relaxed text-black/80 sm:text-lg">{b.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="mt-16 text-center">
+        <p class="hand write mx-auto max-w-3xl text-[1.6rem] leading-snug text-pink sm:text-[1.9rem]">Things I don't have time for: judgement, mum guilt, performative small talk, saying yes when you mean no, and country music (unless it's OG Tay Tay, which barely counts).</p>
+      </div>
+    </div>
+  </section>
+
   <!-- LATEST FROM THE PODCAST -->
   <section class="bg-white px-6 py-20">
     <div class="mx-auto max-w-5xl">
@@ -253,7 +306,8 @@ const arrowIcon = 'M4 12L12 4M5.5 4H12v6.5';
     <div class="mx-auto max-w-6xl">
       <div class="mb-20 text-center">
         <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">Ways to keep going</p>
-        <h2 class="text-3xl font-bold sm:text-4xl">Now that you know me, here's where to go next.</h2>
+        <h2 class="text-3xl font-bold sm:text-4xl">Because growing a list is just the beginning.</h2>
+        <p class="mt-4 font-serif text-xl italic sm:text-2xl">I want you to be seen. Remembered. Respected.</p>
       </div>
       <div class="grid items-stretch gap-20 lg:grid-cols-[1.2fr_0.8fr] lg:gap-14">
         <div class="space-y-6">
