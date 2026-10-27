@@ -5,6 +5,7 @@
 
 import pageOverrides from '../data/page-overrides.json';
 import episodeOverviews from '../data/episode-overviews.json';
+import episodeWriteUps from '../data/episode-writeups.json';
 
 export interface PageOverride {
   quickAnswer?: string;
@@ -519,6 +520,13 @@ export function isStructuredWriteUp(html: string): boolean {
   return (hasTranscript || hasBlocks) && hasPlayer;
 }
 
+/** A full write-up (the HTML the Friday episode skill produces) for an episode that is built from the podcast feed, keyed by page address. */
+export const writeUpFor = (path?: string): string | undefined => {
+  if (!path) return undefined;
+  const key = `/${path.replace(/^\/+|\/+$/g, '')}/`;
+  return (episodeWriteUps as Record<string, string>)[key] || undefined;
+};
+
 /** A written overview of the whole episode for the "About this episode" box (src/data/episode-overviews.json, keyed by page address). */
 export const overviewFor = (path?: string): string | undefined => {
   if (!path) return undefined;
@@ -569,7 +577,7 @@ export function summariseIntro(paragraphs: string[], fallback: string) {
 }
 
 /** Builds the full-version page for a standard write-up, using the opening of the write-up itself. */
-export function autoFullPage(html: string, title: string, slug?: string) {
+export function autoFullPage(html: string, title: string, slug?: string, path?: string) {
   const notes = parseShowNotes(html, slug);
   const override = overridesFor(slug);
   const blocks = [...notes.intro.matchAll(BLOCK)].map((m) => m[0]);
@@ -577,7 +585,7 @@ export function autoFullPage(html: string, title: string, slug?: string) {
   // If the opening is only a line or two, borrow the start of the first section so the box says something useful.
   const firstSection = [...(notes.sections[0]?.html ?? '').matchAll(/<p[^>]*>[\s\S]*?<\/p>/g)].map((m) => m[0]);
   const auto = summariseIntro([...introParas, ...firstSection], title);
-  const overview = override.quickAnswer ? undefined : overviewFor(slug);
+  const overview = override.quickAnswer ? undefined : overviewFor(path ?? slug);
   const used = overview ? openersCoveredBy(introParas, overview) : auto.used;
   const quickAnswer = overview ?? auto.quickAnswer;
   const metaDescription = overview ? summariseIntro([overview], title).metaDescription : auto.metaDescription;

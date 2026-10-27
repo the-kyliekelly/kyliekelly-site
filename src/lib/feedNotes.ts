@@ -22,7 +22,7 @@ const clean = (s: string) =>
   s
     .replace(/<(?!\/?(?:a|b|strong|em|i)\b)[^>]+>/gi, '')
     .replace(/<a\s+[^>]*?href="([^"]*)"[^>]*>/gi, '<a href="$1" target="_blank" rel="noopener">')
-    .replace(/<(b|strong|em|i)>\s*<\/\1>/gi, '')
+    .replace(/<(b|strong|em|i)>(\s*)<\/\1>/gi, '$2')
     .trim();
 
 const toParagraphs = (html: string): string[] =>
@@ -40,13 +40,13 @@ const toParagraphs = (html: string): string[] =>
 const toLines = (html: string): string[] =>
   clean(html.replace(/<\/?(?:p|ul)[^>]*>/gi, '\n').replace(/<\/li>/gi, '\n').replace(/<li[^>]*>/gi, '').replace(/<br\s*\/?>/gi, '\n'))
     .split('\n')
-    .map((l) => l.replace(/^\s*(?:→|•|-|\*)\s*/, '').trim())
+    .map((l) => l.replace(/^\s*(?:→|•|-|\*|🔗)\s*/u, '').trim())
     .filter((l) => plain(l).length > 1);
 
 const titleCase = (s: string) => s.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 
 const MARKER =
-  /<b>\s*((?:what you.ll learn|we chat about|i chat about|we talk about|i talk about)[^<:]*|about [^<:]{2,40}|connect with [^<:]{2,40}|links mentioned|mentioned links|tools mentioned|resources[^<:]*)\s*:?\s*<\/b>\s*:?/gi;
+  /<b>\s*((?:what you.ll learn|we chat about|i chat about|we talk about|i talk about)[^<:]*|about [^<:]{2,40}|connect with [^<:]{2,40}|links mentioned|mentioned links|tools mentioned|resources[^<:]*)\s*:?\s*(?:<br\s*\/?>\s*)?<\/b>\s*:?/gi;
 
 export interface FeedPage {
   notes: ParsedNotes;
@@ -61,7 +61,7 @@ export interface FeedPage {
 }
 
 export function parseFeedNotes(ep: Episode): FeedPage {
-  let html = (ep.notesHtml ?? '').replace(/href='([^']*)'/g, 'href="$1"');
+  let html = (ep.notesHtml ?? '').replace(/href='([^']*)'/g, 'href="$1"').replace(/&apos;/g, "'");
 
   // Drop the promo and links block that ends every episode, and empty paragraphs.
   const dropPara = (test: RegExp) => {
@@ -72,6 +72,9 @@ export function parseFeedNotes(ep: Episode): FeedPage {
   dropPara(/^→?\s*digital shop/i);
   dropPara(/loving the show\?/i);
   html = html.replace(/<p[^>]*>(?:\s|<br\s*\/?>)*<\/p>/gi, '');
+
+  // "Guest Spotlight: Mara Riopel" followed by the bio reads as "About Mara Riopel"
+  html = html.replace(/<b>\s*Guest Spotlight:?\s*<\/b>\s*([^<]{2,40}?)\s*(?=<br\s*\/?>|<\/p>)(?:<br\s*\/?>)?/gi, '<b>About $1</b>');
 
   // Split at the headings
   const marks = [...html.matchAll(MARKER)];
@@ -101,7 +104,12 @@ export function parseFeedNotes(ep: Episode): FeedPage {
     } else if (s.label.startsWith('connect with')) {
       guestLines.push(...toLines(s.body));
     } else {
-      links.push(...toLines(s.body));
+      // A long closing paragraph after the links (a tip, a free quiz) reads as part of the intro, not as a link.
+      for (const chunk of s.body.split(/<\/p>/i)) {
+        const text = plain(chunk);
+        if (text.length > 160 && !/^(?:→|🔗|https?:)/.test(text)) introParas.push(...toParagraphs(`${chunk}</p>`));
+        else links.push(...toLines(chunk));
+      }
     }
   }
 

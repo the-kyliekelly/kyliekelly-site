@@ -4,6 +4,7 @@
 import ShowNotes from '../../../components/ShowNotes.astro';
 import { getEpisodes } from '../../../lib/episodes';
 import { parseFeedNotes } from '../../../lib/feedNotes';
+import { autoFullPage, writeUpFor } from '../../../lib/showNotes';
 
 export async function getStaticPaths() {
   const episodes = await getEpisodes();
@@ -14,6 +15,7 @@ export async function getStaticPaths() {
 
 const { ep } = Astro.props;
 const episodes = await getEpisodes();
-const { notes, extra } = parseFeedNotes(ep);
+const writeUp = writeUpFor(ep.href);
+const { notes, extra } = writeUp ? autoFullPage(writeUp, ep.title, ep.href.split('/').filter(Boolean).pop(), ep.href) : parseFeedNotes(ep);
 ---
-<ShowNotes post={{ slug: ep.href, title: ep.title, date: ep.iso, excerpt: '', content: '' }} path={ep.href} notes={notes} extra={extra} episodes={episodes} />
+<ShowNotes post={{ slug: ep.href, title: ep.title, date: ep.iso, excerpt: '', content: writeUp ?? '' }} path={ep.href} notes={notes} extra={extra} episodes={episodes} />

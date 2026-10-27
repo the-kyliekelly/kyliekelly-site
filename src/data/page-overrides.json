@@ -70,7 +70,7 @@
     "cutHtml": [
       {
         "find": "<h2[^>]*>(?:(?!</h2>).)*?Lane One: Borrowed Audiences(?:(?!</h2>).)*?</h2>",
-        "replace": "<figure data-figure=\"kk\"><img loading=\"lazy\" decoding=\"async\" width=\"1920\" height=\"1080\" src=\"/images/blog/v2-visibility-framework-2026-update.png\" alt=\"The V2 Visibility Framework: grow without social media. Relationship-based strategies (summits, bundles, freebie swaps, guest speaking, podcast guesting and networking) on one side and search and SEO strategies (long form content, social media, YouTube, Pinterest, TikTok and traditional PR) on the other, both leading down to your email list.\" /></figure>$&"
+        "replace": "<figure data-figure=\"kk\"><img loading=\"lazy\" decoding=\"async\" width=\"1920\" height=\"1080\" src=\"/images/blog/v2-visibility-framework-borrowed-evergreen.png\" alt=\"The V2 Visibility Framework: grow without social media. Borrowed audiences (summits, bundles, freebie swaps, guest speaking, podcast guesting and networking) on one side and evergreen discovery (long form content, social media, YouTube, Pinterest, TikTok and traditional PR) on the other, both leading down to your email list.\" /></figure>$&"
       }
     ]
   },
@@ -297,6 +297,95 @@
     "pullQuotes": [
       "Email converts so beautifully because it builds connection, and people buy from people they feel connected to.",
       "Selling stops being a hard launch or a big event and becomes a natural extension of the relationship."
+    ]
+  },
+  "3-day-launch-strategy": {
+    "highlights": [
+      "We need more reasons to sell the things we’ve already made",
+      "A launch can simply mean deciding that for the next three days, you’re going to intentionally sell something you already have.",
+      "The offer doesn’t need to change. The reason to pay attention – that’s what’s new.",
+      "To someone who just found you, it’s brand new.",
+      "The constraint is the point.",
+      "Just the offer, communicated clearly.",
+      "If you said there were 20 spots, there need to actually be 20 spots.",
+      "Reminding someone something is closing tonight isn’t a crime.",
+      "ask yourself honestly when you last actually sold it",
+      "You might just need to give something you’ve already created a red carpet moment."
+    ],
+    "pullQuotes": [
+      "We confuse our own boredom with audience saturation.",
+      "Black Friday isn’t an excuse to create more – it’s a reason to sell what you’ve already made."
+    ]
+  },
+  "more-ways-to-be-discovered": {
+    "highlights": [
+      "That’s evidence 80 people saw it.",
+      "no one knows this shop exists",
+      "Audience size isn’t the same thing as audience security.",
+      "visibility as infrastructure",
+      "You don’t need ten doors by Friday. You build one, get it working, then build another.",
+      "make that one bigger",
+      "they compound",
+      "simply creating something isn’t a strategy anymore",
+      "You’re not creating more – you’re increasing distribution",
+      "then build just one more"
+    ],
+    "pullQuotes": [
+      "Sometimes what looks like an offer problem is really a discovery problem wearing an offer problem’s clothes.",
+      "Security comes from having more than one way in."
+    ]
+  },
+  "q4-planning-consistency-strategy": {
+    "highlights": [
+      "stop asking whether you did the thing",
+      "That’s the opposite of compounding.",
+      "October should remember September. Q4 should remember Q3.",
+      "open your own numbers",
+      "So many business problems are traffic problems in disguise.",
+      "Work out why the people already finding you aren’t taking the next step.",
+      "stop fixing the part of your business that isn’t broken",
+      "give it the majority of your attention",
+      "your Q4 might get smaller",
+      "the boring ones that figured out what works and kept doing it"
+    ],
+    "pullQuotes": [
+      "But consistency amplifies whatever strategy you’ve chosen.",
+      "You’re allowed to repeat yourself."
+    ]
+  },
+  "your-subscribers-like-your-emails-so-why-dont-they-buy": {
+    "highlights": [
+      "enjoying your content and buying from you are two different behaviours",
+      "a communication gap, and you can close it without creating anything new",
+      "there’s too much separation between your nurture and your sales",
+      "Friday becomes a consistent chance to connect something happening in my audience’s world to one of my paid solutions",
+      "You can be kind and direct at the same time.",
+      "Make an offer every Friday and that becomes 52.",
+      "52 pieces of data",
+      "nobody is shocked that a business owner has something to sell",
+      "A tiny PS doesn’t count."
+    ],
+    "pullQuotes": [
+      "Your reader should feel like it’s all one conversation.",
+      "It might simply mean you’ve become really good at giving people reasons to read, and now you get to give them reasons to buy."
+    ]
+  },
+  "the-black-friday-that-made-the-least-and-grew-my-list-the-most": {
+    "highlights": [
+      "It was the smallest November I’d ever had, and I did it on purpose.",
+      "By day three, I hated it.",
+      "we’re not doing this anymore",
+      "Same offer. Higher price. The only thing that changed was the warm-up.",
+      "I didn’t have to deliver a single thing for that $1,100.",
+      "I always treat Black Friday as a bonus",
+      "matters a lot less than we all think",
+      "keeps a buying muscle warm heading into the end of the year",
+      "Pick one lane and let everything else follow from it.",
+      "still sell something"
+    ],
+    "pullQuotes": [
+      "That one honest email built more trust than the whole countdown ever could have.",
+      "The year I sold the least was the year my list grew the most."
     ]
   }
 }
