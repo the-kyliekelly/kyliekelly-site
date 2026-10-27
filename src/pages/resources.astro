@@ -137,23 +137,22 @@ const places = [
 
   <!-- TOOLS I USE -->
   <section class="bg-offwhite px-6 py-20 sm:py-28">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-7xl mx-auto">
       <p class="text-xs uppercase tracking-widest font-semibold text-center mb-3">Business tools</p>
       <h2 class="font-serif text-4xl font-bold italic sm:text-5xl text-center mb-14">The ones I actually use</h2>
       <div class="flex flex-wrap justify-center gap-6">
         {tools.map((t) => (
-          <article id={t.slug} class={`flex scroll-mt-24 flex-col rounded-[2rem] p-8 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] ${t.tint}`}>
+          <article id={t.slug} class={`flex scroll-mt-24 flex-col rounded-[2rem] p-8 w-full sm:w-[calc(50%-12px)] xl:w-[calc(25%-18px)] ${t.tint}`}>
             <div class="mb-6 flex items-center justify-between gap-3">
               <p class="inline-block self-start rounded-full bg-white px-4 py-1.5 text-xs uppercase tracking-widest font-semibold">{t.tag}</p>
             </div>
             {t.logo ? (
-              <div class="mb-5 inline-flex h-[4.5rem] max-w-full items-center self-start rounded-2xl bg-white px-5">
-                <img src={t.logo} alt={`${t.name} logo`} class="max-h-10 w-auto max-w-[200px] object-contain" loading="lazy" />
-              </div>
+              <h3 class="mb-5 inline-flex h-20 max-w-full items-center self-start rounded-2xl bg-white px-6">
+                <img src={t.logo} alt={t.name} class="max-h-11 w-auto max-w-full object-contain" loading="lazy" />
+              </h3>
             ) : (
-              <div class="mb-5 grid h-[4.5rem] w-[4.5rem] place-items-center rounded-2xl bg-white font-serif text-3xl text-pink" aria-hidden="true">{t.name.replace(/^The /, '').charAt(0)}</div>
+              <h3 class="font-serif text-4xl mb-5 text-balance">{t.name}</h3>
             )}
-            <h3 class="font-serif text-4xl mb-4 text-balance">{t.name}</h3>
             <p class="text-sm text-black mb-6 flex-grow">{t.desc}</p>
             {t.perk && (
               <p class="mb-6 inline-flex items-center gap-2 self-start rounded-full bg-black px-4 py-2 text-xs font-semibold text-white">
