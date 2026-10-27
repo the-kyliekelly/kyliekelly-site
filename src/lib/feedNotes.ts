@@ -4,7 +4,7 @@
 // same parts the show notes template uses. Nothing is added or invented: the first paragraph becomes
 // the "About this episode" box, and the same promo block that ends every episode is left out.
 import type { Episode } from './episodes';
-import { summariseIntro, type ParsedNotes } from './showNotes';
+import { openersCoveredBy, overviewFor, summariseIntro, type ParsedNotes } from './showNotes';
 
 const decode = (s: string) =>
   s
@@ -105,7 +105,11 @@ export function parseFeedNotes(ep: Episode): FeedPage {
     }
   }
 
-  const { quickAnswer, metaDescription, used } = summariseIntro(introParas, ep.title);
+  const auto = summariseIntro(introParas, ep.title);
+  const overview = overviewFor(ep.href);
+  const used = overview ? openersCoveredBy(introParas, overview) : auto.used;
+  const quickAnswer = overview ?? auto.quickAnswer;
+  const metaDescription = overview ? summariseIntro([overview], ep.title).metaDescription : auto.metaDescription;
 
   const name = ep.guest ?? guestName;
   const guestHtml = [...guestBio.map((p) => `<p>${p}</p>`), ...guestLines.map((l) => `<p>${l}</p>`)].join('');

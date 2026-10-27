@@ -4,6 +4,7 @@
 // It only reads the HTML. Nothing is added or invented.
 
 import pageOverrides from '../data/page-overrides.json';
+import episodeOverviews from '../data/episode-overviews.json';
 
 export interface PageOverride {
   quickAnswer?: string;
@@ -518,6 +519,29 @@ export function isStructuredWriteUp(html: string): boolean {
   return (hasTranscript || hasBlocks) && hasPlayer;
 }
 
+/** A written overview of the whole episode for the "About this episode" box (src/data/episode-overviews.json, keyed by page address). */
+export const overviewFor = (path?: string): string | undefined => {
+  if (!path) return undefined;
+  const key = `/${path.replace(/^\/+|\/+$/g, '')}/`;
+  return (episodeOverviews as Record<string, string>)[key] || undefined;
+};
+
+/**
+ * How many opening paragraphs the overview already says, so they aren't shown twice. It looks at the first few
+ * paragraphs for sentences the overview repeats, and counts everything up to the last one of those (a lead-in line
+ * with nothing before it would read oddly on its own).
+ */
+export function openersCoveredBy(paragraphs: string[], overview: string) {
+  const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const covered = norm(overview);
+  let count = 0;
+  paragraphs.slice(0, 6).forEach((para, i) => {
+    const sentences = stripTags(para.replace(/<br\s*\/?>/gi, ' ')).match(/[^.!?]+[.!?]/g) ?? [];
+    if (sentences.some((sentence) => norm(sentence).length >= 25 && covered.includes(norm(sentence)))) count = i + 1;
+  });
+  return count;
+}
+
 /**
  * The "About this episode" box: the opening paragraph, or the first few if the opener is only a line,
  * cut at a sentence end. `used` is how many paragraphs it took, so the rest can follow as the intro.
@@ -552,7 +576,11 @@ export function autoFullPage(html: string, title: string, slug?: string) {
   const introParas = blocks.filter((b) => /^<p[\s>]/i.test(b));
   // If the opening is only a line or two, borrow the start of the first section so the box says something useful.
   const firstSection = [...(notes.sections[0]?.html ?? '').matchAll(/<p[^>]*>[\s\S]*?<\/p>/g)].map((m) => m[0]);
-  const { quickAnswer, metaDescription, used } = summariseIntro([...introParas, ...firstSection], title);
+  const auto = summariseIntro([...introParas, ...firstSection], title);
+  const overview = override.quickAnswer ? undefined : overviewFor(slug);
+  const used = overview ? openersCoveredBy(introParas, overview) : auto.used;
+  const quickAnswer = overview ?? auto.quickAnswer;
+  const metaDescription = overview ? summariseIntro([overview], title).metaDescription : auto.metaDescription;
   // The paragraphs the box used come out of the intro; lists, headings and quotes stay where they were.
   let toRemove = override.quickAnswer ? 0 : Math.min(used, introParas.length); // a written-out answer leaves the opening where it is
   notes.intro = blocks.filter((b) => !(toRemove > 0 && /^<p[\s>]/i.test(b) && (toRemove--, true))).join('');
