@@ -25,15 +25,15 @@ const tools = [
     pill: { cls: 'bg-white text-black', pos: 'md:right-[4%] md:top-[8%]', r: '4deg', d: '-1.2s' } },
   { slug: 'buzzsprout', name: 'Buzzsprout', tag: 'Podcasting', desc: 'This is where all my podcast episodes live. Super easy to use, helps me track downloads, and integrates beautifully with my website.', perk: '$20 credit', url: 'https://www.buzzsprout.com/?referrer_id=2046932', tint: 'bg-pink-light',
     pill: { cls: 'bg-pink-light text-black', pos: 'md:left-[0%] md:top-[44%]', r: '-3deg', d: '-2.4s' } },
-  { slug: 'descript', name: 'Descript', tag: 'Audio & video editing', desc: 'Edit audio and video by editing the transcript, like a doc. A game changer for podcasts and clips.', perk: '50% off your first 2 months of Creator', url: 'https://descript.cello.so/JlEIs2TnSLt', tint: 'bg-offwhite',
+  { slug: 'descript', name: 'Descript', tag: 'Audio & video editing', desc: 'Edit audio and video by editing the transcript, like a doc. A game changer for podcasts and clips.', perk: '50% off your first 2 months of Creator', url: 'https://descript.cello.so/JlEIs2TnSLt', tint: 'bg-pink-light',
     pill: { cls: 'bg-[#fbe6f7] text-black', pos: 'md:right-[0%] md:top-[44%]', r: '5deg', d: '-3.1s' } },
   { slug: 'wispr-flow', name: 'Wispr Flow', tag: 'Voice dictation', desc: 'Talk instead of type. It turns your voice into clean, ready-to-send text in any app.', perk: 'A free month of Flow Pro', url: 'https://wisprflow.ai/r?KYLIE344', tint: 'bg-[#e9d9ec]',
     pill: { cls: 'bg-[#e9d9ec] text-black', pos: 'md:left-[7%] md:bottom-[8%]', r: '5deg', d: '-0.6s' } },
   { slug: 'senja', name: 'Senja', tag: 'Social proof', desc: 'Collect testimonials and show them off beautifully, without chasing screenshots.', perk: null, url: 'https://www.senja.io?via=kylie39', tint: 'bg-[#fbe6f7]',
     pill: { cls: 'bg-black text-white ring-2 ring-white/30', pos: 'md:right-[8%] md:bottom-[10%]', r: '-5deg', d: '-1.8s' } },
-  { slug: 'ever-ads', name: 'Ever Ads', tag: 'Facebook ads', desc: 'A Facebook ads tool I’ve just started working with.', perk: null, url: 'https://ever-ads.com?via=kylie-993999', tint: 'bg-pink-light',
+  { slug: 'ever-ads', name: 'Ever Ads', tag: 'Facebook ads', desc: 'A Facebook ads tool I’ve just started working with.', perk: null, url: 'https://ever-ads.com?via=kylie-993999', tint: 'bg-[#e9d9ec]',
     pill: { cls: 'bg-white text-black', pos: 'md:left-[27%] md:top-[0%]', r: '3deg', d: '-2.8s' } },
-  { slug: 'boutique-lawyer', name: 'The Boutique Lawyer', tag: 'Legal templates', desc: 'I’ve used their legal templates for everything from client contracts to my website terms. It’s the peace of mind every business owner needs.', perk: null, url: 'https://the-boutique-lawyer.myshopify.com/kyliekelly', tint: 'bg-offwhite',
+  { slug: 'boutique-lawyer', name: 'The Boutique Lawyer', tag: 'Legal templates', desc: 'I’ve used their legal templates for everything from client contracts to my website terms. It’s the peace of mind every business owner needs.', perk: null, url: 'https://the-boutique-lawyer.myshopify.com/kyliekelly', tint: 'bg-[#fbe6f7]',
     pill: { cls: 'bg-pink text-white', pos: 'md:right-[27%] md:bottom-[0%]', r: '-3deg', d: '-3.6s' } },
 ].map((t) => ({ ...t, logo: logoFor(t.slug) }));
 
@@ -41,7 +41,7 @@ const places = [
   { title: 'The KK Digital Product Shop', text: 'Grab-and-go courses, templates and trainings for growing your list without social media.', href: 'https://shop.kyliekelly.com/', image: '/images/shop-mockup.jpg', dot: 'bg-pink-light text-black' },
   { title: 'Email Marketing Skool', text: 'My free community, with a simple 90-day growth plan and the Email Marketing Starter Kit.', href: 'https://www.skool.com/email-marketing-skool/about', image: '/images/hero-8.jpg', dot: 'bg-[#e9d9ec] text-black' },
   { title: 'The Email Growth Show', text: 'My podcast, every Friday, with full show notes for every episode.', href: '/podcast', image: '/images/hero-1.jpg', dot: 'bg-[#fbe6f7] text-black' },
-  { title: 'Find CoLab', text: 'Where women in business find their next collaboration partner, so you can grow your lists together.', href: 'https://findcolab.com/', image: '/images/hero-7.jpg', dot: 'bg-pink-light text-black' },
+  { title: 'Find CoLab', text: 'Where women in business find their next collaboration partner, so you can grow your lists together.', href: 'https://findcolab.com/?utm_source=website&utm_medium=favorites-page&utm_campaign=resources&utm_content=hottest-recs', image: '/images/hero-7.jpg', dot: 'bg-pink-light text-black' },
 ];
 ---
 <Layout title="Favorites | Kylie Kelly" description="A few of my favorite things: the tools and resources I actually use to run my business.">
@@ -74,7 +74,7 @@ const places = [
   <!-- THE HOTTEST RECS -->
   <section class="relative z-10 -mt-14 sm:-mt-20 rounded-t-[2.5rem] bg-white px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 text-center">
     <div class="max-w-3xl mx-auto">
-      <p class="text-pink font-semibold mb-5">The hottest recs</p>
+      <p class="text-pink font-semibold uppercase tracking-widest text-sm mb-5">The hottest recs</p>
       <h2 class="text-3xl sm:text-5xl font-bold leading-tight text-balance">
         I only recommend what I <Highlight>actually use</Highlight>. Here are a few of my favorites, all in one place.
       </h2>
@@ -139,7 +139,7 @@ const places = [
   <section class="bg-offwhite px-6 py-20 sm:py-28">
     <div class="max-w-5xl mx-auto">
       <p class="text-xs uppercase tracking-widest font-semibold text-center mb-3">Business tools</p>
-      <h2 class="font-serif text-4xl sm:text-5xl text-center mb-14">The ones I actually use</h2>
+      <h2 class="font-serif text-4xl font-bold italic sm:text-5xl text-center mb-14">The ones I actually use</h2>
       <div class="flex flex-wrap justify-center gap-6">
         {tools.map((t) => (
           <article id={t.slug} class={`flex scroll-mt-24 flex-col rounded-[2rem] p-8 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] ${t.tint}`}>
@@ -147,11 +147,11 @@ const places = [
               <p class="inline-block self-start rounded-full bg-white px-4 py-1.5 text-xs uppercase tracking-widest font-semibold">{t.tag}</p>
             </div>
             {t.logo ? (
-              <div class="mb-5 inline-flex h-16 max-w-full items-center self-start rounded-2xl bg-white px-5">
-                <img src={t.logo} alt={`${t.name} logo`} class="h-8 w-auto max-w-[150px] object-contain" loading="lazy" />
+              <div class="mb-5 inline-flex h-[4.5rem] max-w-full items-center self-start rounded-2xl bg-white px-5">
+                <img src={t.logo} alt={`${t.name} logo`} class="max-h-10 w-auto max-w-[200px] object-contain" loading="lazy" />
               </div>
             ) : (
-              <div class="mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-white font-serif text-3xl text-pink" aria-hidden="true">{t.name.replace(/^The /, '').charAt(0)}</div>
+              <div class="mb-5 grid h-[4.5rem] w-[4.5rem] place-items-center rounded-2xl bg-white font-serif text-3xl text-pink" aria-hidden="true">{t.name.replace(/^The /, '').charAt(0)}</div>
             )}
             <h3 class="font-serif text-4xl mb-4 text-balance">{t.name}</h3>
             <p class="text-sm text-black mb-6 flex-grow">{t.desc}</p>
