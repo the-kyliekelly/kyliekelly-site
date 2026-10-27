@@ -5,60 +5,54 @@ import EpisodeArt from '../components/EpisodeArt.astro';
 import { getEpisodes } from '../lib/episodes';
 
 const timeline = [
-  { label: '10+ years', text: "I was an international wedding photographer. I loved the work. I did not love wondering when the next booking would land." },
-  { label: '2020', text: "Two kids under two and a global pause I did not see coming. I knew I didn't want to build a business that depended on being online every single day. I just didn't know what would work instead." },
-  { label: 'The moment', text: "I sat down and actually looked at how many people my daily Instagram posts were sending to my website. Almost none. All that effort, and there was nothing to show for it. Not sales. Not clients. Not even clicks. That was the moment I stopped chasing the algorithm." },
-  { label: '18 months later', text: "0 to 7,000+ email subscribers, without social media. Just email, collaborations, and relationships that actually work." },
-  { label: 'Since then', text: "I started The Email Growth Show (now a top 1.5% podcast globally), built Email Marketing Skool (1,300+ women and counting), and helped hundreds of women grow their own lists the same simple way." },
-  { label: 'Right now', text: "I'm building toward a business that can help thousands of women whether I'm online that day or not. Fewer hours on calls. More simple tools that keep working after I've done the school run." },
+  { label: '10+ years', photo: '/images/kylie-photography.jpg', alt: 'Kylie working as a wedding photographer, shooting a bride and groom by a pool', text: "I was an international wedding photographer. I loved the work. I did not love wondering when the next booking would land." },
+  { label: '2020', photo: '/images/little-fam.jpg', alt: 'Kylie with her husband Nick and their two little boys', text: "Two kids under two and a global pause I did not see coming. I knew I didn't want to build a business that depended on being online every single day. I just didn't know what would work instead." },
+  { label: 'The moment', photo: '/images/desk-scene.jpg', alt: 'A laptop and phone on a white desk', text: "I sat down and actually looked at how many people my daily Instagram posts were sending to my website. Almost none. All that effort, and there was nothing to show for it. Not sales. Not clients. Not even clicks. That was the moment I stopped chasing the algorithm." },
+  { label: '18 months later', photo: '/images/hero-7.jpg', alt: 'Kylie celebrating with a disco ball held high', text: "0 to 7,000+ email subscribers, without social media. Just email, collaborations, and relationships that actually work." },
+  { label: 'Since then', photo: '/images/about/podcast-host.jpg', alt: 'Kylie at her podcast microphone', text: "I started The Email Growth Show (now a top 1.5% podcast globally), built Email Marketing Skool (1,300+ women and counting), and helped hundreds of women grow their own lists the same simple way." },
+  { label: 'Right now', photo: '/images/about/mama.jpg', alt: 'Kylie at the beach with her two boys', text: "I'm building toward a business that can help thousands of women whether I'm online that day or not. Fewer hours on calls. More simple tools that keep working after I've done the school run." },
 ];
-
-const believe = [
-  {
-    title: 'I believe in...',
-    items: [
-      'Business gets easier when more of the right people know you exist.',
-      'Relationships over algorithms, every time.',
-      'Your email list is one of the few things in your business you actually own.',
-      'Simple usually beats complicated.',
-      "Consistency isn't about being perfect, it's about showing up often enough that people remember you.",
-    ],
-  },
-  {
-    title: "I don't have time for:",
-    items: [
-      'An algorithm that changes its mind every six months.',
-      "Content for content's sake.",
-      'Pretending a business has to be complicated to be taken seriously.',
-    ],
-  },
-];
+const tilt = [-3, 2.5, -2, 3, -2.5, 2];
 
 // "A few of the things I answer to": photo lives in public/images/about/<file>. No file yet = a placeholder tile.
 const answerTo = [
-  { label: 'Mama', photo: null, text: 'Mum to Spencer and Sammy, and the reason school pickup never moves.' },
+  { label: 'Mama', photo: '/images/about/mama.jpg', text: 'Mum to Spencer and Sammy, and the reason school pickup never moves.' },
   { label: 'Podcast Host', photo: '/images/about/podcast-host.jpg', text: 'Host of The Email Growth Show, a top 1.5% podcast globally, with a new episode every Friday.' },
   { label: 'Email Nerd', photo: null, text: 'I check my email stats the way other people check the weather.' },
-  { label: 'Babe', photo: null, text: 'Wife to Nick.' },
+  { label: 'Babe', photo: '/images/about/babe.jpg', text: 'Wife to Nick.' },
 ];
 
-// The quiz. `pick` = the options (by position) that are Kylie's answers; `answer` = a typed-out answer instead.
+// The quiz. `pick` = the options (by position) that get circled; `answer` = a handwritten answer instead.
 const quiz = [
-  { q: 'The best title I have:', opts: ['Female Founder', 'Clean Freak', 'Podcast Host', 'Email Nerd', 'Other: Mummy'], pick: [4], written: 'Mummy' },
-  { q: 'My drink of choice is:', opts: ['Black coffee', 'Matcha', 'English Breakfast tea', 'Oat milk latte'], pick: [2, 3], written: 'English Breakfast tea, then an oat milk latte', note: 'Tea within five minutes of waking, latte before lunch. Non negotiable.' },
-  { q: 'Most likely to binge watch:', opts: ['The Bachelor', 'The Office', 'Love Is Blind', 'True Crime Documentary'], pick: [2], written: 'Love Is Blind', note: "Don't judge me." },
-  { q: 'Deathly afraid of:', opts: ['Spiders', 'Public Speaking', 'Heights', 'Clowns'], pick: [2], written: 'Heights', note: 'A mountaintop is fine. A cable car? Absolutely not.' },
+  { q: 'The best title I have:', opts: ['Female Founder', 'Clean Freak', 'Podcast Host', 'Email Nerd', 'Other: Mummy'], pick: [4] },
+  { q: 'My drink of choice is:', opts: ['Black coffee', 'Matcha', 'English Breakfast tea', 'Oat milk latte'], pick: [2, 3], note: 'Tea within five minutes of waking, latte before lunch. Non negotiable.' },
+  { q: 'Most likely to binge watch:', opts: ['The Bachelor', 'The Office', 'Love Is Blind', 'True Crime Documentary'], pick: [2], note: "Don't judge me." },
+  { q: 'Deathly afraid of:', opts: ['Spiders', 'Public Speaking', 'Heights', 'Clowns'], pick: [2], note: 'A mountaintop is fine. A cable car? Absolutely not.' },
   { q: 'My favourite flowers:', answer: 'Pink dahlias.' },
   { q: 'My favourite food:', answer: 'Thai green curry. Spicy, please.' },
   { q: 'My current obsession:', answer: 'Cold plunging and breathwork.' },
-  { q: 'The first thing I check each morning:', opts: ['Instagram', 'The weather', 'Overnight sales', 'My email inbox'], pick: [2], written: 'Overnight sales' },
-  { q: "At school pickup I'm usually:", opts: ['Early', 'On time', 'Slightly late', 'Unsure what day it is'], pick: [3], written: 'Unsure what day it is' },
+  { q: 'The first thing I check each morning:', opts: ['Instagram', 'The weather', 'Overnight sales', 'My email inbox'], pick: [2] },
+  { q: "At school pickup I'm usually:", opts: ['Early', 'On time', 'Slightly late', 'Unsure what day it is'], pick: [3] },
   { q: 'Someday I want to:', answer: "Ride in a hot air balloon. (Yes, even though I'm scared of heights!)" },
 ];
+
+// "Where I stand": each dot slides to its spot (0 = far left, 100 = far right) as the section scrolls into view.
+const sliders = [
+  { left: 'Algorithms', right: 'Relationships', at: 96, color: '#e040fb' },
+  { left: 'Posting daily', right: 'Email list', at: 93, color: '#d5b9db' },
+  { left: 'Complicated', right: 'Simple', at: 95, color: '#000000' },
+  { left: 'Renting an audience', right: 'Owning it', at: 97, color: '#e040fb' },
+  { left: 'Perfect', right: 'Showing up often', at: 90, color: '#d5b9db' },
+  { left: 'Mild', right: 'Spicy', at: 94, color: '#000000' },
+  { left: 'Mountaintop', right: 'Cable car', at: 4, color: '#e040fb' },
+];
+const hellYes = ['Relationships over algorithms', 'An email list you own', 'Simple over complicated', 'Showing up often enough to be remembered', 'Thai green curry (spicy)', 'Pink dahlias'];
+const hardPass = ['An algorithm that changes its mind every six months', "Content for content's sake", 'A business that has to be complicated to be taken seriously', 'Posting every single day', 'Cable cars'];
 
 const paths = [
   {
     num: '01',
+    photo: '/images/hero-8.jpg',
     title: 'Start for free.',
     text: 'Join Email Marketing Skool for a simple 90-day growth plan, the Email Marketing Starter Kit, and a free community of 1,300+ women doing the same work.',
     cta: 'Start My Free Growth Plan →',
@@ -66,6 +60,7 @@ const paths = [
   },
   {
     num: '02',
+    photo: '/images/shop-mockup.jpg',
     title: 'Grab what you need.',
     text: 'Browse the KK Digital Product Shop for grab-and-go courses, templates and trainings for growing your list without social media.',
     cta: 'Help Me Grow My Email List →',
@@ -73,6 +68,7 @@ const paths = [
   },
   {
     num: '03',
+    photo: '/images/kylie-podcast.jpg',
     title: 'Get my brain in your corner.',
     text: 'Join the Coaching Group for weekly voice-note coaching on the real questions: offer clarity, launch strategy, what to prioritise when everything feels urgent.',
     cta: 'Get Weekly Support & Answers →',
@@ -81,30 +77,35 @@ const paths = [
 ];
 const latest = (await getEpisodes()).slice(0, 3);
 const playIcon = 'M5 3.5v9l7.5-4.5z';
-const bigWord = 'MEET KYLIE';
+const arrowIcon = 'M4 12L12 4M5.5 4H12v6.5';
 ---
 <Layout title="Meet Kylie Kelly | Email Marketing Educator & Podcast Host" description="From burnt-out wedding photographer to a multi six-figure business built entirely on email. Meet Kylie Kelly, host of The Email Growth Show.">
 
-  <link slot="head" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" />
+  <link slot="head" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap" />
 
-  <!-- HERO -->
-  <section class="relative isolate overflow-hidden bg-black text-white">
-    <div class="pointer-events-none absolute inset-x-0 top-[4%] -z-10 select-none whitespace-nowrap font-serif text-[13.5vw] font-normal leading-none tracking-tight text-pink sm:top-[5%] sm:text-[19vw] lg:top-[7%] lg:text-[15.5vw]" style="margin-left:-2vw" aria-hidden="true">
-      <span>{bigWord}</span> <span>{bigWord}</span> <span>{bigWord}</span>
-    </div>
-    <div class="relative mx-auto flex max-w-6xl flex-col px-6 pt-16 lg:block lg:h-[800px] lg:pt-0">
-      <img
-        src="/images/about/kylie-hero-cutout.webp"
-        alt="Kylie Kelly sitting in an armchair in a lilac outfit, holding a disco ball up high and a glass of pink bubbles"
-        class="relative z-10 mx-auto h-[500px] w-auto sm:h-[620px] lg:absolute lg:bottom-0 lg:left-[19%] lg:mx-0 lg:h-[780px]"
-        width="1000"
-        height="1500"
-        fetchpriority="high"
-      />
-      <p class="absolute left-6 top-6 z-20 hidden max-w-[11rem] text-[11px] font-semibold uppercase leading-relaxed tracking-widest text-white/70 lg:block">
+  <!-- HERO: the big word, the arch, and the page slides over it as you scroll (large screens) -->
+  <section id="about-hero" class="relative isolate overflow-hidden bg-black text-white lg:sticky lg:top-0 lg:h-[880px]">
+    <div id="hero-inner" class="relative flex h-full flex-col px-6 pb-20 pt-24 lg:block lg:p-0">
+      <div class="pointer-events-none absolute inset-x-0 top-[3.5%] z-0 select-none whitespace-nowrap text-center font-serif text-[14.5vw] leading-none text-pink sm:text-[15vw] lg:hidden" aria-hidden="true">MEET KYLIE</div>
+      <div class="pointer-events-none absolute inset-x-0 top-[14%] z-0 hidden select-none items-start font-serif leading-none text-pink lg:grid" style="grid-template-columns:1fr var(--arch) 1fr;--arch:min(40vw,560px);font-size:min(11.6vw,178px)" aria-hidden="true">
+        <span class="justify-self-end" style="margin-right:-0.14em">MEET</span><span></span><span class="justify-self-start" style="margin-left:-0.14em">KYLIE</span>
+      </div>
+
+      <div class="relative z-10 mx-auto mt-16 w-[80vw] max-w-[380px] lg:absolute lg:bottom-0 lg:left-1/2 lg:mt-0 lg:w-[min(40vw,560px)] lg:max-w-none lg:-translate-x-1/2">
+        <img
+          src="/images/about/kylie-disco.jpg"
+          alt="Kylie Kelly sitting in an armchair in a lilac outfit, holding a disco ball up high and a glass of pink bubbles"
+          class="block aspect-[2/3] w-full rounded-t-[999px] object-cover object-top"
+          width="1400"
+          height="2100"
+          fetchpriority="high"
+        />
+      </div>
+
+      <p class="absolute bottom-[14%] left-[3%] z-10 hidden w-[22%] text-sm font-semibold uppercase leading-relaxed tracking-widest text-white/75 lg:block">
         Wife. Mum of two boys. Email marketing educator. Host of The Email Growth Show.
       </p>
-      <div class="relative z-20 mt-6 pb-16 text-center lg:absolute lg:right-0 lg:top-[46%] lg:mt-0 lg:w-[30%] lg:pb-0 lg:text-left">
+      <div class="relative z-10 mt-10 text-center lg:absolute lg:bottom-[12%] lg:right-[3%] lg:mt-0 lg:w-[26%] lg:text-left">
         <p class="font-serif text-4xl italic text-pink sm:text-5xl">Kylie Kelly</p>
         <p class="mt-4 text-lg leading-relaxed text-white">Ex wedding photographer turned email nerd. Mum of two. Will talk you out of posting daily.</p>
         <div class="mt-7 flex flex-wrap justify-center gap-3 lg:justify-start">
@@ -115,18 +116,20 @@ const bigWord = 'MEET KYLIE';
     </div>
   </section>
 
+  <div class="relative z-10 -mt-8 overflow-hidden rounded-t-[2.5rem] bg-white lg:-mt-14 lg:rounded-t-[3.5rem]">
+
   <!-- THE BIG STATEMENT -->
-  <section class="bg-white px-6 py-20 sm:py-28">
+  <section class="px-6 py-20 sm:py-28">
     <div class="mx-auto max-w-5xl">
-      <p class="mb-8 text-center text-xs font-semibold uppercase tracking-widest text-pink">A little about me</p>
+      <p class="mb-8 text-center text-sm font-semibold uppercase tracking-widest text-pink sm:text-base">A little about me</p>
       <h2 class="mx-auto max-w-4xl text-center font-sans text-3xl font-medium leading-snug text-balance sm:text-5xl sm:leading-snug">
         I spent ten years chasing wedding bookings, then a few more chasing likes for a business that wasn't paying the bills. And honestly? <Highlight>I'm done chasing anything now.</Highlight>
       </h2>
       <div class="mx-auto mt-14 grid max-w-4xl items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
         <div class="space-y-5 text-lg leading-relaxed">
-          <p>These days I build audiences the slower, sturdier way. <strong>Email lists. Real relationships. Rooms worth being in.</strong> No algorithm required.</p>
+          <p>These days I build audiences the slower, sturdier way. <strong class="uppercase tracking-wide">Email lists. Real relationships. Rooms worth being in.</strong> No algorithm required.</p>
           <p>Maybe you're posting (or not posting) and still wondering where your next client is coming from. Maybe your list has stalled, or it's growing and nobody's buying. I've asked myself every single one of those questions. More than once.</p>
-          <p class="font-serif text-xl italic text-pink">Here's the short version of how I found some answers.</p>
+          <p class="font-serif text-2xl font-bold italic leading-snug text-pink sm:text-3xl">Here's the short version of how I found some answers.</p>
         </div>
         <div class="relative mx-auto w-full max-w-xs">
           <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="aspect-[4/5] w-full rounded-[1.75rem] object-cover shadow-[0_24px_50px_rgba(0,0,0,0.15)]" loading="lazy" />
@@ -136,36 +139,44 @@ const bigWord = 'MEET KYLIE';
     </div>
   </section>
 
-  <!-- STATS -->
-  <section class="bg-offwhite px-6 py-16">
-    <div class="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 text-center gap-6">
-      <div><p class="font-serif text-3xl font-bold">0→7,000+</p><p class="text-xs uppercase tracking-wide text-muted mt-2">subscribers in 18 months</p></div>
-      <div><p class="font-serif text-3xl font-bold">Top 1.5%</p><p class="text-xs uppercase tracking-wide text-muted mt-2">The Email Growth Show, globally</p></div>
-      <div><p class="font-serif text-3xl font-bold">1,300+</p><p class="text-xs uppercase tracking-wide text-muted mt-2">women in Email Marketing Skool</p></div>
-      <div><p class="font-serif text-3xl font-bold">2</p><p class="text-xs uppercase tracking-wide text-muted mt-2">small boys who make sure school pickup never moves</p></div>
+  <!-- AS FEATURED IN -->
+  <section class="border-y border-black/10 bg-white px-6 py-10 lg:py-14">
+    <p class="mb-8 text-center text-xs uppercase tracking-widest text-muted">As featured in:</p>
+    <div class="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-14 gap-y-8 lg:max-w-6xl lg:gap-x-20">
+      <a href="https://www.forbes.com/advisor/business/software/email-marketing-strategy/" target="_blank" rel="noopener">
+        <img src="/images/press/forbes.png" alt="Forbes" class="h-10 w-auto opacity-80 transition-opacity hover:opacity-100 sm:h-12 lg:h-14 xl:h-16" />
+      </a>
+      <img src="/images/press/business-insider.jpg" alt="Business Insider" class="h-10 w-auto opacity-80 sm:h-12 lg:h-14 xl:h-16" />
+      <a href="https://www.londondaily.news/why-six-figure-female-entrepreneurs-are-breaking-up-with-social-media-in-2025/" target="_blank" rel="noopener">
+        <img src="/images/press/london-daily-news.png" alt="London Daily News" class="h-10 w-auto opacity-80 transition-opacity hover:opacity-100 sm:h-12 lg:h-14 xl:h-16" />
+      </a>
+      <a href="https://businessmondays.co.uk/independent-business-podcast-surpasses-200-episodes-40000-downloads-highlighting-the-power-of-sustainable-growth/" target="_blank" rel="noopener">
+        <img src="/images/press/business-mondays.jpg" alt="Business Mondays" class="h-14 w-auto opacity-80 transition-opacity hover:opacity-100 sm:h-16 lg:h-20 xl:h-24" />
+      </a>
     </div>
   </section>
 
   <!-- ORIGIN / TIMELINE -->
-  <section class="bg-black text-white px-6 py-20">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-16">
-        <p class="text-pink-light text-xs uppercase tracking-widest font-semibold mb-3">How it all unfolded</p>
-        <h2 class="font-serif italic text-3xl sm:text-4xl font-normal">The short version of a very long story.</h2>
+  <section class="bg-black px-6 py-20 text-white sm:py-28">
+    <div class="mx-auto max-w-5xl">
+      <div class="mb-16 text-center sm:mb-20">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-widest text-pink sm:text-base">How it all unfolded</p>
+        <h2 class="font-serif text-3xl font-normal italic sm:text-5xl">The short version of a very long story.</h2>
       </div>
-      <div class="grid md:grid-cols-[0.8fr_1.2fr] gap-12 items-start">
-        <div class="bg-white p-2 pb-6 rounded-sm shadow-2xl -rotate-2 max-w-xs mx-auto">
-          <img src="/images/kylie-photography.jpg" alt="Kylie working as a wedding photographer, shooting a bride and groom by a pool" class="w-full rounded-sm aspect-[4/5] object-cover" />
-        </div>
-        <div class="border-l border-white/20 pl-8 space-y-8">
-          {timeline.map((t) => (
-            <div class="relative">
-              <span class="absolute -left-[34px] top-1.5 w-2 h-2 rounded-full bg-pink"></span>
-              <p class="text-pink-light text-xs uppercase tracking-widest font-semibold mb-2">{t.label}</p>
-              <p class="text-warmgray">{t.text}</p>
+      <div class="space-y-16 md:space-y-24">
+        {timeline.map((t, i) => (
+          <div class="grid items-center gap-8 md:grid-cols-2 md:gap-16">
+            <div class={`flex justify-center ${i % 2 ? 'md:order-2' : ''}`}>
+              <figure class="w-64 bg-white p-2.5 pb-11 shadow-2xl sm:w-72" style={`transform: rotate(${tilt[i]}deg)`}>
+                <img src={t.photo} alt={t.alt} class="aspect-[4/5] w-full object-cover" loading="lazy" />
+              </figure>
             </div>
-          ))}
-        </div>
+            <div class={i % 2 ? 'md:order-1' : ''}>
+              <p class="mb-3 text-sm font-semibold uppercase tracking-widest text-pink-light">{t.label}</p>
+              <p class="text-xl leading-relaxed text-white/90 sm:text-2xl sm:leading-relaxed">{t.text}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -197,53 +208,76 @@ const bigWord = 'MEET KYLIE';
     </div>
   </section>
 
-  <!-- THE QUIZ -->
-  <section class="bg-offwhite px-6 py-20 sm:py-28">
+  <!-- THE QUIZ (on lined paper) -->
+  <section class="quiz-paper px-6 py-20 sm:py-28">
     <div class="mx-auto max-w-5xl">
       <div class="mb-14 text-center">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">Quick-fire round</p>
+        <p class="mb-3 text-lg font-semibold uppercase tracking-widest text-pink sm:text-2xl">Quick-fire round</p>
         <h2 class="text-3xl font-bold sm:text-4xl">Oh yeah, we're doing this Cosmo girl style.</h2>
-        <p class="mx-auto mt-4 max-w-xl text-muted">Ten questions. No wrong answers (although a couple of mine are questionable).</p>
+        <p class="mx-auto mt-4 max-w-xl text-black">Ten questions. No wrong answers (although a couple of mine are questionable).</p>
       </div>
-      <div class="grid gap-x-12 gap-y-10 md:grid-cols-2">
+      <div class="grid gap-x-14 gap-y-12 md:grid-cols-2">
         {quiz.map((item, n) => (
-          <div class="border-b border-black/10 pb-8">
+          <div>
             <p class="mb-4 text-xs font-semibold uppercase tracking-widest"><span class="mr-2 font-serif text-lg font-bold italic normal-case tracking-normal text-pink">{n + 1}.</span>{item.q}</p>
             {item.answer ? (
-              <p class="font-hand text-4xl font-bold leading-[1.05] sm:text-[2.6rem]"><span class="quiz-ink">{item.answer}</span></p>
+              <p class="hand write text-[1.9rem] leading-[1.2] sm:text-[2.2rem]">{item.answer}</p>
             ) : (
-              <>
-                <ul class="space-y-1 text-[16px] text-black/65">
-                  {item.opts!.map((o, i) => (
-                    <li class="flex gap-3"><span class="w-5 flex-none text-black/35">{'abcde'[i]}.</span><span>{o}</span></li>
-                  ))}
-                </ul>
-                <p class="mt-4 font-hand text-4xl font-bold leading-[1.05] sm:text-[2.6rem]"><span class="quiz-ink">{item.written}</span></p>
-              </>
+              <ul class="space-y-2 text-[17px]">
+                {item.opts!.map((o, i) => (
+                  <li class="flex items-center gap-3">
+                    <span class="w-5 flex-none text-black/35">{'abcde'[i]}.</span>
+                    {item.pick!.includes(i) ? (
+                      <span class="circ relative inline-block px-3 py-0.5 font-semibold">
+                        {o}
+                        <svg class="pointer-events-none absolute left-[-6px] top-[-4px] h-[calc(100%+8px)] w-[calc(100%+12px)] overflow-visible" viewBox="0 0 200 50" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M14 30 C 6 12, 58 3, 112 4 C 168 5, 199 15, 193 29 C 187 45, 140 48, 94 47 C 48 47, 4 41, 13 20" fill="none" stroke="#e040fb" stroke-width="2.4" stroke-linecap="round" vector-effect="non-scaling-stroke" /></svg>
+                      </span>
+                    ) : (
+                      <span class="text-black/70">{o}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
             )}
-            {item.note && <p class="mt-2 font-hand text-2xl font-bold text-pink">{item.note}</p>}
+            {item.note && <p class="hand write mt-3 text-[1.5rem] leading-snug text-pink sm:text-[1.7rem]">{item.note}</p>}
           </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- WHAT I BELIEVE -->
-  <section class="px-6 py-20">
+  <!-- WHERE I STAND -->
+  <section class="bg-white px-6 py-20 sm:py-28">
     <div class="mx-auto max-w-4xl">
-      <div class="mb-12 text-center">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">A few more things about me</p>
-        <h2 class="text-3xl font-bold sm:text-4xl">Because a bio never tells the whole story.</h2>
+      <div class="mb-14 text-center">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-widest text-pink sm:text-base">Hot takes</p>
+        <h2 class="text-3xl font-bold sm:text-5xl">Where I stand on the important things.</h2>
       </div>
-      <div class="grid gap-6 md:grid-cols-2">
-        {believe.map((card) => (
-          <div class="rounded-lg bg-offwhite p-8">
-            <h3 class="mb-5 font-serif text-xl italic">{card.title}</h3>
-            <ul class="space-y-3 text-black">
-              {card.items.map((item) => <li class="flex gap-3"><span class="text-pink">+</span><span>{item}</span></li>)}
-            </ul>
+      <div class="rounded-[2rem] bg-offwhite p-8 sm:p-12">
+        <div class="space-y-9">
+          {sliders.map((r) => (
+            <div>
+              <div class="flex justify-between gap-6 text-base font-bold sm:text-lg"><span>{r.left}</span><span class="text-right">{r.right}</span></div>
+              <div class="relative mt-3 h-1.5 rounded-full bg-black/15">
+                <span class="slide-dot absolute top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full" style={`left:${r.at}%;background:${r.color}`} data-at={r.at}></span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="mt-14 grid gap-10 md:grid-cols-2">
+        <div>
+          <p class="mb-5 text-sm font-semibold uppercase tracking-widest sm:text-base">🔥 Hell yes</p>
+          <div class="flex flex-wrap gap-3">
+            {hellYes.map((c, i) => <span class="chip rounded-full bg-pink px-5 py-2.5 text-[15px] font-semibold text-white" style={`--i:${i}`}>{c}</span>)}
           </div>
-        ))}
+        </div>
+        <div>
+          <p class="mb-5 text-sm font-semibold uppercase tracking-widest sm:text-base">Hard pass 👎</p>
+          <div class="flex flex-wrap gap-3">
+            {hardPass.map((c, i) => <span class="chip rounded-full border border-black px-5 py-2.5 text-[15px] font-semibold text-black/70 line-through decoration-pink decoration-2" style={`--i:${i}`}>{c}</span>)}
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -279,35 +313,120 @@ const bigWord = 'MEET KYLIE';
     </div>
   </section>
 
-  <!-- CHOOSE YOUR PATH -->
-  <section class="bg-offwhite px-6 py-20 text-center">
-    <div class="max-w-5xl mx-auto">
-      <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">Ways to keep going</p>
-      <h2 class="text-3xl sm:text-4xl font-bold mb-3">Now that you know me, here's where to go next.</h2>
-      <p class="text-muted max-w-xl mx-auto mb-14">Three steps, whichever one fits where you're at. No pressure to jump to the end, most people start with step one.</p>
-      <div class="grid md:grid-cols-3 gap-6 text-left">
-        {paths.map((p) => (
-          <div class="bg-white border border-black rounded-lg p-8 flex flex-col">
-            <p class="font-serif italic text-pink text-4xl mb-2">{p.num}</p>
-            <h3 class="text-xl font-bold mb-3">{p.title}</h3>
-            <p class="text-sm text-muted mb-6 flex-grow">{p.text}</p>
-            <a href={p.href} class="btn-outline text-center">{p.cta}</a>
+  <!-- WHERE TO GO NEXT -->
+  <section class="bg-offwhite px-6 py-20 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-14 text-center">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">Ways to keep going</p>
+        <h2 class="text-3xl font-bold sm:text-4xl">Now that you know me, here's where to go next.</h2>
+      </div>
+      <div class="grid items-center gap-14 lg:grid-cols-[1fr_1fr]">
+        <div class="space-y-10">
+          {paths.map((p) => (
+            <a href={p.href} class="group flex items-center gap-6">
+              <img src={p.photo} alt="" class="h-24 w-24 flex-none rounded-full object-cover sm:h-32 sm:w-32" loading="lazy" />
+              <div>
+                <h3 class="text-2xl font-bold sm:text-3xl">{p.title}</h3>
+                <p class="mt-2 text-[15px] leading-relaxed text-black/80">{p.text}</p>
+                <span class="mt-3 inline-block font-semibold underline underline-offset-4 group-hover:text-pink">{p.cta}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div class="relative mx-auto w-full max-w-md">
+          <img src="/images/classics-kylie.jpg" alt="Kylie Kelly in a sparkly jacket holding a microphone" class="aspect-[4/5] w-full rounded-[2rem] object-cover" loading="lazy" />
+          <div class="absolute -right-3 bottom-6 flex flex-col gap-3 sm:-right-8">
+            {[
+              { label: 'Listen on Apple', href: 'https://podcasts.apple.com/podcast/id1550211753', tint: 'bg-[#e9d9ec]' },
+              { label: 'Listen on Spotify', href: 'https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3', tint: 'bg-pink text-white' },
+              { label: 'Watch on YouTube', href: 'https://www.youtube.com/@KylieKelly', tint: 'bg-black text-white' },
+              { label: 'Find CoLab', href: 'https://findcolab.com/', tint: 'bg-[#e9d9ec]' },
+            ].map((l) => (
+              <a href={l.href} target="_blank" rel="noopener" class="flex items-center justify-between gap-6 rounded-full bg-white py-2 pl-6 pr-2 text-[15px] font-semibold shadow-lg transition-transform duration-300 hover:-translate-y-0.5">
+                {l.label}
+                <span class={`grid h-9 w-9 place-items-center rounded-full ${l.tint}`}><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrowIcon} /></svg></span>
+              </a>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   </section>
 
+  </div>
+
 </Layout>
-<style>
-  .quiz-ink {
-    background-image: linear-gradient(rgba(224, 64, 251, 0.28), rgba(224, 64, 251, 0.28));
-    background-repeat: no-repeat;
-    background-position: 0 88%;
-    background-size: 100% 42%;
-    padding: 0 0.12em;
-    margin: 0 -0.12em;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
+
+<style is:global>
+  .hand {
+    font-family: 'Nothing You Could Do', 'Segoe Script', cursive;
+    font-weight: 400;
+    color: #1a1a1a;
+  }
+  .quiz-paper {
+    background-color: #fdfaf8;
+    background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(110, 150, 210, 0.2) 35px, rgba(110, 150, 210, 0.2) 36px);
+  }
+  @media (min-width: 1100px) {
+    .quiz-paper {
+      background-image:
+        linear-gradient(to right, transparent 4.5rem, rgba(224, 64, 251, 0.18) 4.5rem, rgba(224, 64, 251, 0.18) calc(4.5rem + 1px), transparent calc(4.5rem + 1px)),
+        repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(110, 150, 210, 0.2) 35px, rgba(110, 150, 210, 0.2) 36px);
+    }
+  }
+  /* Circles draw themselves, handwriting is written out, dots slide and chips drop in once they scroll into view. */
+  .js .circ path { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.9s cubic-bezier(0.5, 0, 0.2, 1) 0.15s; }
+  .js .circ.is-in path { stroke-dashoffset: 0; }
+  .js .write { clip-path: inset(-20% 100% -30% -2%); transition: clip-path 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s; }
+  .js .write.is-in { clip-path: inset(-20% -2% -30% -2%); }
+  .js .slide-dot { transition: left 1.5s cubic-bezier(0.22, 0.61, 0.36, 1); }
+  .js .chip { opacity: 0; transform: translateY(14px) rotate(-2deg); transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1); transition-delay: calc(var(--i) * 90ms); }
+  .js .chip.is-in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .js .circ path, .js .write, .js .slide-dot, .js .chip { transition: none; }
   }
 </style>
+
+<script>
+  const root = document.documentElement;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // The first screen fades back as the page slides over it
+  const hero = document.getElementById('hero-inner');
+  if (hero && !reduce && window.matchMedia('(min-width: 1024px)').matches) {
+    const update = () => {
+      const p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.85)));
+      hero.style.opacity = String(1 - p * 0.8);
+      hero.style.transform = `scale(${1 - p * 0.05})`;
+      hero.style.transformOrigin = '50% 100%';
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    root.classList.add('js');
+    const dots = document.querySelectorAll<HTMLElement>('.slide-dot');
+    dots.forEach((d) => (d.style.left = '50%'));
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          if (el.classList.contains('slide-dot')) el.style.left = `${el.dataset.at}%`;
+          else if (el.dataset.writes) el.querySelectorAll('.write').forEach((w) => w.classList.add('is-in'));
+          else el.classList.add('is-in');
+          io.unobserve(el);
+        });
+      },
+      { threshold: 0.5 }
+    );
+    // Handwriting is clipped away until it is written out, so watch the box around it instead
+    document.querySelectorAll<HTMLElement>('.write').forEach((w) => {
+      const box = w.parentElement as HTMLElement;
+      box.dataset.writes = '1';
+      io.observe(box);
+    });
+    document.querySelectorAll('.circ, .slide-dot, .chip').forEach((el) => io.observe(el));
+  }
+</script>
