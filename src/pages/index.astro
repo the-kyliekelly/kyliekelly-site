@@ -6,6 +6,7 @@ import RotatingBadge from '../components/RotatingBadge.astro';
 import CountUpStats from '../components/CountUpStats.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
 import { getEpisodes } from '../lib/episodes';
+import { formatAuDate } from '../lib/dates';
 import { getDownloads } from '../lib/stats';
 import reviewData from '../data/listener-reviews.json';
 
@@ -66,7 +67,7 @@ const downloads = await getDownloads();
 // The phone mockup always shows the newest episode.
 const phoneEpisode = latestEpisodes[0];
 const phoneDate = phoneEpisode
-  ? new Date(phoneEpisode.iso).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()
+  ? formatAuDate(phoneEpisode.iso, { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()
   : '';
 const phoneRemaining = (() => {
   const left = Math.max(0, (phoneEpisode?.seconds ?? 0) - 4);

@@ -4,6 +4,7 @@ import episodePosts from '../data/blog-posts.json';
 import topicRules from '../data/topic-rules.json';
 import { guestFromTitle } from './guests';
 import { topicsFor, type TopicRules } from './topics';
+import { formatAuDate } from './dates';
 
 const knownEpisodePages = new Set(episodePosts.map((p) => p.slug));
 
@@ -37,7 +38,7 @@ const rawTag = (item: string, name: string) => {
   const m = item.match(new RegExp(`<${name}[^>]*>([\\s\\S]*?)</${name}>`));
   return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, '').trim() : '';
 };
-const formatDate = (d: string) => new Date(d).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+const formatDate = (d: string) => formatAuDate(d, { day: 'numeric', month: 'short', year: 'numeric' });
 
 async function loadFeedEpisodes() {
   try {

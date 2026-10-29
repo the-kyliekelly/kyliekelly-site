@@ -14,6 +14,7 @@ import PodcastFreebieBand from './PodcastFreebieBand.astro';
 import AskKylieBand from './AskKylieBand.astro';
 import { parseShowNotes, tagFindCoLab, tagFindCoLabUrl, type ParsedNotes } from '../lib/showNotes';
 import { guestPhotoFor } from '../lib/guestPhotos';
+import { formatAuDate } from '../lib/dates';
 import { waveBars } from '../lib/wave';
 import { showName } from '../lib/show';
 import type { Episode } from '../lib/episodes';
@@ -63,7 +64,7 @@ const guestPhoto = num ? guestPhotoFor(num) : undefined;
 const isFull = extra.level === 'full';
 
 const published = new Date(post.date);
-const dateLabel = published.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+const dateLabel = formatAuDate(post.date, { day: 'numeric', month: 'long', year: 'numeric' });
 const words = [notes.intro, ...notes.sections.map((s) => s.html)].join(' ').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
 const readMins = Math.max(1, Math.round(words / 220));
 
