@@ -72,11 +72,15 @@ function tidyLinks(html: string): string {
 }
 
 // Transcript paragraphs: "[00:00:20] text" or "Speaker Name [00:00:20]: text"; a paragraph with no time carries on from the last.
+// A transcript with no times at all is kept paragraph by paragraph, with "Speaker Name:" labels picked out where there are any.
 function parseTranscript(chunk: string): ParsedNotes['transcript'] {
   const out: ParsedNotes['transcript'] = [];
+  const untimed: ParsedNotes['transcript'] = [];
   for (const m of chunk.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)) {
     const t = stripTags(m[1].replace(/<br\s*\/?>/gi, ' '));
     if (!t) continue;
+    const um = t.match(/^([A-Z][\w .'’-]{0,30}):\s+([\s\S]*)$/);
+    untimed.push(um ? { time: '', speaker: um[1].trim(), text: um[2].trim() } : { time: '', text: t });
     const tm = t.match(/^(?:([A-Za-z][\w .'’-]{0,40}?)\s*)?\[(\d\d:\d\d:\d\d)\]:?\s*([\s\S]*)$/);
     if (tm) {
       out.push({ time: tm[2], speaker: tm[1]?.trim() || undefined, text: tm[3].replace(/\s*\[\d\d:\d\d:\d\d\]\s*/g, ' ').trim() });
@@ -84,7 +88,7 @@ function parseTranscript(chunk: string): ParsedNotes['transcript'] {
       out[out.length - 1].text += ` ${t}`;
     }
   }
-  return out;
+  return out.length ? out : untimed;
 }
 
 
@@ -321,7 +325,7 @@ export function parseShowNotes(raw: string, slug?: string): ParsedNotes {
   const learnBox = html.match(/<div style="background:#f5f4f2[^>]*>([\s\S]*?)<\/div>/);
   if (learnBox) {
     takeaways = [...learnBox[1].matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)]
-      .map((m) => stripTags(m[1]).replace(/^✅\s*/, ''))
+      .map((m) => stripTags(m[1]).replace(/^(?:✅|\+)\s*/, ''))
       .filter((t) => t && !/LEARN IN THIS EPISODE/i.test(t));
     html = html.replace(learnBox[0], '');
   }

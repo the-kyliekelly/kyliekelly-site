@@ -346,7 +346,7 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
               </summary>
               <div class="mt-6 space-y-4 text-[15px] leading-relaxed text-black/85">
                 {notes.transcript.map((t) => (
-                  <p><span class="mr-2 font-semibold tabular-nums text-pink">{t.time.replace(/^00:/, '')}</span>{t.speaker && <strong class="mr-1">{t.speaker}:</strong>}{t.text}</p>
+                  <p>{t.time && <span class="mr-2 font-semibold tabular-nums text-pink">{t.time.replace(/^00:/, '')}</span>}{t.speaker && <strong class="mr-1">{t.speaker}:</strong>}{t.text}</p>
                 ))}
               </div>
             </details>
