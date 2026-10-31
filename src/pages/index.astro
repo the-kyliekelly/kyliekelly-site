@@ -43,7 +43,7 @@ const heroPills = [
   { label: 'Work with me', href: '/services', dot: 'border-2 border-black bg-black text-white group-hover:bg-white group-hover:text-black' },
 ];
 
-// Signature course spotlight. Fill in href with the course link when it is ready.
+// Signature course spotlight.
 const signatureCourse = {
   show: true,
   eyebrow: 'My signature course',
@@ -51,7 +51,7 @@ const signatureCourse = {
   tagline: '{A simple system for growing your list and selling to it, without social media.}',
   description: 'I grew my email list from zero to 7,000+ without social media, and my revenue still comes from that list today. This is how I do it, from your first subscriber to your first sale.',
   buttonLabel: 'See what’s inside',
-  href: '', // add the course link here; until then the button does nothing when clicked
+  href: 'https://system.kyliekelly.com/join',
   image: '/images/hero-2.jpg',
   imageAlt: 'Kylie Kelly',
 };
@@ -324,7 +324,7 @@ const tickerItems = [
           {signatureCourse.tagline && <p class="text-xl sm:text-2xl font-bold leading-snug mb-5">{signatureCourse.tagline}</p>}
           {signatureCourse.description && <p class="text-black text-lg mb-8 max-w-lg">{signatureCourse.description}</p>}
           {signatureCourse.buttonLabel && (
-            <a href={signatureCourse.href || '#'} {...(signatureCourse.href ? {} : { onclick: 'return false' })} class="inline-block rounded-full bg-white text-black px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-pink-light">{signatureCourse.buttonLabel} →</a>
+            <a href={signatureCourse.href || '#'} {...(signatureCourse.href ? { target: '_blank', rel: 'noopener' } : { onclick: 'return false' })} class="inline-block rounded-full bg-white text-black px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-pink-light">{signatureCourse.buttonLabel} →</a>
           )}
         </div>
         <div class="relative mx-auto w-full max-w-[340px] md:max-w-none pt-6 pl-6 sm:pt-8 sm:pl-8">

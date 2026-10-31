@@ -49,6 +49,13 @@ const results = [
   },
 ];
 
+const moreResults = [
+  { big: 'Within a month', quote: 'Within a month I went from not knowing anything about email marketing to knowing exactly how to grow my list & what emails to send.', name: 'Amanda M.', role: 'Facebook Ads Strategist', photo: '/images/testimonials/amanda.jpg', card: 'bg-[#fbe6f7]' },
+  { big: 'Two course sales', quote: 'I have close to 500 people on my email list AND I’ve just gotten two course sales! In 2 months, I have had more success with this than I did in 5 years of blogging & waiting passively for subscribers (& income) to find me!', name: 'Vanessa R.', role: '', photo: '/images/testimonials/vanessa.jpg', card: 'bg-[#e9d9ec]' },
+  { big: 'Fresh insights', quote: 'Even though I’ve been doing email for a long time, Kylie gave me fresh insights on how to grow my list, keep them engaged and actually writing much better emails.', name: 'Lori Young', role: 'Offer and Positioning Strategist', photo: '/images/testimonials/lori.jpg', card: 'bg-white' },
+  { big: '3/10 to 9/10', quote: 'When we started I told her I had a 3/10 in confidence when it came to email - now… I’m at a 9/10.', name: 'Debra V.', role: 'Sewing Boss', photo: '/images/testimonials/debra.jpg', card: 'bg-[#fbe6f7]' },
+];
+
 const stats = [
   { num: '7,000+', label: 'email subscribers in 18 months, without social media' },
   { num: '1,400+', label: 'women in Email Marketing Skool' },
@@ -81,14 +88,18 @@ const offers = [
     tag: '',
     desc: 'My signature email course for women who want more sales from their list without living on social media. Start, grow, nurture and sell, all in one place.',
     items: [
-      'Start, grow, nurture and sell, all in one system',
-      'Built on collaborations and relationships, not the algorithm',
+      'A quiz that points you to your part, plus a weekend Fast Track',
+      'Email foundations, freebies and opt-ins',
+      'List building with collaborations and search',
+      'Nurture and selling, plus the automations worth having',
+      'Advanced: bundles, summits, sponsored newsletters, launches and ads',
     ],
+    presale: 'Pre-sale: the whole course opens 1 December. Pay in full or 3 x $99.',
     pop: { bg: 'bg-white', title: "A little bit about what's inside:" },
     cta: 'Get the Money Making Email System',
     href: 'https://system.kyliekelly.com/join',
-    image: '/images/classics-kylie.jpg',
-    alt: 'Kylie Kelly in a sparkly jacket holding a microphone',
+    image: '/images/mmes-checkout.jpg',
+    alt: 'Kylie Kelly smiling in a bright pink top',
     flip: true,
     bg: 'bg-[#e9d9ec]',
   },
@@ -166,8 +177,8 @@ const faqs = [
 
       <div class="mt-8 grid gap-5 text-left md:grid-cols-3">
         {menu.map((m) => (
-          <a href={m.href} class={`group flex flex-col rounded-[2rem] ${m.tint} p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition-transform duration-300 hover:-translate-y-1.5 sm:p-7`}>
-            <span class="mb-4 grid h-11 w-11 place-items-center rounded-full bg-pink font-serif text-lg italic text-white" aria-hidden="true">{m.num}</span>
+          <a href={m.href} class={`group flex flex-col rounded-[2rem] ${m.tint} p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition duration-300 hover:-translate-y-2 hover:bg-[#fbe6f7] hover:shadow-[0_26px_60px_rgba(224,64,251,0.28)] sm:p-7`}>
+            <span class="mb-4 grid h-11 w-11 place-items-center rounded-full bg-pink font-serif text-lg italic text-white transition duration-300 group-hover:rotate-[-8deg] group-hover:scale-110 group-hover:bg-black" aria-hidden="true">{m.num}</span>
             <h2 class="mb-3 font-serif text-2xl leading-tight text-balance">{m.title}</h2>
             <p class="mb-5 flex-grow text-[15px] text-black">{m.line}</p>
             <span class="inline-flex items-center gap-3 text-[15px] font-semibold">
@@ -217,9 +228,9 @@ const faqs = [
           <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">{o.eyebrow}</p>
           <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-balance">{o.title}</h2>
           {o.id === 'step-02' ? (
-            <p class="mb-6 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <p class="mb-6 flex flex-col items-start gap-3">
               <span class="inline-block rounded-full border border-black px-4 py-1.5 text-xs uppercase tracking-widest font-semibold" data-mmes-price>{earlyPrice ? '$297' : '$997'}</span>
-              {earlyPrice && <span class="text-sm font-semibold text-pink" data-mmes-note>Through November, then $997 from 1 December.</span>}
+              {earlyPrice && <span class="text-xs font-semibold uppercase tracking-widest text-pink sm:text-sm" data-mmes-note>Through November, then $997 from 1 December.</span>}
             </p>
           ) : (
             <p class="inline-block rounded-full border border-black px-4 py-1.5 text-xs uppercase tracking-widest font-semibold mb-6">{o.tag}</p>
@@ -227,19 +238,20 @@ const faqs = [
           <p class="text-black mb-6">{o.desc}</p>
           {o.items.length > 0 && (
             <>
-              <button type="button" data-pop-btn aria-expanded="false" aria-controls={`pop-${o.id}`} class="svc-pop-btn mb-8 items-center gap-3 text-[15px] font-semibold">
+              <button type="button" data-pop-btn aria-expanded="false" aria-controls={`pop-${o.id}`} class="svc-pop-btn mb-8 items-center gap-3 text-lg font-semibold sm:text-xl">
                 <span class="svc-lbl-open">The details</span>
                 <span class="svc-lbl-close">Close details</span>
-                <span class={`grid h-9 w-9 place-items-center rounded-full text-black ${o.bg === 'bg-[#e9d9ec]' ? 'bg-white' : 'bg-[#e9d9ec]'}`}><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10" /><path class="svc-plus-v" d="M8 3v10" /></svg></span>
+                <span class={`grid h-11 w-11 place-items-center rounded-full text-black ${o.bg === 'bg-[#e9d9ec]' ? 'bg-white' : 'bg-[#e9d9ec]'}`}><svg viewBox="0 0 16 16" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10" /><path class="svc-plus-v" d="M8 3v10" /></svg></span>
               </button>
-              <div id={`pop-${o.id}`} class={`svc-pop mb-8 rounded-[2rem] p-7 shadow-[0_24px_60px_rgba(0,0,0,0.14)] sm:p-10 ${o.pop.bg} ${o.flip ? 'svc-pop-right' : 'svc-pop-left'}`}>
-                <h3 class="mb-6 font-serif text-2xl leading-tight text-balance sm:text-4xl">{o.pop.title}</h3>
-                <ul class="space-y-3 text-[17px]">
+              <div id={`pop-${o.id}`} class={`svc-pop mb-8 rounded-[2rem] p-7 shadow-[0_24px_60px_rgba(0,0,0,0.14)] sm:p-9 ${o.pop.bg} ${o.flip ? 'svc-pop-right' : 'svc-pop-left'}`}>
+                <h3 class="mb-5 font-serif text-2xl leading-tight text-balance sm:text-3xl">{o.pop.title}</h3>
+                <ul class="space-y-2.5 text-base">
                   {o.items.map((item) => <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&#9679;</span><span>{item}</span></li>)}
+                  {o.presale && earlyPrice && <li class="flex gap-3" data-mmes-note><span class="text-pink" aria-hidden="true">&#9679;</span><span class="font-semibold">{o.presale}</span></li>}
                 </ul>
-                <a href={o.href} class="group mt-8 ml-auto flex w-fit items-center gap-3 text-lg font-semibold">
+                <a href={o.href} {...(/^https?:/.test(o.href) ? { target: "_blank", rel: "noopener" } : {})} class="group mt-6 ml-auto flex w-fit items-center gap-4 rounded-full bg-black pl-7 pr-2 py-2 text-[15px] font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-pink hover:shadow-[0_14px_30px_rgba(200,77,240,0.4)]">
                   {o.cta}
-                  <span class="grid h-12 w-12 place-items-center rounded-full bg-white text-black transition-colors duration-300 group-hover:bg-black group-hover:text-white"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+                  <span class="grid h-11 w-11 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
                 </a>
               </div>
             </>
@@ -250,7 +262,7 @@ const faqs = [
               <footer class="mt-3 text-xs uppercase tracking-widest font-semibold">{o.quote.name}</footer>
             </blockquote>
           )}
-          <a href={o.href} class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
+          <a href={o.href} {...(/^https?:/.test(o.href) ? { target: "_blank", rel: "noopener" } : {})} class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition duration-300 hover:-translate-y-1 hover:bg-pink hover:shadow-[0_14px_30px_rgba(200,77,240,0.4)]">
             {o.cta}
             <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
           </a>
@@ -312,6 +324,18 @@ const faqs = [
 
   <!-- THE STATEMENT, THE NUMBERS AND A BIG PHOTO -->
   <section class="bg-black px-6 pt-8 text-center text-white sm:pt-12">
+    <div class="svc-more mx-auto mb-24 grid max-w-6xl gap-5 text-left sm:grid-cols-2 lg:grid-cols-4">
+      {moreResults.map((r, i) => (
+        <figure class={`svc-mini flex flex-col rounded-[2rem] p-7 text-black ${r.card}`} style={`--i:${i}`}>
+          <p class="mb-4 font-serif text-2xl font-bold leading-tight text-pink">{r.big}</p>
+          <blockquote class="mb-6 flex-grow text-[15px] leading-relaxed">&ldquo;{r.quote}&rdquo;</blockquote>
+          <figcaption class="flex items-center gap-3">
+            <img src={r.photo} alt="" class="h-11 w-11 flex-none rounded-full object-cover" loading="lazy" />
+            <span class="text-sm leading-tight"><strong class="block">{r.name}</strong>{r.role && <span class="text-black/70">{r.role}</span>}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
     <div class="mx-auto max-w-4xl">
       <p class="mb-6 font-semibold text-pink sm:text-lg">You're in the right place, babe.</p>
       <h2 class="font-serif text-[clamp(2.25rem,6vw,4.75rem)] leading-[1.02] text-balance">
@@ -321,7 +345,7 @@ const faqs = [
       <dl class="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 text-center lg:grid-cols-4">
         {stats.map((st) => (
           <div>
-            <dt class="font-serif text-4xl font-bold text-pink sm:text-5xl">{st.num}</dt>
+            <dt class="font-serif text-4xl font-bold text-white sm:text-5xl">{st.num}</dt>
             <dd class="mx-auto mt-3 max-w-[16rem] text-sm leading-snug text-warmgray">{st.label}</dd>
           </div>
         ))}
@@ -380,8 +404,8 @@ const faqs = [
   });
 
   // The testimonial cards slide in from the sides when they scroll into view.
-  const cards = document.querySelector('.svc-cards');
-  if (cards && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const revealEls = document.querySelectorAll('.svc-cards, .svc-more');
+  if (revealEls.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.classList.add('svc-js');
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
@@ -390,11 +414,18 @@ const faqs = [
         io.unobserve(e.target);
       });
     }, { threshold: 0.35 });
-    io.observe(cards);
+    revealEls.forEach((el) => io.observe(el));
   }
 </script>
 
 <style>
+  :global(.svc-js) .svc-mini {
+    opacity: 0;
+    translate: 0 40px;
+    transition: opacity 0.7s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: calc(var(--i, 0) * 120ms);
+  }
+  :global(.svc-js) .svc-more.is-in .svc-mini { opacity: 1; translate: 0 0; }
   .svc-pop-btn { display: none; }
   :global(.svc-pop-js) .svc-pop-btn { display: inline-flex; cursor: pointer; }
   .svc-lbl-close { display: none; }

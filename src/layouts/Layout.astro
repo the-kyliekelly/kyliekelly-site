@@ -3,6 +3,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import CookieBanner from '../components/CookieBanner.astro';
 import Tracking from '../components/Tracking.astro';
+import vercel from '../../vercel.json';
 import '../styles/global.css';
 
 interface Props {
@@ -12,6 +13,12 @@ interface Props {
 }
 
 const hasReveal = Astro.slots.has('reveal');
+
+// Short addresses on this site that redirect to another site (for example /guide), so links to them open in a new tab too.
+const SITE_HOSTS = ['kyliekelly.com', 'www.kyliekelly.com'];
+const externalRedirects = ((vercel as { redirects?: Array<{ source: string; destination: string }> }).redirects ?? [])
+  .filter((r) => !r.source.includes(':') && /^https?:\/\//.test(r.destination) && !SITE_HOSTS.includes(new URL(r.destination).hostname))
+  .map((r) => r.source.replace(/\/$/, ''));
 const { title, description = 'Email marketing strategies for women in business who want to grow their list, without relying on social media.', noindex = false } = Astro.props;
 ---
 <!doctype html>
@@ -41,6 +48,28 @@ const { title, description = 'Email marketing strategies for women in business w
     )}
     <CookieBanner />
     <Tracking />
+    <!-- Every link that leaves this site (including short addresses that redirect elsewhere) opens in a new tab. -->
+    <script is:inline define:vars={{ externalRedirects }}>
+      (function () {
+        var own = ['kyliekelly.com', 'www.kyliekelly.com', location.hostname];
+        document.querySelectorAll('a[href]').forEach(function (a) {
+          var h = a.getAttribute('href');
+          if (!h || a.target || a.hasAttribute('download') || /^(#|mailto:|tel:|sms:|javascript:)/i.test(h)) return;
+          var external = false;
+          try {
+            var u = new URL(h, location.href);
+            if (u.protocol === 'http:' || u.protocol === 'https:') {
+              external = own.indexOf(u.hostname) < 0 || externalRedirects.indexOf(u.pathname.replace(/\/$/, '')) > -1;
+            }
+          } catch (e) {}
+          if (!external) return;
+          a.target = '_blank';
+          var rel = (a.getAttribute('rel') || '').split(/\s+/).filter(Boolean);
+          if (rel.indexOf('noopener') < 0) rel.push('noopener');
+          a.setAttribute('rel', rel.join(' '));
+        });
+      })();
+    </script>
   </body>
 </html>
 
