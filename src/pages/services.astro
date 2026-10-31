@@ -84,12 +84,13 @@ const offers = [
       'Start, grow, nurture and sell, all in one system',
       'Built on collaborations and relationships, not the algorithm',
     ],
+    pop: { bg: 'bg-white', title: "A little bit about what's inside:" },
     cta: 'Get the Money Making Email System',
     href: 'https://system.kyliekelly.com/join',
     image: '/images/classics-kylie.jpg',
     alt: 'Kylie Kelly in a sparkly jacket holding a microphone',
     flip: true,
-    bg: 'bg-offwhite',
+    bg: 'bg-[#e9d9ec]',
   },
   {
     id: 'step-03',
@@ -103,6 +104,7 @@ const offers = [
       'Templates and trainings you can put to work the same day',
       'The Coaching Group: weekly voice-note coaching, straight to your phone',
     ],
+    pop: { bg: 'bg-[#e9d9ec]', title: "A little bit about what's in the shop:" },
     cta: 'Explore the shop',
     href: 'https://shop.kyliekelly.com/',
     image: '/images/shop-mockup.jpg',
@@ -151,7 +153,7 @@ const faqs = [
   </section>
 
   <!-- HERO: the three steps as a menu -->
-  <section class="relative overflow-hidden bg-gradient-to-b from-[#fbe6f7] via-white to-white px-6 pt-10 pb-10 sm:pt-12 sm:pb-12">
+  <section class="relative overflow-hidden bg-gradient-to-b from-[#fbe6f7] via-white to-white px-6 pt-10 pb-16 sm:pt-12 sm:pb-24">
     <div class="mx-auto max-w-6xl text-center">
       <div class="mx-auto mb-6 h-20 w-20">
         <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="h-full w-full rounded-full object-cover object-[50%_25%]" />
@@ -197,7 +199,7 @@ const faqs = [
   <!-- THE THREE STEPS -->
   {offers.map((o) => (
     <section id={o.id} class={`${o.bg} px-6 py-16 sm:py-24 scroll-mt-20`}>
-      <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+      <div class="relative max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
         <div class={`flex justify-center ${o.flip ? 'md:order-2' : ''}`}>
           <div class="relative w-full max-w-sm">
             {o.mockup ? (
@@ -224,15 +226,23 @@ const faqs = [
           )}
           <p class="text-black mb-6">{o.desc}</p>
           {o.items.length > 0 && (
-            <details class="group mb-8">
-              <summary class="inline-flex cursor-pointer list-none items-center gap-3 text-[15px] font-semibold [&::-webkit-details-marker]:hidden">
-                The details
-                <span class="grid place-items-center h-9 w-9 rounded-full bg-[#e9d9ec] text-black transition-transform duration-300 group-open:rotate-45"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M8 3v10M3 8h10" /></svg></span>
-              </summary>
-              <ul class="mt-5 text-sm text-black space-y-2">
-                {o.items.map((item) => <li><span class="text-pink">+</span> {item}</li>)}
-              </ul>
-            </details>
+            <>
+              <button type="button" data-pop-btn aria-expanded="false" aria-controls={`pop-${o.id}`} class="svc-pop-btn mb-8 items-center gap-3 text-[15px] font-semibold">
+                <span class="svc-lbl-open">The details</span>
+                <span class="svc-lbl-close">Close details</span>
+                <span class={`grid h-9 w-9 place-items-center rounded-full text-black ${o.bg === 'bg-[#e9d9ec]' ? 'bg-white' : 'bg-[#e9d9ec]'}`}><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10" /><path class="svc-plus-v" d="M8 3v10" /></svg></span>
+              </button>
+              <div id={`pop-${o.id}`} class={`svc-pop mb-8 rounded-[2rem] p-7 shadow-[0_24px_60px_rgba(0,0,0,0.14)] sm:p-10 ${o.pop.bg} ${o.flip ? 'svc-pop-right' : 'svc-pop-left'}`}>
+                <h3 class="mb-6 font-serif text-2xl leading-tight text-balance sm:text-4xl">{o.pop.title}</h3>
+                <ul class="space-y-3 text-[17px]">
+                  {o.items.map((item) => <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&#9679;</span><span>{item}</span></li>)}
+                </ul>
+                <a href={o.href} class="group mt-8 ml-auto flex w-fit items-center gap-3 text-lg font-semibold">
+                  {o.cta}
+                  <span class="grid h-12 w-12 place-items-center rounded-full bg-white text-black transition-colors duration-300 group-hover:bg-black group-hover:text-white"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+                </a>
+              </div>
+            </>
           )}
           {o.quote && (
             <blockquote class="mb-8 border-l-2 border-pink pl-5">
@@ -351,6 +361,24 @@ const faqs = [
     document.querySelectorAll('[data-mmes-note]').forEach((el) => el.remove());
   }
 
+  // "The details" opens a card over the photo (and closes again). Without JavaScript the card just shows in full.
+  document.documentElement.classList.add('svc-pop-js');
+  const closePop = (sec) => {
+    sec.removeAttribute('data-open');
+    const b = sec.querySelector('[data-pop-btn]');
+    if (b) b.setAttribute('aria-expanded', 'false');
+  };
+  document.querySelectorAll('[data-pop-btn]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const sec = btn.closest('section');
+      const open = sec.toggleAttribute('data-open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.querySelectorAll('section[data-open]').forEach(closePop);
+  });
+
   // The testimonial cards slide in from the sides when they scroll into view.
   const cards = document.querySelector('.svc-cards');
   if (cards && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -367,7 +395,35 @@ const faqs = [
 </script>
 
 <style>
-  .svc-ticker { animation: svc-ticker 45s linear infinite; }
+  .svc-pop-btn { display: none; }
+  :global(.svc-pop-js) .svc-pop-btn { display: inline-flex; cursor: pointer; }
+  .svc-lbl-close { display: none; }
+  [data-open] .svc-lbl-open { display: none; }
+  [data-open] .svc-lbl-close { display: inline; }
+  [data-open] .svc-plus-v { display: none; }
+  :global(.svc-pop-js) .svc-pop { display: none; }
+  :global(.svc-pop-js) [data-open] .svc-pop { display: block; }
+  @media (min-width: 768px) {
+    :global(.svc-pop-js) .svc-pop {
+      display: block;
+      position: absolute;
+      top: 50%;
+      width: calc(50% - 1.5rem);
+      margin: 0;
+      z-index: 20;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-50%) translateX(var(--from, 0));
+      transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.45s;
+    }
+    .svc-pop-right { right: 0; --from: 40px; }
+    .svc-pop-left { left: 0; --from: -40px; }
+    :global(.svc-pop-js) [data-open] .svc-pop { opacity: 1; visibility: visible; transform: translateY(-50%) translateX(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.svc-pop-js) .svc-pop { transition: none; }
+  }
+  .svc-ticker { animation: svc-ticker 110s linear infinite; }
   @keyframes svc-ticker {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
