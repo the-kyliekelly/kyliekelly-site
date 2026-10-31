@@ -113,6 +113,8 @@ const offers = [
   },
 ];
 
+const ticker = ['No algorithm required', 'Email lists', 'Real relationships', 'Rooms worth being in', 'Relationships over algorithms'];
+
 const faqs = [
   {
     q: 'Which one should I start with?',
@@ -149,7 +151,7 @@ const faqs = [
   </section>
 
   <!-- HERO: the three steps as a menu -->
-  <section class="relative overflow-hidden bg-gradient-to-b from-[#fbe6f7] via-white to-white px-6 pt-10 pb-14 sm:pt-12 sm:pb-20">
+  <section class="relative overflow-hidden bg-gradient-to-b from-[#fbe6f7] via-white to-white px-6 pt-10 pb-10 sm:pt-12 sm:pb-12">
     <div class="mx-auto max-w-6xl text-center">
       <div class="mx-auto mb-6 h-20 w-20">
         <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="h-full w-full rounded-full object-cover object-[50%_25%]" />
@@ -173,6 +175,22 @@ const faqs = [
           </a>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- SCROLLING BAR -->
+  <section class="overflow-hidden bg-black py-5 text-white sm:py-6" aria-hidden="true">
+    <div class="svc-ticker flex w-max">
+      {[0, 1].map(() => (
+        <div class="flex flex-none items-center">
+          {[0, 1, 2].map(() => ticker.map((t) => (
+            <span class="flex items-center whitespace-nowrap font-serif text-2xl uppercase tracking-wide sm:text-3xl">
+              {t}
+              <span class="mx-6 text-pink sm:mx-8">&#10022;</span>
+            </span>
+          )))}
+        </div>
+      ))}
     </div>
   </section>
 
@@ -349,6 +367,14 @@ const faqs = [
 </script>
 
 <style>
+  .svc-ticker { animation: svc-ticker 45s linear infinite; }
+  @keyframes svc-ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .svc-ticker { animation: none; }
+  }
   .svc-card { rotate: var(--r, 0deg); }
   :global(.svc-js) .svc-card {
     opacity: 0;
