@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Highlight from '../components/Highlight.astro';
+import RotatingBadge from '../components/RotatingBadge.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
 
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
@@ -15,9 +16,9 @@ const INNER_CIRCLE_WAITLIST = '';
 
 // The three steps, shown as a menu at the top of the page.
 const menu = [
-  { num: '01', title: 'Email Marketing Skool', price: 'Free', line: 'Your 90-day growth plan and the Email Marketing Starter Kit, free on joining.', href: '#step-01', tint: 'bg-white' },
-  { num: '02', title: 'The Money Making Email System', price: 'mmes', line: 'My signature email course: start, grow, nurture and sell, all in one place.', href: '#step-02', tint: 'bg-white' },
-  { num: '03', title: 'Coaching Group', price: '$297 one time', line: 'Weekly voice-note coaching for the real questions, straight to your phone.', href: '#step-03', tint: 'bg-white' },
+  { num: '01', title: 'Take the quiz', line: 'Answer 6 quick questions and get the list-building strategy most likely to work for your business right now.', href: '#step-01', cta: 'See the details' },
+  { num: '02', title: 'The Money Making Email System', line: 'My signature email course: start, grow, nurture and sell, all in one place.', href: '#step-02', cta: 'See the details' },
+  { num: '03', title: 'The KK Digital Product Shop', line: 'Grab-and-go courses, templates and trainings, plus the Coaching Group.', href: '#step-03', cta: 'Explore the shop' },
 ];
 
 // Real client words, taken from what clients sent. The big number is lifted straight from each quote.
@@ -59,19 +60,16 @@ const offers = [
   {
     id: 'step-01',
     num: '01',
-    eyebrow: 'Start for free',
-    title: 'Email Marketing Skool',
-    tag: 'Free',
-    desc: "For online business owners who want more sales from an email list, without living on social media. Inside, you'll learn how to grow an email list of the right people, find collaborations that bring warm subscribers, turn subscribers into buyers, and build visibility without constant posting.",
-    items: [
-      'A simple 90-day growth plan',
-      'The Email Marketing Starter Kit, free on joining',
-      'A free community of 1,400+ women doing the same work',
-    ],
-    cta: 'Join Email Marketing Skool',
-    href: 'https://www.skool.com/email-marketing-skool/about',
-    image: '/images/hero-8.jpg',
-    alt: 'Kylie Kelly',
+    eyebrow: 'Start here',
+    title: 'Your Next 1,000 Subscribers quiz',
+    tag: 'Free \u00b7 60 seconds',
+    desc: 'Answer 6 quick questions and get the list-building strategy most likely to work for your business right now. Then you will know exactly which step to take next.',
+    items: [],
+    cta: 'Take the quiz',
+    href: '/guide',
+    image: '/images/freebie-mockup.png',
+    alt: 'The Your Next 1000 Subscribers quiz on a desktop monitor',
+    mockup: true,
     flip: false,
     bg: 'bg-white',
   },
@@ -96,25 +94,29 @@ const offers = [
   {
     id: 'step-03',
     num: '03',
-    eyebrow: 'Get my brain in your corner',
-    title: 'Coaching Group',
-    tag: '$297 one time',
-    desc: 'Weekly voice-note coaching for the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent. Real questions, real answers, all week long, straight to your phone.',
-    items: [],
-    cta: 'Join the Coaching Group',
-    href: 'https://coaching.kyliekelly.com/checkout',
-    image: '/images/desk-scene.jpg',
-    alt: '',
+    eyebrow: 'Grab what you need, start today',
+    title: 'The KK Digital Product Shop',
+    tag: 'Grab and go',
+    desc: 'Courses, templates and trainings for growing your email list without social media. Pick the one thing you need and put it to work today, from my 50 a Day list growth system to the Coaching Group.',
+    items: [
+      '50 a Day, my no-social email list growth system',
+      'Templates and trainings you can put to work the same day',
+      'The Coaching Group: weekly voice-note coaching, straight to your phone',
+    ],
+    cta: 'Explore the shop',
+    href: 'https://shop.kyliekelly.com/',
+    image: '/images/shop-mockup.jpg',
+    alt: 'The KK Digital Product Shop preview',
     flip: false,
     bg: 'bg-white',
-    quote: { text: "I legitimately feel my shoulders drop every time I listen to one of your Voxer responses… I don't need to do everything, I just need to do the next right thing.", name: 'Nicole Elliott' },
+    quote: { text: "I legitimately feel my shoulders drop every time I listen to one of your Voxer responses… I don't need to do everything, I just need to do the next right thing.", name: 'Nicole Elliott, in the Coaching Group' },
   },
 ];
 
 const faqs = [
   {
     q: 'Which one should I start with?',
-    a: "Most people start with step one, the free Email Marketing Skool community. You get the 90-day growth plan and the starter kit before you spend a thing. If you're ready to build the whole system, go for the Money Making Email System. If you want me in your corner every week, join the coaching group. Still not sure? Take the quiz.",
+    a: "Start with the quiz. It takes about a minute and points you to the list-building strategy that fits your business right now. If you're ready to build the whole system, go for the Money Making Email System. If you just need one thing, or want me in your corner every week, explore the shop.",
   },
   {
     q: 'Do I need to be on social media?',
@@ -125,21 +127,17 @@ const faqs = [
     a: "It's my signature email course. It takes you through starting, growing, nurturing and selling to your email list in one place, built on collaborations and relationships instead of the algorithm.",
   },
   {
-    q: 'How does the coaching group work?',
-    a: 'It is weekly voice-note coaching. You bring me the real questions, offer clarity, launch strategy, what to prioritize when everything feels urgent, and I answer them all week long, straight to your phone. It is a one-time payment of $297.',
-  },
-  {
     q: "What's in the shop?",
-    a: 'Grab-and-go courses, templates and trainings, starting at a $17 collaboration database. The big one is 50 a Day ($27), my system for growing your list by 50 new subscribers a day.',
+    a: 'Grab-and-go courses, templates and trainings, starting at a $17 collaboration database. The big ones are 50 a Day ($27), my system for growing your list by 50 new subscribers a day, and the Coaching Group, weekly voice-note coaching straight to your phone.',
   },
   {
     q: 'What is the Inner Circle?',
-    a: "It's my higher-touch group, opening in early 2027: 12 months with the most support I'm going to give, for $6k. It isn't open yet, so for now these steps are exactly where I'm putting my energy.",
+    a: "It's my higher-touch group, opening in early 2027: 12 months with the most support I'm going to give. It isn't open yet. Join the waitlist and you'll be the first to know when doors open.",
   },
 ];
 
 ---
-<Layout title="Work With Me | Kylie Kelly" description="Three ways to work with Kylie Kelly, whichever step fits where your business is at right now. No algorithm required.">
+<Layout title="Work With Me | Kylie Kelly" description="Three ways to work with Kylie Kelly: take the quiz, build your email system, or explore the shop. No algorithm required.">
 
   <!-- TAG BAR -->
   <section class="bg-black text-white px-6 py-4 border-b border-white/15">
@@ -167,41 +165,13 @@ const faqs = [
           <a href={m.href} class={`group flex flex-col rounded-[2rem] ${m.tint} p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition-transform duration-300 hover:-translate-y-1.5 sm:p-7`}>
             <span class="mb-4 grid h-11 w-11 place-items-center rounded-full bg-pink font-serif text-lg italic text-white" aria-hidden="true">{m.num}</span>
             <h2 class="mb-3 font-serif text-2xl leading-tight text-balance">{m.title}</h2>
-            <p class="mb-5">
-              <span class="inline-block rounded-full border border-black px-3.5 py-1 text-xs font-semibold uppercase tracking-widest" {...(m.price === 'mmes' ? { 'data-mmes-price': '' } : {})}>{m.price === 'mmes' ? (earlyPrice ? '$297' : '$997') : m.price}</span>
-            </p>
             <p class="mb-5 flex-grow text-[15px] text-black">{m.line}</p>
             <span class="inline-flex items-center gap-3 text-[15px] font-semibold">
-              See the details
+              {m.cta}
               <span class="grid h-10 w-10 place-items-center rounded-full bg-black text-white transition-colors duration-300 group-hover:bg-pink"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
             </span>
           </a>
         ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- NOT SURE? THE QUIZ -->
-  <section class="px-6 pb-20 sm:pb-28">
-    <div class="mx-auto grid max-w-5xl items-center gap-10 rounded-[2.5rem] bg-[#fbe6f7] p-8 sm:p-12 md:grid-cols-2 md:gap-14 lg:p-16">
-      <div class="relative mx-auto w-full max-w-[260px] sm:max-w-sm md:max-w-none">
-        <div class="pointer-events-none absolute inset-x-[6%] inset-y-[8%] rounded-full bg-white/90 blur-3xl" aria-hidden="true"></div>
-        <img src="/images/freebie-mockup.png" alt="The Your Next 1000 Subscribers quiz on a desktop monitor" class="relative block h-auto w-full drop-shadow-[0_0_26px_rgba(255,255,255,0.95)]" loading="lazy" />
-        <span class="absolute -top-2 right-0 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-black shadow-lg sm:text-sm">
-          <span class="h-2.5 w-2.5 rounded-full bg-pink"></span>
-          Free &middot; 60 seconds
-        </span>
-      </div>
-      <div class="text-center md:text-left">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-widest">Not sure where to start?</p>
-        <h2 class="mb-4 font-serif text-4xl italic leading-tight text-balance sm:text-5xl">Take the quiz.</h2>
-        <p class="mb-8 text-black sm:text-lg">
-          Answer 6 quick questions and get the list-building strategy most likely to work for your business right now. Then pick the step below that fits.
-        </p>
-        <a href="/guide" class="group inline-flex items-center gap-4 rounded-full bg-black pl-7 pr-2 py-2 text-[15px] font-semibold text-white transition-transform duration-300 hover:-translate-y-1">
-          Take the quiz
-          <span class="grid h-10 w-10 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-        </a>
       </div>
     </div>
   </section>
@@ -212,7 +182,14 @@ const faqs = [
       <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center">
         <div class={`flex justify-center ${o.flip ? 'md:order-2' : ''}`}>
           <div class="relative w-full max-w-sm">
-            <img src={o.image} alt={o.alt} class="w-full rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.12)]" loading="lazy" />
+            {o.mockup ? (
+              <div class="relative">
+                <div class="pointer-events-none absolute inset-x-[6%] inset-y-[8%] rounded-full bg-[#fbe6f7] blur-3xl" aria-hidden="true"></div>
+                <img src={o.image} alt={o.alt} class="relative block h-auto w-full" loading="lazy" />
+              </div>
+            ) : (
+              <img src={o.image} alt={o.alt} class="w-full rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.12)]" loading="lazy" />
+            )}
             <span class="absolute -top-5 -left-3 sm:-left-6 grid place-items-center h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-pink text-white font-serif italic text-2xl sm:text-3xl shadow-lg" aria-hidden="true">{o.num}</span>
           </div>
         </div>
@@ -254,30 +231,34 @@ const faqs = [
     </section>
   ))}
 
-  <!-- JUST NEED ONE THING / COMING EARLY 2027 -->
-  <section class="bg-offwhite px-6 py-16 sm:py-24">
-    <div class="max-w-5xl mx-auto grid gap-6 md:grid-cols-2">
-      <div class="flex flex-col rounded-[2rem] bg-white p-8 sm:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.05)]">
-        <p class="text-xs uppercase tracking-widest font-semibold mb-4 text-pink">Just need one thing?</p>
-        <h2 class="font-serif text-3xl sm:text-4xl italic mb-4 text-balance">The KK Digital Product Shop</h2>
-        <p class="text-black mb-8 flex-grow">Grab-and-go courses, templates and trainings for growing your email list without social media, from a $17 collaboration database up.</p>
-        <a href="https://shop.kyliekelly.com/" class="group inline-flex items-center gap-4 self-start rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-          Shop the products
-          <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-        </a>
+  <!-- THE INNER CIRCLE -->
+  <section class="relative overflow-hidden bg-black px-6 py-20 text-white sm:py-28">
+    <div class="pointer-events-none absolute left-[-10%] top-1/2 h-[70%] w-[60%] -translate-y-1/2 rounded-full bg-pink/25 blur-[130px]" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute right-[-10%] bottom-[-20%] h-[60%] w-[45%] rounded-full bg-[#e9d9ec]/10 blur-[120px]" aria-hidden="true"></div>
+    <div class="relative mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-[0.85fr_1.15fr] md:gap-20">
+      <div class="relative mx-auto w-full max-w-sm">
+        <div class="aspect-[4/5] overflow-hidden rounded-t-full border border-white/20 p-2">
+          <img src="/images/kylie-podcast.jpg" alt="Kylie Kelly smiling, resting her chin on her hand" class="h-full w-full rounded-t-full object-cover object-[50%_25%]" loading="lazy" />
+        </div>
+        <RotatingBadge text="COMING EARLY 2027 • COMING EARLY 2027 •" size={130} class="absolute -right-4 bottom-8 sm:-right-10" />
       </div>
-      <div class="flex flex-col rounded-[2rem] bg-black p-8 sm:p-10 text-white">
-        <p class="text-xs uppercase tracking-widest font-semibold mb-4 text-pink">Coming early 2027</p>
-        <h2 class="font-serif text-3xl sm:text-4xl italic mb-4 text-balance">The Inner Circle</h2>
-        <p class="text-warmgray mb-8 flex-grow">My higher-touch group: 12 months with the most support I'm going to give. $6k for the year. Not open yet, but it's coming.</p>
-        {INNER_CIRCLE_WAITLIST ? (
-          <a href={INNER_CIRCLE_WAITLIST} class="group inline-flex items-center gap-4 self-start rounded-full bg-white text-black pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-            Join the waitlist
-            <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-          </a>
-        ) : (
-          <p class="inline-block self-start rounded-full border border-white/40 px-4 py-1.5 text-xs uppercase tracking-widest font-semibold">Opening early 2027</p>
-        )}
+      <div class="text-center md:text-left">
+        <p class="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-pink">&#10022; Coming early 2027 &#10022;</p>
+        <h2 class="font-serif text-[clamp(3rem,7.5vw,6rem)] leading-[0.95]">
+          The <span class="italic text-pink">Inner</span> Circle
+        </h2>
+        <p class="mx-auto mt-7 max-w-lg font-serif text-2xl italic leading-snug text-balance md:mx-0 sm:text-3xl">12 months with the most support I'm going to give.</p>
+        <p class="mx-auto mt-5 max-w-lg text-warmgray sm:text-lg md:mx-0">Doors aren't open yet. Join the waitlist to be the first to know when they are.</p>
+        <div class="mt-9">
+          {INNER_CIRCLE_WAITLIST ? (
+            <a href={INNER_CIRCLE_WAITLIST} class="group inline-flex items-center gap-4 rounded-full bg-white pl-8 pr-2 py-2 text-base font-semibold text-black transition-transform duration-300 hover:-translate-y-1">
+              Join the waitlist
+              <span class="grid h-12 w-12 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+            </a>
+          ) : (
+            <p class="inline-block rounded-full border border-white/40 px-5 py-2 text-xs font-semibold uppercase tracking-widest">Waitlist opening soon</p>
+          )}
+        </div>
       </div>
     </div>
   </section>
@@ -336,29 +317,6 @@ const faqs = [
             <p class="px-6 pb-6 text-black">{f.a}</p>
           </details>
         ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- CLOSING CTA -->
-  <section class="px-4 sm:px-6 pb-16 sm:pb-24">
-    <div class="max-w-6xl mx-auto overflow-hidden rounded-[2rem] bg-[#e9d9ec] grid md:grid-cols-[0.8fr_1.2fr] items-center">
-      <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="w-full h-full max-h-[420px] md:max-h-none object-cover object-[50%_30%] aspect-square md:aspect-auto" loading="lazy" />
-      <div class="px-7 sm:px-12 py-12 sm:py-16">
-        <p class="text-xs uppercase tracking-widest font-semibold mb-3">This feel like your vibe?</p>
-        <h2 class="text-3xl sm:text-4xl font-bold mb-5 text-balance">Whichever step you pick, you don't have to figure this out alone anymore.</h2>
-        <p class="text-black mb-3">I built these ways to work together because I know business doesn't look the same for everyone, and it shouldn't have to. Start where you're at. Move to the next step when you're ready, not before.</p>
-        <p class="font-serif italic text-pink text-lg mb-8">Cheering you on always, Kylie xx</p>
-        <div class="flex flex-wrap gap-3">
-          <a href="https://www.skool.com/email-marketing-skool/about" class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-            Start for free
-            <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-          </a>
-          <a href="https://system.kyliekelly.com/join" class="group inline-flex items-center gap-4 rounded-full bg-white text-black pl-7 pr-2 py-2 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">
-            Get the email system
-            <span class="grid place-items-center h-11 w-11 rounded-full bg-pink-light text-black transition-colors duration-300 group-hover:bg-black group-hover:text-white"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-          </a>
-        </div>
       </div>
     </div>
   </section>
