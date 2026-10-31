@@ -21,39 +21,14 @@ const menu = [
   { num: '03', title: 'The KK Digital Product Shop', line: 'Grab-and-go courses, templates and trainings, plus the Coaching Group.', href: '#step-03', cta: 'Explore the shop' },
 ];
 
-// Real client words, taken from what clients sent. The big number is lifted straight from each quote.
-const results = [
-  {
-    big: '122 new subscribers',
-    quote: 'I went from stuck and overwhelmed to 122 new subscribers, in just days of working with Kylie (all without social media!!) She is great at what she does!!',
-    name: 'Erin K.',
-    card: 'bg-[#e9d9ec] text-black',
-    from: 'left',
-    rot: '-5deg',
-  },
-  {
-    big: '45 to nearly 800',
-    quote: "I've gone from 45 to currently just under 800 active subscribers in less than a month!",
-    name: 'Amy G.',
-    card: 'bg-pink text-white',
-    from: 'bottom',
-    rot: '3deg',
-  },
-  {
-    big: '231 to 643',
-    quote: 'I started with 231 people before I met you and now my email list is currently 643 with 412 new subscribers 🎉',
-    name: 'Celia V.',
-    card: 'bg-[#fbe6f7] text-black',
-    from: 'right',
-    rot: '-2deg',
-  },
-];
-
-const moreResults = [
-  { big: 'Within a month', quote: 'Within a month I went from not knowing anything about email marketing to knowing exactly how to grow my list & what emails to send.', name: 'Amanda M.', role: 'Facebook Ads Strategist', photo: '/images/testimonials/amanda.jpg', card: 'bg-[#fbe6f7]' },
-  { big: 'Two course sales', quote: 'I have close to 500 people on my email list AND I’ve just gotten two course sales! In 2 months, I have had more success with this than I did in 5 years of blogging & waiting passively for subscribers (& income) to find me!', name: 'Vanessa R.', role: '', photo: '/images/testimonials/vanessa.jpg', card: 'bg-[#e9d9ec]' },
-  { big: 'Fresh insights', quote: 'Even though I’ve been doing email for a long time, Kylie gave me fresh insights on how to grow my list, keep them engaged and actually writing much better emails.', name: 'Lori Young', role: 'Offer and Positioning Strategist', photo: '/images/testimonials/lori.jpg', card: 'bg-white' },
-  { big: '3/10 to 9/10', quote: 'When we started I told her I had a 3/10 in confidence when it came to email - now… I’m at a 9/10.', name: 'Debra V.', role: 'Sewing Boss', photo: '/images/testimonials/debra.jpg', card: 'bg-[#fbe6f7]' },
+// Real client words, taken from what clients sent. The big line is lifted straight from each quote.
+const testimonials = [
+  { big: '122 new subscribers', quote: 'I went from stuck and overwhelmed to 122 new subscribers, in just days of working with Kylie (all without social media!!) She is great at what she does!!', name: 'Erin K.', role: '', card: 'bg-[#e9d9ec] text-black', rot: '-3deg' },
+  { big: '45 to nearly 800', quote: "I've gone from 45 to currently just under 800 active subscribers in less than a month!", name: 'Amy G.', role: '', card: 'bg-pink text-white', rot: '2deg' },
+  { big: '231 to 643', quote: 'I started with 231 people before I met you and now my email list is currently 643 with 412 new subscribers 🎉', name: 'Celia V.', role: '', card: 'bg-[#fbe6f7] text-black', rot: '-1.5deg' },
+  { big: 'Within a month', quote: 'Within a month I went from not knowing anything about email marketing to knowing exactly how to grow my list & what emails to send.', name: 'Amanda M.', role: 'Facebook Ads Strategist', card: 'bg-white text-black', rot: '3deg' },
+  { big: 'Two course sales', quote: 'I have close to 500 people on my email list AND I’ve just gotten two course sales! In 2 months, I have had more success with this than I did in 5 years of blogging & waiting passively for subscribers (& income) to find me!', name: 'Vanessa R.', role: '', card: 'bg-[#e9d9ec] text-black', rot: '-2deg' },
+  { big: '3/10 to 9/10', quote: 'When we started I told her I had a 3/10 in confidence when it came to email - now… I’m at a 9/10.', name: 'Debra V.', role: 'Sewing Boss', card: 'bg-[#fbe6f7] text-black', rot: '1.5deg' },
 ];
 
 const stats = [
@@ -147,7 +122,7 @@ const faqs = [
   },
   {
     q: 'What is the Inner Circle?',
-    a: "It's my higher-touch group, opening in early 2027: 12 months with the most support I'm going to give. It isn't open yet. Join the waitlist and you'll be the first to know when doors open.",
+    a: "It's my higher-touch group, opening in early 2027: a whole year of deeper support, actual implementation and a small group of women to do it with. You also get every course in my shop while you're in. It isn't open yet, so pop your name on the waitlist and I'll email you the second I can tell you more.",
   },
 ];
 
@@ -177,7 +152,7 @@ const faqs = [
 
       <div class="mt-8 grid gap-5 text-left md:grid-cols-3">
         {menu.map((m) => (
-          <a href={m.href} class={`group flex flex-col rounded-[2rem] ${m.tint} p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition duration-300 hover:-translate-y-2 hover:bg-[#fbe6f7] hover:shadow-[0_26px_60px_rgba(224,64,251,0.28)] sm:p-7`}>
+          <a href={m.href} class={`group flex flex-col rounded-[2rem] border border-black ${m.tint} p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition duration-300 hover:-translate-y-2 hover:bg-[#fbe6f7] hover:shadow-[0_26px_60px_rgba(224,64,251,0.28)] sm:p-7`}>
             <span class="mb-4 grid h-11 w-11 place-items-center rounded-full bg-pink font-serif text-lg italic text-white transition duration-300 group-hover:rotate-[-8deg] group-hover:scale-110 group-hover:bg-black" aria-hidden="true">{m.num}</span>
             <h2 class="mb-3 font-serif text-2xl leading-tight text-balance">{m.title}</h2>
             <p class="mb-5 flex-grow text-[15px] text-black">{m.line}</p>
@@ -287,55 +262,53 @@ const faqs = [
         <h2 class="font-serif text-[clamp(3rem,7.5vw,6rem)] leading-[0.95]">
           The <span class="italic text-pink">Inner</span> Circle
         </h2>
-        <p class="mx-auto mt-7 max-w-lg font-serif text-2xl italic leading-snug text-balance md:mx-0 sm:text-3xl">12 months with the most support I'm going to give.</p>
-        <p class="mx-auto mt-5 max-w-lg text-warmgray sm:text-lg md:mx-0">Doors aren't open yet. Join the waitlist to be the first to know when they are.</p>
+        <p class="mx-auto mt-7 max-w-lg font-serif text-2xl italic leading-snug text-balance md:mx-0 sm:text-3xl">A whole year of not building this on your own.</p>
+        <p class="mx-auto mt-6 max-w-lg text-warmgray sm:text-lg md:mx-0">If you're a coach, course creator or service provider and you're ready for <strong class="text-white">more</strong> of me, with deeper support, actual implementation and a small group of women to do it with, this is it.</p>
+        <p class="mx-auto mt-4 max-w-lg text-warmgray sm:text-lg md:mx-0">You also get every course in my shop while you're in, including the new ones I create along the way.</p>
+        <p class="mx-auto mt-4 max-w-lg font-semibold text-white sm:text-lg md:mx-0">Doors open early 2027. Pop your name on the waitlist and I'll email you the second I can tell you more.</p>
         <div class="mt-9">
           {INNER_CIRCLE_WAITLIST ? (
-            <a href={INNER_CIRCLE_WAITLIST} class="group inline-flex items-center gap-4 rounded-full bg-white pl-8 pr-2 py-2 text-base font-semibold text-black transition-transform duration-300 hover:-translate-y-1">
+            <a href={INNER_CIRCLE_WAITLIST} target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-white pl-8 pr-2 py-2 text-base font-semibold text-black transition duration-300 hover:-translate-y-1 hover:bg-pink hover:text-white">
               Join the waitlist
-              <span class="grid h-12 w-12 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+              <span class="grid h-12 w-12 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
             </a>
           ) : (
             <p class="inline-block rounded-full border border-white/40 px-5 py-2 text-xs font-semibold uppercase tracking-widest">Waitlist opening soon</p>
           )}
         </div>
       </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- RESULTS: big tilted cards that slide in from the sides, straddling a light and a dark band -->
+  <!-- RESULTS: every testimonial in one full-width line that drifts slowly sideways -->
   <section class="svc-results relative z-10 overflow-hidden">
-    <div class="absolute inset-x-0 bottom-0 h-1/2 bg-black" aria-hidden="true"></div>
-    <div class="relative mx-auto max-w-6xl px-6 pt-20 pb-24 sm:pt-28 sm:pb-32">
+    <div class="absolute inset-x-0 bottom-0 top-[25rem] bg-black" aria-hidden="true"></div>
+    <div class="relative pt-20 pb-20 sm:pt-28 sm:pb-28">
       <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-pink">&mdash; Happy clients &mdash;</p>
-      <h2 class="mb-14 text-center text-3xl font-bold sm:text-4xl">Real students. <span class="script-accent italic text-pink">Real results.</span></h2>
-      <div class="svc-cards grid items-center gap-8 md:grid-cols-3 md:gap-0">
-        {results.map((r, i) => (
-          <figure class={`svc-card svc-from-${r.from} relative rounded-[2.25rem] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.18)] sm:p-10 md:min-h-[26rem] ${r.card} ${i === 1 ? 'z-10 md:-mx-4' : ''} ${i === 2 ? 'md:-mt-6' : ''}`} style={`--r:${r.rot}`}>
-            <p class="mb-6 text-lg tracking-[0.2em]" aria-label="5 stars">★★★★★</p>
-            <p class="mb-5 text-2xl font-bold uppercase leading-[1.05] tracking-tight sm:text-3xl">{r.big}</p>
-            <blockquote class="text-[15px] leading-relaxed">&ldquo;{r.quote}&rdquo;</blockquote>
-            <figcaption class="mt-8 font-semibold">&ndash; {r.name}</figcaption>
-          </figure>
-        ))}
+      <h2 class="mb-12 px-6 text-center text-3xl font-bold sm:text-4xl">Real students. <span class="script-accent italic text-pink">Real results.</span></h2>
+      <div class="svc-strip overflow-hidden py-10" role="region" aria-label="Client testimonials">
+        <div class="svc-track flex w-max">
+          {[0, 1].map((copy) => (
+            <div class="flex flex-none gap-6 pr-6" aria-hidden={copy === 1 ? 'true' : undefined}>
+              {testimonials.map((t) => (
+                <figure class={`svc-card flex w-[300px] flex-none flex-col rounded-[2.25rem] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.18)] sm:w-[360px] sm:p-10 ${t.card}`} style={`--r:${t.rot}`}>
+                  <p class="mb-5 text-lg tracking-[0.2em]" aria-label="5 stars">★★★★★</p>
+                  <p class="mb-5 text-2xl font-bold uppercase leading-[1.05] tracking-tight sm:text-3xl">{t.big}</p>
+                  <blockquote class="mb-8 flex-grow text-[15px] leading-relaxed">&ldquo;{t.quote}&rdquo;</blockquote>
+                  <figcaption class="leading-tight"><strong class="block">&ndash; {t.name}</strong>{t.role && <span class="mt-1 block text-sm opacity-70">{t.role}</span>}</figcaption>
+                </figure>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>
 
   <!-- THE STATEMENT, THE NUMBERS AND A BIG PHOTO -->
   <section class="bg-black px-6 pt-8 text-center text-white sm:pt-12">
-    <div class="svc-more mx-auto mb-24 grid max-w-6xl gap-5 text-left sm:grid-cols-2 lg:grid-cols-4">
-      {moreResults.map((r, i) => (
-        <figure class={`svc-mini flex flex-col rounded-[2rem] p-7 text-black ${r.card}`} style={`--i:${i}`}>
-          <p class="mb-4 font-serif text-2xl font-bold leading-tight text-pink">{r.big}</p>
-          <blockquote class="mb-6 flex-grow text-[15px] leading-relaxed">&ldquo;{r.quote}&rdquo;</blockquote>
-          <figcaption class="flex items-center gap-3">
-            <img src={r.photo} alt="" class="h-11 w-11 flex-none rounded-full object-cover" loading="lazy" />
-            <span class="text-sm leading-tight"><strong class="block">{r.name}</strong>{r.role && <span class="text-black/70">{r.role}</span>}</span>
-          </figcaption>
-        </figure>
-      ))}
-    </div>
     <div class="mx-auto max-w-4xl">
       <p class="mb-6 font-semibold text-pink sm:text-lg">You're in the right place, babe.</p>
       <h2 class="font-serif text-[clamp(2.25rem,6vw,4.75rem)] leading-[1.02] text-balance">
@@ -404,7 +377,7 @@ const faqs = [
   });
 
   // The testimonial cards slide in from the sides when they scroll into view.
-  const revealEls = document.querySelectorAll('.svc-cards, .svc-more');
+  const revealEls = document.querySelectorAll('.svc-strip');
   if (revealEls.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.classList.add('svc-js');
     const io = new IntersectionObserver((entries) => {
@@ -419,13 +392,29 @@ const faqs = [
 </script>
 
 <style>
-  :global(.svc-js) .svc-mini {
-    opacity: 0;
-    translate: 0 40px;
-    transition: opacity 0.7s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transition-delay: calc(var(--i, 0) * 120ms);
+  .svc-ticker { animation: svc-ticker 110s linear infinite; }
+  @keyframes svc-ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
-  :global(.svc-js) .svc-more.is-in .svc-mini { opacity: 1; translate: 0 0; }
+  .svc-card { rotate: var(--r, 0deg); }
+  .svc-track { animation: svc-track 90s linear infinite; }
+  .svc-strip:hover .svc-track { animation-play-state: paused; }
+  @keyframes svc-track {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  :global(.svc-js) .svc-strip {
+    opacity: 0;
+    translate: 0 50px;
+    transition: opacity 0.8s ease, translate 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  :global(.svc-js) .svc-strip.is-in { opacity: 1; translate: 0 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .svc-ticker { animation: none; }
+    .svc-strip { overflow-x: auto; }
+    .svc-track { animation: none; }
+  }
   .svc-pop-btn { display: none; }
   :global(.svc-pop-js) .svc-pop-btn { display: inline-flex; cursor: pointer; }
   .svc-lbl-close { display: none; }
@@ -454,22 +443,4 @@ const faqs = [
   @media (prefers-reduced-motion: reduce) {
     :global(.svc-pop-js) .svc-pop { transition: none; }
   }
-  .svc-ticker { animation: svc-ticker 110s linear infinite; }
-  @keyframes svc-ticker {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .svc-ticker { animation: none; }
-  }
-  .svc-card { rotate: var(--r, 0deg); }
-  :global(.svc-js) .svc-card {
-    opacity: 0;
-    transition: opacity 0.8s ease, translate 1.1s cubic-bezier(0.2, 0.8, 0.2, 1), rotate 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
-    rotate: 0deg;
-  }
-  :global(.svc-js) .svc-from-left { translate: -70vw 0; }
-  :global(.svc-js) .svc-from-right { translate: 70vw 0; }
-  :global(.svc-js) .svc-from-bottom { translate: 0 90px; transition-delay: 0.25s; }
-  :global(.svc-js) .svc-cards.is-in .svc-card { opacity: 1; translate: 0 0; rotate: var(--r, 0deg); }
 </style>
