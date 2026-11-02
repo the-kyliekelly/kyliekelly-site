@@ -4,38 +4,14 @@ import RotatingBadge from '../components/RotatingBadge.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
 import allPosts from '../data/blog-posts.json';
 import { getEpisodes } from '../lib/episodes';
+import { blogCovers } from '../lib/blog';
 
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const playIcon = 'M5 3.5v9l7.5-4.5z';
 
 // Blog posts are category 35. Podcast episodes (category 36) live in the episode library.
-// Each post gets a cover image (the title graphic from the post) and a topic label.
-const covers: Record<string, { image: string; topic: string }> = {
-  'legal-mistakes-business-owners': {
-    image: '/images/blog/3-Legal-Mistakes-Most-Creatives-Make-Before-They-Hit-100K-and-How-to-Fix-Them-Fast-683x1024.jpg',
-    topic: 'Business',
-  },
-  'website-planet-feature': {
-    image: '/images/blog/Website-Planet-Feature-Kylie-Kelly-Quote-1024x1024.png',
-    topic: 'In the press',
-  },
-  'using-events-to-grow-audience': {
-    image: '/images/blog/7-Powerful-Ways-to-Use-Events-to-Build-Your-Brand-and-Attract-the-Right-People-Kylie-Kelly-Pinterest-683x1024.jpg',
-    topic: 'Visibility',
-  },
-  'how-to-blog-for-business': {
-    image: '/images/blog/How-to-Use-Blogging-to-Attract-Aligned-Clients-and-Grow-Your-Email-List-Eden-from-Maven-Made-Copy-683x1024.jpg',
-    topic: 'Content',
-  },
-  'email-marketing-myths-the-truth-about-what-actually-works-in-2025': {
-    image: '/images/blog/Kylie-Kelly-Blog-Whats-Actually-Working-in-Email-Marketing-in-2025-Pinterest-Pin-683x1024.jpg',
-    topic: 'Email marketing',
-  },
-  'the-rise-framework-explained-how-to-grow-your-audience-without-burning-out': {
-    image: '/images/blog/Kylie-Kelly-Blog-How-To-Grow-Your-Audience-Without-Burning-Out2-791x1024.jpg',
-    topic: 'Audience growth',
-  },
-};
+// Each post gets a cover image (the title graphic from the post) and a topic label: see src/lib/blog.ts.
+const covers = blogCovers;
 
 const clean = (html: string) => html.replace(/<[^>]+>/g, ' ').replace(/&[#\w]+;/g, ' ').replace(/\s+/g, ' ').trim();
 const shorten = (text: string, max: number) => {

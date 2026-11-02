@@ -231,6 +231,11 @@
       "permanent": false
     },
     {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap-index.xml",
+      "permanent": true
+    },
+    {
       "source": "/start",
       "destination": "https://kyliekelly.myflodesk.com/starthere",
       "permanent": false

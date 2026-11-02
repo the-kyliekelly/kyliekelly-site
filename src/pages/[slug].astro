@@ -1,4 +1,5 @@
 ---
+import BlogPost from '../layouts/BlogPost.astro';
 import BlogPostLayout from '../layouts/BlogPostLayout.astro';
 import ShowNotes from '../components/ShowNotes.astro';
 import posts from '../data/blog-posts.json';
@@ -22,6 +23,11 @@ export async function getStaticPaths() {
 }
 
 const { post, ep } = Astro.props;
+// A short plain-text summary for the page description.
+const blogDescription = (html: string) => {
+  const t = html.replace(/<[^>]+>/g, ' ').replace(/&[#\w]+;/g, ' ').replace(/\s+/g, ' ').trim();
+  return t.length > 155 ? t.slice(0, 155).replace(/\s+\S*$/, '') + '…' : t;
+};
 // Episodes listed in src/data/show-notes.json use the new show notes template.
 const extra = post ? (showNotes as Record<string, any>)[post.slug] : null;
 // A write-up in the standard format, with no entry of its own in show-notes.json, still gets the full template.
@@ -41,7 +47,11 @@ const feedPage = ep && !feedAuto ? parseFeedNotes(ep) : null;
 ) : auto ? (
   <ShowNotes post={post} notes={auto.notes} extra={auto.extra} episodes={episodes} />
 ) : (
-  <BlogPostLayout title={post.title} description={post.excerpt} date={post.date} kind={post.categories.includes(35) ? 'blog' : 'episode'}>
-    <Fragment set:html={post.content} />
-  </BlogPostLayout>
+  post.categories.includes(35) ? (
+    <BlogPost slug={post.slug} title={post.title} description={blogDescription(post.excerpt)} date={post.date} html={post.content} />
+  ) : (
+    <BlogPostLayout title={post.title} description={post.excerpt} date={post.date} kind="episode">
+      <Fragment set:html={post.content} />
+    </BlogPostLayout>
+  )
 )}

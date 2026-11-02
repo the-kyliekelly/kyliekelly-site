@@ -1,0 +1,245 @@
+---
+// A blog post: a hero with the post's cover image, then the article beside a sidebar (about Kylie, the quiz,
+// recent posts). The "In this post" list sits after the intro and links to every h2 (plain links, no script).
+import Layout from './Layout.astro';
+import allPosts from '../data/blog-posts.json';
+import { blogCovers, prepareBlogHtml } from '../lib/blog';
+import { formatAuDate } from '../lib/dates';
+
+interface Cta {
+  eyebrow?: string;
+  headline: string;
+  text: string;
+  label: string;
+  href: string;
+}
+interface Props {
+  slug: string;
+  title: string;
+  description?: string;
+  date: string;
+  html: string;
+  /** A YouTube video id, only when it is Kylie's own video that fits the post. Shown at the very top. */
+  video?: string;
+}
+
+const { slug, title, description, date, html, video } = Astro.props;
+const cover = blogCovers[slug];
+const { intro, rest, toc, words } = prepareBlogHtml(html);
+const readMins = Math.max(1, Math.round(words / 220));
+const dateLabel = formatAuDate(date, { day: 'numeric', month: 'long', year: 'numeric' });
+const url = new URL(`/${slug}/`, Astro.site ?? 'https://kyliekelly.com').toString();
+const imageUrl = cover ? new URL(cover.image, Astro.site ?? 'https://kyliekelly.com').toString() : undefined;
+
+// The Website Planet post is left out of suggestions: its title still uses the old "visibility coaching" wording.
+const notSuggested = ['website-planet-feature'];
+const others = allPosts
+  .filter((p) => p.categories.includes(35) && p.slug !== slug && blogCovers[p.slug] && !notSuggested.includes(p.slug))
+  .sort((a, b) => +new Date(b.date) - +new Date(a.date));
+// Same topic first, then the newest.
+const related = [...others.filter((p) => blogCovers[p.slug].topic === cover?.topic), ...others.filter((p) => blogCovers[p.slug].topic !== cover?.topic)].slice(0, 3);
+const recent = others.slice(0, 4);
+
+const graph = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: new Date(date).toISOString(),
+  dateModified: new Date(date).toISOString(),
+  mainEntityOfPage: url,
+  ...(imageUrl ? { image: imageUrl } : {}),
+  author: { '@type': 'Person', name: 'Kylie Kelly', url: new URL('/meet-kylie/', url).toString() },
+  publisher: { '@type': 'Person', name: 'Kylie Kelly' },
+};
+---
+<Layout title={`${title} | Kylie Kelly`} description={description}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+  </Fragment>
+
+  <section class="bg-offwhite px-6 py-14 sm:py-20">
+    <div class="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-[minmax(0,1fr)_260px] lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div>
+        <a href="/blog" class="inline-block mb-6 text-sm font-semibold underline underline-offset-4 hover:text-pink">← The blog</a>
+        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">{cover?.topic && <>{cover.topic} · </>}{dateLabel} · {readMins} min read</p>
+        <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] text-balance">{title}</h1>
+        <p class="mt-6 flex items-center gap-3 text-sm font-semibold">
+          <img src="/images/kylie-headshot.jpg" alt="" width="44" height="44" class="h-11 w-11 rounded-full object-cover object-top" />
+          <span>By Kylie Kelly</span>
+        </p>
+      </div>
+      {cover && (
+        <img src={cover.image} alt={title} class="mx-auto w-full max-w-[260px] md:max-w-none rounded-2xl shadow-[0_18px_40px_rgba(0,0,0,0.12)]" />
+      )}
+    </div>
+  </section>
+
+  <div class="px-6 py-14 sm:py-20">
+    <div class="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[minmax(0,1fr)_320px]">
+
+      <article class="min-w-0">
+        <div class="blog-body max-w-[42rem]">
+          {video && (
+            <div class="mb-10 aspect-video overflow-hidden rounded-2xl bg-black">
+              <iframe src={`https://www.youtube-nocookie.com/embed/${video}`} title={title} class="h-full w-full" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          )}
+
+          <div set:html={intro} />
+
+          {toc.length > 0 && (
+            <nav aria-label="In this post" class="blog-toc my-10 rounded-2xl bg-offwhite p-6 sm:p-8">
+              <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">In this post</p>
+              <ol>
+                {toc.map((t) => (
+                  <li class={t.level === 3 ? 'is-sub' : ''}><a href={`#${t.id}`}>{t.title}</a></li>
+                ))}
+              </ol>
+            </nav>
+          )}
+
+          <div set:html={rest} />
+        </div>
+
+        {related.length > 0 && (
+          <section class="mt-20 max-w-[42rem] border-t border-black/10 pt-10">
+            <h2 class="font-serif text-2xl font-bold mb-6">Keep reading</h2>
+            <ul class="grid gap-5 sm:grid-cols-3">
+              {related.map((p) => (
+                <li>
+                  <a href={`/${p.slug}/`} class="group block">
+                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="aspect-[2/3] w-full rounded-xl object-cover object-top transition-transform duration-300 group-hover:-translate-y-1" />
+                    <span class="mt-3 block text-sm font-semibold leading-snug group-hover:text-pink">{p.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </article>
+
+      <aside class="space-y-8 lg:sticky lg:top-24 lg:self-start">
+        <div class="rounded-3xl bg-offwhite p-7 text-center">
+          <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly" width="112" height="112" class="mx-auto mb-4 h-28 w-28 rounded-full object-cover object-top" />
+          <p class="font-serif italic text-2xl font-bold leading-tight mb-3">Hey there! I'm Kylie Kelly.</p>
+          <p class="text-sm mb-5">I'm an ex international wedding photographer turned email marketing educator and the host of The Email Growth Show. I grew my list from 0 to 7,000+ subscribers in 18 months without social media, and I share how, every Friday.</p>
+          <a href="/meet-kylie" class="inline-block rounded-full border border-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-black hover:text-white">More about me →</a>
+        </div>
+
+        <div class="rounded-3xl bg-[#e9d9ec] p-7 text-center">
+          <img src="/images/freebie-mockup.png" alt="Your Next 1,000 Subscribers quiz" loading="lazy" class="mx-auto mb-5 w-full max-w-[220px]" />
+          <p class="font-serif italic text-2xl font-bold leading-tight mb-3">Your next 1,000 subscribers</p>
+          <p class="text-sm mb-5">Take the free quiz to find the fastest way for you to grow your email list without social media.</p>
+          <a href="/guide" class="btn-primary text-xs">Take the quiz →</a>
+        </div>
+
+        {recent.length > 0 && (
+          <div>
+            <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Recent posts</p>
+            <ul class="divide-y divide-black/10 border-y border-black/10">
+              {recent.map((p) => (
+                <li><a href={`/${p.slug}/`} class="block py-3 text-sm font-semibold leading-snug hover:text-pink">{p.title}</a></li>
+              ))}
+            </ul>
+            <a href="/blog" class="mt-4 inline-block text-sm font-semibold underline underline-offset-4 hover:text-pink">All posts →</a>
+          </div>
+        )}
+      </aside>
+
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .blog-body :global(p),
+  .blog-body :global(li) {
+    font-size: 1.08rem;
+    line-height: 1.75;
+    color: #222;
+    margin: 0 0 22px;
+  }
+  .blog-body :global(h2) {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    line-height: 1.2;
+    margin: 56px 0 18px;
+    scroll-margin-top: 90px;
+  }
+  .blog-body :global(h3) {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    margin: 32px 0 12px;
+    scroll-margin-top: 90px;
+  }
+  .blog-body :global(blockquote) {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    border-left: 3px solid #e040fb;
+    padding-left: 24px;
+    margin: 32px 0;
+  }
+  .blog-body :global(a) {
+    color: #e040fb;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .blog-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 14px;
+    margin: 28px auto;
+  }
+  .blog-body :global(ul),
+  .blog-body :global(ol) {
+    margin: 0 0 22px;
+    padding-left: 26px;
+  }
+  .blog-toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: toc;
+  }
+  .blog-toc li {
+    counter-increment: toc;
+    margin: 0;
+    padding: 6px 0;
+    font-size: 1rem;
+    line-height: 1.4;
+    display: flex;
+    gap: 12px;
+  }
+  .blog-toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #e040fb;
+    flex: none;
+    width: 1.6rem;
+  }
+  .blog-toc li.is-sub {
+    padding-left: 2.2rem;
+    font-size: 0.95rem;
+  }
+  .blog-toc li.is-sub::before {
+    content: '–';
+    width: 1rem;
+  }
+  .blog-toc a {
+    color: #111;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .blog-toc a:hover {
+    color: #e040fb;
+  }
+</style>
