@@ -29,10 +29,6 @@ export const blogCovers: Record<string, { image?: string; topic: string; placeho
     image: '/images/blog/3-Legal-Mistakes-Most-Creatives-Make-Before-They-Hit-100K-and-How-to-Fix-Them-Fast-683x1024.jpg',
     topic: 'Business',
   },
-  'website-planet-feature': {
-    image: '/images/blog/Website-Planet-Feature-Kylie-Kelly-Quote-1024x1024.png',
-    topic: 'In the press',
-  },
   'using-events-to-grow-audience': {
     image: '/images/blog/7-Powerful-Ways-to-Use-Events-to-Build-Your-Brand-and-Attract-the-Right-People-Kylie-Kelly-Pinterest-683x1024.jpg',
     topic: 'Visibility',

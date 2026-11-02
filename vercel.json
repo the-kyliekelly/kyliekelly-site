@@ -241,6 +241,16 @@
       "permanent": true
     },
     {
+      "source": "/website-planet-feature",
+      "destination": "/press",
+      "permanent": true
+    },
+    {
+      "source": "/website-planet-feature/",
+      "destination": "/press",
+      "permanent": true
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true

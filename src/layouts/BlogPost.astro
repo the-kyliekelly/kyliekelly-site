@@ -45,10 +45,8 @@ const dateLabel = formatAuDate(date, { day: 'numeric', month: 'long', year: 'num
 const url = new URL(`/${slug}/`, Astro.site ?? 'https://kyliekelly.com').toString();
 const imageUrl = cover?.image ? new URL(cover.image, Astro.site ?? 'https://kyliekelly.com').toString() : undefined;
 
-// The Website Planet post is left out of suggestions: its title still uses the old "visibility coaching" wording.
-const notSuggested = ['website-planet-feature'];
 const others = allPosts
-  .filter((p) => p.categories.includes(35) && p.slug !== slug && blogCovers[p.slug] && !notSuggested.includes(p.slug))
+  .filter((p) => p.categories.includes(35) && p.slug !== slug && blogCovers[p.slug])
   .sort((a, b) => +new Date(b.date) - +new Date(a.date));
 // Same topic first, then the newest.
 const related = [...others.filter((p) => blogCovers[p.slug].topic === cover?.topic), ...others.filter((p) => blogCovers[p.slug].topic !== cover?.topic)].slice(0, 3);
