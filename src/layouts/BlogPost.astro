@@ -3,7 +3,9 @@
 // recent posts). The "In this post" list sits after the intro and links to every h2 (plain links, no script).
 import Layout from './Layout.astro';
 import allPosts from '../data/blog-posts.json';
+import AboutBlogger from '../components/AboutBlogger.astro';
 import { blogCovers, prepareBlogHtml } from '../lib/blog';
+import { highlightPhrases } from '../lib/showNotes';
 import { formatAuDate } from '../lib/dates';
 
 interface Cta {
@@ -16,14 +18,19 @@ interface Cta {
 interface Props {
   slug: string;
   title: string;
+  /** The title tag, when it should be shorter than the post's own title. */
+  seoTitle?: string;
   description?: string;
   date: string;
   html: string;
+  /** Phrases copied word for word from the post that get the yellow marker highlight. */
+  highlights?: string[];
   /** A YouTube video id, only when it is Kylie's own video that fits the post. Shown at the very top. */
   video?: string;
 }
 
-const { slug, title, description, date, html, video } = Astro.props;
+const { slug, title, seoTitle, description, date, html: rawHtml, highlights = [], video } = Astro.props;
+const html = highlights.length ? highlightPhrases(rawHtml, highlights, slug) : rawHtml;
 const cover = blogCovers[slug];
 const { intro, rest, toc, words } = prepareBlogHtml(html);
 const readMins = Math.max(1, Math.round(words / 220));
@@ -53,7 +60,7 @@ const graph = {
   publisher: { '@type': 'Person', name: 'Kylie Kelly' },
 };
 ---
-<Layout title={`${title} | Kylie Kelly`} description={description}>
+<Layout title={seoTitle ?? `${title} | Kylie Kelly`} description={description}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(graph)} />
     <meta property="og:type" content="article" />
@@ -106,6 +113,8 @@ const graph = {
           <div set:html={rest} />
         </div>
 
+        <AboutBlogger />
+
         {related.length > 0 && (
           <section class="mt-20 max-w-[42rem] border-t border-black/10 pt-10">
             <h2 class="font-serif text-2xl font-bold mb-6">Keep reading</h2>
@@ -123,15 +132,30 @@ const graph = {
         )}
       </article>
 
-      <aside class="space-y-8 lg:sticky lg:top-24 lg:self-start">
-        <div class="rounded-3xl bg-offwhite p-7 text-center">
-          <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly" width="112" height="112" class="mx-auto mb-4 h-28 w-28 rounded-full object-cover object-top" />
-          <p class="font-serif italic text-2xl font-bold leading-tight mb-3">Hey there! I'm Kylie Kelly.</p>
-          <p class="text-sm mb-5">I'm an ex international wedding photographer turned email marketing educator and the host of The Email Growth Show. I grew my list from 0 to 7,000+ subscribers in 18 months without social media, and I share how, every Friday.</p>
-          <a href="/meet-kylie" class="inline-block rounded-full border border-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-black hover:text-white">More about me →</a>
+      <aside class="space-y-10">
+        <div class="overflow-hidden rounded-[2rem] bg-[#d5b9db]">
+          <div class="relative">
+            <img src="/images/hero-8.jpg" alt="Kylie Kelly" width="1200" height="1458" loading="lazy" class="aspect-[4/4.3] w-full object-cover object-top" />
+            <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#d5b9db] to-transparent"></div>
+          </div>
+          <div class="px-7 pb-8 pt-1">
+            <p class="font-serif italic text-[1.7rem] font-bold leading-tight mb-3">Before you get any further... Hi! I'm Kylie Kelly!</p>
+            <p class="text-sm leading-relaxed mb-6">I'm an email marketing educator who grew my list from 0 to 7,000+ subscribers in 18 months without social media. My obsession is teaching you how to get known, trusted and selling, without the algorithm running your life.</p>
+            <a href="/meet-kylie" class="inline-block bg-black px-6 py-3.5 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-pink">Meet Kylie →</a>
+          </div>
         </div>
 
-        <div class="rounded-3xl bg-[#e9d9ec] p-7 text-center">
+        <div>
+          <p class="text-xs uppercase tracking-[0.2em] font-semibold mb-5">As seen in:</p>
+          <div class="grid grid-cols-2 items-center gap-x-6 gap-y-5">
+            <img src="/images/press/forbes.png" alt="Forbes" loading="lazy" class="h-8 w-auto" />
+            <img src="/images/press/business-insider.jpg" alt="Business Insider" loading="lazy" class="h-10 w-auto mix-blend-multiply" />
+            <img src="/images/press/london-daily-news.png" alt="London Daily News" loading="lazy" class="h-8 w-auto" />
+            <img src="/images/press/business-mondays.jpg" alt="Business Mondays" loading="lazy" class="h-12 w-auto mix-blend-multiply" />
+          </div>
+        </div>
+
+        <div class="rounded-[2rem] bg-offwhite p-7 text-center">
           <img src="/images/freebie-mockup.png" alt="Your Next 1,000 Subscribers quiz" loading="lazy" class="mx-auto mb-5 w-full max-w-[220px]" />
           <p class="font-serif italic text-2xl font-bold leading-tight mb-3">Your next 1,000 subscribers</p>
           <p class="text-sm mb-5">Take the free quiz to find the fastest way for you to grow your email list without social media.</p>
@@ -140,13 +164,22 @@ const graph = {
 
         {recent.length > 0 && (
           <div>
-            <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">Recent posts</p>
-            <ul class="divide-y divide-black/10 border-y border-black/10">
+            <p class="font-serif text-2xl font-bold mb-2">Binge the latest posts</p>
+            <span class="mb-2 block h-1 w-12 bg-pink"></span>
+            <ul>
               {recent.map((p) => (
-                <li><a href={`/${p.slug}/`} class="block py-3 text-sm font-semibold leading-snug hover:text-pink">{p.title}</a></li>
+                <li class="border-b border-black/15 last:border-b-0">
+                  <a href={`/${p.slug}/`} class="group flex items-center gap-4 py-5">
+                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="h-20 w-20 flex-none rounded-full object-cover object-top transition-transform duration-300 group-hover:scale-105" />
+                    <span class="min-w-0">
+                      <span class="block text-[11px] uppercase tracking-[0.18em] font-semibold text-pink mb-1">{blogCovers[p.slug].topic}</span>
+                      <span class="block font-serif text-[1.05rem] leading-snug group-hover:text-pink">{p.title}</span>
+                    </span>
+                  </a>
+                </li>
               ))}
             </ul>
-            <a href="/blog" class="mt-4 inline-block text-sm font-semibold underline underline-offset-4 hover:text-pink">All posts →</a>
+            <a href="/blog" class="mt-3 inline-block text-sm font-semibold underline underline-offset-4 hover:text-pink">All posts →</a>
           </div>
         )}
       </aside>
@@ -179,6 +212,15 @@ const graph = {
     margin: 32px 0 12px;
     scroll-margin-top: 90px;
   }
+  .blog-body :global(mark) {
+    background: linear-gradient(180deg, transparent 40%, #fff06a 40%);
+    color: inherit;
+    font-weight: 600;
+    padding: 0 0.1em;
+    margin: 0 -0.1em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
   .blog-body :global(blockquote) {
     font-family: 'Playfair Display', Georgia, serif;
     font-style: italic;
@@ -203,6 +245,84 @@ const graph = {
   .blog-body :global(ol) {
     margin: 0 0 22px;
     padding-left: 26px;
+  }
+  .blog-body :global(p.lead) {
+    font-size: 1.3rem;
+    line-height: 1.6;
+  }
+  .blog-body :global(.post-learn) {
+    background: #f9f1f2;
+    border-radius: 16px;
+    padding: 26px 30px;
+    margin: 28px 0;
+  }
+  .blog-body :global(.post-learn-title) {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+  .blog-body :global(.post-learn ul) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .blog-body :global(.post-learn li) {
+    position: relative;
+    padding-left: 24px;
+    margin: 0 0 10px;
+    font-size: 1rem;
+  }
+  .blog-body :global(.post-learn li::before) {
+    content: '+';
+    position: absolute;
+    left: 0;
+    color: #e040fb;
+    font-weight: 700;
+  }
+  .blog-body :global(.post-cta) {
+    background: #111;
+    color: #fff;
+    border-radius: 18px;
+    padding: 44px 34px;
+    text-align: center;
+    margin: 56px 0 8px;
+  }
+  .blog-body :global(.post-cta p) {
+    color: #d9d9d9;
+    margin: 0 auto 24px;
+    max-width: 30rem;
+  }
+  .blog-body :global(.post-cta .post-cta-eyebrow) {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    color: #e040fb;
+    font-size: 1.4rem;
+    margin: 0 0 8px;
+  }
+  .blog-body :global(.post-cta .post-cta-headline) {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff;
+    font-size: 1.7rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 12px;
+  }
+  .blog-body :global(.post-cta a) {
+    display: inline-block;
+    background: #e040fb;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    border-radius: 50px;
+    transition: transform 0.3s;
+  }
+  .blog-body :global(.post-cta a:hover) {
+    transform: translateY(-3px);
   }
   .blog-toc ol {
     list-style: none;

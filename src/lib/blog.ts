@@ -4,6 +4,22 @@
 // Blog posts are category 35 in src/data/blog-posts.json. A post only appears on /blog (and gets a cover on its own
 // page) once it has an entry here: the pin image from public/images/blog and a short topic label.
 export const blogCovers: Record<string, { image: string; topic: string }> = {
+  'should-i-run-a-black-friday-sale': {
+    image: '/images/blog/should-i-run-a-black-friday-sale.jpg',
+    topic: 'Launching & selling',
+  },
+  'welcome-sequence-start-here-email': {
+    image: '/images/blog/welcome-sequence-start-here-email.jpg',
+    topic: 'Email marketing',
+  },
+  'interactive-lead-magnet': {
+    image: '/images/blog/interactive-lead-magnet.jpg',
+    topic: 'List growth',
+  },
+  'how-long-does-it-take-to-grow-an-online-business': {
+    image: '/images/blog/how-long-does-it-take-to-grow-an-online-business.jpg',
+    topic: 'Mindset & life',
+  },
   'legal-mistakes-business-owners': {
     image: '/images/blog/3-Legal-Mistakes-Most-Creatives-Make-Before-They-Hit-100K-and-How-to-Fix-Them-Fast-683x1024.jpg',
     topic: 'Business',
@@ -41,7 +57,7 @@ const slugify = (text: string) =>
     .slice(0, 70)
     .replace(/-+$/, '');
 
-const NOT_A_SECTION = /^(in this (post|episode)\b|what you.ll learn|love this post|save it for later|with special guest|listen to|links? mentioned|about [a-z]+$)/i;
+const NOT_A_SECTION = /^(in this (post|episode)\b|what you.ll learn|love this post|save it for later|with special guest|listen to|links? mentioned|about the (author|blogger)|about [a-z]+$)/i;
 
 export interface BlogToc {
   id: string;

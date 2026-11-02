@@ -48,7 +48,7 @@ const feedPage = ep && !feedAuto ? parseFeedNotes(ep) : null;
   <ShowNotes post={post} notes={auto.notes} extra={auto.extra} episodes={episodes} />
 ) : (
   post.categories.includes(35) ? (
-    <BlogPost slug={post.slug} title={post.title} description={blogDescription(post.excerpt)} date={post.date} html={post.content} />
+    <BlogPost slug={post.slug} title={post.title} seoTitle={(post as { seoTitle?: string }).seoTitle} highlights={(post as { highlights?: string[] }).highlights} description={blogDescription(post.excerpt)} date={post.date} html={post.content} />
   ) : (
     <BlogPostLayout title={post.title} description={post.excerpt} date={post.date} kind="episode">
       <Fragment set:html={post.content} />
