@@ -231,6 +231,16 @@
       "permanent": false
     },
     {
+      "source": "/email-marketing-myths-the-truth-about-what-actually-works-in-2025",
+      "destination": "/email-marketing-myths-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/email-marketing-myths-the-truth-about-what-actually-works-in-2025/",
+      "destination": "/email-marketing-myths-2026/",
+      "permanent": true
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true

@@ -3,7 +3,8 @@
 
 // Blog posts are category 35 in src/data/blog-posts.json. A post only appears on /blog (and gets a cover on its own
 // page) once it has an entry here: the pin image from public/images/blog and a short topic label.
-export const blogCovers: Record<string, { image: string; topic: string }> = {
+/** image is the Pinterest pin graphic; a post without one has no pin button, pin block or share image. */
+export const blogCovers: Record<string, { image?: string; topic: string }> = {
   'should-i-run-a-black-friday-sale': {
     image: '/images/blog/should-i-run-a-black-friday-sale.jpg',
     topic: 'Launching & selling',
@@ -36,8 +37,7 @@ export const blogCovers: Record<string, { image: string; topic: string }> = {
     image: '/images/blog/How-to-Use-Blogging-to-Attract-Aligned-Clients-and-Grow-Your-Email-List-Eden-from-Maven-Made-Copy-683x1024.jpg',
     topic: 'Content',
   },
-  'email-marketing-myths-the-truth-about-what-actually-works-in-2025': {
-    image: '/images/blog/Kylie-Kelly-Blog-Whats-Actually-Working-in-Email-Marketing-in-2025-Pinterest-Pin-683x1024.jpg',
+  'email-marketing-myths-2026': {
     topic: 'Email marketing',
   },
   'the-rise-framework-explained-how-to-grow-your-audience-without-burning-out': {
@@ -65,7 +65,13 @@ export function bannerFor(slug: string): ImageMetadata | undefined {
   return bannerPhotos[position % bannerPhotos.length];
 }
 
-const stripTags = (html: string) => html.replace(/<[^>]+>/g, ' ').replace(/&[#\w]+;/g, ' ').replace(/\s+/g, ' ').trim();
+const named: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', hellip: '…', ndash: '–', mdash: '—', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“' };
+const decodeEntities = (t: string) =>
+  t.replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&([a-z]+);/gi, (m, n) => named[n.toLowerCase()] ?? m);
+// Plain text of some HTML, with entities turned into real characters (so "&amp;" stays an "&").
+const stripTags = (html: string) => decodeEntities(html.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
 const slugify = (text: string) =>
   stripTags(text)
     .toLowerCase()
@@ -93,9 +99,13 @@ export function prepareBlogHtml(source: string): { intro: string; rest: string; 
   // The closing call to action (a <div class="post-cta">) is shown full width under the article, not inside it.
   const cta = source.match(/<div class="post-cta">[\s\S]*?<\/div>/)?.[0] ?? '';
   const html = cta ? source.replace(cta, '') : source;
+  // Older posts open their list of takeaways with an "In this post, you'll learn:" heading and a plain list. Show it the
+  // same way as the newer posts: a "What you'll learn in this post" title over a list with plus signs.
+  const learnBlock = /<h2[^>]*>(?:(?!<\/h2>)[\s\S])*in this post,? you.ll learn(?:(?!<\/h2>)[\s\S])*<\/h2>\s*<ul[^>]*>([\s\S]*?)<\/ul>/i;
+  const withLearn = html.replace(learnBlock, (_m, items: string) => `<div class="post-learn"><p class="post-learn-title">What you'll learn in this post</p><ul>${items}</ul></div>`);
   const used = new Set<string>();
   const toc: BlogToc[] = [];
-  const withIds = html.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi, (whole, level: string, attrs: string, inner: string) => {
+  const withIds = withLearn.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi, (whole, level: string, attrs: string, inner: string) => {
     const title = stripTags(inner);
     if (!title) return whole;
     let id = attrs.match(/\sid="([^"]+)"/)?.[1];

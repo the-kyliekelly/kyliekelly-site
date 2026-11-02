@@ -94,7 +94,7 @@ const topics = [...topicCounts.entries()].sort((x, y) => y[1] - x[1]).map(([t]) 
           {featured.banner ? (
             <Image src={featured.banner} alt="" widths={[640, 960, 1280]} sizes="(min-width: 768px) 50vw, 100vw" loading="eager" class="w-full h-full max-h-[560px] md:max-h-[680px] object-cover" />
           ) : (
-            <img src={featured.image} alt="" class="w-full h-full max-h-[560px] md:max-h-[680px] object-cover object-top" />
+            featured.image && <img src={featured.image} alt="" class="w-full h-full max-h-[560px] md:max-h-[680px] object-cover object-top" />
           )}
         </a>
         <div class="bg-black text-white flex flex-col justify-center px-8 sm:px-14 lg:px-20 py-16 sm:py-20">
@@ -150,7 +150,7 @@ const topics = [...topicCounts.entries()].sort((x, y) => y[1] - x[1]).map(([t]) 
               {p.banner ? (
                 <Image src={p.banner} alt="" widths={[480, 720]} sizes="(min-width: 1024px) 330px, (min-width: 640px) 45vw, 90vw" class="h-full w-full object-cover" loading="lazy" />
               ) : (
-                <img src={p.image} alt="" class="h-full w-full object-cover object-top" loading="lazy" />
+                p.image && <img src={p.image} alt="" class="h-full w-full object-cover object-top" loading="lazy" />
               )}
               <span class="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-black">{p.topic}</span>
               <span class="absolute bottom-3 right-3 grid h-10 w-10 place-items-center rounded-full bg-white text-black shadow-md transition-colors duration-300 group-hover:bg-pink group-hover:text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>

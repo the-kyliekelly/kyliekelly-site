@@ -14,7 +14,8 @@ export const GET: APIRoute = () => {
     .sort((a, b) => +new Date(b.date) - +new Date(a.date))
     .map((p) => {
       const url = `${SITE}/${p.slug}/`;
-      const image = `${SITE}${blogCovers[p.slug].image}`;
+      const cover = blogCovers[p.slug].image;
+      const image = cover ? `${SITE}${cover}` : '';
       const type = image.endsWith('.png') ? 'image/png' : 'image/jpeg';
       return `    <item>
       <title>${esc(p.title)}</title>
@@ -23,9 +24,9 @@ export const GET: APIRoute = () => {
       <pubDate>${new Date(p.date).toUTCString()}</pubDate>
       <category>${esc(blogCovers[p.slug].topic)}</category>
       <description>${esc(plain(p.excerpt).slice(0, 300))}</description>
-      <enclosure url="${image}" length="0" type="${type}" />
+${image ? `      <enclosure url="${image}" length="0" type="${type}" />
       <media:content url="${image}" medium="image" />
-    </item>`;
+` : ''}    </item>`;
     })
     .join('\n');
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

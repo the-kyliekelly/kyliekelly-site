@@ -28,19 +28,22 @@ interface Props {
   highlights?: string[];
   /** A YouTube video id, only when it is Kylie's own video that fits the post. Shown at the very top. */
   video?: string;
+  /** When the post was last refreshed (shown as "Updated ..." and used as dateModified). */
+  updated?: string;
 }
 
-const { slug, title, seoTitle, description, date, html: rawHtml, highlights = [], video } = Astro.props;
+const { slug, title, seoTitle, description, date, html: rawHtml, highlights = [], video, updated } = Astro.props;
 const html = highlights.length ? highlightPhrases(rawHtml, highlights, slug) : rawHtml;
 const cover = blogCovers[slug];
 
 // The banner photo (see bannerFor in src/lib/blog.ts). The sidebar uses a photo of Kylie.
 const banner = bannerFor(slug);
 const { intro, rest, cta, toc, words } = prepareBlogHtml(html);
+const updatedLabel = updated ? formatAuDate(updated, { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 const readMins = Math.max(1, Math.round(words / 220));
 const dateLabel = formatAuDate(date, { day: 'numeric', month: 'long', year: 'numeric' });
 const url = new URL(`/${slug}/`, Astro.site ?? 'https://kyliekelly.com').toString();
-const imageUrl = cover ? new URL(cover.image, Astro.site ?? 'https://kyliekelly.com').toString() : undefined;
+const imageUrl = cover?.image ? new URL(cover.image, Astro.site ?? 'https://kyliekelly.com').toString() : undefined;
 
 // The Website Planet post is left out of suggestions: its title still uses the old "visibility coaching" wording.
 const notSuggested = ['website-planet-feature'];
@@ -61,7 +64,7 @@ const favorites = [
 const numberColours = ['text-pink', 'text-[#b58fc0]', 'text-black', 'text-pink'];
 
 // Save-to-Pinterest link, using the post's pin image (the cover) and its address.
-const pinUrl = cover
+const pinUrl = cover?.image
   ? `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&media=${encodeURIComponent(imageUrl ?? '')}&description=${encodeURIComponent(title)}`
   : undefined;
 const pinGlyph = 'M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z';
@@ -72,7 +75,7 @@ const graph = {
   headline: title,
   description,
   datePublished: new Date(date).toISOString(),
-  dateModified: new Date(date).toISOString(),
+  dateModified: new Date(updated ?? date).toISOString(),
   mainEntityOfPage: url,
   ...(imageUrl ? { image: imageUrl } : {}),
   author: { '@type': 'Person', name: 'Kylie Kelly', url: new URL('/meet-kylie/', url).toString() },
@@ -97,7 +100,7 @@ const graph = {
     <div class="relative mx-auto flex min-h-[480px] max-w-6xl flex-col justify-end px-6 py-14 sm:min-h-[560px] sm:py-20">
       <div class="max-w-2xl">
         <a href="/blog" class="mb-6 inline-block text-sm font-semibold underline underline-offset-4 hover:text-[#f1b3ff]">← The blog</a>
-        <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-[#f1b3ff]">{cover?.topic && <>{cover.topic} · </>}{dateLabel} · {readMins} min read</p>
+        <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-[#f1b3ff]">{cover?.topic && <>{cover.topic} · </>}{dateLabel} · {readMins} min read{updatedLabel && <> · Updated {updatedLabel}</>}</p>
         <h1 class="font-serif text-4xl font-bold leading-[1.08] text-balance sm:text-5xl lg:text-6xl">{title}</h1>
         <p class="mt-6 flex items-center gap-3 text-sm font-semibold">
           <img src="/images/kylie-headshot.jpg" alt="" width="44" height="44" class="h-11 w-11 rounded-full object-cover object-top" />
@@ -139,7 +142,7 @@ const graph = {
           <div set:html={rest} />
         </div>
 
-        {pinUrl && cover && (
+        {pinUrl && cover?.image && (
           <div class="mt-14 max-w-[42rem] text-center">
             <p class="mb-5 font-serif text-2xl font-bold italic">Love this post? Save it for later...</p>
             <a href={pinUrl} target="_blank" rel="noopener" class="group inline-block">
@@ -211,7 +214,7 @@ const graph = {
                     {bannerFor(p.slug) ? (
                       <Image src={bannerFor(p.slug)!} alt="" widths={[224, 336]} sizes="112px" loading="lazy" class="h-28 w-28 flex-none rounded-full object-cover transition-transform duration-300 group-hover:scale-105" />
                     ) : (
-                      <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="h-28 w-28 flex-none rounded-full object-cover object-top" />
+                      <span class="h-28 w-28 flex-none rounded-full bg-offwhite"></span>
                     )}
                     <span class="min-w-0">
                       <span class="block text-xs uppercase tracking-[0.18em] font-semibold text-pink mb-1.5">{blogCovers[p.slug].topic}</span>
@@ -245,7 +248,7 @@ const graph = {
                   {bannerFor(p.slug) ? (
                     <Image src={bannerFor(p.slug)!} alt="" widths={[480, 720]} sizes="(min-width: 640px) 330px, 90vw" loading="lazy" class="aspect-square w-full rounded-2xl object-cover transition-transform duration-300 group-hover:-translate-y-1" />
                   ) : (
-                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="aspect-square w-full rounded-2xl object-cover object-top transition-transform duration-300 group-hover:-translate-y-1" />
+                    <span class="block aspect-square w-full rounded-2xl bg-offwhite"></span>
                   )}
                   <span class="mt-4 block font-serif text-xl font-bold leading-snug group-hover:text-pink">{p.title}</span>
                 </a>
@@ -319,6 +322,9 @@ const graph = {
     margin: 0 0 22px;
     padding-left: 26px;
   }
+  .blog-body :global(ul) { list-style: disc; }
+  .blog-body :global(ol) { list-style: decimal; }
+  .blog-body :global(.post-learn ul) { list-style: none; padding: 0; }
   .blog-body :global(p.lead) {
     font-size: 1.3rem;
     line-height: 1.6;
