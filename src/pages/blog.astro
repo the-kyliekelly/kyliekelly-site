@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import RotatingBadge from '../components/RotatingBadge.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
 import allPosts from '../data/blog-posts.json';
 import { getEpisodes } from '../lib/episodes';
@@ -34,22 +35,18 @@ const posts = allPosts
 
 const tileTint = ['bg-[#e9d9ec]', 'bg-[#fbe6f7]', 'bg-pink-light', 'bg-offwhite'];
 const [featured, ...rest] = posts;
-const stack = rest.slice(0, 3);
+
+const pills = [
+  { label: 'The blog', href: '#latest', dot: 'bg-pink text-white', active: true },
+  { label: 'Podcast show notes', href: '/podcast/archive', dot: 'bg-pink-light text-black' },
+  { label: 'Favorites', href: '/resources', dot: 'bg-[#e9d9ec] text-black' },
+  { label: 'Free community', href: 'https://www.skool.com/email-marketing-skool/about', dot: 'bg-black text-white' },
+];
 
 // Topic filters: every topic that has a post, the busiest first.
 const topicCounts = new Map<string, number>();
 for (const p of posts) topicCounts.set(p.topic, (topicCounts.get(p.topic) ?? 0) + 1);
 const topics = [...topicCounts.entries()].sort((x, y) => y[1] - x[1]).map(([t]) => t);
-
-// "Start here": a short list picked by hand. Swap the addresses to change it.
-const startHereSlugs = [
-  'welcome-sequence-start-here-email',
-  'interactive-lead-magnet',
-  'email-marketing-myths-the-truth-about-what-actually-works-in-2025',
-  'the-rise-framework-explained-how-to-grow-your-audience-without-burning-out',
-  'how-to-blog-for-business',
-];
-const startHere = startHereSlugs.map((slug) => posts.find((p) => p.slug === slug)).filter((p): p is (typeof posts)[number] => Boolean(p));
 
 const episodes = (await getEpisodes()).slice(0, 3);
 ---
@@ -63,62 +60,52 @@ const episodes = (await getEpisodes()).slice(0, 3);
     </p>
   </section>
 
-  <!-- HEADER: signature, search and topic filters -->
-  <section class="bg-offwhite px-6 pt-12 pb-8 sm:pt-16">
-    <div class="mx-auto grid max-w-6xl items-end gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,420px)]">
-      <div>
-        <h1 class="font-serif italic font-bold leading-[0.95] text-pink text-[clamp(3.5rem,9vw,6.5rem)]">Kylie Kelly</h1>
-        <p class="mt-3 text-xs uppercase tracking-[0.25em] font-semibold">The blog &middot; email marketing without living on social media</p>
-      </div>
-      <form role="search" class="relative" data-blog-search-form>
-        <label for="blog-search" class="sr-only">Search the blog</label>
-        <input id="blog-search" type="search" placeholder="Search the blog" autocomplete="off" class="w-full rounded-full border border-black bg-white px-6 py-4 pr-14 text-[15px] focus:border-pink focus:outline-none focus:ring-1 focus:ring-pink" />
-        <svg viewBox="0 0 20 20" class="pointer-events-none absolute right-5 top-1/2 h-5 w-5 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" /><path d="M13 13l4 4" /></svg>
+  <!-- HERO -->
+  <section class="bg-offwhite px-6 pt-16 pb-24 sm:pt-24 sm:pb-32 text-center">
+    <div class="max-w-4xl mx-auto">
+      <p class="text-xs uppercase tracking-widest font-semibold mb-5">The blog</p>
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] text-balance mb-7">
+        Welcome to the <span class="script-accent italic text-pink">Kylie Kelly</span> blog
+      </h1>
+      <p class="text-black max-w-xl mx-auto mb-10">
+        Email marketing, visibility and growing a business without living on social media. Looking for the podcast? Every episode's show notes live in the episode library.
+      </p>
+      <form role="search" class="relative mx-auto mb-8 max-w-md" data-blog-search-form>
+        <label for="blog-search-top" class="sr-only">Search the blog</label>
+        <input id="blog-search-top" data-blog-search type="search" placeholder="Search the blog" autocomplete="off" class="w-full rounded-full border border-black bg-transparent px-7 py-4 pr-16 text-[13px] uppercase tracking-[0.2em] placeholder:text-black/50 focus:border-pink focus:outline-none focus:ring-1 focus:ring-pink" />
+        <button type="submit" aria-label="Search" class="absolute right-5 top-1/2 -translate-y-1/2 text-pink transition-transform hover:translate-x-0.5"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6" /></svg></button>
       </form>
+      <div class="flex flex-wrap justify-center gap-3">
+        {pills.map((p) => (
+          <a href={p.href} class={`group inline-flex items-center gap-4 rounded-full pl-6 pr-2 py-2 text-[15px] font-semibold shadow-[0_8px_30px_rgba(0,0,0,0.05)] transition-transform duration-300 hover:-translate-y-1 ${p.active ? 'bg-black text-white' : 'bg-white text-black'}`}>
+            {p.label}
+            <span class={`grid place-items-center h-10 w-10 rounded-full transition-colors duration-300 ${p.dot}`}><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+          </a>
+        ))}
+      </div>
     </div>
-    <nav aria-label="Blog topics" class="mx-auto mt-8 hidden max-w-6xl flex-wrap gap-2" data-blog-filters>
-      <button type="button" data-topic="" aria-pressed="true" class="blog-pill">All posts</button>
-      {topics.map((t) => <button type="button" data-topic={t} aria-pressed="false" class="blog-pill">{t}</button>)}
-    </nav>
   </section>
 
-  <!-- HOT & NEW -->
+  <!-- FEATURED POST -->
   {featured && (
-    <section class="bg-offwhite px-6 pb-16 sm:pb-20">
-      <div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.3fr_1fr]">
-        <a href={featured.href} class="group grid overflow-hidden rounded-[2rem] bg-[#e9d9ec] sm:grid-cols-[260px_minmax(0,1fr)]">
-          <div class="relative">
-            <img src={featured.image} alt="" class="h-full w-full max-h-[420px] object-cover object-top sm:max-h-none" />
-            <span class="absolute left-4 top-4 rounded-full bg-white px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-pink">Hot &amp; new</span>
-          </div>
-          <div class="flex flex-col justify-center p-8 sm:p-10">
-            <p class="text-pink text-[11px] uppercase tracking-widest font-semibold mb-3">{featured.topic} · {featured.date}</p>
-            <h2 class="font-serif text-3xl sm:text-4xl leading-tight text-balance mb-5 group-hover:text-pink transition-colors">{featured.title}</h2>
-            <p class="text-sm text-black mb-7">{featured.excerpt}</p>
-            <span class="inline-flex items-center gap-3 self-start rounded-full bg-black pl-6 pr-2 py-2 text-sm font-semibold text-white">Read the post
-              <span class="grid h-9 w-9 place-items-center rounded-full bg-pink text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>
-            </span>
-          </div>
+    <section class="relative">
+      <div class="grid md:grid-cols-2">
+        <a href={featured.href} class="block bg-[#e9d9ec] overflow-hidden">
+          <img src={featured.image} alt="" class="w-full h-full max-h-[560px] md:max-h-[680px] object-cover object-top" />
         </a>
-        <ul class="divide-y divide-black/15 self-center">
-          {stack.map((p) => (
-            <li>
-              <a href={p.href} class="group flex items-center justify-between gap-6 py-5 first:pt-0 last:pb-0">
-                <span class="min-w-0">
-                  <span class="mb-1.5 block text-[11px] font-semibold uppercase tracking-widest text-pink">{p.topic}</span>
-                  <span class="block font-serif text-xl leading-snug transition-colors group-hover:text-pink sm:text-2xl">{p.title}</span>
-                </span>
-                <img src={p.image} alt="" loading="lazy" class="h-24 w-24 flex-none rounded-2xl object-cover object-top transition-transform duration-300 group-hover:-rotate-3" />
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div class="bg-black text-white flex flex-col justify-center px-8 sm:px-14 lg:px-20 py-16 sm:py-20">
+          <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-5">{featured.topic} · {featured.date}</p>
+          <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl leading-tight text-balance mb-6">{featured.title}</h2>
+          <p class="text-warmgray mb-9 max-w-md">{featured.excerpt}</p>
+          <a href={featured.href} class="inline-block self-start rounded-full bg-[#e9d9ec] text-black px-7 py-3.5 text-[15px] font-semibold transition-transform duration-300 hover:-translate-y-1">Read the post</a>
+        </div>
       </div>
+      <RotatingBadge text="FEATURED POST • FEATURED POST • " fill="#e040fb" textColor="#fff" size={130} class="absolute -top-16 right-6 md:right-16 z-10" />
     </section>
   )}
 
   <!-- QUIZ BAND -->
-  <section class="px-6 pb-16 sm:pb-24">
+  <section class="px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
     <div class="mx-auto grid max-w-6xl items-center gap-6 rounded-[2rem] bg-black px-8 py-10 text-white sm:px-14 md:grid-cols-[1fr_auto]">
       <div>
         <p class="font-serif text-3xl uppercase leading-[1.02] sm:text-5xl">What's your fastest way to grow your list?</p>
@@ -128,45 +115,29 @@ const episodes = (await getEpisodes()).slice(0, 3);
     </div>
   </section>
 
-  <!-- START HERE -->
-  {startHere.length > 0 && (
-    <section class="px-6 pb-20 sm:pb-28">
-      <div class="mx-auto max-w-5xl">
-        <p class="-mb-3 text-center font-serif uppercase leading-none text-transparent text-[clamp(3.5rem,13vw,9rem)] [-webkit-text-stroke:1.5px_rgba(0,0,0,0.25)]" aria-hidden="true">Start here</p>
-        <div class="relative rounded-[2rem] bg-[#e9d9ec] px-6 py-4 sm:px-12">
-          <h2 class="sr-only">Start here</h2>
-          <ul class="divide-y divide-black/20">
-            {startHere.map((p) => (
-              <li>
-                <a href={p.href} class="group flex items-center justify-between gap-6 py-7">
-                  <span class="min-w-0">
-                    <span class="mb-1.5 block text-[11px] font-semibold uppercase tracking-widest text-pink">{p.topic}</span>
-                    <span class="block font-serif text-xl leading-snug transition-colors group-hover:text-pink sm:text-2xl">{p.title}</span>
-                  </span>
-                  <span class="grid h-12 w-12 flex-none place-items-center rounded-full bg-pink text-white transition-transform duration-300 group-hover:scale-110" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  )}
-
   <!-- ALL RECENT POSTS -->
   <section id="latest" class="scroll-mt-24 bg-white px-6 py-20 sm:py-28">
     <div class="mx-auto max-w-6xl">
       <p class="mb-3 text-center text-xs uppercase tracking-[0.3em] font-semibold">All recent posts</p>
-      <h2 class="mb-14 text-center font-serif text-4xl sm:text-5xl" data-blog-heading>Everything on the blog</h2>
+      <h2 class="mb-8 text-center font-serif text-4xl font-bold italic sm:text-5xl" data-blog-heading>Everything on the blog</h2>
+      <form role="search" class="relative mx-auto mb-8 max-w-md" data-blog-search-form>
+        <label for="blog-search" class="sr-only">Search the blog</label>
+        <input id="blog-search" data-blog-search type="search" placeholder="Search the blog" autocomplete="off" class="w-full rounded-full border border-black bg-white px-6 py-4 pr-14 text-[15px] focus:border-pink focus:outline-none focus:ring-1 focus:ring-pink" />
+        <svg viewBox="0 0 20 20" class="pointer-events-none absolute right-5 top-1/2 h-5 w-5 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" /><path d="M13 13l4 4" /></svg>
+      </form>
+    <nav aria-label="Blog topics" class="mx-auto mb-14 hidden max-w-4xl flex-wrap justify-center gap-2" data-blog-filters>
+      <button type="button" data-topic="" aria-pressed="true" class="blog-pill">All posts</button>
+      {topics.map((t) => <button type="button" data-topic={t} aria-pressed="false" class="blog-pill">{t}</button>)}
+    </nav>
       <div class="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3" data-blog-grid>
         {posts.map((p, i) => (
           <a href={p.href} class="group block" data-topic={p.topic} data-search={`${p.title} ${p.short} ${p.topic}`.toLowerCase()}>
-            <div class={`relative aspect-[2/3] overflow-hidden rounded-[1.5rem] ${tileTint[i % tileTint.length]} transition-transform duration-300 group-hover:-translate-y-1`}>
+            <div class={`relative aspect-square overflow-hidden rounded-[1.5rem] ${tileTint[i % tileTint.length]} transition-transform duration-300 group-hover:-translate-y-1`}>
               <img src={p.image} alt="" class="h-full w-full object-cover object-top" loading="lazy" />
               <span class="absolute bottom-3 right-3 grid h-10 w-10 place-items-center rounded-full bg-white text-black shadow-md transition-colors duration-300 group-hover:bg-pink group-hover:text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>
             </div>
             <p class="mt-4 mb-1.5 text-[11px] uppercase tracking-widest font-semibold text-pink">{p.topic} · {p.date}</p>
-            <h3 class="font-serif text-xl leading-snug text-balance transition-colors group-hover:text-pink">{p.title}</h3>
+            <h3 class="font-serif text-xl font-bold leading-snug text-balance transition-colors group-hover:text-pink">{p.title}</h3>
             <p class="mt-2 text-sm text-black/80">{p.short}</p>
           </a>
         ))}
@@ -175,24 +146,27 @@ const episodes = (await getEpisodes()).slice(0, 3);
     </div>
   </section>
 
-  <!-- BEFORE YOU GET ANY FURTHER -->
+  <!-- BEFORE YOU GET ANY FURTHER: full-width photo with the press logos in the same block -->
   <section class="bg-[#d5b9db]">
-    <div class="grid md:grid-cols-2">
-      <div class="flex flex-col justify-center px-6 py-16 sm:px-10 sm:py-20 md:pl-[max(2.5rem,calc(50vw-36rem+1.5rem))]">
-        <h2 class="mb-6 font-serif italic text-4xl font-bold leading-tight sm:text-5xl">Before you get any further... Hi! I'm Kylie Kelly!</h2>
-        <p class="mb-8 max-w-md">I'm an email marketing educator who grew my list from 0 to 7,000+ subscribers in 18 months without social media. My obsession is teaching you how to get known, trusted and selling, without the algorithm running your life. I'm glad you're here!</p>
-        <a href="/meet-kylie" class="inline-block self-start bg-black px-8 py-4 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-pink">Meet Kylie →</a>
+    <div class="relative overflow-hidden">
+      <img src="/images/hero-8.jpg" alt="" aria-hidden="true" width="1200" height="1458" loading="lazy" class="absolute inset-0 h-full w-full object-cover object-[60%_24%]" />
+      <div class="absolute inset-0 bg-[#d5b9db]/65 md:bg-transparent md:bg-[linear-gradient(90deg,#d5b9db_0%,rgba(213,185,219,0.9)_28%,rgba(213,185,219,0)_60%)]" aria-hidden="true"></div>
+      <div class="relative mx-auto flex min-h-[560px] max-w-6xl flex-col justify-center px-6 py-20 sm:py-24 md:min-h-[720px]">
+        <div class="max-w-xl">
+          <h2 class="mb-6 font-serif italic text-4xl font-bold leading-tight sm:text-5xl">Before you get any further... Hi! I'm Kylie Kelly!</h2>
+          <p class="mb-8 max-w-md">I'm an email marketing educator who grew my list from 0 to 7,000+ subscribers in 18 months without social media. My obsession is teaching you how to get known, trusted and selling, without the algorithm running your life. I'm glad you're here!</p>
+          <a href="/meet-kylie" class="inline-block bg-black px-8 py-4 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-pink">Meet Kylie →</a>
+        </div>
       </div>
-      <img src="/images/hero-8.jpg" alt="Kylie Kelly in a lilac outfit holding a disco ball" loading="lazy" width="1200" height="1458" class="h-full max-h-[620px] w-full object-cover object-top md:max-h-none" />
     </div>
-  </section>
-  <section class="bg-offwhite px-6 py-12">
-    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-12 gap-y-6">
+    <div class="bg-gradient-to-r from-[#d5b9db] to-white">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-12 gap-y-6 px-6 py-12">
       <p class="text-xs uppercase tracking-[0.25em] font-semibold">As seen in:</p>
       <img src="/images/press/forbes.png" alt="Forbes" loading="lazy" class="h-9 w-auto" />
       <img src="/images/press/business-insider.jpg" alt="Business Insider" loading="lazy" class="h-12 w-auto mix-blend-multiply" />
-      <img src="/images/press/london-daily-news.png" alt="London Daily News" loading="lazy" class="h-9 w-auto" />
+      <img src="/images/press/london-daily-news.png" alt="London Daily News" loading="lazy" class="h-9 w-auto mix-blend-multiply" />
       <img src="/images/press/business-mondays.jpg" alt="Business Mondays" loading="lazy" class="h-14 w-auto mix-blend-multiply" />
+    </div>
     </div>
   </section>
 
@@ -248,8 +222,9 @@ const episodes = (await getEpisodes()).slice(0, 3);
   // Search and topic filters for the post grid. Without script the filters stay hidden and every post shows.
   const grid = document.querySelector<HTMLElement>('[data-blog-grid]');
   const filters = document.querySelector<HTMLElement>('[data-blog-filters]');
-  const input = document.querySelector<HTMLInputElement>('#blog-search');
-  const form = document.querySelector<HTMLFormElement>('[data-blog-search-form]');
+  const inputs = [...document.querySelectorAll<HTMLInputElement>('input[data-blog-search]')];
+  const input = inputs[0];
+  const forms = [...document.querySelectorAll<HTMLFormElement>('[data-blog-search-form]')];
   const empty = document.querySelector<HTMLElement>('[data-blog-empty]');
   const heading = document.querySelector<HTMLElement>('[data-blog-heading]');
 
@@ -278,11 +253,19 @@ const episodes = (await getEpisodes()).slice(0, 3);
       filters.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
       apply();
     });
-    input.addEventListener('input', apply);
-    form?.addEventListener('submit', (e) => {
-      e.preventDefault();
-      apply();
-      document.getElementById('latest')?.scrollIntoView({ behavior: 'smooth' });
-    });
+    // The search boxes at the top and above the posts share one search.
+    for (const box of inputs) {
+      box.addEventListener('input', () => {
+        for (const other of inputs) if (other !== box) other.value = box.value;
+        apply();
+      });
+    }
+    for (const f of forms) {
+      f.addEventListener('submit', (e) => {
+        e.preventDefault();
+        apply();
+        document.getElementById('latest')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
   }
 </script>

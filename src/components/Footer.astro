@@ -8,90 +8,61 @@ const chips = [
   { label: 'Find your next collab', href: 'https://findcolab.com/?utm_source=website&utm_medium=footer&utm_campaign=site-footer' },
 ];
 
-const getAround = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/meet-kylie' },
-  { label: 'Podcast', href: '/podcast' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Favorites', href: '/resources' },
-  { label: 'Work With Me', href: '/services' },
-  { label: 'The Shop', href: 'https://shop.kyliekelly.com/' },
-  { label: 'Community', href: 'https://www.skool.com/email-marketing-skool/about' },
-  { label: 'Ask Kylie', href: '/ask-kylie' },
-  { label: 'Press', href: '/press' },
-  { label: 'Student Login', href: 'https://student.kyliekelly.com/' },
-  { label: 'Contact', href: '/contact' },
-];
-
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 ---
-<footer class="bg-black text-white">
-  <!-- The four-petal shape for the photo -->
-  <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
-    <defs>
-      <clipPath id="kk-flower" clipPathUnits="objectBoundingBox">
-        <circle cx="0.3" cy="0.3" r="0.3" />
-        <circle cx="0.7" cy="0.3" r="0.3" />
-        <circle cx="0.3" cy="0.7" r="0.3" />
-        <circle cx="0.7" cy="0.7" r="0.3" />
-        <rect x="0.2" y="0.2" width="0.6" height="0.6" />
-      </clipPath>
-    </defs>
-  </svg>
-
-  <div class="relative mx-auto max-w-6xl px-6 pb-12 pt-20 sm:pt-24">
-    <a href="#top" data-back-to-top class="absolute right-6 top-24 hidden flex-col items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#d5b9db] transition-colors hover:text-white lg:flex" aria-label="Back to top">
+<footer class="bg-black text-white pt-20 pb-10 px-6">
+  <div class="relative max-w-6xl mx-auto">
+    <a href="#top" data-back-to-top class="absolute right-0 top-0 hidden flex-col items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#d5b9db] transition-colors hover:text-white lg:flex" aria-label="Back to top">
       <svg viewBox="0 0 16 40" class="h-10 w-4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 38V3M3 8l5-5 5 5" /></svg>
       <span style="writing-mode: vertical-rl;">Back to top</span>
     </a>
 
-    <div class="grid gap-14 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:pr-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:pr-14">
       <div>
-        <p class="font-serif italic font-bold leading-[0.95] text-pink text-[clamp(3.5rem,9vw,6.5rem)]">Kylie Kelly</p>
-
-        <div class="mt-8 flex flex-col gap-8 sm:flex-row sm:items-center">
-          <div class="h-36 w-36 flex-none bg-[#d5b9db]" style="clip-path: url(#kk-flower);">
-            <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly" width="144" height="144" loading="lazy" class="h-full w-full object-cover object-top" />
-          </div>
-          <div>
-            <p class="mb-5 max-w-sm text-[15px] leading-relaxed text-warmgray">I'm an ex international wedding photographer turned email marketing educator, podcaster and mum of two boys. I help women get known, trusted and selling through email and real relationships. Never an algorithm.</p>
-            <ul class="grid gap-3 sm:grid-cols-2">
-              {chips.map((c) => (
-                <li>
-                  <a href={c.href} class="group flex items-center gap-3 border border-white/20 bg-white/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors hover:border-pink hover:bg-pink">
-                    <span class="grid h-6 w-6 flex-none place-items-center rounded-full bg-pink text-white transition-colors group-hover:bg-white group-hover:text-pink"><svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-                    {c.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <nav aria-label="Get around">
-        <p class="font-bold uppercase leading-none text-pink text-4xl tracking-wide">Get<br />Around</p>
-        <span class="mt-4 mb-6 block h-[3px] w-28 bg-pink"></span>
-        <ul class="grid grid-cols-2 gap-x-8 gap-y-3 font-serif text-lg">
-          {getAround.map((l) => (
-            <li><a href={l.href} class="text-white hover:text-pink">{l.label}</a></li>
+        <p class="font-serif italic text-2xl mb-4">Kylie Kelly.</p>
+        <p class="text-sm text-warmgray max-w-xs mb-6">
+          Helping women get known, trusted, and selling to the right people, through email and real relationships. Never an algorithm.
+        </p>
+        <p class="text-sm text-warmgray mb-6">hello@kyliekelly.com</p>
+        <ul class="grid max-w-sm grid-cols-2 gap-3">
+          {chips.map((c) => (
+            <li>
+              <a href={c.href} class="group flex h-full items-center gap-3 border border-white/20 bg-white/5 px-3 py-3 text-[11px] font-semibold uppercase leading-snug tracking-[0.12em] transition-colors hover:border-pink hover:bg-pink">
+                <span class="grid h-6 w-6 flex-none place-items-center rounded-full bg-pink text-white transition-colors group-hover:bg-white group-hover:text-pink"><svg viewBox="0 0 16 16" class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+                {c.label}
+              </a>
+            </li>
           ))}
         </ul>
-        <p class="mt-8 text-sm">
-          <a href="mailto:hello@kyliekelly.com" class="text-warmgray underline underline-offset-4 hover:text-pink">hello@kyliekelly.com</a>
-        </p>
-      </nav>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-widest font-semibold mb-4 text-pink">Explore</p>
+        <ul class="text-sm space-y-3 text-warmgray">
+          <li><a href="/services" class="hover:text-white">Work With Me</a></li>
+          <li><a href="/podcast" class="hover:text-white">Podcast</a></li>
+          <li><a href="/ask-kylie" class="hover:text-white">Ask Kylie</a></li>
+          <li><a href="/blog" class="hover:text-white">Blog</a></li>
+          <li><a href="/meet-kylie" class="hover:text-white">Meet Kylie</a></li>
+          <li><a href="https://shop.kyliekelly.com/" class="hover:text-white">Shop</a></li>
+          <li><a href="/resources" class="hover:text-white">Favorites</a></li>
+          <li><a href="https://www.skool.com/email-marketing-skool/about" class="hover:text-white">Community</a></li>
+          <li><a href="https://student.kyliekelly.com/" class="hover:text-white">Student Login</a></li>
+          <li><a href="/contact" class="hover:text-white">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-widest font-semibold mb-4 text-pink">The Fine Print</p>
+        <ul class="text-sm space-y-3 text-warmgray">
+          <li><a href="/privacy-policy" class="hover:text-white">Privacy Policy</a></li>
+          <li><a href="/terms" class="hover:text-white">Terms &amp; Conditions</a></li>
+          <li><a href="/disclaimer" class="hover:text-white">Disclaimer</a></li>
+          <li><button type="button" data-cookie-settings class="hover:text-white cursor-pointer">Cookie settings</button></li>
+        </ul>
+      </div>
     </div>
-
-    <div class="mt-16 flex flex-col gap-4 border-t border-white/15 pt-6 text-xs text-warmgray sm:flex-row sm:items-center sm:justify-between">
-      <p>Copyright &copy; {year} &middot; Kylie Kelly</p>
-      <ul class="flex flex-wrap gap-x-6 gap-y-2 uppercase tracking-[0.12em] font-semibold">
-        <li><a href="/privacy-policy" class="hover:text-white">Privacy Policy</a></li>
-        <li><a href="/terms" class="hover:text-white">Terms &amp; Conditions</a></li>
-        <li><a href="/disclaimer" class="hover:text-white">Disclaimer</a></li>
-        <li><button type="button" data-cookie-settings class="cursor-pointer uppercase tracking-[0.12em] font-semibold hover:text-white">Cookie settings</button></li>
-      </ul>
-    </div>
+  </div>
+  <div class="max-w-6xl mx-auto mt-14 pt-6 border-t border-white/10 text-center">
+    <p class="text-xs text-warmgray">Copyright &copy; {year} &middot; Kylie Kelly</p>
   </div>
 </footer>
 

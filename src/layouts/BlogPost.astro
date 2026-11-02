@@ -1,6 +1,8 @@
 ---
 // A blog post: a hero with the post's cover image, then the article beside a sidebar (about Kylie, the quiz,
 // recent posts). The "In this post" list sits after the intro and links to every h2 (plain links, no script).
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Layout from './Layout.astro';
 import allPosts from '../data/blog-posts.json';
 import AboutBlogger from '../components/AboutBlogger.astro';
@@ -32,6 +34,18 @@ interface Props {
 const { slug, title, seoTitle, description, date, html: rawHtml, highlights = [], video } = Astro.props;
 const html = highlights.length ? highlightPhrases(rawHtml, highlights, slug) : rawHtml;
 const cover = blogCovers[slug];
+
+// The banner photo: one of the photos in src/assets/blog-banners, in this order (a mix of Kylie, her photography and a
+// desk shot), picked by the post's place in the blog (newest first) so neighbouring posts get different photos.
+// The sidebar uses a different photo. To change the mix, change this list.
+const bannerNames = ['01-desk-scene', '02-sequin-mic-laugh', '03-photographer-at-work', '04-blazer-smile', '05-laughing', '06-wedding-couple', '07-magenta-smile'];
+const found = import.meta.glob<{ default: ImageMetadata }>('../assets/blog-banners/*.{jpg,jpeg,png,webp}', { eager: true });
+const bannerPhotos = bannerNames
+  .map((name) => Object.entries(found).find(([path]) => path.includes(`/${name}.`))?.[1].default)
+  .filter((img): img is ImageMetadata => Boolean(img));
+const newestFirst = allPosts.filter((p) => p.categories.includes(35)).sort((a, b) => +new Date(b.date) - +new Date(a.date));
+const position = Math.max(0, newestFirst.findIndex((p) => p.slug === slug));
+const banner = bannerPhotos.length ? bannerPhotos[position % bannerPhotos.length] : undefined;
 const { intro, rest, toc, words } = prepareBlogHtml(html);
 const readMins = Math.max(1, Math.round(words / 220));
 const dateLabel = formatAuDate(date, { day: 'numeric', month: 'long', year: 'numeric' });
@@ -46,6 +60,15 @@ const others = allPosts
 // Same topic first, then the newest.
 const related = [...others.filter((p) => blogCovers[p.slug].topic === cover?.topic), ...others.filter((p) => blogCovers[p.slug].topic !== cover?.topic)].slice(0, 3);
 const recent = others.slice(0, 4);
+
+// A few tools from the Favorites page (src/pages/resources.astro), with the same affiliate links and perks.
+const favorites = [
+  { name: 'Flodesk', text: 'This is where my email list lives. I use it to send my emails, deliver my freebies and run my automations.', perk: '25% off your first year', url: 'https://flodesk.com/c/KYLIEKELLY' },
+  { name: 'Teachery', text: 'This is where I host my courses and programs. Super simple to set up and it just works.', perk: '$950 lifetime deal', url: 'https://www.teachery.co/limited-time?a=c4AganJG' },
+  { name: 'Buzzsprout', text: 'This is where all my podcast episodes live. Super easy to use, and it helps me track downloads.', perk: '$20 credit', url: 'https://www.buzzsprout.com/?referrer_id=2046932' },
+  { name: 'Wispr Flow', text: 'Talk instead of type. It turns your voice into clean, ready-to-send text in any app.', perk: 'A free month of Flow Pro', url: 'https://wisprflow.ai/r?KYLIE344' },
+];
+const numberColours = ['text-pink', 'text-[#b58fc0]', 'text-black', 'text-pink'];
 
 const graph = {
   '@context': 'https://schema.org',
@@ -69,20 +92,21 @@ const graph = {
     {imageUrl && <meta property="og:image" content={imageUrl} />}
   </Fragment>
 
-  <section class="bg-offwhite px-6 py-14 sm:py-20">
-    <div class="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-[minmax(0,1fr)_260px] lg:grid-cols-[minmax(0,1fr)_300px]">
-      <div>
-        <a href="/blog" class="inline-block mb-6 text-sm font-semibold underline underline-offset-4 hover:text-pink">← The blog</a>
-        <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-4">{cover?.topic && <>{cover.topic} · </>}{dateLabel} · {readMins} min read</p>
-        <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1] text-balance">{title}</h1>
+  <section class="relative overflow-hidden bg-black text-white">
+    {banner && (
+      <Image src={banner} alt="" widths={[640, 960, 1280]} sizes="(min-width: 768px) 48vw, 100vw" loading="eager" class="absolute inset-y-0 right-0 h-full w-full object-cover object-[50%_10%] md:w-[48%]" />
+    )}
+    <div class="absolute inset-0 bg-black/60 md:bg-transparent md:bg-[linear-gradient(90deg,#000_0%,#000_52%,rgba(0,0,0,0)_66%)]" aria-hidden="true"></div>
+    <div class="relative mx-auto flex min-h-[480px] max-w-6xl flex-col justify-end px-6 py-14 sm:min-h-[560px] sm:py-20">
+      <div class="max-w-2xl">
+        <a href="/blog" class="mb-6 inline-block text-sm font-semibold underline underline-offset-4 hover:text-[#f1b3ff]">← The blog</a>
+        <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-[#f1b3ff]">{cover?.topic && <>{cover.topic} · </>}{dateLabel} · {readMins} min read</p>
+        <h1 class="font-serif text-4xl font-bold leading-[1.08] text-balance sm:text-5xl lg:text-6xl">{title}</h1>
         <p class="mt-6 flex items-center gap-3 text-sm font-semibold">
           <img src="/images/kylie-headshot.jpg" alt="" width="44" height="44" class="h-11 w-11 rounded-full object-cover object-top" />
           <span>By Kylie Kelly</span>
         </p>
       </div>
-      {cover && (
-        <img src={cover.image} alt={title} class="mx-auto w-full max-w-[260px] md:max-w-none rounded-2xl shadow-[0_18px_40px_rgba(0,0,0,0.12)]" />
-      )}
     </div>
   </section>
 
@@ -122,8 +146,8 @@ const graph = {
               {related.map((p) => (
                 <li>
                   <a href={`/${p.slug}/`} class="group block">
-                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="aspect-[2/3] w-full rounded-xl object-cover object-top transition-transform duration-300 group-hover:-translate-y-1" />
-                    <span class="mt-3 block text-sm font-semibold leading-snug group-hover:text-pink">{p.title}</span>
+                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="aspect-square w-full rounded-xl object-cover object-top transition-transform duration-300 group-hover:-translate-y-1" />
+                    <span class="mt-3 block text-sm font-bold leading-snug group-hover:text-pink">{p.title}</span>
                   </a>
                 </li>
               ))}
@@ -133,16 +157,13 @@ const graph = {
       </article>
 
       <aside class="space-y-10">
-        <div class="overflow-hidden rounded-[2rem] bg-[#d5b9db]">
-          <div class="relative">
-            <img src="/images/hero-8.jpg" alt="Kylie Kelly" width="1200" height="1458" loading="lazy" class="aspect-[4/4.3] w-full object-cover object-top" />
-            <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#d5b9db] to-transparent"></div>
+        <div class="text-center">
+          <div class="mx-auto mb-7 aspect-[4/5] w-full max-w-[17rem] overflow-hidden rounded-t-full bg-[#d5b9db]">
+            <img src="/images/hero-8.jpg" alt="Kylie Kelly" width="1200" height="1458" loading="lazy" class="h-full w-full object-cover object-[55%_18%]" />
           </div>
-          <div class="px-7 pb-8 pt-1">
-            <p class="font-serif italic text-[1.7rem] font-bold leading-tight mb-3">Before you get any further... Hi! I'm Kylie Kelly!</p>
-            <p class="text-sm leading-relaxed mb-6">I'm an email marketing educator who grew my list from 0 to 7,000+ subscribers in 18 months without social media. My obsession is teaching you how to get known, trusted and selling, without the algorithm running your life.</p>
-            <a href="/meet-kylie" class="inline-block bg-black px-6 py-3.5 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-pink">Meet Kylie →</a>
-          </div>
+          <p class="font-serif text-[1.9rem] font-bold leading-tight mb-4">Hey there, I'm<br />Kylie Kelly</p>
+          <p class="mx-auto mb-6 max-w-[19rem] text-[15px] leading-relaxed">I'm an email marketing educator who grew my list from 0 to 7,000+ subscribers in 18 months without social media. My obsession is teaching you how to get known, trusted and selling, without the algorithm running your life.</p>
+          <a href="/meet-kylie" class="inline-block bg-black px-6 py-3.5 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-pink">Meet Kylie →</a>
         </div>
 
         <div>
@@ -155,25 +176,45 @@ const graph = {
           </div>
         </div>
 
-        <div class="rounded-[2rem] bg-offwhite p-7 text-center">
+        <div class="rounded-[2rem] border border-black bg-offwhite/50 p-7 text-center">
           <img src="/images/freebie-mockup.png" alt="Your Next 1,000 Subscribers quiz" loading="lazy" class="mx-auto mb-5 w-full max-w-[220px]" />
           <p class="font-serif italic text-2xl font-bold leading-tight mb-3">Your next 1,000 subscribers</p>
           <p class="text-sm mb-5">Take the free quiz to find the fastest way for you to grow your email list without social media.</p>
           <a href="/guide" class="btn-primary text-xs">Take the quiz →</a>
         </div>
 
+        <div class="rounded-[2rem] bg-white p-7 shadow-[0_14px_44px_rgba(0,0,0,0.09)]">
+          <p class="font-serif text-3xl font-bold italic leading-tight mb-5">A few of my favorite things</p>
+          <ul class="border-t border-black/20">
+            {favorites.map((f, i) => (
+              <li class="border-b border-black/20 py-5 last:border-b-0 last:pb-0">
+                <a href={f.url} target="_blank" rel="sponsored noopener" class="group block" aria-label={`${f.name} (affiliate link)`}>
+                  <span class="mb-2 flex items-baseline gap-3">
+                    <span class={`font-serif text-3xl ${numberColours[i % numberColours.length]}`}>{String(i + 1).padStart(2, '0')}</span>
+                    <span class="font-serif text-2xl font-bold leading-tight group-hover:text-pink">{f.name}</span>
+                  </span>
+                  <span class="block text-sm leading-relaxed">{f.text}</span>
+                  <span class="mt-2 block text-xs font-semibold uppercase tracking-widest text-pink">{f.perk} →</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p class="mt-5 text-xs leading-relaxed text-black/70">Some of these are affiliate links, so I may earn a small commission at no extra cost to you. I only recommend what I actually use.</p>
+          <a href="/resources" class="mt-3 inline-block text-sm font-semibold underline underline-offset-4 hover:text-pink">See all my favorites →</a>
+        </div>
+
         {recent.length > 0 && (
           <div>
-            <p class="font-serif text-2xl font-bold mb-2">Binge the latest posts</p>
-            <span class="mb-2 block h-1 w-12 bg-pink"></span>
+            <p class="font-serif text-4xl font-bold italic leading-tight mb-3">Binge the latest posts</p>
+            <span class="mb-3 block h-1 w-14 bg-pink"></span>
             <ul>
               {recent.map((p) => (
                 <li class="border-b border-black/15 last:border-b-0">
-                  <a href={`/${p.slug}/`} class="group flex items-center gap-4 py-5">
-                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="h-20 w-20 flex-none rounded-full object-cover object-top transition-transform duration-300 group-hover:scale-105" />
+                  <a href={`/${p.slug}/`} class="group flex items-center gap-5 py-6">
+                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="h-28 w-28 flex-none rounded-full object-cover object-top transition-transform duration-300 group-hover:scale-105" />
                     <span class="min-w-0">
-                      <span class="block text-[11px] uppercase tracking-[0.18em] font-semibold text-pink mb-1">{blogCovers[p.slug].topic}</span>
-                      <span class="block font-serif text-[1.05rem] leading-snug group-hover:text-pink">{p.title}</span>
+                      <span class="block text-xs uppercase tracking-[0.18em] font-semibold text-pink mb-1.5">{blogCovers[p.slug].topic}</span>
+                      <span class="block font-serif text-xl leading-snug group-hover:text-pink">{p.title}</span>
                     </span>
                   </a>
                 </li>
