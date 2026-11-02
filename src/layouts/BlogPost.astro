@@ -2,11 +2,10 @@
 // A blog post: a hero with the post's cover image, then the article beside a sidebar (about Kylie, the quiz,
 // recent posts). The "In this post" list sits after the intro and links to every h2 (plain links, no script).
 import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import Layout from './Layout.astro';
 import allPosts from '../data/blog-posts.json';
 import AboutBlogger from '../components/AboutBlogger.astro';
-import { blogCovers, prepareBlogHtml } from '../lib/blog';
+import { bannerFor, blogCovers, prepareBlogHtml } from '../lib/blog';
 import { highlightPhrases } from '../lib/showNotes';
 import { formatAuDate } from '../lib/dates';
 
@@ -35,21 +34,7 @@ const { slug, title, seoTitle, description, date, html: rawHtml, highlights = []
 const html = highlights.length ? highlightPhrases(rawHtml, highlights, slug) : rawHtml;
 const cover = blogCovers[slug];
 
-// The banner photo: free stock photos in src/assets/blog-banners/pexels (see SOURCES.txt there), in this order, picked by
-// the post's place in the blog (newest first) so neighbouring posts get different photos. The same photo is the
-// round thumbnail for that post in "Binge the latest posts". The sidebar uses a photo of Kylie.
-// To change the mix, change this list.
-const bannerNames = ['01-pink-notebooks', '02-mic-on-desk', '03-pink-workspace', '04-hands-typing', '05-pink-stationery', '06-overhead-planner', '07-pink-notebook-laptop'];
-const found = import.meta.glob<{ default: ImageMetadata }>('../assets/blog-banners/pexels/*.{jpg,jpeg,png,webp}', { eager: true });
-const bannerPhotos = bannerNames
-  .map((name) => Object.entries(found).find(([path]) => path.includes(`/${name}.`))?.[1].default)
-  .filter((img): img is ImageMetadata => Boolean(img));
-const newestFirst = allPosts.filter((p) => p.categories.includes(35)).sort((a, b) => +new Date(b.date) - +new Date(a.date));
-const bannerFor = (postSlug: string) => {
-  if (!bannerPhotos.length) return undefined;
-  const position = Math.max(0, newestFirst.findIndex((p) => p.slug === postSlug));
-  return bannerPhotos[position % bannerPhotos.length];
-};
+// The banner photo (see bannerFor in src/lib/blog.ts). The sidebar uses a photo of Kylie.
 const banner = bannerFor(slug);
 const { intro, rest, cta, toc, words } = prepareBlogHtml(html);
 const readMins = Math.max(1, Math.round(words / 220));
@@ -257,7 +242,11 @@ const graph = {
             {related.map((p) => (
               <li>
                 <a href={`/${p.slug}/`} class="group block">
-                  <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="aspect-square w-full rounded-2xl object-cover object-top transition-transform duration-300 group-hover:-translate-y-1" />
+                  {bannerFor(p.slug) ? (
+                    <Image src={bannerFor(p.slug)!} alt="" widths={[480, 720]} sizes="(min-width: 640px) 330px, 90vw" loading="lazy" class="aspect-square w-full rounded-2xl object-cover transition-transform duration-300 group-hover:-translate-y-1" />
+                  ) : (
+                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="aspect-square w-full rounded-2xl object-cover object-top transition-transform duration-300 group-hover:-translate-y-1" />
+                  )}
                   <span class="mt-4 block font-serif text-xl font-bold leading-snug group-hover:text-pink">{p.title}</span>
                 </a>
               </li>

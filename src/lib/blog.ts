@@ -46,6 +46,25 @@ export const blogCovers: Record<string, { image: string; topic: string }> = {
   },
 };
 
+import type { ImageMetadata } from 'astro';
+import allPosts from '../data/blog-posts.json';
+
+// Free stock photos in src/assets/blog-banners/pexels (see SOURCES.txt there), in this order. A post's photo is picked
+// by its place in the blog (newest first), so neighbouring posts get different photos. The same photo is its banner, its
+// card on the blog page and its round thumbnail. To change the mix, change this list.
+const bannerNames = ['01-pink-notebooks', '02-mic-on-desk', '03-pink-workspace', '04-hands-typing', '05-pink-stationery', '06-overhead-planner', '07-pink-notebook-laptop', '08-pink-flatlay', '09-phone-over-laptop', '10-phone-email'];
+const bannerFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/blog-banners/pexels/*.{jpg,jpeg,png,webp}', { eager: true });
+const bannerPhotos = bannerNames
+  .map((name) => Object.entries(bannerFiles).find(([path]) => path.includes(`/${name}.`))?.[1].default)
+  .filter((img): img is ImageMetadata => Boolean(img));
+const newestFirst = allPosts.filter((p) => p.categories.includes(35)).sort((a, b) => +new Date(b.date) - +new Date(a.date));
+
+export function bannerFor(slug: string): ImageMetadata | undefined {
+  if (!bannerPhotos.length) return undefined;
+  const position = Math.max(0, newestFirst.findIndex((p) => p.slug === slug));
+  return bannerPhotos[position % bannerPhotos.length];
+}
+
 const stripTags = (html: string) => html.replace(/<[^>]+>/g, ' ').replace(/&[#\w]+;/g, ' ').replace(/\s+/g, ' ').trim();
 const slugify = (text: string) =>
   stripTags(text)

@@ -4,7 +4,8 @@ import RotatingBadge from '../components/RotatingBadge.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
 import allPosts from '../data/blog-posts.json';
 import { getEpisodes } from '../lib/episodes';
-import { blogCovers } from '../lib/blog';
+import { Image } from 'astro:assets';
+import { bannerFor, blogCovers } from '../lib/blog';
 
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const playIcon = 'M5 3.5v9l7.5-4.5z';
@@ -31,6 +32,7 @@ const posts = allPosts
     excerpt: shorten(p.excerpt, 190),
     short: shorten(p.excerpt, 110),
     ...covers[p.slug],
+    banner: bannerFor(p.slug),
   }));
 
 const tileTint = ['bg-[#e9d9ec]', 'bg-[#fbe6f7]', 'bg-pink-light', 'bg-offwhite'];
@@ -92,7 +94,11 @@ const episodes = (await getEpisodes()).slice(0, 3);
     <section class="relative">
       <div class="grid md:grid-cols-2">
         <a href={featured.href} class="block bg-[#e9d9ec] overflow-hidden">
-          <img src={featured.image} alt="" class="w-full h-full max-h-[560px] md:max-h-[680px] object-cover object-top" />
+          {featured.banner ? (
+            <Image src={featured.banner} alt="" widths={[640, 960, 1280]} sizes="(min-width: 768px) 50vw, 100vw" loading="eager" class="w-full h-full max-h-[560px] md:max-h-[680px] object-cover" />
+          ) : (
+            <img src={featured.image} alt="" class="w-full h-full max-h-[560px] md:max-h-[680px] object-cover object-top" />
+          )}
         </a>
         <div class="bg-black text-white flex flex-col justify-center px-8 sm:px-14 lg:px-20 py-16 sm:py-20">
           <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-5">{featured.topic} · {featured.date}</p>
@@ -144,10 +150,15 @@ const episodes = (await getEpisodes()).slice(0, 3);
           )}
           <a href={p.href} class="group block" data-topic={p.topic} data-search={`${p.title} ${p.short} ${p.topic}`.toLowerCase()}>
             <div class={`relative aspect-square overflow-hidden rounded-[1.5rem] ${tileTint[i % tileTint.length]} transition-transform duration-300 group-hover:-translate-y-1`}>
-              <img src={p.image} alt="" class="h-full w-full object-cover object-top" loading="lazy" />
+              {p.banner ? (
+                <Image src={p.banner} alt="" widths={[480, 720]} sizes="(min-width: 1024px) 330px, (min-width: 640px) 45vw, 90vw" class="h-full w-full object-cover" loading="lazy" />
+              ) : (
+                <img src={p.image} alt="" class="h-full w-full object-cover object-top" loading="lazy" />
+              )}
+              <span class="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-black">{p.topic}</span>
               <span class="absolute bottom-3 right-3 grid h-10 w-10 place-items-center rounded-full bg-white text-black shadow-md transition-colors duration-300 group-hover:bg-pink group-hover:text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>
             </div>
-            <p class="mt-4 mb-1.5 text-[11px] uppercase tracking-widest font-semibold text-pink">{p.topic} · {p.date}</p>
+            <p class="mt-4 mb-1.5 text-[11px] uppercase tracking-widest font-semibold text-pink">{p.date}</p>
             <h3 class="font-serif text-xl font-bold leading-snug text-balance transition-colors group-hover:text-pink">{p.title}</h3>
             <p class="mt-2 text-sm text-black/80">{p.short}</p>
           </a>

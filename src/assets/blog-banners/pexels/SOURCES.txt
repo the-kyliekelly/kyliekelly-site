@@ -6,3 +6,6 @@ Free stock photos from Pexels (https://www.pexels.com/license/: free for commerc
 05-pink-stationery.jpg       https://www.pexels.com/photo/29765813/
 06-overhead-planner.jpg      https://www.pexels.com/photo/8532928/
 07-pink-notebook-laptop.jpg  https://www.pexels.com/photo/11451730/
+08-pink-flatlay.jpg          https://www.pexels.com/photo/31581061/
+09-phone-over-laptop.jpg     https://www.pexels.com/photo/29464764/
+10-phone-email.jpg           https://www.pexels.com/photo/3850252/
