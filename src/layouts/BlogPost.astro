@@ -35,17 +35,22 @@ const { slug, title, seoTitle, description, date, html: rawHtml, highlights = []
 const html = highlights.length ? highlightPhrases(rawHtml, highlights, slug) : rawHtml;
 const cover = blogCovers[slug];
 
-// The banner photo: free stock photos in src/assets/blog-banners/stock (see SOURCES.txt there), in this order, picked by
-// the post's place in the blog (newest first) so neighbouring posts get different photos.
-// The sidebar uses a photo of Kylie. To change the mix, change this list.
-const bannerNames = ['01-pink-keyboard', '02-mic-on-pink', '03-pink-book-flatlay', '04-hands-typing', '05-notebook-on-pink', '06-white-desk-laptop', '07-laptop-dried-flowers'];
-const found = import.meta.glob<{ default: ImageMetadata }>('../assets/blog-banners/stock/*.{jpg,jpeg,png,webp}', { eager: true });
+// The banner photo: free stock photos in src/assets/blog-banners/pexels (see SOURCES.txt there), in this order, picked by
+// the post's place in the blog (newest first) so neighbouring posts get different photos. The same photo is the
+// round thumbnail for that post in "Binge the latest posts". The sidebar uses a photo of Kylie.
+// To change the mix, change this list.
+const bannerNames = ['01-pink-notebooks', '02-mic-on-desk', '03-pink-workspace', '04-hands-typing', '05-pink-stationery', '06-overhead-planner', '07-pink-notebook-laptop'];
+const found = import.meta.glob<{ default: ImageMetadata }>('../assets/blog-banners/pexels/*.{jpg,jpeg,png,webp}', { eager: true });
 const bannerPhotos = bannerNames
   .map((name) => Object.entries(found).find(([path]) => path.includes(`/${name}.`))?.[1].default)
   .filter((img): img is ImageMetadata => Boolean(img));
 const newestFirst = allPosts.filter((p) => p.categories.includes(35)).sort((a, b) => +new Date(b.date) - +new Date(a.date));
-const position = Math.max(0, newestFirst.findIndex((p) => p.slug === slug));
-const banner = bannerPhotos.length ? bannerPhotos[position % bannerPhotos.length] : undefined;
+const bannerFor = (postSlug: string) => {
+  if (!bannerPhotos.length) return undefined;
+  const position = Math.max(0, newestFirst.findIndex((p) => p.slug === postSlug));
+  return bannerPhotos[position % bannerPhotos.length];
+};
+const banner = bannerFor(slug);
 const { intro, rest, cta, toc, words } = prepareBlogHtml(html);
 const readMins = Math.max(1, Math.round(words / 220));
 const dateLabel = formatAuDate(date, { day: 'numeric', month: 'long', year: 'numeric' });
@@ -70,6 +75,12 @@ const favorites = [
 ];
 const numberColours = ['text-pink', 'text-[#b58fc0]', 'text-black', 'text-pink'];
 
+// Save-to-Pinterest link, using the post's pin image (the cover) and its address.
+const pinUrl = cover
+  ? `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(url)}&media=${encodeURIComponent(imageUrl ?? '')}&description=${encodeURIComponent(title)}`
+  : undefined;
+const pinGlyph = 'M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z';
+
 const graph = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -86,6 +97,7 @@ const graph = {
 <Layout title={seoTitle ?? `${title} | Kylie Kelly`} description={description}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+    <link rel="alternate" type="application/rss+xml" title="The Kylie Kelly Blog" href="/blog/rss.xml" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
@@ -105,6 +117,11 @@ const graph = {
         <p class="mt-6 flex items-center gap-3 text-sm font-semibold">
           <img src="/images/kylie-headshot.jpg" alt="" width="44" height="44" class="h-11 w-11 rounded-full object-cover object-top" />
           <span>By Kylie Kelly</span>
+          {pinUrl && (
+            <a href={pinUrl} target="_blank" rel="noopener" aria-label="Save this post to Pinterest" title="Save to Pinterest" class="ml-2 grid h-10 w-10 place-items-center rounded-full border border-white/60 text-white transition duration-300 hover:-translate-y-0.5 hover:border-pink hover:bg-pink">
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor" aria-hidden="true"><path d={pinGlyph} /></svg>
+            </a>
+          )}
         </p>
       </div>
     </div>
@@ -136,6 +153,19 @@ const graph = {
 
           <div set:html={rest} />
         </div>
+
+        {pinUrl && cover && (
+          <div class="mt-14 max-w-[42rem] text-center">
+            <p class="mb-5 font-serif text-2xl font-bold italic">Love this post? Save it for later...</p>
+            <a href={pinUrl} target="_blank" rel="noopener" class="group inline-block">
+              <img src={cover.image} alt={`Pin: ${title}`} loading="lazy" class="mx-auto w-44 rounded-xl shadow-[0_14px_36px_rgba(0,0,0,0.14)] transition-transform duration-300 group-hover:-translate-y-1" />
+              <span class="mt-5 inline-flex items-center gap-2 rounded-full bg-pink px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-colors group-hover:bg-black">
+                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor" aria-hidden="true"><path d={pinGlyph} /></svg>
+                Save to Pinterest
+              </span>
+            </a>
+          </div>
+        )}
       </article>
 
       <aside class="space-y-10">
@@ -143,7 +173,7 @@ const graph = {
           <div class="mx-auto mb-7 aspect-[4/5] w-full max-w-[17rem] overflow-hidden rounded-t-full bg-[#d5b9db]">
             <img src="/images/hero-8.jpg" alt="Kylie Kelly" width="1200" height="1458" loading="lazy" class="h-full w-full object-cover object-[55%_18%]" />
           </div>
-          <p class="font-serif text-[1.9rem] font-bold leading-tight mb-4">Hey there, I'm<br />Kylie Kelly</p>
+          <p class="font-serif text-[2.2rem] font-bold italic leading-tight mb-4">Hey there...<br />I'm Kylie Kelly</p>
           <p class="mx-auto mb-6 max-w-[19rem] text-[15px] leading-relaxed">I'm an email marketing educator who grew my list from 0 to 7,000+ subscribers in 18 months without social media. My obsession is teaching you how to get known, trusted and selling, without the algorithm running your life.</p>
           <a href="/meet-kylie" class="inline-block bg-black px-6 py-3.5 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-pink">Meet Kylie →</a>
         </div>
@@ -162,7 +192,7 @@ const graph = {
           <img src="/images/freebie-mockup.png" alt="Your Next 1,000 Subscribers quiz" loading="lazy" class="mx-auto mb-5 w-full max-w-[220px]" />
           <p class="font-serif italic text-2xl font-bold leading-tight mb-3">Your next 1,000 subscribers</p>
           <p class="text-sm mb-5">Take the free quiz to find the fastest way for you to grow your email list without social media.</p>
-          <a href="/guide" class="btn-primary text-xs">Take the quiz →</a>
+          <a href="/guide" class="inline-block rounded-full bg-black px-8 py-3.5 text-xs font-semibold uppercase tracking-widest text-white transition duration-300 hover:-translate-y-1 hover:bg-pink">Take the quiz →</a>
         </div>
 
         <div class="rounded-[2rem] bg-white p-7 shadow-[0_14px_44px_rgba(0,0,0,0.09)]">
@@ -187,13 +217,17 @@ const graph = {
 
         {recent.length > 0 && (
           <div>
-            <p class="font-serif text-4xl font-bold italic leading-tight mb-3">Binge the latest posts</p>
+            <p class="font-serif text-[1.65rem] font-bold italic leading-tight whitespace-nowrap mb-3">Binge the latest posts</p>
             <span class="mb-3 block h-1 w-14 bg-pink"></span>
             <ul>
               {recent.map((p) => (
                 <li class="border-b border-black/15 last:border-b-0">
                   <a href={`/${p.slug}/`} class="group flex items-center gap-5 py-6">
-                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="h-28 w-28 flex-none rounded-full object-cover object-top transition-transform duration-300 group-hover:scale-105" />
+                    {bannerFor(p.slug) ? (
+                      <Image src={bannerFor(p.slug)!} alt="" widths={[224, 336]} sizes="112px" loading="lazy" class="h-28 w-28 flex-none rounded-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                    ) : (
+                      <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="h-28 w-28 flex-none rounded-full object-cover object-top" />
+                    )}
                     <span class="min-w-0">
                       <span class="block text-xs uppercase tracking-[0.18em] font-semibold text-pink mb-1.5">{blogCovers[p.slug].topic}</span>
                       <span class="block font-serif text-xl leading-snug group-hover:text-pink">{p.title}</span>
@@ -202,7 +236,7 @@ const graph = {
                 </li>
               ))}
             </ul>
-            <a href="/blog" class="mt-3 inline-block text-sm font-semibold underline underline-offset-4 hover:text-pink">All posts →</a>
+            <a href="/blog" class="mt-3 inline-block text-sm font-semibold uppercase tracking-widest text-pink underline underline-offset-4 transition-colors hover:text-black">All posts →</a>
           </div>
         )}
       </aside>
@@ -255,8 +289,10 @@ const graph = {
   .blog-body :global(h3) {
     font-family: 'Playfair Display', Georgia, serif;
     font-weight: 700;
-    font-size: 1.25rem;
-    line-height: 1.3;
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.4;
     margin: 32px 0 12px;
     scroll-margin-top: 90px;
   }
@@ -307,7 +343,7 @@ const graph = {
     font-weight: 700;
     font-size: clamp(1.9rem, 4vw, 2.4rem);
     line-height: 1.15;
-    color: #e040fb;
+    color: #000;
     margin: 0 0 16px;
   }
   .blog-body :global(.post-learn ul) {

@@ -51,6 +51,7 @@ const topics = [...topicCounts.entries()].sort((x, y) => y[1] - x[1]).map(([t]) 
 const episodes = (await getEpisodes()).slice(0, 3);
 ---
 <Layout title="The Blog | Kylie Kelly" description="Email marketing, visibility and growing a business without living on social media. Practical posts from Kylie Kelly.">
+  <link slot="head" rel="alternate" type="application/rss+xml" title="The Kylie Kelly Blog" href="/blog/rss.xml" />
 
   <section class="bg-pink-light px-6 py-4">
     <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-black text-center">
@@ -111,7 +112,7 @@ const episodes = (await getEpisodes()).slice(0, 3);
         <p class="font-serif text-3xl uppercase leading-[1.02] sm:text-5xl">What's your fastest way to grow your list?</p>
         <p class="mt-3 text-warmgray">Take the free quiz and find out. No social media needed.</p>
       </div>
-      <a href="/guide" class="inline-block rounded-full bg-pink px-9 py-4 text-center text-sm font-semibold uppercase tracking-widest text-white transition-transform duration-300 hover:-translate-y-1">Take the quiz →</a>
+      <a href="/guide" class="inline-block rounded-full bg-pink px-9 py-4 text-center text-sm font-semibold uppercase tracking-widest text-white transition duration-300 hover:-translate-y-1 hover:bg-white hover:text-black">Take the quiz →</a>
     </div>
   </section>
 
@@ -131,6 +132,16 @@ const episodes = (await getEpisodes()).slice(0, 3);
     </nav>
       <div class="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3" data-blog-grid>
         {posts.map((p, i) => (
+          <>
+          {i === 6 && (
+            <div data-blog-promo class="sm:col-span-2 lg:col-span-3 grid items-center gap-6 rounded-[2rem] bg-[#e9d9ec] px-8 py-10 sm:px-14 md:grid-cols-[1fr_auto]">
+              <div>
+                <p class="font-serif text-3xl font-bold italic leading-tight sm:text-4xl">Want my Start Here email template?</p>
+                <p class="mt-3 max-w-xl">It's the one email I use to welcome new subscribers, and it's yours free. Grab it and make it your own.</p>
+              </div>
+              <a href="/start" class="inline-block rounded-full bg-black px-9 py-4 text-center text-sm font-semibold uppercase tracking-widest text-white transition duration-300 hover:-translate-y-1 hover:bg-pink">Get the template →</a>
+            </div>
+          )}
           <a href={p.href} class="group block" data-topic={p.topic} data-search={`${p.title} ${p.short} ${p.topic}`.toLowerCase()}>
             <div class={`relative aspect-square overflow-hidden rounded-[1.5rem] ${tileTint[i % tileTint.length]} transition-transform duration-300 group-hover:-translate-y-1`}>
               <img src={p.image} alt="" class="h-full w-full object-cover object-top" loading="lazy" />
@@ -140,6 +151,7 @@ const episodes = (await getEpisodes()).slice(0, 3);
             <h3 class="font-serif text-xl font-bold leading-snug text-balance transition-colors group-hover:text-pink">{p.title}</h3>
             <p class="mt-2 text-sm text-black/80">{p.short}</p>
           </a>
+          </>
         ))}
       </div>
       <p class="mt-12 hidden text-center" data-blog-empty>Nothing on the blog matches that yet. <a href="/podcast/archive" class="font-semibold underline underline-offset-4 hover:text-pink">Try the episode library →</a></p>
@@ -243,6 +255,7 @@ const episodes = (await getEpisodes()).slice(0, 3);
         if (ok) shown++;
       }
       empty?.classList.toggle('hidden', shown > 0);
+      grid.querySelectorAll<HTMLElement>('[data-blog-promo]').forEach((el) => el.classList.toggle('hidden', Boolean(q || topic)));
       if (heading) heading.textContent = q || topic ? `${shown} ${shown === 1 ? 'post' : 'posts'}${topic ? ` in ${topic}` : ''}${q ? ` for "${input.value.trim()}"` : ''}` : 'Everything on the blog';
     };
 
