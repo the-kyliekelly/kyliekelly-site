@@ -32,9 +32,13 @@ const bands = [
   'bg-[#fbe6f7] text-black',
 ];
 const n = Number(num) || 0;
+// Episodes that use a chosen photo instead of the next one in the rotation: episode number -> photo number
+// (its position in src/assets/episode-photos, counting from 1).
+const chosenPhoto: Record<string, number> = { '274': 8 };
 // A guest episode uses the guest's headshot when one has been added, otherwise one of Kylie's photos.
 const guestPhoto = guestPhotoFor(num);
-const photo = guestPhoto ?? (photos.length ? photos[n % photos.length] : null);
+const chosen = chosenPhoto[num] ? photos[chosenPhoto[num] - 1] : undefined;
+const photo = guestPhoto ?? chosen ?? (photos.length ? photos[n % photos.length] : null);
 // Name the guest only when their own headshot is on the cover, so the photo and the name always match.
 const withName = guestPhoto && guest ? guest : 'Kylie Kelly';
 // Shift the band colour each time the photos cycle round, so a repeated photo gets a new colour.

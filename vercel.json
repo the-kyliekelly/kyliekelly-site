@@ -231,6 +231,26 @@
       "permanent": false
     },
     {
+      "source": "/start",
+      "destination": "https://kyliekelly.myflodesk.com/starthere",
+      "permanent": false
+    },
+    {
+      "source": "/start/",
+      "destination": "https://kyliekelly.myflodesk.com/starthere",
+      "permanent": false
+    },
+    {
+      "source": "/course",
+      "destination": "https://system.kyliekelly.com/join",
+      "permanent": false
+    },
+    {
+      "source": "/course/",
+      "destination": "https://system.kyliekelly.com/join",
+      "permanent": false
+    },
+    {
       "source": "/emailgrowthclub",
       "destination": "https://www.skool.com/email-marketing-skool/about",
       "permanent": false
