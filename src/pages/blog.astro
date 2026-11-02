@@ -26,7 +26,10 @@ const posts = allPosts
     slug: p.slug,
     title: p.title,
     href: `/${p.slug}/`,
-    date: new Date(p.date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }),
+    // A refreshed post shows when it was last updated instead of when it was first published.
+    date: (p as { updated?: string }).updated
+      ? `Updated ${new Date((p as { updated?: string }).updated!).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}`
+      : new Date(p.date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }),
     excerpt: shorten(p.excerpt, 190),
     short: shorten(p.excerpt, 110),
     ...covers[p.slug],

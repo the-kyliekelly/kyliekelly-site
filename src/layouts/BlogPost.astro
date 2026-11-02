@@ -100,7 +100,7 @@ const graph = {
     <div class="relative mx-auto flex min-h-[480px] max-w-6xl flex-col justify-end px-6 py-14 sm:min-h-[560px] sm:py-20">
       <div class="max-w-2xl">
         <a href="/blog" class="mb-6 inline-block text-sm font-semibold underline underline-offset-4 hover:text-[#f1b3ff]">← The blog</a>
-        <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-[#f1b3ff]">{cover?.topic && <>{cover.topic} · </>}{dateLabel} · {readMins} min read{updatedLabel && <> · Updated {updatedLabel}</>}</p>
+        <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-[#f1b3ff]">{cover?.topic && <>{cover.topic} · </>}{updatedLabel ? `Updated ${updatedLabel}` : dateLabel} · {readMins} min read</p>
         <h1 class="font-serif text-4xl font-bold leading-[1.08] text-balance sm:text-5xl lg:text-6xl">{title}</h1>
         <p class="mt-6 flex items-center gap-3 text-sm font-semibold">
           <img src="/images/kylie-headshot.jpg" alt="" width="44" height="44" class="h-11 w-11 rounded-full object-cover object-top" />
