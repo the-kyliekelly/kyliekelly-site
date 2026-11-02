@@ -3,12 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import RotatingBadge from '../components/RotatingBadge.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
 import allPosts from '../data/blog-posts.json';
-import { getEpisodes } from '../lib/episodes';
 import { Image } from 'astro:assets';
 import { bannerFor, blogCovers } from '../lib/blog';
 
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
-const playIcon = 'M5 3.5v9l7.5-4.5z';
 
 // Blog posts are category 35. Podcast episodes (category 36) live in the episode library.
 // Each post gets a cover image (the title graphic from the post) and a topic label: see src/lib/blog.ts.
@@ -50,7 +48,6 @@ const topicCounts = new Map<string, number>();
 for (const p of posts) topicCounts.set(p.topic, (topicCounts.get(p.topic) ?? 0) + 1);
 const topics = [...topicCounts.entries()].sort((x, y) => y[1] - x[1]).map(([t]) => t);
 
-const episodes = (await getEpisodes()).slice(0, 3);
 ---
 <Layout title="The Blog | Kylie Kelly" description="Email marketing, visibility and growing a business without living on social media. Practical posts from Kylie Kelly.">
   <link slot="head" rel="alternate" type="application/rss+xml" title="The Kylie Kelly Blog" href="/blog/rss.xml" />
@@ -64,7 +61,7 @@ const episodes = (await getEpisodes()).slice(0, 3);
   </section>
 
   <!-- HERO -->
-  <section class="bg-offwhite px-6 pt-16 pb-24 sm:pt-24 sm:pb-32 text-center">
+  <section class="bg-offwhite/50 px-6 pt-16 pb-24 sm:pt-24 sm:pb-32 text-center">
     <div class="max-w-4xl mx-auto">
       <p class="text-xs uppercase tracking-widest font-semibold mb-5">The blog</p>
       <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] text-balance mb-7">
@@ -193,32 +190,15 @@ const episodes = (await getEpisodes()).slice(0, 3);
     </div>
   </section>
 
-  <!-- PREFER TO LISTEN -->
-  {episodes.length > 0 && (
-    <section class="relative overflow-hidden bg-black text-white px-6 py-20 sm:py-28">
-      <img src="/images/podcast-cover.jpg" alt="" aria-hidden="true" class="absolute inset-0 h-full w-full scale-125 object-cover opacity-60 blur-2xl" />
-      <div class="absolute inset-0 bg-gradient-to-b from-pink/50 via-black/35 to-black/60" aria-hidden="true"></div>
-      <div class="relative max-w-2xl mx-auto">
-        <p class="text-xs uppercase tracking-widest font-semibold text-center mb-3">Prefer to listen?</p>
-        <h2 class="font-serif text-4xl sm:text-6xl uppercase text-center leading-[0.98] mb-12">Show notes<br />+ episodes</h2>
-        <div class="space-y-4">
-          {episodes.map((ep, i) => (
-            <a href={ep.href} class="group flex items-center gap-4 sm:gap-5 rounded-full bg-white text-black p-3 pr-4 sm:pr-5 shadow-xl transition-transform duration-300 hover:-translate-y-1">
-              <img src="/images/hero-1.jpg" alt="" class="h-16 w-16 sm:h-20 sm:w-20 flex-none rounded-full object-cover" loading="lazy" />
-              <span class="flex-1 min-w-0">
-                <span class="block text-[11px] uppercase tracking-widest font-semibold text-black/70 mb-1">Ep {ep.num}{ep.mins ? ` · ${ep.mins} min listen` : ''}</span>
-                <span class="block font-semibold leading-snug text-[15px] sm:text-base">{ep.title}</span>
-              </span>
-              <span class={`grid place-items-center h-11 w-11 flex-none rounded-full transition-transform duration-300 group-hover:scale-110 ${['bg-pink text-white', 'bg-black text-white', 'bg-pink-light text-black'][i % 3]}`} aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4" fill="currentColor"><path d={playIcon} /></svg></span>
-            </a>
-          ))}
-        </div>
-        <p class="text-center mt-12">
-          <a href="/podcast/archive" class="font-serif text-xl underline underline-offset-4 decoration-white/40 hover:decoration-white">All episodes + show notes →</a>
-        </p>
-      </div>
-    </section>
-  )}
+  <!-- FREE COMMUNITY -->
+  <section class="px-6 py-16 sm:py-24">
+    <div class="mx-auto max-w-6xl rounded-[2rem] bg-black px-8 py-16 text-center text-white sm:px-14 sm:py-20">
+      <p class="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-[#f1b3ff]">Free community</p>
+      <h2 class="mb-6 font-serif text-4xl font-bold italic leading-tight sm:text-6xl">Email Marketing Skool</h2>
+      <p class="mx-auto mb-10 max-w-xl text-lg text-warmgray">My free community, with a simple 90-day growth plan and the Email Marketing Starter Kit.</p>
+      <a href="https://www.skool.com/email-marketing-skool/about" class="inline-block rounded-full bg-pink px-10 py-4 text-sm font-semibold uppercase tracking-widest text-white transition duration-300 hover:-translate-y-1 hover:bg-white hover:text-black">Join for free →</a>
+    </div>
+  </section>
 
   <!-- FREEBIE REVEAL: sits behind the footer and is uncovered at the very end of the page -->
   <FreebieReveal slot="reveal" />
