@@ -3,23 +3,27 @@
 
 // Blog posts are category 35 in src/data/blog-posts.json. A post only appears on /blog (and gets a cover on its own
 // page) once it has an entry here: the pin image from public/images/blog and a short topic label.
-/** image is the Pinterest pin graphic; a post without one has no pin button, pin block or share image. */
-export const blogCovers: Record<string, { image?: string; topic: string }> = {
+/** image is the Pinterest pin graphic (placeholder: a stand-in cover that is not offered to Pinterest); a post without one has no pin button, pin block or share image. */
+export const blogCovers: Record<string, { image?: string; topic: string; placeholder?: boolean }> = {
   'should-i-run-a-black-friday-sale': {
     image: '/images/blog/should-i-run-a-black-friday-sale.jpg',
     topic: 'Launching & selling',
+    placeholder: true,
   },
   'welcome-sequence-start-here-email': {
     image: '/images/blog/welcome-sequence-start-here-email.jpg',
     topic: 'Email marketing',
+    placeholder: true,
   },
   'interactive-lead-magnet': {
     image: '/images/blog/interactive-lead-magnet.jpg',
     topic: 'List growth',
+    placeholder: true,
   },
   'how-long-does-it-take-to-grow-an-online-business': {
     image: '/images/blog/how-long-does-it-take-to-grow-an-online-business.jpg',
     topic: 'Mindset & life',
+    placeholder: true,
   },
   'legal-mistakes-business-owners': {
     image: '/images/blog/3-Legal-Mistakes-Most-Creatives-Make-Before-They-Hit-100K-and-How-to-Fix-Them-Fast-683x1024.jpg',
