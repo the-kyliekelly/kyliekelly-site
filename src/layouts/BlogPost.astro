@@ -35,18 +35,18 @@ const { slug, title, seoTitle, description, date, html: rawHtml, highlights = []
 const html = highlights.length ? highlightPhrases(rawHtml, highlights, slug) : rawHtml;
 const cover = blogCovers[slug];
 
-// The banner photo: one of the photos in src/assets/blog-banners, in this order (a mix of Kylie, her photography and a
-// desk shot), picked by the post's place in the blog (newest first) so neighbouring posts get different photos.
-// The sidebar uses a different photo. To change the mix, change this list.
-const bannerNames = ['01-desk-scene', '02-sequin-mic-laugh', '03-photographer-at-work', '04-blazer-smile', '05-laughing', '06-wedding-couple', '07-magenta-smile'];
-const found = import.meta.glob<{ default: ImageMetadata }>('../assets/blog-banners/*.{jpg,jpeg,png,webp}', { eager: true });
+// The banner photo: free stock photos in src/assets/blog-banners/stock (see SOURCES.txt there), in this order, picked by
+// the post's place in the blog (newest first) so neighbouring posts get different photos.
+// The sidebar uses a photo of Kylie. To change the mix, change this list.
+const bannerNames = ['01-pink-keyboard', '02-mic-on-pink', '03-pink-book-flatlay', '04-hands-typing', '05-notebook-on-pink', '06-white-desk-laptop', '07-laptop-dried-flowers'];
+const found = import.meta.glob<{ default: ImageMetadata }>('../assets/blog-banners/stock/*.{jpg,jpeg,png,webp}', { eager: true });
 const bannerPhotos = bannerNames
   .map((name) => Object.entries(found).find(([path]) => path.includes(`/${name}.`))?.[1].default)
   .filter((img): img is ImageMetadata => Boolean(img));
 const newestFirst = allPosts.filter((p) => p.categories.includes(35)).sort((a, b) => +new Date(b.date) - +new Date(a.date));
 const position = Math.max(0, newestFirst.findIndex((p) => p.slug === slug));
 const banner = bannerPhotos.length ? bannerPhotos[position % bannerPhotos.length] : undefined;
-const { intro, rest, toc, words } = prepareBlogHtml(html);
+const { intro, rest, cta, toc, words } = prepareBlogHtml(html);
 const readMins = Math.max(1, Math.round(words / 220));
 const dateLabel = formatAuDate(date, { day: 'numeric', month: 'long', year: 'numeric' });
 const url = new URL(`/${slug}/`, Astro.site ?? 'https://kyliekelly.com').toString();
@@ -110,7 +110,7 @@ const graph = {
     </div>
   </section>
 
-  <div class="px-6 py-14 sm:py-20">
+  <div class="px-6 pt-14 pb-14 sm:pt-20 sm:pb-20">
     <div class="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[minmax(0,1fr)_320px]">
 
       <article class="min-w-0">
@@ -136,24 +136,6 @@ const graph = {
 
           <div set:html={rest} />
         </div>
-
-        <AboutBlogger />
-
-        {related.length > 0 && (
-          <section class="mt-20 max-w-[42rem] border-t border-black/10 pt-10">
-            <h2 class="font-serif text-2xl font-bold mb-6">Keep reading</h2>
-            <ul class="grid gap-5 sm:grid-cols-3">
-              {related.map((p) => (
-                <li>
-                  <a href={`/${p.slug}/`} class="group block">
-                    <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="aspect-square w-full rounded-xl object-cover object-top transition-transform duration-300 group-hover:-translate-y-1" />
-                    <span class="mt-3 block text-sm font-bold leading-snug group-hover:text-pink">{p.title}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
       </article>
 
       <aside class="space-y-10">
@@ -227,6 +209,30 @@ const graph = {
 
     </div>
   </div>
+
+  <section class="px-6 pb-20 sm:pb-28">
+    <div class="mx-auto max-w-6xl space-y-16">
+      {cta && <div class="blog-body"><div set:html={cta} /></div>}
+
+      <AboutBlogger />
+
+      {related.length > 0 && (
+        <section class="border-t border-black/10 pt-12">
+          <h2 class="mb-8 font-serif text-3xl font-bold italic">Keep reading</h2>
+          <ul class="grid gap-6 sm:grid-cols-3">
+            {related.map((p) => (
+              <li>
+                <a href={`/${p.slug}/`} class="group block">
+                  <img src={blogCovers[p.slug].image} alt="" loading="lazy" class="aspect-square w-full rounded-2xl object-cover object-top transition-transform duration-300 group-hover:-translate-y-1" />
+                  <span class="mt-4 block font-serif text-xl font-bold leading-snug group-hover:text-pink">{p.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
+  </section>
 </Layout>
 
 <style>
@@ -239,6 +245,7 @@ const graph = {
   }
   .blog-body :global(h2) {
     font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
     font-weight: 700;
     font-size: clamp(1.6rem, 3vw, 2rem);
     line-height: 1.2;
@@ -292,16 +299,16 @@ const graph = {
     line-height: 1.6;
   }
   .blog-body :global(.post-learn) {
-    background: #f9f1f2;
-    border-radius: 16px;
-    padding: 26px 30px;
-    margin: 28px 0;
+    margin: 36px 0;
   }
   .blog-body :global(.post-learn-title) {
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
-    font-weight: 600;
-    margin: 0 0 12px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(1.9rem, 4vw, 2.4rem);
+    line-height: 1.15;
+    color: #e040fb;
+    margin: 0 0 16px;
   }
   .blog-body :global(.post-learn ul) {
     list-style: none;
@@ -325,9 +332,9 @@ const graph = {
     background: #111;
     color: #fff;
     border-radius: 18px;
-    padding: 44px 34px;
+    padding: 56px 34px;
     text-align: center;
-    margin: 56px 0 8px;
+    margin: 0;
   }
   .blog-body :global(.post-cta p) {
     color: #d9d9d9;
@@ -339,7 +346,7 @@ const graph = {
     font-style: italic;
     color: #e040fb;
     font-size: 1.4rem;
-    margin: 0 0 8px;
+    margin: 0 auto 8px;
   }
   .blog-body :global(.post-cta .post-cta-headline) {
     font-family: 'Playfair Display', Georgia, serif;
@@ -347,7 +354,7 @@ const graph = {
     font-size: 1.7rem;
     font-weight: 700;
     line-height: 1.2;
-    margin: 0 0 12px;
+    margin: 0 auto 12px;
   }
   .blog-body :global(.post-cta a) {
     display: inline-block;

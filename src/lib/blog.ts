@@ -70,7 +70,10 @@ export interface BlogToc {
  * the intro, and everything from there on. The "In this post" list goes between the two, and is plain links to
  * the headings. No script, so search and AI crawlers read it as it is.
  */
-export function prepareBlogHtml(html: string): { intro: string; rest: string; toc: BlogToc[]; words: number } {
+export function prepareBlogHtml(source: string): { intro: string; rest: string; cta: string; toc: BlogToc[]; words: number } {
+  // The closing call to action (a <div class="post-cta">) is shown full width under the article, not inside it.
+  const cta = source.match(/<div class="post-cta">[\s\S]*?<\/div>/)?.[0] ?? '';
+  const html = cta ? source.replace(cta, '') : source;
   const used = new Set<string>();
   const toc: BlogToc[] = [];
   const withIds = html.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h\1>/gi, (whole, level: string, attrs: string, inner: string) => {
@@ -94,6 +97,7 @@ export function prepareBlogHtml(html: string): { intro: string; rest: string; to
   return {
     intro: firstH2 === -1 ? withIds : withIds.slice(0, firstH2),
     rest: firstH2 === -1 ? '' : withIds.slice(firstH2),
+    cta,
     toc: shown.filter((t) => t.level === 2).length >= 2 ? shown : [],
     words: stripTags(withIds).split(' ').filter(Boolean).length,
   };
