@@ -14,7 +14,7 @@ const when = now >= new Date(LAST_WEEK_FROM).getTime() ? 'last' : 'this';
 ---
 {live && (
   <div data-event-banner data-last-week-from={LAST_WEEK_FROM} data-show-until={SHOW_UNTIL} class="bg-pink text-white">
-    <a href={HREF} class="block px-4 py-2.5 text-center text-[13px] font-semibold leading-snug transition-colors hover:bg-black sm:text-sm">
+    <a href={HREF} class="block px-4 py-2.5 text-center text-[11px] font-normal uppercase leading-snug tracking-[0.12em] transition-colors hover:bg-black sm:text-[13px]">
       <span class="hidden sm:inline">Did we meet at an event <span data-when>{when}</span> week? 👋 Take the free quiz and find out where your next 1000 subscribers are coming from →</span>
       <span class="sm:hidden">Met me at an event <span data-when>{when}</span> week? Take the free quiz →</span>
     </a>
