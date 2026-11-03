@@ -49,6 +49,11 @@ const shareImage = new URL(image, Astro.site).toString();
     <meta name="twitter:image" content={shareImage} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- The fonts load without holding up the page (text shows straight away, then switches to the web fonts). -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:wght@400;600&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:wght@400;600&display=swap" /></noscript>
     <slot name="head" />
   </head>
   <body>
@@ -65,6 +70,7 @@ const shareImage = new URL(image, Astro.site).toString();
         <slot name="reveal" />
       </div>
     )}
+    <noscript><style>.reveal-panel { visibility: visible; }</style></noscript>
     <ScrollToTop />
     <CookieBanner />
     <Tracking />
@@ -99,6 +105,8 @@ const shareImage = new URL(image, Astro.site).toString();
      the panel simply sits below the footer. */
   html.reveal-on .reveal-page { position: relative; z-index: 10; background: #fff; }
   html.reveal-on .reveal-panel { position: fixed; left: 0; right: 0; bottom: 0; z-index: 0; }
+  .reveal-panel { visibility: hidden; }
+  .reveal-panel.is-ready { visibility: visible; }
 </style>
 
 <script>
@@ -114,6 +122,14 @@ const shareImage = new URL(image, Astro.site).toString();
       page.style.marginBottom = on ? `${h}px` : '';
     };
     update();
+    // Show the panel only once the visitor is within a screen or so of the bottom (it sits behind the page until then).
+    const ready = () => {
+      const left = document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
+      panel.classList.toggle('is-ready', left < window.innerHeight * 1.5 + panel.offsetHeight);
+    };
+    window.addEventListener('scroll', ready, { passive: true });
+    window.addEventListener('resize', ready);
+    ready();
     window.addEventListener('resize', update);
     if ('ResizeObserver' in window) new ResizeObserver(update).observe(panel);
     reduce.addEventListener('change', update);

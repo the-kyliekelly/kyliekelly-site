@@ -9,6 +9,7 @@ export default {
         pink: {
           DEFAULT: '#e040fb',
           light: '#d5b9db',
+          deep: '#b01fc6', // small magenta text on light backgrounds (readable contrast)
         },
         muted: '#666666',
         warmgray: '#d4d0cc',

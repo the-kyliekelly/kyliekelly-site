@@ -13,7 +13,7 @@ const live = now < new Date(SHOW_UNTIL).getTime();
 const when = now >= new Date(LAST_WEEK_FROM).getTime() ? 'last' : 'this';
 ---
 {live && (
-  <div data-event-banner data-last-week-from={LAST_WEEK_FROM} data-show-until={SHOW_UNTIL} class="bg-pink text-white">
+  <div data-event-banner data-last-week-from={LAST_WEEK_FROM} data-show-until={SHOW_UNTIL} class="bg-[#c026d3] text-white">
     <a href={HREF} class="block px-4 py-2.5 text-center text-[10px] font-normal uppercase leading-snug tracking-[0.04em] transition-colors hover:bg-black min-[420px]:text-[11px] min-[420px]:tracking-[0.1em] sm:text-[12px] sm:tracking-[0.1em] xl:text-[13px] xl:tracking-[0.12em]">
       <span class="hidden xl:inline">Did we meet at an event <span data-when>{when}</span> week? 👋 Take the free quiz and find out where your next 1000 subscribers are coming from →</span>
       <span class="xl:hidden">Met me at an event <span data-when>{when}</span> week? Take the free quiz →</span>
