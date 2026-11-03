@@ -11,6 +11,10 @@ interface Props {
   title: string;
   description?: string;
   noindex?: boolean;
+  /** A full address or a path to the share image (1200x630 works best). Defaults to the site's share image. */
+  image?: string;
+  /** 'website' for most pages, 'article' for a blog post. */
+  ogType?: 'website' | 'article';
 }
 
 const hasReveal = Astro.slots.has('reveal');
@@ -20,7 +24,9 @@ const SITE_HOSTS = ['kyliekelly.com', 'www.kyliekelly.com'];
 const externalRedirects = ((vercel as { redirects?: Array<{ source: string; destination: string }> }).redirects ?? [])
   .filter((r) => !r.source.includes(':') && /^https?:\/\//.test(r.destination) && !SITE_HOSTS.includes(new URL(r.destination).hostname))
   .map((r) => r.source.replace(/\/$/, ''));
-const { title, description = 'Email marketing strategies for women in business who want to grow their list, without relying on social media.', noindex = false } = Astro.props;
+const { title, description = 'Email marketing strategies for women in business who want to grow their list, without relying on social media.', noindex = false, image = '/images/og-default.jpg', ogType = 'website' } = Astro.props;
+const pageUrl = new URL(Astro.url.pathname, Astro.site);
+const shareImage = new URL(image, Astro.site).toString();
 ---
 <!doctype html>
 <html lang="en">
@@ -30,6 +36,16 @@ const { title, description = 'Email marketing strategies for women in business w
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta property="og:site_name" content="Kylie Kelly" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={shareImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={shareImage} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <slot name="head" />

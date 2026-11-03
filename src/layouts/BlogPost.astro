@@ -82,14 +82,10 @@ const graph = {
   publisher: { '@type': 'Person', name: 'Kylie Kelly' },
 };
 ---
-<Layout title={seoTitle ?? `${title} | Kylie Kelly`} description={description}>
+<Layout title={seoTitle ?? `${title} | Kylie Kelly`} description={description} ogType="article" image={imageUrl}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(graph)} />
     <link rel="alternate" type="application/rss+xml" title="The Kylie Kelly Blog" href="/blog/rss.xml" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content={title} />
-    {description && <meta property="og:description" content={description} />}
-    {imageUrl && <meta property="og:image" content={imageUrl} />}
   </Fragment>
 
   <section class="relative overflow-hidden bg-black text-white">
