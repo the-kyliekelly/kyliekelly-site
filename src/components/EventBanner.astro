@@ -1,0 +1,35 @@
+---
+// A thin bar across the very top of every page for an event Kylie is at. It runs itself:
+//   - until LAST_WEEK_FROM it says "this week", then "last week"
+//   - from SHOW_UNTIL it disappears (the script hides it even on a page built earlier; a rebuild drops it from the page entirely)
+// All dates are Sydney time. To reuse it for another event, change the dates and the words below.
+// To remove the banner altogether, delete <EventBanner /> from src/layouts/Layout.astro.
+const LAST_WEEK_FROM = '2026-11-09T00:00:00+11:00';
+const SHOW_UNTIL = '2026-11-14T00:00:00+11:00';
+const HREF = '/guide?utm_source=website&utm_medium=banner&utm_campaign=event-nov-2026';
+
+const now = Date.now();
+const live = now < new Date(SHOW_UNTIL).getTime();
+const when = now >= new Date(LAST_WEEK_FROM).getTime() ? 'last' : 'this';
+---
+{live && (
+  <div data-event-banner data-last-week-from={LAST_WEEK_FROM} data-show-until={SHOW_UNTIL} class="bg-pink text-white">
+    <a href={HREF} class="block px-4 py-2.5 text-center text-[13px] font-semibold leading-snug transition-colors hover:bg-black sm:text-sm">
+      <span class="hidden sm:inline">Did we meet at an event <span data-when>{when}</span> week? 👋 Take the free quiz and find out where your next 1000 subscribers are coming from →</span>
+      <span class="sm:hidden">Met me at an event <span data-when>{when}</span> week? Take the free quiz →</span>
+    </a>
+  </div>
+)}
+
+<script is:inline>
+  // Keeps the banner right on a page that was built days ago: "this week" turns to "last week", then it hides.
+  window.kkEventBanner = function (now) {
+    var el = document.querySelector('[data-event-banner]');
+    if (!el) return;
+    var t = now.getTime();
+    el.hidden = t >= new Date(el.getAttribute('data-show-until')).getTime();
+    var word = t >= new Date(el.getAttribute('data-last-week-from')).getTime() ? 'last' : 'this';
+    el.querySelectorAll('[data-when]').forEach(function (s) { s.textContent = word; });
+  };
+  window.kkEventBanner(new Date());
+</script>

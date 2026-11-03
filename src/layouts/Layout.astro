@@ -1,4 +1,5 @@
 ---
+import EventBanner from '../components/EventBanner.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import CookieBanner from '../components/CookieBanner.astro';
@@ -35,6 +36,7 @@ const { title, description = 'Email marketing strategies for women in business w
   </head>
   <body>
     <div class="reveal-page" data-reveal-page>
+      <EventBanner />
       <Nav />
       <main>
         <slot />
