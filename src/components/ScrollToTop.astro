@@ -1,0 +1,37 @@
+---
+// A round "back to top" button that appears once a visitor has scrolled down a screen or so. On every page, phone and desktop.
+---
+<button type="button" data-scroll-top aria-label="Back to top" class="scroll-top fixed bottom-5 right-5 z-50 grid h-12 w-12 place-items-center rounded-full border border-white/30 bg-black text-white shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition duration-300 hover:-translate-y-1 hover:bg-pink sm:bottom-6 sm:right-6 sm:h-14 sm:w-14" hidden>
+  <svg viewBox="0 0 16 16" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" /></svg>
+</button>
+
+<style>
+  .scroll-top { opacity: 0; transform: translateY(12px); pointer-events: none; }
+  .scroll-top.is-shown { opacity: 1; transform: none; pointer-events: auto; }
+  .scroll-top.is-shown:hover { transform: translateY(-4px); }
+  @media (prefers-reduced-motion: reduce) { .scroll-top { transition: none; } }
+</style>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-scroll-top]');
+  if (btn) {
+    btn.hidden = false;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      btn.classList.toggle('is-shown', window.scrollY > Math.max(600, window.innerHeight * 0.9));
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }, { passive: true });
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: reduce.matches ? 'auto' : 'smooth' });
+      (document.querySelector('a, button') as HTMLElement | null)?.focus({ preventScroll: true });
+    });
+    update();
+  }
+</script>
