@@ -37,11 +37,8 @@ const testimonials = [
   },
 ];
 
-const heroPills = [
-  { label: 'Start for free', href: 'https://www.skool.com/email-marketing-skool/about', dot: 'border-2 border-transparent bg-pink text-white group-hover:border-black group-hover:bg-white group-hover:text-black' },
-  { label: 'Shop the products', href: 'https://shop.kyliekelly.com/', dot: 'border-2 border-transparent bg-pink-light text-black group-hover:border-black group-hover:bg-white group-hover:text-black' },
-  { label: 'Work with me', href: '/services', dot: 'border-2 border-black bg-black text-white group-hover:bg-white group-hover:text-black' },
-];
+// One call to action above the fold: Work with me. (Free community and the shop are further down the page and in the menu and footer.)
+const heroCta = { label: 'Work with me', href: '/services' };
 
 // Signature course spotlight.
 const signatureCourse = {
@@ -102,7 +99,7 @@ const tickerItems = [
     </p>
   </section>
 
-  <!-- HERO: one centred column, three call-to-action pills, polaroid fan -->
+  <!-- HERO: one centred column, one call to action, polaroid fan -->
   <section class="bg-black text-white px-6 pt-14 sm:pt-16 text-center relative overflow-hidden">
     <div class="max-w-3xl mx-auto">
       <h1 class="text-[29px] sm:text-[40px] lg:text-[44px] font-bold leading-[1.15] mb-5 text-balance">
@@ -110,20 +107,18 @@ const tickerItems = [
         with an email list &amp; real relationships that work
         <em class="italic font-normal">{"{even when you're not online}"}</em>.
       </h1>
-      <p class="text-white text-base mb-10">For coaches, course creators and service providers.</p>
+      <p class="text-white text-base mb-9">For coaches, course creators and service providers.</p>
 
-      <div class="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-4 sm:gap-5 lg:gap-6 max-w-xs sm:max-w-none mx-auto">
-        {heroPills.map((pill) => (
-          <a
-            href={pill.href}
-            class="group flex items-center justify-between gap-5 bg-white text-black rounded-full pl-6 pr-2 py-2 lg:pl-7 lg:py-2.5 lg:pr-2.5 text-[15px] lg:text-base font-semibold shadow-[0_8px_22px_rgba(224,64,251,0.18)] transition-transform duration-300 hover:-translate-y-1"
-          >
-            <span>{pill.label}</span>
-            <span class={`grid place-items-center h-10 w-10 lg:h-12 lg:w-12 rounded-full transition-colors duration-300 ${pill.dot}`}>
-              <svg viewBox="0 0 16 16" class="h-4 w-4 lg:h-5 lg:w-5 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
-            </span>
-          </a>
-        ))}
+      <div class="flex justify-center">
+        <a
+          href={heroCta.href}
+          class="group inline-flex items-center justify-between gap-6 rounded-full bg-white text-black pl-8 pr-2.5 py-2.5 lg:pl-10 lg:py-3 lg:pr-3 text-base lg:text-lg font-semibold shadow-[0_10px_30px_rgba(224,64,251,0.28)] transition duration-300 hover:-translate-y-1 hover:bg-pink hover:text-white"
+        >
+          <span>{heroCta.label}</span>
+          <span class="grid place-items-center h-11 w-11 lg:h-12 lg:w-12 rounded-full bg-black text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black">
+            <svg viewBox="0 0 16 16" class="h-4 w-4 lg:h-5 lg:w-5 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
+          </span>
+        </a>
       </div>
     </div>
 

@@ -6,16 +6,43 @@
 // "Accept" is chosen. To add another tool that should wait for consent, paste its script like this:
 //   <script is:inline type="text/plain" data-consent="analytics"> ...code... </script>
 ---
-<div id="cookie-banner" class="hidden fixed inset-x-4 bottom-4 z-[60] sm:inset-x-auto sm:left-6 sm:bottom-6 sm:max-w-md rounded-[1.75rem] bg-white p-6 text-black shadow-[0_20px_60px_rgba(0,0,0,0.22)] border border-black/10" role="dialog" aria-modal="false" aria-labelledby="cookie-title" aria-describedby="cookie-text">
-  <p id="cookie-title" class="font-serif italic font-bold text-pink text-xl leading-none mb-2">Cookies, your call.</p>
+<div id="cookie-banner" class="cookie-banner hidden fixed inset-x-4 bottom-4 z-[60] sm:inset-x-auto sm:left-6 sm:bottom-6 sm:max-w-md rounded-[1.75rem] bg-white p-6 pt-7 text-black shadow-[0_20px_60px_rgba(0,0,0,0.22)] border border-black/10" role="dialog" aria-modal="false" aria-labelledby="cookie-title" aria-describedby="cookie-text">
+  <span class="cookie-icon absolute -top-5 right-6 grid h-12 w-12 place-items-center rounded-full bg-pink-light text-2xl shadow-md" aria-hidden="true">🍪</span>
+  <p id="cookie-title" class="font-serif italic font-bold text-pink text-2xl leading-none mb-2">Fancy a cookie?</p>
   <p id="cookie-text" class="text-sm leading-relaxed mb-5">
-    This site may use cookies and similar tools for analytics and advertising. Accept or decline, the site works the same either way. Details are in the <a href="/privacy-policy#privacy" class="font-semibold underline underline-offset-2 hover:text-pink">Privacy Policy</a>.
+    I use a few cookies to see what's working on the site and to show you ads that make sense. Not the chocolate chip kind (sadly). Say yes or no, the site works exactly the same either way. The grown-up details are in the <a href="/privacy-policy#privacy" class="font-semibold underline underline-offset-2 hover:text-pink">Privacy Policy</a>.
   </p>
   <div class="flex flex-wrap items-center gap-3">
-    <button type="button" data-cookie-choice="accepted" class="inline-flex items-center rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5 cursor-pointer">Accept</button>
-    <button type="button" data-cookie-choice="declined" class="inline-flex items-center rounded-full border border-black px-6 py-3 text-sm font-semibold text-black transition-colors duration-300 hover:bg-black hover:text-white cursor-pointer">Decline</button>
+    <button type="button" data-cookie-choice="accepted" class="inline-flex items-center rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-pink cursor-pointer">Yes please 🍪</button>
+    <button type="button" data-cookie-choice="declined" class="inline-flex items-center rounded-full border border-black px-6 py-3 text-sm font-semibold text-black transition-colors duration-300 hover:bg-black hover:text-white cursor-pointer">No thanks</button>
   </div>
 </div>
+
+<style>
+  /* A little bounce on the way in, and a cookie that wobbles now and then. Both stand still for people who prefer less motion. */
+  .cookie-banner:not(.hidden) {
+    animation: cookie-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  .cookie-banner:not(.hidden) .cookie-icon {
+    animation: cookie-wobble 5s ease-in-out 1.5s infinite;
+    transform-origin: 50% 80%;
+  }
+  @keyframes cookie-in {
+    from { opacity: 0; transform: translateY(40px) scale(0.96); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes cookie-wobble {
+    0%, 82%, 100% { transform: rotate(0deg); }
+    86% { transform: rotate(-14deg); }
+    90% { transform: rotate(12deg); }
+    94% { transform: rotate(-8deg); }
+    97% { transform: rotate(4deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cookie-banner:not(.hidden),
+    .cookie-banner:not(.hidden) .cookie-icon { animation: none; }
+  }
+</style>
 
 <script>
   const KEY = 'kk-cookie-consent';
