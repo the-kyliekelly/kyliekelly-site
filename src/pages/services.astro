@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Highlight from '../components/Highlight.astro';
+import InnerCircleWaitlist from '../components/InnerCircleWaitlist.astro';
 import RotatingBadge from '../components/RotatingBadge.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
 
@@ -10,9 +11,6 @@ const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 // The page works this out when it is built, and a small script at the bottom keeps it right on the day.
 const PRICE_RISES = '2026-12-01T00:00:00+11:00';
 const earlyPrice = Date.now() < Date.parse(PRICE_RISES);
-
-// The Inner Circle waitlist: paste the Flodesk form or signup link here and a "Join the waitlist" button appears on its card.
-const INNER_CIRCLE_WAITLIST = '';
 
 // The three steps, shown as a menu at the top of the page.
 const menu = [
@@ -266,16 +264,7 @@ const faqs = [
         <p class="mx-auto mt-6 max-w-lg text-warmgray sm:text-lg md:mx-0">If you're a coach, course creator or service provider and you're ready for <strong class="text-white">more</strong> of me, with deeper support, actual implementation and a small group of women to do it with, this is it.</p>
         <p class="mx-auto mt-4 max-w-lg text-warmgray sm:text-lg md:mx-0">You also get every course in my shop while you're in, including the new ones I create along the way.</p>
         <p class="mx-auto mt-4 max-w-lg font-semibold text-white sm:text-lg md:mx-0">Doors open early 2027. Pop your name on the waitlist and I'll email you the second I can tell you more.</p>
-        <div class="mt-9">
-          {INNER_CIRCLE_WAITLIST ? (
-            <a href={INNER_CIRCLE_WAITLIST} target="_blank" rel="noopener" class="group inline-flex items-center gap-4 rounded-full bg-white pl-8 pr-2 py-2 text-base font-semibold text-black transition duration-300 hover:-translate-y-1 hover:bg-pink hover:text-white">
-              Join the waitlist
-              <span class="grid h-12 w-12 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-            </a>
-          ) : (
-            <p class="inline-block rounded-full border border-white/40 px-5 py-2 text-xs font-semibold uppercase tracking-widest">Waitlist opening soon</p>
-          )}
-        </div>
+        <InnerCircleWaitlist />
       </div>
         </div>
       </div>

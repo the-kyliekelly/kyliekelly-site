@@ -1,0 +1,97 @@
+---
+// The Inner Circle waitlist sign-up (a Flodesk form): first name and email. The form ID and the submit address are the
+// ones from the Flodesk embed code; the look is the site's own. Flodesk's script (loaded below) handles checking the
+// fields, sending them and showing the thank-you message.
+// After sign-up it shows the thank-you message below (set in data-ff-config). Flodesk's own "After submission" setting
+// for this form should also be a message, not a redirect.
+// To use a different form, change FORM_ID and the config (copy both from the new embed code).
+const FORM_ID = '6ae968b630164fafb1274552';
+const CONFIG = 'eyJ0cmlnZ2VyIjp7Im1vZGUiOiJpbW1lZGlhdGVseSIsInZhbHVlIjowfSwib25TdWNjZXNzIjp7Im1vZGUiOiJtZXNzYWdlIiwibWVzc2FnZSI6IllvdSdyZSBvbiB0aGUgbGlzdCEgSSdsbCBlbWFpbCB5b3UgdGhlIHNlY29uZCBJIGNhbiB0ZWxsIHlvdSBtb3JlLiIsInJlZGlyZWN0VXJsIjoiIn0sImNvaSI6ZmFsc2UsInNob3dGb3JSZXR1cm5WaXNpdG9ycyI6dHJ1ZSwibm90aWZpY2F0aW9uIjp0cnVlLCJnZHByIjp7ImFjY2VwdHNNYXJrZXRpbmciOmZhbHNlLCJwcml2YWN5UG9saWN5Ijp7ImVuYWJsZWQiOmZhbHNlLCJtYW5kYXRvcnkiOmZhbHNlfX0sInRyYWNraW5nQ29uZmlnIjp7Im1ldGFQaXhlbElkIjoiIiwiY29va2llQmFubmVyRW5hYmxlZCI6ZmFsc2UsImdvb2dsZUFuYWx5dGljc0lkIjoiIn19';
+const root = `ff-${FORM_ID}`;
+---
+<div class:list={[root, 'kk-wl']} data-ff-el="root" data-ff-version="3" data-ff-type="inline" data-ff-name="inlineNoImage" data-ff-stage="default">
+  <div data-ff-el="config" data-ff-config={CONFIG} style="display: none"></div>
+  <form action={`https://form.flodesk.com/forms/${FORM_ID}/submit`} method="post" data-ff-el="form" aria-label="Join the Inner Circle waitlist">
+    <div class="fd-form-content" data-ff-el="content">
+      <div data-ff-el="fields">
+        <div class="fd-form-group">
+          <input id={`${root}-firstName`} class="fd-form-control" type="text" maxlength="255" name="firstName" placeholder="First name" autocomplete="given-name" data-ff-tab="firstName::email" required />
+          <label for={`${root}-firstName`} class="fd-form-label"><div><div>First name</div></div></label>
+        </div>
+        <div class="fd-form-group">
+          <input id={`${root}-email`} class="fd-form-control" type="text" inputmode="email" maxlength="255" name="email" placeholder="Email address" autocomplete="email" data-ff-tab="email:firstName:submit" required />
+          <label for={`${root}-email`} class="fd-form-label"><div><div>Email address</div></div></label>
+        </div>
+        <input type="text" maxlength="255" name="confirm_email_address" style="display: none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      </div>
+      <div data-ff-el="footer">
+        <button type="submit" class="fd-btn" data-ff-el="submit" data-ff-tab="submit"><span data-draw-element="editable">Join the waitlist →</span></button>
+      </div>
+    </div>
+    <div class="fd-form-success" data-ff-el="success" role="status">
+      <p class="kk-wl-thanks">You're on the list! ✨ I'll email you the second I can tell you more.</p>
+    </div>
+    <div class="fd-form-error" data-ff-el="error" role="alert"></div>
+  </form>
+</div>
+
+<style is:global>
+  .kk-wl { margin-top: 2.25rem; max-width: 28rem; text-align: left; }
+  .kk-wl *, .kk-wl *::before, .kk-wl *::after { box-sizing: border-box; }
+  .kk-wl [hidden] { display: none !important; }
+  .kk-wl .fd-form-content { position: relative; }
+  .kk-wl .fd-form-group { position: relative; margin: 0 0 12px; }
+  .kk-wl .fd-form-control {
+    display: block; width: 100%; height: 3.25rem; padding: 0 1.5rem; margin: 0;
+    border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 9999px;
+    background: #fff; color: #000; font: inherit; font-size: 15px; outline: none;
+    -webkit-appearance: none; appearance: none; transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .kk-wl .fd-form-control::placeholder { color: transparent; opacity: 0; }
+  .kk-wl .fd-form-control:focus { border-color: #e040fb; box-shadow: 0 0 0 3px rgba(224, 64, 251, 0.4); }
+  /* The label sits over the empty box like a placeholder and fades once there is text */
+  .kk-wl .fd-form-label {
+    position: absolute; top: 0; left: 0; right: 0; height: 3.25rem; line-height: 3.25rem; margin: 0;
+    padding: 0 1.5rem; color: #6b6b6b; font-size: 15px; font-weight: 400;
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis; pointer-events: none;
+  }
+  .kk-wl .fd-form-label div { display: inline; }
+  .kk-wl .fd-form-control:not(:placeholder-shown) + .fd-form-label { opacity: 0; }
+  .kk-wl .fd-form-group.fd-has-error .fd-form-control { border-color: #ff8a80; }
+  .kk-wl .fd-form-feedback { display: none; margin: 6px 0 0 1.5rem; font-size: 0.8rem; color: #ff8a80; }
+  .kk-wl .fd-form-group.fd-has-error .fd-form-feedback { display: block; }
+  .kk-wl .fd-btn {
+    display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 3.25rem;
+    border: 0; border-radius: 9999px; background: #e040fb; color: #fff; cursor: pointer;
+    font: inherit; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  }
+  .kk-wl .fd-btn:hover { background: #fff; color: #000; transform: translateY(-2px); }
+  .kk-wl .fd-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .kk-wl .fd-btn:disabled { opacity: 0.7; cursor: default; transform: none; }
+  .kk-wl .fd-form-success { display: none; }
+  .kk-wl .fd-has-success .fd-form-success, .kk-wl[data-ff-stage="success"] .fd-form-success, .kk-wl.fd-has-success .fd-form-success { display: block; }
+  .kk-wl .fd-has-success .fd-form-content, .kk-wl[data-ff-stage="success"] .fd-form-content, .kk-wl.fd-has-success .fd-form-content { display: none; }
+  .kk-wl-thanks { margin: 0; font-size: 1.125rem; font-weight: 600; line-height: 1.5; color: #fff; }
+  .kk-wl .fd-form-error { display: none; margin-top: 12px; font-size: 0.9rem; color: #ff8a80; }
+  .kk-wl .fd-has-error .fd-form-error { display: block; }
+  .kk-wl .fd-has-captcha .fd-form-content > *:not(.fd-form-captcha) { opacity: 0; visibility: hidden; }
+  .kk-wl .fd-form-captcha { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; }
+  .kk-wl .fd-form-suggestion { margin: 6px 0 0; font-size: 0.85rem; text-align: center; color: #fff; }
+  .kk-wl .fd-form-suggestion__link { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+  @media (max-width: 767px) { .kk-wl { margin-left: auto; margin-right: auto; } }
+</style>
+
+<script is:inline>
+  // Flodesk's loader (from their embed code). It adds the script that runs the form.
+  (function (w, d, t, h, s, n) {
+    w.FlodeskObject = n;
+    var fn = function () { (w[n].q = w[n].q || []).push(arguments); };
+    w[n] = w[n] || fn;
+    var f = d.getElementsByTagName(t)[0];
+    var v = '?v=' + Math.floor(new Date().getTime() / (120 * 1000)) * 60;
+    var sm = d.createElement(t); sm.async = true; sm.type = 'module'; sm.src = h + s + '.mjs' + v; f.parentNode.insertBefore(sm, f);
+    var sn = d.createElement(t); sn.async = true; sn.noModule = true; sn.src = h + s + '.js' + v; f.parentNode.insertBefore(sn, f);
+  })(window, document, 'script', 'https://assets.flodesk.com', '/universal', 'fd');
+  window.fd('form:handle', { formId: '6ae968b630164fafb1274552', rootEl: '.ff-6ae968b630164fafb1274552' });
+</script>
