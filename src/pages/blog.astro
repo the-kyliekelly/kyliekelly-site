@@ -54,6 +54,15 @@ const topics = [...topicCounts.entries()].sort((x, y) => y[1] - x[1]).map(([t]) 
 ---
 <Layout title="The Blog | Kylie Kelly" description="Email marketing, visibility and growing a business without living on social media. Practical posts from Kylie Kelly.">
   <link slot="head" rel="alternate" type="application/rss+xml" title="The Kylie Kelly Blog" href="/blog/rss.xml" />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'The Kylie Kelly Blog',
+    url: 'https://kyliekelly.com/blog/',
+    description: 'Email marketing, visibility and growing a business without living on social media.',
+    author: { '@type': 'Person', name: 'Kylie Kelly', url: 'https://kyliekelly.com/meet-kylie/' },
+    publisher: { '@type': 'Person', name: 'Kylie Kelly', url: 'https://kyliekelly.com/' },
+  })} />
 
   <section class="bg-black px-6 py-4">
     <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-white text-center">

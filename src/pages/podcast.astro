@@ -67,6 +67,19 @@ const playTint = ['bg-pink text-white', 'bg-black text-white', 'bg-pink-light te
 const classicsTint = ['text-pink', 'text-black', 'text-[#a21cb8]', 'text-[#6b3a82]'];
 ---
 <Layout title="The Email Growth Show | Kylie Kelly" description="A top 1.5% podcast globally for women growing an email list without social media. Every Friday, real talk on visibility, list growth, and building a business without the burnout.">
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'PodcastSeries',
+    name: 'The Email Growth Show',
+    alternateName: 'This Mama Means Business',
+    url: 'https://kyliekelly.com/podcast/',
+    description: 'A podcast for women growing an email list without social media. Every Friday, real talk on visibility, list growth, and building a business without the burnout.',
+    image: 'https://kyliekelly.com/images/podcast-cover.jpg',
+    webFeed: 'https://feeds.buzzsprout.com/2065148.rss',
+    inLanguage: 'en',
+    author: { '@type': 'Person', name: 'Kylie Kelly', url: 'https://kyliekelly.com/meet-kylie/' },
+    sameAs: ['https://podcasts.apple.com/podcast/id1550211753', 'https://open.spotify.com/show/69feUlzhejQl1xIMpCLyC3'],
+  })} />
 
   <section class="bg-black text-white px-6 py-4">
     <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-white text-center">

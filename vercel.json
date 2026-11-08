@@ -251,6 +251,56 @@
       "permanent": true
     },
     {
+      "source": "/join",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/join/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/newsletter",
+      "destination": "/guide",
+      "permanent": true
+    },
+    {
+      "source": "/newsletter/",
+      "destination": "/guide",
+      "permanent": true
+    },
+    {
+      "source": "/collabs",
+      "destination": "https://findcolab.com/?utm_source=website&utm_medium=redirect&utm_campaign=old-collab-page",
+      "permanent": true
+    },
+    {
+      "source": "/collabs/",
+      "destination": "https://findcolab.com/?utm_source=website&utm_medium=redirect&utm_campaign=old-collab-page",
+      "permanent": true
+    },
+    {
+      "source": "/collaborate",
+      "destination": "https://findcolab.com/?utm_source=website&utm_medium=redirect&utm_campaign=old-collab-page",
+      "permanent": true
+    },
+    {
+      "source": "/collaborate/",
+      "destination": "https://findcolab.com/?utm_source=website&utm_medium=redirect&utm_campaign=old-collab-page",
+      "permanent": true
+    },
+    {
+      "source": "/50-a-day",
+      "destination": "https://kyliekelly.thrivecart.com/50-a-day",
+      "permanent": false
+    },
+    {
+      "source": "/50-a-day/",
+      "destination": "https://kyliekelly.thrivecart.com/50-a-day",
+      "permanent": false
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true

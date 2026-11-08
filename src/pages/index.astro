@@ -89,6 +89,28 @@ const tickerItems = [
 ];
 ---
 <Layout title="Kylie Kelly | Grow Your Email List Without Social Media">
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Person',
+        '@id': 'https://kyliekelly.com/#kylie',
+        name: 'Kylie Kelly',
+        url: 'https://kyliekelly.com/',
+        image: 'https://kyliekelly.com/images/hero-8.jpg',
+        jobTitle: 'Email marketing educator and podcast host',
+        description: 'Helps women grow an email list without social media, and get known, trusted and selling through email and real relationships.',
+        knowsAbout: ['Email marketing', 'Email list growth', 'Lead magnets and quizzes', 'Podcasting'],
+      },
+      {
+        '@type': 'WebSite',
+        '@id': 'https://kyliekelly.com/#website',
+        name: 'Kylie Kelly',
+        url: 'https://kyliekelly.com/',
+        publisher: { '@id': 'https://kyliekelly.com/#kylie' },
+      },
+    ],
+  })} />
 
   <!-- PILLAR BANNER -->
   <section class="bg-pink-light px-6 py-4">
@@ -294,7 +316,7 @@ const tickerItems = [
               </div>
               <div class="flex justify-center order-first md:order-none">
                 <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 w-[190px] sm:w-[230px] max-w-full">
-                  <img src="/images/desk-scene.jpg" alt="" class="w-full rounded-sm" />
+                  <img src="/images/desk-scene.jpg" alt="A tidy white desk with a laptop, phone, black vase and candle" class="w-full rounded-sm" />
                 </div>
               </div>
               <a href="https://coaching.kyliekelly.com/checkout" aria-label="Learn more about the Coaching Group" class="group inline-flex justify-self-end md:col-span-2 items-center gap-4 text-lg font-semibold text-white">
@@ -509,7 +531,7 @@ const tickerItems = [
                 <div class="mx-auto mt-2 h-[20px] w-[78px] rounded-full bg-black"></div>
                 <div class="px-5 pb-5 pt-3">
                   <div class="mx-auto mb-3 h-1 w-9 rounded-full bg-black/15"></div>
-                  <img src="/images/podcast-cover.jpg" alt="" class="block aspect-square w-full rounded-xl object-cover shadow-lg" />
+                  <img src="/images/podcast-cover.jpg" alt="The Email Growth Show podcast cover" class="block aspect-square w-full rounded-xl object-cover shadow-lg" />
                   <p class="mt-4 text-[10px] font-medium uppercase tracking-wide text-black/50">{phoneDate}</p>
                   <p class="mt-1 text-[15px] font-semibold leading-snug text-black line-clamp-2">{phoneEpisode.title}</p>
                   <p class="text-[13px] text-pink">The Email Growth Show</p>
