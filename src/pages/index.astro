@@ -12,6 +12,38 @@ import reviewData from '../data/listener-reviews.json';
 
 const testimonials = [
   {
+    quote: "Kylie is the real deal. She gives you the exact strategy you need, wrapped in the kind of loving truth-telling that somehow makes you feel both seen and unstoppable.",
+    name: 'Carly F.',
+  },
+  {
+    quote: "If you want a coach who’s going to show up, tell you the truth, push you, support you, and actually help you make money ... Kylie is it.",
+    name: 'Julie B.',
+  },
+  {
+    quote: "Kylie is honest, direct, and full of integrity. She gave me clear next steps for my business and was super thoughtful about it!",
+    name: 'Natalie E.',
+  },
+  {
+    quote: "I love that her feedback was honest but truly kind and respectful, showing keen awareness of where I am in my business journey and how easily overwhelm can occur.",
+    name: 'Erica A.',
+  },
+  {
+    quote: "The recommendations were clear and simple. Not to mention they helped me see the pattern I kept repeating: trying to always do more work.",
+    name: 'Jen',
+  },
+  {
+    quote: "She totally frees you from that pressure of having to be on socials to grow your business and is super honest and generous with everything that she shares.",
+    name: 'Sarah',
+  },
+  {
+    quote: "Kylie’s an honest, genuine and 1000% authentic person which I value so much.",
+    name: 'Laurel V.',
+  },
+  {
+    quote: "Kylie Kelly is the real deal. She works hard at her craft, she serves the female entrepreneur with straight talk and compassion, and she will teach you how to do the work to see growth.",
+    name: 'Apple Podcasts review',
+  },
+  {
     quote: "I went from stuck and overwhelmed to 122 new subscribers, in just days of working with Kylie (all without social media!!) She is great at what she does!!",
     name: 'Erin K.',
   },
@@ -232,6 +264,34 @@ const tickerItems = [
     </div>
   </section>
 
+  <!-- HAPPY CLIENTS / TESTIMONIAL SLIDER -->
+  <section class="bg-black text-white px-6 py-20">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="text-pink text-xs uppercase tracking-widest font-normal mb-3">— Happy Clients —</p>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-14">Real students. <span class="script-accent italic text-pink">Real results.</span></h2>
+      <div class="min-h-[220px] sm:min-h-[160px] flex flex-col items-center justify-center">
+        {testimonials.map((t, i) => (
+          <div class="testimonial-slide" data-index={i} style={i === 0 ? '' : 'display:none;'}>
+            <p class="font-serif text-xl sm:text-2xl leading-relaxed text-white mb-6">&ldquo;{t.quote}&rdquo;</p>
+            <p class="text-pink text-xs uppercase tracking-widest font-semibold">— {t.name}</p>
+          </div>
+        ))}
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-1 mt-12 max-w-md mx-auto">
+        {testimonials.map((t, i) => (
+          <button
+            type="button"
+            class="testimonial-dot grid h-8 w-8 shrink-0 place-items-center rounded-full"
+            data-index={i}
+            aria-label={`Show testimonial from ${t.name}`}
+          >
+            <span class="dot block h-2.5 w-2.5 rounded-full border border-white/40 transition-colors" style={i === 0 ? 'background:#e040fb;border-color:#e040fb;' : 'background:transparent;'}></span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <div class="border-t border-dashed border-warmgray"></div>
 
   <!-- PAIN MIRROR: five thought cards that pop in one after another -->
@@ -401,34 +461,6 @@ const tickerItems = [
       </div>
     </section>
   )}
-
-  <!-- HAPPY CLIENTS / TESTIMONIAL SLIDER -->
-  <section class="bg-black text-white px-6 py-20">
-    <div class="max-w-3xl mx-auto text-center">
-      <p class="text-pink text-xs uppercase tracking-widest font-normal mb-3">— Happy Clients —</p>
-      <h2 class="text-3xl sm:text-4xl font-bold mb-14">Real students. <span class="script-accent italic text-pink">Real results.</span></h2>
-      <div class="min-h-[220px] sm:min-h-[160px] flex flex-col items-center justify-center">
-        {testimonials.map((t, i) => (
-          <div class="testimonial-slide" data-index={i} style={i === 0 ? '' : 'display:none;'}>
-            <p class="font-serif text-xl sm:text-2xl leading-relaxed text-white mb-6">&ldquo;{t.quote}&rdquo;</p>
-            <p class="text-pink text-xs uppercase tracking-widest font-semibold">— {t.name}</p>
-          </div>
-        ))}
-      </div>
-      <div class="flex items-center justify-center gap-1 mt-12">
-        {testimonials.map((t, i) => (
-          <button
-            type="button"
-            class="testimonial-dot grid h-8 w-8 place-items-center rounded-full"
-            data-index={i}
-            aria-label={`Show testimonial from ${t.name}`}
-          >
-            <span class="dot block h-2.5 w-2.5 rounded-full border border-white/40 transition-colors" style={i === 0 ? 'background:#e040fb;border-color:#e040fb;' : 'background:transparent;'}></span>
-          </button>
-        ))}
-      </div>
-    </div>
-  </section>
 
   <script>
     const slides = document.querySelectorAll<HTMLElement>('.testimonial-slide');
