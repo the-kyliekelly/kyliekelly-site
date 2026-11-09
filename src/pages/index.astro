@@ -89,7 +89,10 @@ const tickerItems = [
   'always says thank you & please to Claude',
 ];
 ---
-<Layout title="Kylie Kelly | Grow Your Email List Without Social Media">
+<Layout
+  title="Kylie Kelly | Email Marketing for Women in Business"
+  description="Email marketing strategies for women building online businesses. Grow your list, build authority and get paid, without living on social media."
+>
   <script type="application/ld+json" slot="head" set:html={JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
@@ -127,13 +130,13 @@ const tickerItems = [
     <div class="max-w-6xl mx-auto grid items-center gap-6 sm:gap-8 lg:gap-14 lg:grid-cols-[1.2fr_1fr]">
       <div class="text-center lg:text-left lg:pl-4">
         <p class="text-pink text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] mb-4 sm:mb-5">Hi, I&rsquo;m Kylie, your biz cheerleader</p>
-        <h1 class="text-[31px] sm:text-[46px] lg:text-[56px] font-bold leading-[1.1] mb-5 sm:mb-6 text-balance">
+        <h1 class="text-[31px] sm:text-[46px] lg:text-[56px] font-bold leading-[1.1] mb-8 sm:mb-10 lg:mb-12 text-balance">
           In your corner, telling you the truth, and handing you <em class="italic font-bold text-pink">your next step.</em>
         </h1>
-        <p class="text-white text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0 mb-3">
+        <p class="text-white text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0 mb-5 sm:mb-6">
           Grow your audience, build your authority and get paid, with sexy marketing strategies that keep selling while you&rsquo;re offline.
         </p>
-        <p class="text-white/75 text-sm sm:text-base mb-6 sm:mb-9">For women building online businesses.</p>
+        <p class="text-white/75 text-sm sm:text-base mb-9 sm:mb-12">For women building online businesses.</p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-5">
           <a
@@ -155,7 +158,7 @@ const tickerItems = [
       <div class="order-first lg:order-last flex justify-center items-center">
         <div class="relative">
           <div class="hidden lg:block absolute -left-24 top-10 w-[170px] bg-white p-[7px] pb-[22px] shadow-2xl -rotate-[9deg]" aria-hidden="true">
-            <img src="/images/responsive/hero-7-400.webp" width="400" height="600" alt="" loading="lazy" decoding="async" class="block w-full h-auto" />
+            <img src="/images/responsive/hero-2-400.webp" width="400" height="600" alt="" loading="lazy" decoding="async" class="block w-full h-auto" />
           </div>
           <div class="relative z-10 w-[148px] sm:w-[260px] lg:w-[380px] bg-white p-[5px] pb-4 sm:p-2 sm:pb-6 lg:p-3 lg:pb-9 shadow-2xl rotate-[3deg]">
             <img
@@ -189,12 +192,44 @@ const tickerItems = [
     </div>
   </section>
 
-  <!-- STATEMENT -->
-  <section class="bg-white px-6 pt-12 pb-14 sm:pt-14 sm:pb-16 text-center border-t border-black/10">
-    <p class="text-pink-deep text-xs uppercase tracking-widest font-semibold mb-4">The Kylie Kelly Promise</p>
-    <p class="font-serif font-normal italic text-[18px] sm:text-[22px] lg:text-[25px] leading-[1.45] max-w-[38em] mx-auto text-black text-balance">
-      I'm on a mission to <strong class="font-bold">help you get known, trusted, and selling to the right people</strong>. Built on the system that took me from 0 to 7,000+ subscribers in 18 months - <span class="whitespace-nowrap"><Highlight>I want you to have consistent sales</Highlight></span> from visibility systems that keep working long after you build them.
-    </p>
+  <!-- THE PROMISE: three things you can count on -->
+  <section class="bg-white px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 border-t border-black/10">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center">
+        <p class="text-pink-deep text-xs uppercase tracking-widest font-semibold mb-4">The Kylie Kelly Promise</p>
+        <h2 class="font-serif font-bold text-[30px] sm:text-[42px] lg:text-[50px] leading-[1.12] text-black text-balance mb-6">
+          Three things you can <em class="italic text-pink-deep">count on</em> from me.
+        </h2>
+        <p class="text-base sm:text-lg leading-relaxed max-w-2xl mx-auto text-black/80 text-pretty">
+          Online it can feel like smoke and mirrors, with everyone shouting that their program is the one that will make the difference. Here&rsquo;s what you can count on from me.
+        </p>
+      </div>
+
+      <ol class="grid gap-5 md:grid-cols-3 mt-10 sm:mt-14 list-none p-0">
+        <li class="rounded-2xl bg-offwhite p-7 sm:p-8">
+          <span class="block font-serif italic text-[40px] leading-none text-pink-deep mb-4" aria-hidden="true">01</span>
+          <h3 class="font-serif font-bold text-[21px] sm:text-[23px] leading-snug text-black mb-3">I&rsquo;ll make the truth safe to hear.</h3>
+          <p class="text-[15px] sm:text-base leading-relaxed text-black/80">I&rsquo;ll tell you what I see in your business, honestly and kindly. If something isn&rsquo;t working, you&rsquo;ll hear it from me, gently and without the sugar-coating.</p>
+        </li>
+        <li class="rounded-2xl bg-offwhite p-7 sm:p-8">
+          <span class="block font-serif italic text-[40px] leading-none text-pink-deep mb-4" aria-hidden="true">02</span>
+          <h3 class="font-serif font-bold text-[21px] sm:text-[23px] leading-snug text-black mb-3">I&rsquo;ll keep your next step to ONE thing.</h3>
+          <p class="text-[15px] sm:text-base leading-relaxed text-black/80">You&rsquo;ll leave every conversation knowing exactly what to do next. One thing, not twelve.</p>
+        </li>
+        <li class="rounded-2xl bg-offwhite p-7 sm:p-8">
+          <span class="block font-serif italic text-[40px] leading-none text-pink-deep mb-4" aria-hidden="true">03</span>
+          <h3 class="font-serif font-bold text-[21px] sm:text-[23px] leading-snug text-black mb-3">I&rsquo;ll never ask you to show up as someone you&rsquo;re not.</h3>
+          <p class="text-[15px] sm:text-base leading-relaxed text-black/80">No dancing on Reels. No pretending to be an extrovert. No being &ldquo;always on&rdquo; to stay visible. You&rsquo;ll grow in a way that feels like you.</p>
+        </li>
+      </ol>
+
+      <div class="text-center mt-12 sm:mt-16">
+        <p class="font-serif italic text-[18px] sm:text-[22px] lg:text-[24px] leading-[1.5] max-w-[36em] mx-auto text-black text-pretty">
+          You don&rsquo;t need social media to build a business. <span class="whitespace-nowrap"><Highlight>I built mine without it:</Highlight></span> 0 to 7,000+ subscribers in 18 months, a top 1.5% podcast and a 1,400+ person community, all built through email, collaborations and other people&rsquo;s audiences. I&rsquo;ll show you how.
+        </p>
+        <p class="font-serif font-bold text-[22px] sm:text-[28px] text-pink-deep mt-8 sm:mt-10">And I&rsquo;ll be cheering you on, always.</p>
+      </div>
+    </div>
   </section>
 
   <div class="border-t border-dashed border-warmgray"></div>
