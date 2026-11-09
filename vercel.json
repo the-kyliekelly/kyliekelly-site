@@ -301,6 +301,16 @@
       "permanent": false
     },
     {
+      "source": "/question",
+      "destination": "https://airtable.com/app6EcrVvUnV8Xv57/paghKEcyWPt8mdod8/form",
+      "permanent": false
+    },
+    {
+      "source": "/question/",
+      "destination": "https://airtable.com/app6EcrVvUnV8Xv57/paghKEcyWPt8mdod8/form",
+      "permanent": false
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true
