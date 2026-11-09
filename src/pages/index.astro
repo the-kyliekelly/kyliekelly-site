@@ -290,6 +290,79 @@ const tickerItems = [
 
   <div class="border-t border-dashed border-warmgray"></div>
 
+  <!-- MEET KYLIE -->
+  <section class="bg-pink-light overflow-hidden py-3">
+    <div class="ticker-wrap flex">
+      <div class="ticker-track flex items-center gap-10 pr-10 shrink-0">
+        {tickerItems.map((item) => (
+          <span class="flex items-center gap-10 text-xs sm:text-sm uppercase tracking-widest text-black font-normal whitespace-nowrap">
+            {item}
+            <span class="text-pink text-base">+</span>
+          </span>
+        ))}
+      </div>
+      <div class="ticker-track flex items-center gap-10 pr-10 shrink-0" aria-hidden="true">
+        {tickerItems.map((item) => (
+          <span class="flex items-center gap-10 text-xs sm:text-sm uppercase tracking-widest text-black font-normal whitespace-nowrap">
+            {item}
+            <span class="text-pink text-base">+</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .ticker-wrap {
+      width: max-content;
+      animation: ticker-scroll 50s linear infinite;
+    }
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-wrap { animation: none; }
+    }
+  </style>
+
+  <section class="bg-offwhite px-6 py-28 sm:py-36">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-[1fr_1.2fr] gap-12 items-start">
+      <div>
+        <p class="text-pink-deep text-xs uppercase tracking-widest font-semibold mb-3">— Meet Kylie —</p>
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+          Kylie <span class="script-accent italic text-pink">{'{founder}'}</span> + Nick, Spencer &amp; Sammy <span class="script-accent italic text-pink">{'{my why}'}</span>.
+        </h2>
+        <p class="text-xs uppercase tracking-wide text-black font-semibold mb-6">
+          One builds the strategy. The others are why school pickup never moves.
+        </p>
+        <ul class="text-black text-sm space-y-2 mb-4">
+          <li><span class="text-pink">+</span> From 0 to 7,000+ email subscribers in 18 months, no algorithm.</li>
+          <li><span class="text-pink">+</span> A Skool community of 1,300+.</li>
+          <li><span class="text-pink">+</span> A podcast ranked in the top 1.5% globally.</li>
+        </ul>
+        <p class="text-black mb-8">
+          Built around nap times, school runs, and a genuine belief that business gets to be fun.
+        </p>
+        <a href="/meet-kylie" class="btn-primary">Get to Know Kylie →</a>
+      </div>
+      <div class="grid grid-cols-2 gap-6 items-start">
+        <div class="dev-polaroid bg-white p-3 rounded-sm shadow-2xl" style="--rest:-3deg;">
+          <img src="/images/responsive/kylie-podcast-800.webp" srcset="/images/responsive/kylie-podcast-480.webp 480w, /images/responsive/kylie-podcast-800.webp 800w" sizes="(min-width: 768px) 400px, 80vw" width="800" height="800" loading="lazy" decoding="async" alt="Kylie Kelly" class="w-full rounded-sm" />
+          <div class="h-16 flex items-center justify-center">
+            <p class="text-center font-typewriter text-base uppercase tracking-wide text-black">Kylie</p>
+          </div>
+        </div>
+        <div class="dev-polaroid bg-white p-3 rounded-sm shadow-2xl mt-10" style="--rest:3deg;">
+          <img src="/images/responsive/little-fam-800.webp" srcset="/images/responsive/little-fam-480.webp 480w, /images/responsive/little-fam-800.webp 800w" sizes="(min-width: 768px) 400px, 80vw" width="800" height="1203" loading="lazy" decoding="async" alt="Kylie with Nick, Spencer and Sammy" class="w-full rounded-sm" />
+          <div class="h-16 flex items-center justify-center">
+            <p class="text-center font-typewriter text-base uppercase tracking-wide text-black">Nick, Spencer &amp; Sammy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PAIN MIRROR: five thought cards that pop in one after another -->
   <section class="px-6 pt-14 pb-16 sm:pt-16 sm:pb-20">
     <div class="max-w-5xl mx-auto">
@@ -493,79 +566,6 @@ const tickerItems = [
 
     if (slides.length > 0) resetTimer();
   </script>
-
-  <!-- MEET KYLIE -->
-  <section class="bg-pink-light overflow-hidden py-3">
-    <div class="ticker-wrap flex">
-      <div class="ticker-track flex items-center gap-10 pr-10 shrink-0">
-        {tickerItems.map((item) => (
-          <span class="flex items-center gap-10 text-xs sm:text-sm uppercase tracking-widest text-black font-normal whitespace-nowrap">
-            {item}
-            <span class="text-pink text-base">+</span>
-          </span>
-        ))}
-      </div>
-      <div class="ticker-track flex items-center gap-10 pr-10 shrink-0" aria-hidden="true">
-        {tickerItems.map((item) => (
-          <span class="flex items-center gap-10 text-xs sm:text-sm uppercase tracking-widest text-black font-normal whitespace-nowrap">
-            {item}
-            <span class="text-pink text-base">+</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <style>
-    .ticker-wrap {
-      width: max-content;
-      animation: ticker-scroll 50s linear infinite;
-    }
-    @keyframes ticker-scroll {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .ticker-wrap { animation: none; }
-    }
-  </style>
-
-  <section class="bg-offwhite px-6 py-28 sm:py-36">
-    <div class="max-w-5xl mx-auto grid md:grid-cols-[1fr_1.2fr] gap-12 items-start">
-      <div>
-        <p class="text-pink-deep text-xs uppercase tracking-widest font-semibold mb-3">— Meet Kylie —</p>
-        <h2 class="text-3xl sm:text-4xl font-bold mb-4">
-          Kylie <span class="script-accent italic text-pink">{'{founder}'}</span> + Nick, Spencer &amp; Sammy <span class="script-accent italic text-pink">{'{my why}'}</span>.
-        </h2>
-        <p class="text-xs uppercase tracking-wide text-black font-semibold mb-6">
-          One builds the strategy. The others are why school pickup never moves.
-        </p>
-        <ul class="text-black text-sm space-y-2 mb-4">
-          <li><span class="text-pink">+</span> From 0 to 7,000+ email subscribers in 18 months, no algorithm.</li>
-          <li><span class="text-pink">+</span> A Skool community of 1,300+.</li>
-          <li><span class="text-pink">+</span> A podcast ranked in the top 1.5% globally.</li>
-        </ul>
-        <p class="text-black mb-8">
-          Built around nap times, school runs, and a genuine belief that business gets to be fun.
-        </p>
-        <a href="/meet-kylie" class="btn-primary">Get to Know Kylie →</a>
-      </div>
-      <div class="grid grid-cols-2 gap-6 items-start">
-        <div class="dev-polaroid bg-white p-3 rounded-sm shadow-2xl" style="--rest:-3deg;">
-          <img src="/images/responsive/kylie-podcast-800.webp" srcset="/images/responsive/kylie-podcast-480.webp 480w, /images/responsive/kylie-podcast-800.webp 800w" sizes="(min-width: 768px) 400px, 80vw" width="800" height="800" loading="lazy" decoding="async" alt="Kylie Kelly" class="w-full rounded-sm" />
-          <div class="h-16 flex items-center justify-center">
-            <p class="text-center font-typewriter text-base uppercase tracking-wide text-black">Kylie</p>
-          </div>
-        </div>
-        <div class="dev-polaroid bg-white p-3 rounded-sm shadow-2xl mt-10" style="--rest:3deg;">
-          <img src="/images/responsive/little-fam-800.webp" srcset="/images/responsive/little-fam-480.webp 480w, /images/responsive/little-fam-800.webp 800w" sizes="(min-width: 768px) 400px, 80vw" width="800" height="1203" loading="lazy" decoding="async" alt="Kylie with Nick, Spencer and Sammy" class="w-full rounded-sm" />
-          <div class="h-16 flex items-center justify-center">
-            <p class="text-center font-typewriter text-base uppercase tracking-wide text-black">Nick, Spencer &amp; Sammy</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- PODCAST PROMO: white section, brand-styled latest episodes, proof numbers -->
   <section class="bg-white text-black px-6 py-20 sm:py-24 relative overflow-hidden">
