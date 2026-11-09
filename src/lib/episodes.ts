@@ -149,6 +149,10 @@ const slugFromTitle = (title: string) => {
   return kept.join('-');
 };
 
+// Episodes left out of every list on the site (archive, homepage, previous / next links). Their pages redirect elsewhere.
+// Ep 154 introduced the Email Growth Club, which is retired; its page now redirects to the main list-growth guide.
+const HIDDEN_EPISODE_HREFS = new Set(['/grow-your-email-list-without-social-media-inside-the-email-growth-club/']);
+
 let cachedEpisodes: Promise<Episode[]> | null = null;
 
 // The feed is read once per build and shared by every page.
@@ -178,6 +182,6 @@ async function loadEpisodes(): Promise<Episode[]> {
         topics: topicsFor(full.num, full.title, full.summary, topicRules as TopicRules),
       };
     })
-    .filter((ep) => ep.href)
+    .filter((ep) => ep.href && !HIDDEN_EPISODE_HREFS.has(ep.href))
     .sort((x, y) => Number(y.num) - Number(x.num));
 }

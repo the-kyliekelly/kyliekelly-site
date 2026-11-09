@@ -12,6 +12,7 @@ import Layout from '../layouts/Layout.astro';
 import EpisodeArt from './EpisodeArt.astro';
 import PodcastFreebieBand from './PodcastFreebieBand.astro';
 import AskKylieBand from './AskKylieBand.astro';
+import ListGrowthHub from './ListGrowthHub.astro';
 import { parseShowNotes, tagFindCoLab, tagFindCoLabUrl, type ParsedNotes } from '../lib/showNotes';
 import { guestPhotoFor } from '../lib/guestPhotos';
 import { formatAuDate } from '../lib/dates';
@@ -239,6 +240,9 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
 
         <div class="min-w-0 space-y-8">
 
+          <!-- LIST GROWTH: a "Start here" link up to the main guide -->
+          <ListGrowthHub slug={post.slug} place="top" />
+
           {playerHtml && (
             <section>
               <h2 class="sr-only">Listen to the episode</h2>
@@ -300,6 +304,9 @@ const playerHtml = notes.player ? `<div id="buzzsprout-player-${notes.player.id}
               </section>
             ))}
           </div>
+
+          <!-- LIST GROWTH: "Go deeper" links from the main guide -->
+          <ListGrowthHub slug={post.slug} place="bottom" />
 
           <!-- GUEST -->
           {guest && notes.guestSection && (

@@ -1,0 +1,48 @@
+---
+// Ties the list-growth posts together so search engines (and readers) see one main guide.
+//   - On the main guide: a "Go deeper" list of the specialist posts.
+//   - On the other list-growth posts: a "Start here" link up to the main guide.
+// The slugs live in src/data/list-growth-hub.json. Titles are read from the posts themselves.
+import hub from '../data/list-growth-hub.json';
+import posts from '../data/blog-posts.json';
+
+interface Props {
+  slug: string;
+  /** 'top' = the "Start here" box (other list-growth posts); 'bottom' = the "Go deeper" list (main guide). */
+  place: 'top' | 'bottom';
+}
+const { slug, place } = Astro.props;
+const titleOf = (s: string) =>
+  (posts.find((p) => p.slug === s)?.title ?? '')
+    .replace(/&#8217;|&rsquo;/g, '’')
+    .replace(/&amp;/g, '&');
+const isMain = slug === hub.main;
+const isSupporting = hub.supporting.includes(slug);
+const mainTitle = titleOf(hub.main);
+const deeper = hub.deeper.map((s) => ({ href: `/${s}/`, title: titleOf(s) })).filter((d) => d.title);
+---
+{place === 'top' && isSupporting && mainTitle && (
+  <p class="border-l-4 border-pink pl-4 leading-snug text-black">
+    <span class="mr-2 text-[11px] font-semibold uppercase tracking-[0.18em]">Start here</span>
+    New to growing your list?
+    <a href={`/${hub.main}/`} class="font-semibold underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:decoration-black">Read my full guide: {mainTitle} &rarr;</a>
+  </p>
+)}
+{place === 'bottom' && isMain && deeper.length > 0 && (
+  <section class="border-t border-black/10 pt-8">
+    <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-2">Go deeper on each way to grow your list</h2>
+    <p class="mb-5 text-black/80">Each of these goes into one of the methods above in more detail.</p>
+    <ul class="space-y-3">
+      {deeper.map((d) => (
+        <li>
+          <a href={d.href} class="group flex items-start gap-3 leading-snug text-black">
+            <span class="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black" aria-hidden="true">
+              <svg viewBox="0 0 16 16" class="h-3 w-3 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
+            </span>
+            <span class="underline decoration-black/25 decoration-1 underline-offset-4 transition-colors group-hover:decoration-pink">{d.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

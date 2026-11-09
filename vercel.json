@@ -311,6 +311,16 @@
       "permanent": false
     },
     {
+      "source": "/grow-your-email-list-without-social-media-inside-the-email-growth-club",
+      "destination": "/grow-email-list-without-instagram-ads",
+      "permanent": true
+    },
+    {
+      "source": "/grow-your-email-list-without-social-media-inside-the-email-growth-club/",
+      "destination": "/grow-email-list-without-instagram-ads",
+      "permanent": true
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true
