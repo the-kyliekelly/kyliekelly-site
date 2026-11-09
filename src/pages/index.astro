@@ -37,8 +37,9 @@ const testimonials = [
   },
 ];
 
-// One call to action above the fold: Work with me. (Free community and the shop are further down the page and in the menu and footer.)
-const heroCta = { label: 'Work with me', href: '/services' };
+// Above the fold: a main button (the free quiz) and a quieter one (Work with me). The free community and the shop are further down the page and in the menu and footer.
+const heroCta = { label: 'Find my next step', href: 'https://kyliekelly.myflodesk.com/audience' };
+const heroCtaSecondary = { label: 'Work with me', href: '/services' };
 
 // Signature course spotlight.
 const signatureCourse = {
@@ -121,38 +122,52 @@ const tickerItems = [
     </p>
   </section>
 
-  <!-- HERO: one centred column, one call to action, polaroid fan -->
-  <section class="bg-black text-white px-6 pt-14 sm:pt-16 text-center relative overflow-hidden">
-    <div class="max-w-3xl mx-auto">
-      <h1 class="text-[29px] sm:text-[40px] lg:text-[44px] font-bold leading-[1.15] mb-5 text-balance">
-        Helping you get <em class="italic font-bold text-pink">known, trusted, and selling,</em>
-        with an email list &amp; real relationships that work
-        <em class="italic font-normal">{"{even when you're not online}"}</em>.
-      </h1>
-      <p class="text-white text-base mb-9">For coaches, course creators and service providers.</p>
+  <!-- HERO: leads with Kylie. Text on the left, her photo beside the headline (on a phone the photo sits on top). -->
+  <section class="bg-black text-white px-6 pt-9 pb-14 sm:pt-14 sm:pb-20 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto grid items-center gap-6 sm:gap-8 lg:gap-14 lg:grid-cols-[1.2fr_1fr]">
+      <div class="text-center lg:text-left lg:pl-4">
+        <p class="text-pink text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] mb-4 sm:mb-5">Hi, I&rsquo;m Kylie, your biz cheerleader</p>
+        <h1 class="text-[31px] sm:text-[46px] lg:text-[56px] font-bold leading-[1.1] mb-5 sm:mb-6 text-balance">
+          In your corner, telling you the truth, and handing you <em class="italic font-bold text-pink">your next step.</em>
+        </h1>
+        <p class="text-white text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0 mb-3">
+          Grow your audience, build your authority and get paid, with sexy marketing strategies that keep selling while you&rsquo;re offline.
+        </p>
+        <p class="text-white/75 text-sm sm:text-base mb-6 sm:mb-9">For women building online businesses.</p>
 
-      <div class="flex justify-center">
-        <a
-          href={heroCta.href}
-          class="group inline-flex items-center justify-between gap-6 rounded-full bg-white text-black pl-8 pr-2.5 py-2.5 lg:pl-10 lg:py-3 lg:pr-3 text-base lg:text-lg font-semibold shadow-[0_10px_30px_rgba(224,64,251,0.28)] transition duration-300 hover:-translate-y-1 hover:bg-pink hover:text-white"
-        >
-          <span>{heroCta.label}</span>
-          <span class="grid place-items-center h-11 w-11 lg:h-12 lg:w-12 rounded-full bg-black text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black">
-            <svg viewBox="0 0 16 16" class="h-4 w-4 lg:h-5 lg:w-5 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
-          </span>
-        </a>
+        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-5">
+          <a
+            href={heroCta.href}
+            class="group inline-flex items-center justify-between gap-6 rounded-full bg-white text-black pl-8 pr-2.5 py-2.5 lg:pl-10 lg:py-3 lg:pr-3 text-base lg:text-lg font-semibold shadow-[0_10px_30px_rgba(224,64,251,0.28)] transition duration-300 hover:-translate-y-1 hover:bg-pink hover:text-white"
+          >
+            <span>{heroCta.label}</span>
+            <span class="grid place-items-center h-11 w-11 lg:h-12 lg:w-12 rounded-full bg-black text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black">
+              <svg viewBox="0 0 16 16" class="h-4 w-4 lg:h-5 lg:w-5 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
+            </span>
+          </a>
+          <a
+            href={heroCtaSecondary.href}
+            class="inline-flex items-center justify-center rounded-full border border-white/60 px-8 py-3.5 text-base font-semibold text-white transition duration-300 hover:border-pink hover:text-pink"
+          >{heroCtaSecondary.label}</a>
+        </div>
       </div>
-    </div>
 
-    <div class="flex justify-center items-start mt-16 sm:mt-20 h-[230px] sm:h-[285px] lg:h-[360px]">
-      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl -rotate-[12deg] translate-y-6 -mr-[16px] sm:-mr-[26px] lg:-mr-[38px]">
-        <img src="/images/hero-1.jpg" alt="Kylie Kelly" class="block w-full" />
-      </div>
-      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl rotate-[3deg] -translate-y-3 z-10">
-        <img src="/images/hero-2.jpg" alt="Kylie Kelly laughing" class="block w-full" />
-      </div>
-      <div class="flex-none w-[118px] sm:w-[190px] lg:w-[240px] bg-white p-[5px] pb-4 sm:p-[7px] sm:pb-[22px] lg:p-[9px] lg:pb-[28px] shadow-2xl rotate-[11deg] translate-y-5 -ml-[16px] sm:-ml-[26px] lg:-ml-[38px] z-20">
-        <img src="/images/hero-7.jpg" alt="Kylie Kelly holding a disco ball" class="block w-full" />
+      <div class="order-first lg:order-last flex justify-center items-center">
+        <div class="relative">
+          <div class="hidden lg:block absolute -left-24 top-10 w-[170px] bg-white p-[7px] pb-[22px] shadow-2xl -rotate-[9deg]" aria-hidden="true">
+            <img src="/images/responsive/hero-7-400.webp" width="400" height="600" alt="" loading="lazy" decoding="async" class="block w-full h-auto" />
+          </div>
+          <div class="relative z-10 w-[148px] sm:w-[260px] lg:w-[380px] bg-white p-[5px] pb-4 sm:p-2 sm:pb-6 lg:p-3 lg:pb-9 shadow-2xl rotate-[3deg]">
+            <img
+              src="/images/responsive/hero-1-800.webp"
+              srcset="/images/responsive/hero-1-480.webp 480w, /images/responsive/hero-1-800.webp 800w"
+              sizes="(min-width: 1024px) 356px, (min-width: 640px) 244px, 138px"
+              width="800" height="800" fetchpriority="high" decoding="async"
+              alt="Kylie Kelly smiling at the camera"
+              class="block w-full h-auto"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </section>
