@@ -5,6 +5,7 @@ import CrossingRibbons from '../components/CrossingRibbons.astro';
 import RotatingBadge from '../components/RotatingBadge.astro';
 import CountUpStats from '../components/CountUpStats.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
+import ArrowButton from '../components/ArrowButton.astro';
 import { getEpisodes } from '../lib/episodes';
 import { formatAuDate } from '../lib/dates';
 import { getDownloads } from '../lib/stats';
@@ -205,18 +206,20 @@ const tickerItems = [
 
   <!-- AS FEATURED IN -->
   <section class="bg-white px-6 py-5 lg:py-7">
-    <p class="text-center text-xs uppercase tracking-widest text-muted mb-4">As featured in:</p>
-    <div class="max-w-4xl lg:max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-12 lg:gap-x-16 gap-y-3">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-8 lg:gap-12">
+    <p class="text-center sm:text-left text-xs uppercase tracking-widest text-muted whitespace-nowrap">As featured in:</p>
+    <div class="flex flex-1 flex-wrap items-center justify-center sm:justify-between gap-x-4 sm:gap-x-8 lg:gap-x-12 gap-y-3">
       <a href="https://www.forbes.com/advisor/business/software/email-marketing-strategy/" target="_blank" rel="noopener">
-        <img src="/images/press/forbes.png" alt="Forbes" class="h-5 sm:h-8 lg:h-9 xl:h-10 w-auto opacity-80 hover:opacity-100 transition-opacity" />
+        <img src="/images/press/forbes.png" alt="Forbes" class="h-5 sm:h-6 md:h-8 lg:h-9 xl:h-10 w-auto opacity-80 hover:opacity-100 transition-opacity" />
       </a>
-      <img src="/images/press/business-insider.jpg" alt="Business Insider" class="h-5 sm:h-8 lg:h-9 xl:h-10 w-auto opacity-80" />
+      <img src="/images/press/business-insider.jpg" alt="Business Insider" class="h-5 sm:h-6 md:h-8 lg:h-9 xl:h-10 w-auto opacity-80" />
       <a href="https://www.londondaily.news/why-six-figure-female-entrepreneurs-are-breaking-up-with-social-media-in-2025/" target="_blank" rel="noopener">
-        <img src="/images/press/london-daily-news.png" alt="London Daily News" class="h-5 sm:h-8 lg:h-9 xl:h-10 w-auto opacity-80 hover:opacity-100 transition-opacity" />
+        <img src="/images/press/london-daily-news.png" alt="London Daily News" class="h-5 sm:h-6 md:h-8 lg:h-9 xl:h-10 w-auto opacity-80 hover:opacity-100 transition-opacity" />
       </a>
       <a href="https://businessmondays.co.uk/independent-business-podcast-surpasses-200-episodes-40000-downloads-highlighting-the-power-of-sustainable-growth/" target="_blank" rel="noopener">
-        <img src="/images/press/business-mondays.jpg" alt="Business Mondays" class="h-7 sm:h-11 lg:h-12 xl:h-14 w-auto opacity-80 hover:opacity-100 transition-opacity" />
+        <img src="/images/press/business-mondays.jpg" alt="Business Mondays" class="h-7 sm:h-9 md:h-11 lg:h-12 xl:h-14 w-auto opacity-80 hover:opacity-100 transition-opacity" />
       </a>
+    </div>
     </div>
   </section>
 
@@ -224,7 +227,7 @@ const tickerItems = [
   <section class="bg-white px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 border-t border-black/10">
     <div class="max-w-5xl mx-auto">
       <div class="text-center">
-        <p class="text-pink-deep text-xs uppercase tracking-widest font-semibold mb-4">The Kylie Kelly Promise</p>
+        <p class="text-black text-xs uppercase tracking-widest font-semibold mb-4">The Kylie Kelly Promise</p>
         <h2 class="font-serif font-bold text-[30px] sm:text-[42px] lg:text-[50px] leading-[1.12] text-black text-balance mb-6">
           Three things <em class="italic font-bold text-pink">{"{you can count on from me.}"}</em>
         </h2>
@@ -235,17 +238,17 @@ const tickerItems = [
 
       <ol class="grid gap-5 md:grid-cols-3 mt-10 sm:mt-14 list-none p-0">
         <li class="rounded-2xl border-2 border-black bg-offwhite p-7 sm:p-8 transition duration-300 ease-out hover:-translate-y-1.5 hover:bg-white hover:shadow-[6px_6px_0_0_#e040fb] active:-translate-y-1.5 active:shadow-[6px_6px_0_0_#e040fb] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0">
-          <span class="block text-[15px] sm:text-base font-bold uppercase tracking-[0.18em] leading-none text-pink-deep mb-5" aria-hidden="true">01</span>
+          <span class="block text-[30px] sm:text-[36px] font-normal tracking-[0.04em] leading-none text-black mb-5" aria-hidden="true">01</span>
           <h3 class="font-serif font-bold text-[21px] sm:text-[23px] leading-snug text-black mb-3">I&rsquo;ll make the truth safe to hear.</h3>
           <p class="text-[15px] sm:text-base leading-relaxed text-black/80">I&rsquo;ll tell you what I see in your business, honestly and kindly. If something isn&rsquo;t working, you&rsquo;ll hear it from me, gently and without the sugar-coating.</p>
         </li>
         <li class="rounded-2xl border-2 border-black bg-offwhite p-7 sm:p-8 transition duration-300 ease-out hover:-translate-y-1.5 hover:bg-white hover:shadow-[6px_6px_0_0_#e040fb] active:-translate-y-1.5 active:shadow-[6px_6px_0_0_#e040fb] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0">
-          <span class="block text-[15px] sm:text-base font-bold uppercase tracking-[0.18em] leading-none text-pink-deep mb-5" aria-hidden="true">02</span>
+          <span class="block text-[30px] sm:text-[36px] font-normal tracking-[0.04em] leading-none text-black mb-5" aria-hidden="true">02</span>
           <h3 class="font-serif font-bold text-[21px] sm:text-[23px] leading-snug text-black mb-3">I&rsquo;ll keep your next step to ONE thing.</h3>
           <p class="text-[15px] sm:text-base leading-relaxed text-black/80">You&rsquo;ll leave every conversation knowing exactly what to do next. One thing, not twelve.</p>
         </li>
         <li class="rounded-2xl border-2 border-black bg-offwhite p-7 sm:p-8 transition duration-300 ease-out hover:-translate-y-1.5 hover:bg-white hover:shadow-[6px_6px_0_0_#e040fb] active:-translate-y-1.5 active:shadow-[6px_6px_0_0_#e040fb] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0">
-          <span class="block text-[15px] sm:text-base font-bold uppercase tracking-[0.18em] leading-none text-pink-deep mb-5" aria-hidden="true">03</span>
+          <span class="block text-[30px] sm:text-[36px] font-normal tracking-[0.04em] leading-none text-black mb-5" aria-hidden="true">03</span>
           <h3 class="font-serif font-bold text-[21px] sm:text-[23px] leading-snug text-black mb-3">I&rsquo;ll never ask you to show up as someone you&rsquo;re not.</h3>
           <p class="text-[15px] sm:text-base leading-relaxed text-black/80">No dancing on Reels. No pretending to be an extrovert. No being &ldquo;always on&rdquo; to stay visible. You&rsquo;ll grow in a way that feels like you.</p>
         </li>
@@ -253,9 +256,9 @@ const tickerItems = [
 
       <div class="text-center mt-12 sm:mt-16">
         <p class="text-base sm:text-lg leading-relaxed max-w-2xl mx-auto text-black/80 text-pretty">
-          You don&rsquo;t need social media to build a business. <span class="whitespace-nowrap"><Highlight>I built mine without it:</Highlight></span> 0 to 7,000+ subscribers in 18 months, a top 1.5% podcast and a 1,400+ person community, all built through email, collaborations and other people&rsquo;s audiences. I&rsquo;ll show you how.
+          You don&rsquo;t need social media to build a business. <span class="whitespace-nowrap"><Highlight>I built mine without it:</Highlight></span> 0 to 7,000+ subscribers in 18 months, a top 1.5% podcast and a 1,400+ person community, <strong class="font-bold">all built through email, collaborations and other people&rsquo;s audiences.</strong> I&rsquo;ll show you how.
         </p>
-        <p class="font-serif font-bold italic text-[22px] sm:text-[28px] text-pink mt-8 sm:mt-10">... and I&rsquo;ll be cheering you on, always.</p>
+        <p class="font-serif font-bold italic text-[22px] sm:text-[28px] text-pink mt-8 sm:mt-10">... and I&rsquo;ll be cheering you on, always. 🎉</p>
       </div>
     </div>
   </section>
@@ -329,7 +332,7 @@ const tickerItems = [
   <section class="bg-offwhite px-6 py-28 sm:py-36">
     <div class="max-w-5xl mx-auto grid md:grid-cols-[1fr_1.2fr] gap-12 items-start">
       <div>
-        <p class="text-pink-deep text-xs uppercase tracking-widest font-semibold mb-3">— Meet Kylie —</p>
+        <p class="text-black text-xs uppercase tracking-widest font-semibold mb-3">— Meet Kylie —</p>
         <h2 class="text-3xl sm:text-4xl font-bold mb-4">
           Kylie <span class="script-accent italic text-pink">{'{founder}'}</span> + Nick, Spencer &amp; Sammy <span class="script-accent italic text-pink">{'{my why}'}</span>.
         </h2>
@@ -344,11 +347,11 @@ const tickerItems = [
         <p class="text-black mb-8">
           Built around nap times, school runs, and a genuine belief that business gets to be fun.
         </p>
-        <a href="/meet-kylie" class="btn-primary">Get to Know Kylie →</a>
+        <ArrowButton href="/meet-kylie" label="Get to Know Kylie" variant="dark" />
       </div>
       <div class="grid grid-cols-2 gap-6 items-start">
         <div class="dev-polaroid bg-white p-3 rounded-sm shadow-2xl" style="--rest:-3deg;">
-          <img src="/images/responsive/kylie-podcast-800.webp" srcset="/images/responsive/kylie-podcast-480.webp 480w, /images/responsive/kylie-podcast-800.webp 800w" sizes="(min-width: 768px) 400px, 80vw" width="800" height="800" loading="lazy" decoding="async" alt="Kylie Kelly" class="w-full rounded-sm" />
+          <img src="/images/responsive/kylie-sequin-800.webp" srcset="/images/responsive/kylie-sequin-480.webp 480w, /images/responsive/kylie-sequin-800.webp 800w" sizes="(min-width: 768px) 400px, 80vw" width="800" height="800" loading="lazy" decoding="async" alt="Kylie Kelly laughing with a microphone" class="w-full rounded-sm" />
           <div class="h-16 flex items-center justify-center">
             <p class="text-center font-typewriter text-base uppercase tracking-wide text-black">Kylie</p>
           </div>
@@ -372,24 +375,24 @@ const tickerItems = [
       <p class="text-black uppercase tracking-widest text-sm text-center mb-10">Sound familiar?</p>
 
       <ul class="flex flex-wrap justify-center gap-4 sm:gap-5" data-pop-group>
-        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
-          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+        <li class="pop-item group w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl border-2 border-transparent bg-offwhite text-black p-[22px] flex items-start gap-4 transition duration-300 ease-out hover:-translate-y-1.5 hover:border-black hover:bg-white hover:shadow-[6px_6px_0_0_#e040fb] active:-translate-y-1.5 active:border-black active:shadow-[6px_6px_0_0_#e040fb] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold transition duration-300 group-hover:rotate-90 group-hover:scale-110 group-active:rotate-90" aria-hidden="true">+</span>
           <span>Maybe you're posting (or not posting) and still wondering where your next client is coming from.</span>
         </li>
-        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
-          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+        <li class="pop-item group w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl border-2 border-transparent bg-offwhite text-black p-[22px] flex items-start gap-4 transition duration-300 ease-out hover:-translate-y-1.5 hover:border-black hover:bg-white hover:shadow-[6px_6px_0_0_#e040fb] active:-translate-y-1.5 active:border-black active:shadow-[6px_6px_0_0_#e040fb] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold transition duration-300 group-hover:rotate-90 group-hover:scale-110 group-active:rotate-90" aria-hidden="true">+</span>
           <span>Maybe your email list doesn't exist yet, has stalled, or it's growing but nobody's buying.</span>
         </li>
-        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
-          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+        <li class="pop-item group w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl border-2 border-transparent bg-offwhite text-black p-[22px] flex items-start gap-4 transition duration-300 ease-out hover:-translate-y-1.5 hover:border-black hover:bg-white hover:shadow-[6px_6px_0_0_#e040fb] active:-translate-y-1.5 active:border-black active:shadow-[6px_6px_0_0_#e040fb] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold transition duration-300 group-hover:rotate-90 group-hover:scale-110 group-active:rotate-90" aria-hidden="true">+</span>
           <span>Maybe you've tried Instagram, then SEO, then Pinterest, and you still don't know what works.</span>
         </li>
-        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-offwhite text-black p-6 flex items-start gap-4">
-          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+        <li class="pop-item group w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl border-2 border-transparent bg-offwhite text-black p-[22px] flex items-start gap-4 transition duration-300 ease-out hover:-translate-y-1.5 hover:border-black hover:bg-white hover:shadow-[6px_6px_0_0_#e040fb] active:-translate-y-1.5 active:border-black active:shadow-[6px_6px_0_0_#e040fb] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold transition duration-300 group-hover:rotate-90 group-hover:scale-110 group-active:rotate-90" aria-hidden="true">+</span>
           <span>Maybe you're tired of being "always on" just to stay visible.</span>
         </li>
-        <li class="pop-item w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl bg-black text-white p-6 flex items-start gap-4">
-          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold" aria-hidden="true">+</span>
+        <li class="pop-item group w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.85rem)] rounded-2xl border-2 border-transparent bg-black text-white p-[22px] flex items-start gap-4 transition duration-300 ease-out hover:-translate-y-1.5 hover:border-pink hover:shadow-[6px_6px_0_0_#e040fb] active:-translate-y-1.5 active:border-pink active:shadow-[6px_6px_0_0_#e040fb] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0">
+          <span class="flex-none h-8 w-8 rounded-full bg-pink text-white grid place-items-center text-lg leading-none font-semibold transition duration-300 group-hover:rotate-90 group-hover:scale-110 group-active:rotate-90" aria-hidden="true">+</span>
           <span>Or maybe you're thinking, "Kylie, that's literally all of it."</span>
         </li>
       </ul>
@@ -431,7 +434,7 @@ const tickerItems = [
 
     <div class="px-6 pt-12 sm:pt-16">
       <div class="max-w-5xl mx-auto">
-        <p class="text-pink-deep text-xs uppercase tracking-widest font-semibold text-center mb-3">&mdash; Ways to Work Together &mdash;</p>
+        <p class="text-pink text-xs uppercase tracking-widest font-semibold text-center mb-3">&mdash; Ways to Work Together &mdash;</p>
         <h2 class="text-3xl sm:text-4xl font-bold text-center mb-3">Three steps, whichever one fits where you're at.</h2>
         <p class="text-black italic text-center max-w-xl mx-auto mb-12 sm:mb-16">{"{no pressure to jump to the end, most people start with step one}"}</p>
 
@@ -444,10 +447,6 @@ const tickerItems = [
                 <h3 class="text-2xl sm:text-3xl font-bold mb-1">Start for free.</h3>
                 <p class="text-xs uppercase tracking-wide text-black mb-4">Email Marketing Skool</p>
                 <p class="text-black mb-4">For online business owners who want more sales from an email list, without living on social media. Inside, you'll learn how to grow an email list of the right people, find collaborations that bring warm subscribers, turn subscribers into buyers, and build visibility without constant posting.</p>
-                <ul class="text-black text-sm space-y-2 mb-6">
-                  <li><span class="text-pink">+</span> A simple 90-day growth plan</li>
-                  <li><span class="text-pink">+</span> The Email Marketing Starter Kit, free on joining</li>
-                </ul>
               </div>
               <div class="flex justify-center order-first md:order-none">
                 <div class="bg-white p-2 pb-6 rounded-sm shadow-xl -rotate-3 w-[190px] sm:w-[230px] max-w-full">
@@ -517,10 +516,10 @@ const tickerItems = [
         <div>
           <p class="text-black text-xs uppercase tracking-widest font-semibold mb-4">{signatureCourse.eyebrow}</p>
           <h2 class="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.02] text-white mb-5 text-balance">{signatureCourse.name}</h2>
-          {signatureCourse.tagline && <p class="text-xl sm:text-2xl font-bold leading-snug mb-5">{signatureCourse.tagline}</p>}
+          {signatureCourse.tagline && <p class="text-xl sm:text-2xl font-bold italic leading-snug mb-5">{signatureCourse.tagline}</p>}
           {signatureCourse.description && <p class="text-black text-lg mb-8 max-w-lg">{signatureCourse.description}</p>}
           {signatureCourse.buttonLabel && (
-            <a href={signatureCourse.href || '#'} {...(signatureCourse.href ? { target: '_blank', rel: 'noopener' } : { onclick: 'return false' })} class="inline-block rounded-full bg-white text-black px-8 py-4 text-[13px] font-bold uppercase tracking-[0.08em] transition-colors hover:bg-pink-light">{signatureCourse.buttonLabel} →</a>
+            <ArrowButton href={signatureCourse.href || '#'} label={signatureCourse.buttonLabel} variant="onPink" />
           )}
         </div>
         <div class="relative mx-auto w-full max-w-[340px] md:max-w-none pt-6 pl-6 sm:pt-8 sm:pl-8">
@@ -725,6 +724,8 @@ const tickerItems = [
         if (!entries.some((e) => e.isIntersecting)) return;
         io.disconnect();
         items.forEach((el) => (el.dataset.pop = 'in'));
+        // Once they have popped in, drop the stagger so the hover animation reacts instantly.
+        window.setTimeout(() => items.forEach((el) => { el.removeAttribute('data-pop'); el.style.removeProperty('--pop-delay'); }), 1500);
       },
       { threshold: 0.2 }
     );

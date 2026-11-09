@@ -1,0 +1,32 @@
+---
+// The pill button with the built-in arrow (the one above the fold on the homepage).
+// variant: 'light' = white pill, for black backgrounds; 'dark' = black pill, for light backgrounds; 'onPink' = white pill that turns black, for pink backgrounds.
+interface Props {
+  href: string;
+  label: string;
+  variant?: 'light' | 'dark' | 'onPink';
+  class?: string;
+}
+const { href, label, variant = 'light', class: extra = '' } = Astro.props;
+const external = /^https?:\/\//.test(href);
+const pill = {
+  light: 'bg-white text-black shadow-[0_10px_30px_rgba(224,64,251,0.28)] hover:bg-pink hover:text-white',
+  dark: 'bg-black text-white shadow-[0_10px_30px_rgba(0,0,0,0.18)] hover:bg-pink',
+  onPink: 'bg-white text-black shadow-[0_10px_30px_rgba(0,0,0,0.18)] hover:bg-black hover:text-white',
+}[variant];
+const circle = {
+  light: 'bg-black text-white group-hover:bg-white group-hover:text-black',
+  dark: 'bg-white text-black group-hover:bg-black group-hover:text-white',
+  onPink: 'bg-black text-white group-hover:bg-white group-hover:text-black',
+}[variant];
+---
+<a
+  href={href}
+  {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+  class:list={['group inline-flex items-center justify-between gap-6 rounded-full pl-8 pr-2.5 py-2.5 lg:pl-10 lg:py-3 lg:pr-3 text-base lg:text-lg font-semibold transition duration-300 hover:-translate-y-1', pill, extra]}
+>
+  <span>{label}</span>
+  <span class:list={['grid place-items-center h-11 w-11 lg:h-12 lg:w-12 rounded-full transition-colors duration-300', circle]}>
+    <svg viewBox="0 0 16 16" class="h-4 w-4 lg:h-5 lg:w-5 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
+  </span>
+</a>
