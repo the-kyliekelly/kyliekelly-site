@@ -1,35 +1,30 @@
 ---
-// A thin bar across the very top of every page for an event Kylie is at. It runs itself:
-//   - until LAST_WEEK_FROM it says "this week", then "last week"
-//   - from SHOW_UNTIL it disappears (the script hides it even on a page built earlier; a rebuild drops it from the page entirely)
-// All dates are Sydney time. To reuse it for another event, change the dates and the words below.
-// To remove the banner altogether, delete <EventBanner /> from src/layouts/Layout.astro.
-const LAST_WEEK_FROM = '2026-11-09T00:00:00+11:00';
-const SHOW_UNTIL = '2026-11-14T00:00:00+11:00';
-const HREF = '/guide?utm_source=website&utm_medium=banner&utm_campaign=event-nov-2026';
+// A thin announcement bar across the very top of every page. It runs itself:
+//   - it shows until SHOW_UNTIL, then disappears (the script hides it even on a page built earlier; a rebuild drops it from the page entirely)
+// Right now it promotes the Money-Making Email System pre-sale. SHOW_UNTIL is the moment the $297 price ends:
+// 11:59pm US Eastern on 30 Nov 2026 = about 3:59pm Sydney time on 1 Dec 2026 (Sydney time shown below).
+// To reuse it for something else, change the date, link and words below.
+// To remove the banner altogether, delete <EventBanner /> from src/layouts/Layout.astro and delete this file.
+const SHOW_UNTIL = '2026-12-01T15:59:00+11:00';
+const HREF = 'https://system.kyliekelly.com/join';
 
-const now = Date.now();
-const live = now < new Date(SHOW_UNTIL).getTime();
-const when = now >= new Date(LAST_WEEK_FROM).getTime() ? 'last' : 'this';
+const live = Date.now() < new Date(SHOW_UNTIL).getTime();
 ---
 {live && (
-  <div data-event-banner data-last-week-from={LAST_WEEK_FROM} data-show-until={SHOW_UNTIL} class="bg-[#c026d3] text-white">
+  <div data-event-banner data-show-until={SHOW_UNTIL} class="bg-[#c026d3] text-white">
     <a href={HREF} class="block px-4 py-2.5 text-center text-[10px] font-normal uppercase leading-snug tracking-[0.04em] transition-colors hover:bg-black min-[420px]:text-[11px] min-[420px]:tracking-[0.1em] sm:text-[12px] sm:tracking-[0.1em] xl:text-[13px] xl:tracking-[0.12em]">
-      <span class="hidden xl:inline">Did we meet at an event <span data-when>{when}</span> week? 👋 Take the free quiz and find out where your next 1000 subscribers are coming from →</span>
-      <span class="xl:hidden">Met me at an event <span data-when>{when}</span> week? Take the free quiz →</span>
+      <span class="hidden sm:inline">The Money-Making Email System is open: $297 until 30 Nov, then $997 →</span>
+      <span class="sm:hidden">Money-Making Email System: $297 until 30 Nov →</span>
     </a>
   </div>
 )}
 
 <script is:inline>
-  // Keeps the banner right on a page that was built days ago: "this week" turns to "last week", then it hides.
+  // Keeps the banner right on a page that was built days ago: it hides itself once the pre-sale has ended.
   window.kkEventBanner = function (now) {
     var el = document.querySelector('[data-event-banner]');
     if (!el) return;
-    var t = now.getTime();
-    el.hidden = t >= new Date(el.getAttribute('data-show-until')).getTime();
-    var word = t >= new Date(el.getAttribute('data-last-week-from')).getTime() ? 'last' : 'this';
-    el.querySelectorAll('[data-when]').forEach(function (s) { s.textContent = word; });
+    el.hidden = now.getTime() >= new Date(el.getAttribute('data-show-until')).getTime();
   };
   window.kkEventBanner(new Date());
 </script>
