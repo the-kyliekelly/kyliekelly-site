@@ -19,6 +19,7 @@ const titleOf = (s: string) =>
 const isMain = slug === hub.main;
 const isSupporting = hub.supporting.includes(slug);
 const mainTitle = titleOf(hub.main);
+const beginnerTitle = titleOf(hub.beginner);
 const deeper = hub.deeper.map((s) => ({ href: `/${s}/`, title: titleOf(s) })).filter((d) => d.title);
 ---
 {place === 'top' && isSupporting && mainTitle && (
@@ -26,12 +27,18 @@ const deeper = hub.deeper.map((s) => ({ href: `/${s}/`, title: titleOf(s) })).fi
     <span class="mr-2 text-[11px] font-semibold uppercase tracking-[0.18em]">Start here</span>
     New to growing your list?
     <a href={`/${hub.main}/`} class="font-semibold underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:decoration-black">Read my full guide: {mainTitle} &rarr;</a>
+    {beginnerTitle && (
+      <span class="mt-1 block">
+        Brand new to email marketing?
+        <a href={`/${hub.beginner}/`} class="font-semibold underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:decoration-black">Start with the beginner&rsquo;s guide: {beginnerTitle} &rarr;</a>
+      </span>
+    )}
   </p>
 )}
 {place === 'bottom' && isMain && deeper.length > 0 && (
   <section class="border-t border-black/10 pt-8">
     <h2 class="font-serif font-bold italic text-2xl sm:text-3xl mb-2">Go deeper on each way to grow your list</h2>
-    <p class="mb-5 text-black/80">Each of these goes into one of the methods above in more detail.</p>
+    <p class="mb-5 text-black/80">Each of these goes into one of the methods above in more detail.{beginnerTitle && (<> New to email marketing altogether? Start with <a href={`/${hub.beginner}/`} class="font-semibold underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:decoration-black">{beginnerTitle}</a>.</>)}</p>
     <ul class="space-y-3">
       {deeper.map((d) => (
         <li>
