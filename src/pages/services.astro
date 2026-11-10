@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Highlight from '../components/Highlight.astro';
 import InnerCircleWaitlist from '../components/InnerCircleWaitlist.astro';
 import RotatingBadge from '../components/RotatingBadge.astro';
 import FreebieReveal from '../components/FreebieReveal.astro';
+import ArrowButton from '../components/ArrowButton.astro';
+import TestimonialSlider from '../components/TestimonialSlider.astro';
 
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 
@@ -15,19 +16,9 @@ const earlyPrice = Date.now() < Date.parse(PRICE_RISES);
 
 // The three steps, shown as a menu at the top of the page.
 const menu = [
-  { num: '01', title: 'Take the quiz', line: 'Answer 6 quick questions and get the list-building strategy most likely to work for your business right now.', href: '#step-01', cta: 'See the details' },
-  { num: '02', title: 'The Money-Making Email System', line: 'My signature email course: start, grow, nurture and sell, all in one place.', href: '#step-02', cta: 'See the details' },
-  { num: '03', title: 'The KK Digital Product Shop', line: 'Grab-and-go courses, templates and trainings, plus the Coaching Group.', href: '#step-03', cta: 'Explore the shop' },
-];
-
-// Real client words, taken from what clients sent. The big line is lifted straight from each quote.
-const testimonials = [
-  { big: '122 new subscribers', quote: 'I went from stuck and overwhelmed to 122 new subscribers, in just days of working with Kylie (all without social media!!) She is great at what she does!!', name: 'Erin K.', role: '', card: 'bg-[#e9d9ec] text-black', rot: '-3deg' },
-  { big: '45 to nearly 800', quote: "I've gone from 45 to currently just under 800 active subscribers in less than a month!", name: 'Amy G.', role: '', card: 'bg-pink text-white', rot: '2deg' },
-  { big: '231 to 643', quote: 'I started with 231 people before I met you and now my email list is currently 643 with 412 new subscribers 🎉', name: 'Celia V.', role: '', card: 'bg-[#fbe6f7] text-black', rot: '-1.5deg' },
-  { big: 'Within a month', quote: 'Within a month I went from not knowing anything about email marketing to knowing exactly how to grow my list & what emails to send.', name: 'Amanda M.', role: 'Facebook Ads Strategist', card: 'bg-white text-black', rot: '3deg' },
-  { big: 'Two course sales', quote: 'I have close to 500 people on my email list AND I’ve just gotten two course sales! In 2 months, I have had more success with this than I did in 5 years of blogging & waiting passively for subscribers (& income) to find me!', name: 'Vanessa R.', role: '', card: 'bg-[#e9d9ec] text-black', rot: '-2deg' },
-  { big: '3/10 to 9/10', quote: 'When we started I told her I had a 3/10 in confidence when it came to email - now… I’m at a 9/10.', name: 'Debra V.', role: 'Sewing Boss', card: 'bg-[#fbe6f7] text-black', rot: '1.5deg' },
+  { num: '01', title: 'Start for free', line: 'Take the 60-second quiz and join the free Email Marketing Skool community.', href: '#step-01', cta: 'See the details', tint: 'bg-white' },
+  { num: '02', title: 'The Money-Making Email System', line: 'My signature email course: start, grow, nurture and sell, all in one place.', href: '#step-02', cta: 'See the details', tint: 'bg-white' },
+  { num: '03', title: 'The KK Digital Product Shop', line: 'Grab-and-go courses, templates and trainings, plus the Coaching Group.', href: '#step-03', cta: 'Explore the shop', tint: 'bg-white' },
 ];
 
 const stats = [
@@ -42,13 +33,15 @@ const offers = [
     id: 'step-01',
     num: '01',
     eyebrow: 'Start here',
-    title: 'Your Next 1,000 Subscribers quiz',
+    title: 'Start for free',
     tag: 'Free \u00b7 60 seconds',
-    desc: 'Answer 6 quick questions and get the list-building strategy most likely to work for your business right now. Then you will know exactly which step to take next.',
+    desc: 'Take the Your Next 1,000 Subscribers quiz: 6 quick questions and you get the list-building strategy most likely to work for your business right now. Then come and join the free Email Marketing Skool community, where 1,400+ women are growing their lists without social media.',
     items: [],
     cta: 'Take the quiz',
     href: '/guide',
-    image: '/images/freebie-mockup.png',
+    cta2: { label: 'Join the free community', href: 'https://www.skool.com/email-marketing-skool/about' },
+    image: 'freebie-mockup',
+    imgW: 1000, imgH: 807, imgSizes: [600, 1000],
     alt: 'The Your Next 1000 Subscribers quiz on a desktop monitor',
     mockup: true,
     flip: false,
@@ -72,7 +65,8 @@ const offers = [
     pop: { bg: 'bg-white', title: "A little bit about what's inside:" },
     cta: 'Get the Money-Making Email System',
     href: 'https://system.kyliekelly.com/join',
-    image: '/images/mmes-checkout.jpg',
+    image: 'mmes-checkout',
+    imgW: 800, imgH: 788, imgSizes: [480, 800],
     alt: 'Kylie Kelly smiling in a bright pink top',
     flip: true,
     bg: 'bg-[#e9d9ec]',
@@ -92,7 +86,8 @@ const offers = [
     pop: { bg: 'bg-[#e9d9ec]', title: "A little bit about what's in the shop:" },
     cta: 'Explore the shop',
     href: 'https://shop.kyliekelly.com/',
-    image: '/images/shop-mockup.jpg',
+    image: 'shop-mockup',
+    imgW: 800, imgH: 800, imgSizes: [480, 800],
     alt: 'The KK Digital Product Shop preview',
     flip: false,
     bg: 'bg-white',
@@ -108,16 +103,16 @@ const faqs = [
     a: "Start with the quiz. It takes about a minute and points you to the list-building strategy that fits your business right now. If you're ready to build the whole system, go for the Money-Making Email System. If you just need one thing, or want me in your corner every week, explore the shop.",
   },
   {
-    q: 'Do I need to be on social media?',
-    a: 'No. Everything I teach is built around growing your email list and selling to it without relying on social media.',
+    q: 'Do I need to be on social media to grow my email list?',
+    a: 'No. Everything I teach is built around growing your email list and selling to it without relying on social media. I grew my own list from zero to 7,000+ subscribers in 18 months that way.',
   },
   {
     q: "What's the Money-Making Email System?",
-    a: "It's my signature email course. It takes you through starting, growing, nurturing and selling to your email list in one place, built on collaborations and relationships instead of the algorithm.",
+    a: "It's my signature email marketing course. It takes you through starting, growing, nurturing and selling to your email list in one place, built on collaborations and relationships instead of the algorithm.",
   },
   {
     q: "What's in the shop?",
-    a: 'Grab-and-go courses, templates and trainings, starting at a $17 collaboration database. The big ones are 50 a Day ($27), my system for growing your list by 50 new subscribers a day, and the Coaching Group, weekly voice-note coaching straight to your phone.',
+    a: 'Grab-and-go courses, templates and trainings for growing your list without social media. The big ones are 50 a Day ($27), my system for growing your list by 50 new subscribers a day, and the Coaching Group, weekly voice-note coaching straight to your phone.',
   },
   {
     q: 'What is the Inner Circle?',
@@ -125,40 +120,61 @@ const faqs = [
   },
 ];
 
----
-<Layout title="Work With Me | Kylie Kelly" description="Three ways to work with Kylie Kelly: take the quiz, build your email system, or explore the shop. No algorithm required.">
+// Structured data so Google can show the page properly: the questions above, the course, and where this page sits on the site.
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: 'The Money-Making Email System',
+    description: 'An email marketing course for women who want more sales from their list without living on social media. Start, grow, nurture and sell, all in one place.',
+    provider: { '@type': 'Person', name: 'Kylie Kelly', url: 'https://kyliekelly.com/meet-kylie' },
+    url: 'https://system.kyliekelly.com/join',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://kyliekelly.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Work With Me', item: 'https://kyliekelly.com/services' },
+    ],
+  },
+];
 
-  <!-- TAG BAR -->
-  <section class="bg-black text-white px-6 py-4 border-b border-white/15">
-    <p class="max-w-4xl mx-auto flex items-center justify-center gap-4 text-xs sm:text-sm font-normal uppercase tracking-widest text-white text-center">
-      <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
-      Three ways to work with me. No algorithm required.
-      <span class="hidden sm:block h-px flex-1 bg-white/30"></span>
-    </p>
-  </section>
+---
+<Layout title="Email Marketing Course & Ways to Work With Me | Kylie Kelly" description="Start with a free list-building quiz, join the Money-Making Email System course, or grab a shop template. Grow your email list without social media.">
+  <Fragment slot="head">
+    {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+  </Fragment>
 
   <!-- HERO: the three steps as a menu -->
-  <section class="relative overflow-hidden bg-gradient-to-b from-[#fbe6f7] via-white to-white px-6 pt-10 pb-16 sm:pt-12 sm:pb-24">
+  <section class="relative overflow-hidden bg-gradient-to-b from-[#fbe6f7] via-white to-white px-6 pt-10 pb-14 sm:pt-14 sm:pb-24">
     <div class="mx-auto max-w-6xl text-center">
-      <div class="mx-auto mb-6 h-20 w-20">
-        <img src="/images/kylie-headshot.jpg" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="h-full w-full rounded-full object-cover object-[50%_25%]" />
+      <div class="mx-auto mb-5 h-20 w-20">
+        <img src="/images/responsive/kylie-headshot-160.webp" srcset="/images/responsive/kylie-headshot-160.webp 160w, /images/responsive/kylie-headshot-320.webp 320w" sizes="80px" width="160" height="240" alt="Kylie Kelly smiling, sitting in a chair wearing a lilac top" class="h-full w-full rounded-full object-cover object-[50%_25%]" decoding="async" />
       </div>
       <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-pink">&mdash; Ways to work with me &mdash;</p>
       <h1 class="font-serif text-[clamp(2.5rem,6.2vw,5rem)] leading-[0.98] text-balance">
         Where do you want to <span class="script-accent italic text-pink">start</span>?
       </h1>
-      <p class="mx-auto mt-4 max-w-xl text-lg text-black">Three ways to work with me, whichever fits where your business is at today. No wrong step, promise.</p>
+      <p class="mx-auto mt-5 max-w-2xl text-lg text-black">I teach women how to grow an email list and sell to it without social media. I grew mine to 7,000+ subscribers in 18 months that way. Pick the step that fits where your business is at today, no wrong step, promise.</p>
 
-      <div class="mt-8 grid gap-5 text-left md:grid-cols-3">
+      <div class="mt-8 grid gap-3 text-left sm:gap-5 md:grid-cols-3">
         {menu.map((m) => (
-          <a href={m.href} class={`group flex flex-col rounded-[2rem] border border-black ${m.tint} p-6 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition duration-300 hover:-translate-y-2 hover:bg-[#fbe6f7] hover:shadow-[0_26px_60px_rgba(224,64,251,0.28)] sm:p-7`}>
-            <span class="mb-4 grid h-11 w-11 place-items-center rounded-full bg-pink font-serif text-lg italic text-white transition duration-300 group-hover:rotate-[-8deg] group-hover:scale-110 group-hover:bg-black" aria-hidden="true">{m.num}</span>
-            <h2 class="mb-3 font-serif text-2xl leading-tight text-balance">{m.title}</h2>
-            <p class="mb-5 flex-grow text-[15px] text-black">{m.line}</p>
-            <span class="inline-flex items-center gap-3 text-[15px] font-semibold">
-              {m.cta}
-              <span class="grid h-10 w-10 place-items-center rounded-full bg-black text-white transition-colors duration-300 group-hover:bg-pink"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-            </span>
+          <a href={m.href} class={`group flex items-start gap-4 rounded-[2rem] border border-black ${m.tint} p-5 shadow-[0_18px_50px_rgba(0,0,0,0.08)] transition duration-300 hover:-translate-y-2 hover:bg-[#fbe6f7] hover:shadow-[0_26px_60px_rgba(224,64,251,0.28)] md:flex-col md:items-stretch md:gap-0 md:p-7`}>
+            <span class="grid h-11 w-11 flex-none place-items-center rounded-full bg-pink font-serif text-lg italic text-white transition duration-300 group-hover:rotate-[-8deg] group-hover:scale-110 group-hover:bg-black md:mb-4" aria-hidden="true">{m.num}</span>
+            <div class="flex min-w-0 flex-1 flex-col">
+              <p class="mb-2 font-serif text-xl leading-tight text-balance md:mb-3 md:text-2xl">{m.title}</p>
+              <p class="mb-3 flex-grow text-[15px] text-black md:mb-5">{m.line}</p>
+              <span class="inline-flex items-center gap-3 text-[15px] font-semibold">
+                {m.cta}
+                <span class="grid h-10 w-10 place-items-center rounded-full bg-black text-white transition-colors duration-300 group-hover:bg-pink"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+              </span>
+            </div>
           </a>
         ))}
       </div>
@@ -190,10 +206,10 @@ const faqs = [
             {o.mockup ? (
               <div class="relative">
                 <div class="pointer-events-none absolute inset-x-[6%] inset-y-[8%] rounded-full bg-[#fbe6f7] blur-3xl" aria-hidden="true"></div>
-                <img src={o.image} alt={o.alt} class="relative block h-auto w-full" loading="lazy" />
+                <img src={`/images/responsive/${o.image}-${o.imgSizes[1]}.webp`} srcset={o.imgSizes.map((w) => `/images/responsive/${o.image}-${w}.webp ${w}w`).join(', ')} sizes="(min-width: 768px) 384px, 90vw" width={o.imgW} height={o.imgH} alt={o.alt} class="relative block h-auto w-full" loading="lazy" decoding="async" />
               </div>
             ) : (
-              <img src={o.image} alt={o.alt} class="w-full rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.12)]" loading="lazy" />
+              <img src={`/images/responsive/${o.image}-${o.imgSizes[1]}.webp`} srcset={o.imgSizes.map((w) => `/images/responsive/${o.image}-${w}.webp ${w}w`).join(', ')} sizes="(min-width: 768px) 384px, 90vw" width={o.imgW} height={o.imgH} alt={o.alt} class="h-auto w-full rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.12)]" loading="lazy" decoding="async" />
             )}
             <span class="absolute -top-5 -left-3 sm:-left-6 grid place-items-center h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-pink text-white font-serif italic text-2xl sm:text-3xl shadow-lg" aria-hidden="true">{o.num}</span>
           </div>
@@ -223,10 +239,7 @@ const faqs = [
                   {o.items.map((item) => <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&#9679;</span><span>{item}</span></li>)}
                   {o.presale && earlyPrice && <li class="flex gap-3" data-mmes-note><span class="text-pink" aria-hidden="true">&#9679;</span><span class="font-semibold">{o.presale}</span></li>}
                 </ul>
-                <a href={o.href} {...(/^https?:/.test(o.href) ? { target: "_blank", rel: "noopener" } : {})} class="group mt-6 ml-auto flex w-fit items-center gap-4 rounded-full bg-black pl-7 pr-2 py-2 text-[15px] font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-pink hover:shadow-[0_14px_30px_rgba(200,77,240,0.4)]">
-                  {o.cta}
-                  <span class="grid h-11 w-11 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-                </a>
+                <div class="mt-6 flex justify-end"><ArrowButton href={o.href} label={o.cta} variant="dark" /></div>
               </div>
             </>
           )}
@@ -236,10 +249,10 @@ const faqs = [
               <footer class="mt-3 text-xs uppercase tracking-widest font-semibold">{o.quote.name}</footer>
             </blockquote>
           )}
-          <a href={o.href} {...(/^https?:/.test(o.href) ? { target: "_blank", rel: "noopener" } : {})} class="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[15px] font-semibold transition duration-300 hover:-translate-y-1 hover:bg-pink hover:shadow-[0_14px_30px_rgba(200,77,240,0.4)]">
-            {o.cta}
-            <span class="grid place-items-center h-11 w-11 rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-          </a>
+          <div class="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+            <ArrowButton href={o.href} label={o.cta} variant="dark" />
+            {o.cta2 && <a href={o.cta2.href} target="_blank" rel="noopener" class="font-semibold underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:decoration-black">{o.cta2.label}</a>}
+          </div>
         </div>
       </div>
     </section>
@@ -252,7 +265,7 @@ const faqs = [
     <div class="relative mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-[0.85fr_1.15fr] md:gap-20">
       <div class="relative mx-auto w-full max-w-sm">
         <div class="aspect-[4/5] overflow-hidden rounded-t-full border border-white/20 p-2">
-          <img src="/images/kylie-podcast.jpg" alt="Kylie Kelly smiling, resting her chin on her hand" class="h-full w-full rounded-t-full object-cover object-[50%_25%]" loading="lazy" />
+          <img src="/images/responsive/kylie-podcast-800.webp" srcset="/images/responsive/kylie-podcast-480.webp 480w, /images/responsive/kylie-podcast-800.webp 800w" sizes="(min-width: 768px) 384px, 90vw" width="800" height="800" alt="Kylie Kelly smiling, resting her chin on her hand" class="h-full w-full rounded-t-full object-cover object-[50%_25%]" loading="lazy" decoding="async" />
         </div>
         <RotatingBadge text="COMING EARLY 2027 • COMING EARLY 2027 •" size={130} class="absolute -right-4 bottom-8 sm:-right-10" />
       </div>
@@ -267,38 +280,14 @@ const faqs = [
         <p class="mx-auto mt-4 max-w-lg font-semibold text-white sm:text-lg md:mx-0">Doors open early 2027. Pop your name on the waitlist and I'll email you the second I can tell you more.</p>
         <InnerCircleWaitlist />
       </div>
-        </div>
-      </div>
     </div>
   </section>
 
-  <!-- RESULTS: every testimonial in one full-width line that drifts slowly sideways -->
-  <section class="svc-results relative z-10 overflow-hidden">
-    <div class="absolute inset-x-0 bottom-0 top-[25rem] bg-black" aria-hidden="true"></div>
-    <div class="relative pt-20 pb-20 sm:pt-28 sm:pb-28">
-      <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-pink">&mdash; Happy clients &mdash;</p>
-      <h2 class="mb-12 px-6 text-center text-3xl font-bold sm:text-4xl">Real students. <span class="script-accent italic text-pink">Real results.</span></h2>
-      <div class="svc-strip overflow-hidden py-10" role="region" aria-label="Client testimonials">
-        <div class="svc-track flex w-max">
-          {[0, 1].map((copy) => (
-            <div class="flex flex-none gap-6 pr-6" aria-hidden={copy === 1 ? 'true' : undefined}>
-              {testimonials.map((t) => (
-                <figure class={`svc-card flex w-[300px] flex-none flex-col rounded-[2.25rem] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.18)] sm:w-[360px] sm:p-10 ${t.card}`} style={`--r:${t.rot}`}>
-                  <p class="mb-5 text-lg tracking-[0.2em]" aria-label="5 stars">★★★★★</p>
-                  <p class="mb-5 text-2xl font-bold uppercase leading-[1.05] tracking-tight sm:text-3xl">{t.big}</p>
-                  <blockquote class="mb-8 flex-grow text-[15px] leading-relaxed">&ldquo;{t.quote}&rdquo;</blockquote>
-                  <figcaption class="leading-tight"><strong class="block">&ndash; {t.name}</strong>{t.role && <span class="mt-1 block text-sm opacity-70">{t.role}</span>}</figcaption>
-                </figure>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- RESULTS: the same testimonial slider as the homepage -->
+  <TestimonialSlider />
 
   <!-- THE STATEMENT, THE NUMBERS AND A BIG PHOTO -->
-  <section class="bg-black px-6 pt-8 text-center text-white sm:pt-12">
+  <section class="bg-black px-6 pt-4 text-center text-white sm:pt-8">
     <div class="mx-auto max-w-4xl">
       <p class="mb-6 font-semibold text-pink sm:text-lg">You're in the right place, babe.</p>
       <h2 class="font-serif text-[clamp(2.25rem,6vw,4.75rem)] leading-[1.02] text-balance">
@@ -314,7 +303,29 @@ const faqs = [
         ))}
       </dl>
     </div>
-    <img src="/images/hero-8.jpg" alt="Kylie Kelly relaxing in a chair holding a disco ball and a glass of rosé" class="mx-auto mt-16 h-[320px] w-full max-w-6xl rounded-t-[2.5rem] object-cover object-[50%_32%] sm:h-[460px]" loading="lazy" />
+    <img src="/images/responsive/hero-8-800.webp" srcset="/images/responsive/hero-8-480.webp 480w, /images/responsive/hero-8-800.webp 800w" sizes="(min-width: 1152px) 1152px, 100vw" width="800" height="972" alt="Kylie Kelly relaxing in a chair holding a disco ball and a glass of rosé" class="mx-auto mt-16 h-[320px] w-full max-w-6xl rounded-t-[2.5rem] object-cover object-[50%_32%] sm:h-[460px]" loading="lazy" decoding="async" />
+  </section>
+
+  <!-- KEEP LEARNING: free places to start -->
+  <section class="bg-offwhite px-6 py-16 sm:py-20">
+    <div class="mx-auto max-w-4xl text-center">
+      <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">&mdash; Not ready to buy yet? &mdash;</p>
+      <h2 class="mb-8 text-3xl font-bold text-balance sm:text-4xl">Learn with me for free.</h2>
+      <div class="grid gap-4 text-left sm:grid-cols-3">
+        <a href="/email-marketing-for-small-business/" class="group rounded-[1.75rem] border border-black/20 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-pink">
+          <p class="mb-2 font-serif text-xl leading-tight">Email marketing for small business</p>
+          <p class="text-[15px]">My beginner's guide: what to do first, in the order I'd do it.</p>
+        </a>
+        <a href="/grow-email-list-without-instagram-ads/" class="group rounded-[1.75rem] border border-black/20 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-pink">
+          <p class="mb-2 font-serif text-xl leading-tight">Grow your list without social media</p>
+          <p class="text-[15px]">The full guide to building a list without Instagram or paid ads.</p>
+        </a>
+        <a href="/podcast" class="group rounded-[1.75rem] border border-black/20 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-pink">
+          <p class="mb-2 font-serif text-xl leading-tight">The Email Growth Show</p>
+          <p class="text-[15px]">My weekly podcast on growing and selling to your email list.</p>
+        </a>
+      </div>
+    </div>
   </section>
 
   <!-- FAQ -->
@@ -365,20 +376,6 @@ const faqs = [
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') document.querySelectorAll('section[data-open]').forEach(closePop);
   });
-
-  // The testimonial cards slide in from the sides when they scroll into view.
-  const revealEls = document.querySelectorAll('.svc-strip');
-  if (revealEls.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.documentElement.classList.add('svc-js');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('is-in');
-        io.unobserve(e.target);
-      });
-    }, { threshold: 0.35 });
-    revealEls.forEach((el) => io.observe(el));
-  }
 </script>
 
 <style>
@@ -387,23 +384,8 @@ const faqs = [
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
   }
-  .svc-card { rotate: var(--r, 0deg); }
-  .svc-track { animation: svc-track 90s linear infinite; }
-  .svc-strip:hover .svc-track { animation-play-state: paused; }
-  @keyframes svc-track {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  :global(.svc-js) .svc-strip {
-    opacity: 0;
-    translate: 0 50px;
-    transition: opacity 0.8s ease, translate 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-  :global(.svc-js) .svc-strip.is-in { opacity: 1; translate: 0 0; }
   @media (prefers-reduced-motion: reduce) {
     .svc-ticker { animation: none; }
-    .svc-strip { overflow-x: auto; }
-    .svc-track { animation: none; }
   }
   .svc-pop-btn { display: none; }
   :global(.svc-pop-js) .svc-pop-btn { display: inline-flex; cursor: pointer; }

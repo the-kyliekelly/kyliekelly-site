@@ -1,0 +1,67 @@
+---
+// The "Real students. Real results." testimonial slider, shared by the homepage and the Work With Me page.
+// The quotes live in src/data/testimonials.json (word for word from Kylie's approved testimonials).
+import testimonials from '../data/testimonials.json';
+---
+  <section class="bg-black text-white px-6 py-20">
+    <div class="max-w-3xl mx-auto text-center">
+      <p class="text-pink text-xs uppercase tracking-widest font-normal mb-3">— Happy Clients —</p>
+      <h2 class="text-3xl sm:text-4xl font-bold mb-14">Real students. <span class="script-accent italic text-pink">Real results.</span></h2>
+      <div class="min-h-[220px] sm:min-h-[160px] flex flex-col items-center justify-center">
+        {testimonials.map((t, i) => (
+          <div class="testimonial-slide" data-index={i} style={i === 0 ? '' : 'display:none;'}>
+            <p class="font-serif text-xl sm:text-2xl leading-relaxed text-white mb-6">&ldquo;{t.quote}&rdquo;</p>
+            <p class="text-pink text-xs uppercase tracking-widest font-semibold">— {t.name}</p>
+          </div>
+        ))}
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-1 mt-12 max-w-lg mx-auto">
+        {testimonials.map((t, i) => (
+          <button
+            type="button"
+            class="testimonial-dot grid h-8 w-8 shrink-0 place-items-center rounded-full"
+            data-index={i}
+            aria-label={`Show testimonial from ${t.name}`}
+          >
+            <span class="dot block h-2.5 w-2.5 rounded-full border border-white/40 transition-colors" style={i === 0 ? 'background:#e040fb;border-color:#e040fb;' : 'background:transparent;'}></span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+<script>
+    const slides = document.querySelectorAll<HTMLElement>('.testimonial-slide');
+    const dots = document.querySelectorAll<HTMLElement>('.testimonial-dot');
+    let current = 0;
+    let timer: ReturnType<typeof setInterval>;
+
+    function show(index: number) {
+      slides.forEach((s, i) => {
+        s.style.display = i === index ? '' : 'none';
+      });
+      dots.forEach((d, i) => {
+        const dot = d.querySelector<HTMLElement>('.dot');
+        if (!dot) return;
+        dot.style.background = i === index ? '#e040fb' : 'transparent';
+        dot.style.borderColor = i === index ? '#e040fb' : 'rgba(255,255,255,0.4)';
+      });
+      current = index;
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        show((current + 1) % slides.length);
+      }, 6000);
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        show(parseInt(dot.dataset.index ?? '0', 10));
+        resetTimer();
+      });
+    });
+
+    if (slides.length > 0) resetTimer();
+  </script>
