@@ -16,10 +16,12 @@ const ALLOWED_HOSTS = new Set([
   '127.0.0.1',
 ]);
 
-// list name -> the Flodesk segment IDs to add the person to (an empty list means "just add them to Flodesk")
+// list name -> where to add the person in Flodesk.
+//   segmentIds: the segments to add them to (an empty list means "just add them to Flodesk")
+//   formId: the old Flodesk form. Only used as a back-up if the Flodesk API refuses the sign-up.
 const LISTS = {
-  'inner-circle': ['6ae968ef06fd210ed1e3dac0'], // Inner Circle Waitlist
-  freebie: [], // the "You almost left without this freebie?" form: the Your Next 1000 Subscribers quiz
+  'inner-circle': { segmentIds: ['6ae968ef06fd210ed1e3dac0'], formId: '6ae968b630164fafb1274552' }, // Inner Circle Waitlist
+  freebie: { segmentIds: [], formId: '6a389632c69dbd7193980270' }, // the "You almost left without this freebie?" form
 };
 
 const clip = (value, max) => String(value ?? '').slice(0, max);
@@ -44,8 +46,8 @@ export default async function handler(req, res) {
     return res.status(403).json({ ok: false, error: 'forbidden' });
   }
 
-  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
-  const flodeskKey = process.env.FLODESK_API_KEY;
+  const turnstileSecret = (process.env.TURNSTILE_SECRET_KEY || '').trim();
+  const flodeskKey = (process.env.FLODESK_API_KEY || '').trim();
   if (!turnstileSecret || !flodeskKey) {
     return res.status(500).json({ ok: false, error: 'not-configured' });
   }
@@ -77,8 +79,8 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  const segmentIds = LISTS[list];
-  if (!segmentIds) {
+  const target = LISTS[list];
+  if (!target) {
     return res.status(400).json({ ok: false, error: 'unknown-list' });
   }
   if (!firstName || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -105,7 +107,8 @@ export default async function handler(req, res) {
     return res.status(502).json({ ok: false, error: 'captcha-unavailable' });
   }
 
-  // Add them to Flodesk.
+  // Add them to Flodesk through the API.
+  const upstream = {};
   try {
     const response = await fetch('https://api.flodesk.com/v1/subscribers', {
       method: 'POST',
@@ -114,14 +117,35 @@ export default async function handler(req, res) {
         'User-Agent': 'kyliekelly.com (https://kyliekelly.com)',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, first_name: firstName, ...(segmentIds.length ? { segment_ids: segmentIds } : {}) }),
+      body: JSON.stringify({ email, first_name: firstName, ...(target.segmentIds.length ? { segment_ids: target.segmentIds } : {}) }),
       signal: AbortSignal.timeout(10000),
     });
-    if (!response.ok) {
-      return res.status(502).json({ ok: false, error: 'signup-failed' });
+    if (response.ok) {
+      return res.status(200).json({ ok: true });
     }
-    return res.status(200).json({ ok: true });
-  } catch {
-    return res.status(502).json({ ok: false, error: 'signup-failed' });
+    upstream.api = response.status;
+    console.error('Flodesk API refused the sign-up', response.status, (await response.text().catch(() => '')).slice(0, 300));
+  } catch (error) {
+    upstream.api = 'error';
+    console.error('Flodesk API call failed', String(error).slice(0, 300));
   }
+
+  // Back-up: the visitor has already passed the human check, so send them through the old Flodesk form instead.
+  try {
+    const response = await fetch(`https://form.flodesk.com/forms/${target.formId}/submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'kyliekelly.com (https://kyliekelly.com)' },
+      body: new URLSearchParams({ firstName, email }),
+      signal: AbortSignal.timeout(10000),
+    });
+    upstream.form = response.status;
+    if (response.status < 400) {
+      return res.status(200).json({ ok: true });
+    }
+    console.error('Flodesk form back-up refused the sign-up', response.status);
+  } catch (error) {
+    upstream.form = 'error';
+    console.error('Flodesk form back-up failed', String(error).slice(0, 300));
+  }
+  return res.status(502).json({ ok: false, error: 'signup-failed', upstream });
 }
