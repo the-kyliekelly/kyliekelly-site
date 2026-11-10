@@ -1,0 +1,125 @@
+---
+// The "Real students. Real results." testimonial block, used on the Work With Me page.
+// A pink band with a row of cards you can swipe, drag or step through with the arrows.
+// The quotes live in src/data/testimonials.json (word for word from Kylie's approved testimonials).
+import testimonials from '../data/testimonials.json';
+
+// The cards rotate through these looks so the row never feels samey.
+const looks = [
+  { card: 'bg-white text-black', name: 'text-pink-deep', rot: '-1.5deg' },
+  { card: 'bg-[#e9d9ec] text-black', name: 'text-black', rot: '1deg' },
+  { card: 'bg-black text-white', name: 'text-pink', rot: '-0.5deg' },
+  { card: 'bg-[#fbe6f7] text-black', name: 'text-pink-deep', rot: '1.5deg' },
+];
+const arrow = 'M3 8h10M9 4l4 4-4 4';
+---
+<section class="tm-band relative overflow-hidden bg-pink px-0 py-16 text-black sm:py-24" aria-label="Client testimonials">
+  <div class="mx-auto max-w-6xl px-6 text-center">
+    <p class="mb-3 text-xs font-semibold uppercase tracking-widest">&mdash; Happy clients &mdash;</p>
+    <h2 class="mb-10 text-3xl font-bold text-balance sm:mb-12 sm:text-4xl">Real students. <span class="script-accent italic text-white">Real results.</span></h2>
+  </div>
+
+  <div class="tm-track flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-10 pt-4 sm:gap-6 sm:px-[max(1.5rem,calc((100vw-72rem)/2+1.5rem))]" data-tm-track tabindex="0" role="region" aria-label="Testimonials, scroll sideways to read more">
+    {testimonials.map((t, i) => {
+      const l = looks[i % looks.length];
+      return (
+        <figure data-tm-card class={`tm-card flex w-[82vw] max-w-[380px] flex-none snap-center flex-col rounded-[2.25rem] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.18)] sm:w-[360px] sm:p-9 ${l.card}`} style={`--r:${l.rot}`}>
+          <p class="mb-5 text-lg tracking-[0.2em] text-pink" role="img" aria-label="5 stars">★★★★★</p>
+          <blockquote class="mb-8 flex-grow font-serif text-xl leading-snug sm:text-[1.35rem]">&ldquo;{t.quote}&rdquo;</blockquote>
+          <figcaption class={`text-xs font-semibold uppercase tracking-widest ${l.name}`}>&mdash; {t.name}</figcaption>
+        </figure>
+      );
+    })}
+  </div>
+
+  <div class="mx-auto flex max-w-6xl items-center justify-center gap-5 px-6">
+    <button type="button" data-tm-prev aria-label="Previous testimonial" class="grid h-12 w-12 place-items-center rounded-full bg-black text-white transition duration-300 hover:bg-white hover:text-black disabled:cursor-default disabled:opacity-30 disabled:hover:bg-black disabled:hover:text-white">
+      <svg viewBox="0 0 16 16" class="h-4 w-4 rotate-180" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg>
+    </button>
+    <p class="min-w-[4.5rem] text-center text-sm font-semibold tabular-nums" aria-live="polite"><span data-tm-now>1</span> / {testimonials.length}</p>
+    <button type="button" data-tm-next aria-label="Next testimonial" class="grid h-12 w-12 place-items-center rounded-full bg-black text-white transition duration-300 hover:bg-white hover:text-black disabled:cursor-default disabled:opacity-30 disabled:hover:bg-black disabled:hover:text-white">
+      <svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  .tm-track { scrollbar-width: none; cursor: grab; scroll-padding-inline: 1.5rem; }
+  .tm-track::-webkit-scrollbar { display: none; }
+  .tm-track.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+  .tm-track.is-dragging .tm-card { pointer-events: none; }
+  .tm-card { rotate: var(--r, 0deg); transition: rotate 0.4s ease, translate 0.4s ease; }
+  .tm-card:hover { rotate: 0deg; translate: 0 -6px; }
+  @media (prefers-reduced-motion: reduce) {
+    .tm-card { transition: none; }
+    .tm-card:hover { translate: 0 0; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.tm-band').forEach((band) => {
+    const track = band.querySelector<HTMLElement>('[data-tm-track]');
+    const cards = Array.from(band.querySelectorAll<HTMLElement>('[data-tm-card]'));
+    const prev = band.querySelector<HTMLButtonElement>('[data-tm-prev]');
+    const next = band.querySelector<HTMLButtonElement>('[data-tm-next]');
+    const now = band.querySelector<HTMLElement>('[data-tm-now]');
+    if (!track || !cards.length || !prev || !next) return;
+
+    // Which card sits closest to the middle of the row right now.
+    const nearest = () => {
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0;
+      let gap = Infinity;
+      cards.forEach((c, i) => {
+        const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+        if (d < gap) { gap = d; best = i; }
+      });
+      return best;
+    };
+
+    const update = () => {
+      const atStart = track.scrollLeft <= 4;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+      prev.disabled = atStart;
+      next.disabled = atEnd;
+      if (now) now.textContent = String(atEnd ? cards.length : atStart ? 1 : nearest() + 1);
+    };
+
+    const step = (dir: number) => {
+      const c = cards[0];
+      const w = c.offsetWidth + parseFloat(getComputedStyle(track).columnGap || '24');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollBy({ left: dir * w, behavior: reduce ? 'auto' : 'smooth' });
+    };
+    prev.addEventListener('click', () => step(-1));
+    next.addEventListener('click', () => step(1));
+    track.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+    });
+    window.addEventListener('resize', update);
+
+    // Drag with a mouse (touch already swipes natively).
+    let down = false; let startX = 0; let startLeft = 0; let moved = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      down = true; moved = false; startX = e.clientX; startLeft = track.scrollLeft;
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 5) { moved = true; track.classList.add('is-dragging'); }
+      if (moved) track.scrollLeft = startLeft - dx;
+    });
+    const end = () => {
+      if (!down) return;
+      down = false;
+      track.classList.remove('is-dragging');
+    };
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
+
+    update();
+  });
+</script>
