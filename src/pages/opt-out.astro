@@ -1,0 +1,27 @@
+---
+// The thank-you page for the "opt out of sales emails" link in Kylie's Saturday sales emails.
+// Clicking that link in Flodesk starts an automation that puts the person in the "Do Not Disturb - Sales Emails" segment
+// for 30 days, so this page is only the friendly landing spot. It stays out of Google (noindex) and out of the sitemap.
+import Layout from '../layouts/Layout.astro';
+import ArrowButton from '../components/ArrowButton.astro';
+---
+<Layout title="You're all set | Kylie Kelly" description="You won't get my Saturday sales emails for the next 30 days." noindex>
+  <section class="bg-offwhite px-6 py-24 sm:py-32">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-black">Thank you</p>
+      <h1 class="mb-6 font-serif text-4xl font-bold leading-tight text-balance sm:text-5xl">
+        Done! No sales emails for the next <span class="italic text-pink">30 days.</span>
+      </h1>
+      <p class="mx-auto mb-4 max-w-xl text-lg leading-relaxed text-black/80">
+        Thanks for letting me know. You won't get my Saturday sales emails for the next 30 days, so your inbox gets a little quieter.
+      </p>
+      <p class="mx-auto mb-10 max-w-xl leading-relaxed text-black/80">
+        If you'd rather stop hearing from me altogether, there's an unsubscribe link at the bottom of every email I send.
+      </p>
+      <div class="flex flex-col items-center justify-center gap-5 sm:flex-row">
+        <ArrowButton href="/podcast" label="Listen to the podcast" variant="dark" />
+        <a href="/blog" class="font-semibold underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:decoration-black">Read the blog</a>
+      </div>
+    </div>
+  </section>
+</Layout>

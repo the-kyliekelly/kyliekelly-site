@@ -321,6 +321,111 @@
       "permanent": true
     },
     {
+      "source": "/about-us",
+      "destination": "/meet-kylie",
+      "permanent": true
+    },
+    {
+      "source": "/about-us/",
+      "destination": "/meet-kylie",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/meet-kylie",
+      "permanent": true
+    },
+    {
+      "source": "/about/",
+      "destination": "/meet-kylie",
+      "permanent": true
+    },
+    {
+      "source": "/feed",
+      "destination": "/blog/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/feed/",
+      "destination": "/blog/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/blog/page/:n",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog/page/:n/",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/category",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/category/",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/category/podcast/page/:n",
+      "destination": "/podcast",
+      "permanent": true
+    },
+    {
+      "source": "/category/podcast/page/:n/",
+      "destination": "/podcast",
+      "permanent": true
+    },
+    {
+      "source": "/empire",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/empire/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/programs",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/programs/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/:slug/:junk(\\[URL\\]|%5BURL%5D)",
+      "destination": "/:slug/",
+      "permanent": true
+    },
+    {
+      "source": "/booking",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/booking/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/ai-offer-intensive",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/ai-offer-intensive/",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true
