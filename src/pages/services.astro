@@ -7,15 +7,16 @@ import FreebieReveal from '../components/FreebieReveal.astro';
 
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 
-// The Money Making Email System is $297 through November and $997 from 1 December (Sydney time).
+// The Money-Making Email System is $297 until 11:59pm US Eastern on 30 November, then $997.
+// That moment is 3:59pm Sydney time on 1 December, the same moment the announcement bar hides.
 // The page works this out when it is built, and a small script at the bottom keeps it right on the day.
-const PRICE_RISES = '2026-12-01T00:00:00+11:00';
+const PRICE_RISES = '2026-12-01T15:59:00+11:00';
 const earlyPrice = Date.now() < Date.parse(PRICE_RISES);
 
 // The three steps, shown as a menu at the top of the page.
 const menu = [
   { num: '01', title: 'Take the quiz', line: 'Answer 6 quick questions and get the list-building strategy most likely to work for your business right now.', href: '#step-01', cta: 'See the details' },
-  { num: '02', title: 'The Money Making Email System', line: 'My signature email course: start, grow, nurture and sell, all in one place.', href: '#step-02', cta: 'See the details' },
+  { num: '02', title: 'The Money-Making Email System', line: 'My signature email course: start, grow, nurture and sell, all in one place.', href: '#step-02', cta: 'See the details' },
   { num: '03', title: 'The KK Digital Product Shop', line: 'Grab-and-go courses, templates and trainings, plus the Coaching Group.', href: '#step-03', cta: 'Explore the shop' },
 ];
 
@@ -57,7 +58,7 @@ const offers = [
     id: 'step-02',
     num: '02',
     eyebrow: 'My signature email course',
-    title: 'The Money Making Email System',
+    title: 'The Money-Making Email System',
     tag: '',
     desc: 'My signature email course for women who want more sales from their list without living on social media. Start, grow, nurture and sell, all in one place.',
     items: [
@@ -69,7 +70,7 @@ const offers = [
     ],
     presale: 'Pre-sale: the whole course opens 1 December. Pay in full or 3 x $99.',
     pop: { bg: 'bg-white', title: "A little bit about what's inside:" },
-    cta: 'Get the Money Making Email System',
+    cta: 'Get the Money-Making Email System',
     href: 'https://system.kyliekelly.com/join',
     image: '/images/mmes-checkout.jpg',
     alt: 'Kylie Kelly smiling in a bright pink top',
@@ -104,14 +105,14 @@ const ticker = ['No algorithm required', 'Email lists', 'Real relationships', 'R
 const faqs = [
   {
     q: 'Which one should I start with?',
-    a: "Start with the quiz. It takes about a minute and points you to the list-building strategy that fits your business right now. If you're ready to build the whole system, go for the Money Making Email System. If you just need one thing, or want me in your corner every week, explore the shop.",
+    a: "Start with the quiz. It takes about a minute and points you to the list-building strategy that fits your business right now. If you're ready to build the whole system, go for the Money-Making Email System. If you just need one thing, or want me in your corner every week, explore the shop.",
   },
   {
     q: 'Do I need to be on social media?',
     a: 'No. Everything I teach is built around growing your email list and selling to it without relying on social media.',
   },
   {
-    q: "What's the Money Making Email System?",
+    q: "What's the Money-Making Email System?",
     a: "It's my signature email course. It takes you through starting, growing, nurturing and selling to your email list in one place, built on collaborations and relationships instead of the algorithm.",
   },
   {
