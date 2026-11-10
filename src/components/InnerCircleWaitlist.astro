@@ -1,37 +1,36 @@
 ---
-// The Inner Circle waitlist sign-up (a Flodesk form): first name and email. The form ID and the submit address are the
-// ones from the Flodesk embed code; the look is the site's own. Flodesk's script (loaded below) handles checking the
-// fields, sending them and showing the thank-you message.
-// After sign-up it shows the thank-you message below (set in data-ff-config). Flodesk's own "After submission" setting
-// for this form should also be a message, not a redirect.
-// To use a different form, change FORM_ID and the config (copy both from the new embed code).
-const FORM_ID = '6ae968b630164fafb1274552';
-const CONFIG = 'eyJ0cmlnZ2VyIjp7Im1vZGUiOiJpbW1lZGlhdGVseSIsInZhbHVlIjowfSwib25TdWNjZXNzIjp7Im1vZGUiOiJtZXNzYWdlIiwibWVzc2FnZSI6IllvdSdyZSBvbiB0aGUgbGlzdCEgSSdsbCBlbWFpbCB5b3UgdGhlIHNlY29uZCBJIGNhbiB0ZWxsIHlvdSBtb3JlLiIsInJlZGlyZWN0VXJsIjoiIn0sImNvaSI6ZmFsc2UsInNob3dGb3JSZXR1cm5WaXNpdG9ycyI6dHJ1ZSwibm90aWZpY2F0aW9uIjp0cnVlLCJnZHByIjp7ImFjY2VwdHNNYXJrZXRpbmciOmZhbHNlLCJwcml2YWN5UG9saWN5Ijp7ImVuYWJsZWQiOmZhbHNlLCJtYW5kYXRvcnkiOmZhbHNlfX0sInRyYWNraW5nQ29uZmlnIjp7Im1ldGFQaXhlbElkIjoiIiwiY29va2llQmFubmVyRW5hYmxlZCI6ZmFsc2UsImdvb2dsZUFuYWx5dGljc0lkIjoiIn19';
-const root = `ff-${FORM_ID}`;
+// The Inner Circle waitlist sign-up: first name and email. It posts to our own /api/subscribe endpoint (see
+// api/subscribe.mjs), which checks the visitor with Cloudflare Turnstile and then adds them to the Flodesk
+// segment "Inner Circle Waitlist". Nothing is sent straight from the page to Flodesk any more, so spam bots
+// that skip the page get nowhere.
+// TURNSTILE_SITE_KEY is the public key of the Cloudflare Turnstile widget for kyliekelly.com (safe to show in the page).
+// The matching secret key lives in Vercel as TURNSTILE_SECRET_KEY.
+const TURNSTILE_SITE_KEY = '0x4AAAAAAF6sbZzxdQlcet6q';
+const LIST = 'inner-circle';
 ---
-<div class:list={[root, 'kk-wl']} data-ff-el="root" data-ff-version="3" data-ff-type="inline" data-ff-name="inlineNoImage" data-ff-stage="default">
-  <div data-ff-el="config" data-ff-config={CONFIG} style="display: none"></div>
-  <form action={`https://form.flodesk.com/forms/${FORM_ID}/submit`} method="post" data-ff-el="form" aria-label="Join the Inner Circle waitlist">
-    <div class="fd-form-content" data-ff-el="content">
-      <div data-ff-el="fields">
+<div class="kk-wl" data-wl data-list={LIST} data-sitekey={TURNSTILE_SITE_KEY}>
+  <form novalidate action="/api/subscribe" method="post" data-wl-form aria-label="Join the Inner Circle waitlist">
+    <div class="fd-form-content">
+      <div>
         <div class="fd-form-group">
-          <input id={`${root}-firstName`} class="fd-form-control" type="text" maxlength="255" name="firstName" placeholder="First name" autocomplete="given-name" data-ff-tab="firstName::email" required />
-          <label for={`${root}-firstName`} class="fd-form-label"><div><div>First name</div></div></label>
+          <input id="wl-firstName" class="fd-form-control" type="text" maxlength="120" name="firstName" placeholder="First name" autocomplete="given-name" required />
+          <label for="wl-firstName" class="fd-form-label"><div><div>First name</div></div></label>
         </div>
         <div class="fd-form-group">
-          <input id={`${root}-email`} class="fd-form-control" type="text" inputmode="email" maxlength="255" name="email" placeholder="Email address" autocomplete="email" data-ff-tab="email:firstName:submit" required />
-          <label for={`${root}-email`} class="fd-form-label"><div><div>Email address</div></div></label>
+          <input id="wl-email" class="fd-form-control" type="email" maxlength="200" name="email" placeholder="Email address" autocomplete="email" inputmode="email" required />
+          <label for="wl-email" class="fd-form-label"><div><div>Email address</div></div></label>
         </div>
-        <input type="text" maxlength="255" name="confirm_email_address" style="display: none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <input type="text" maxlength="200" name="website" style="display: none" tabindex="-1" autocomplete="off" aria-hidden="true" />
       </div>
-      <div data-ff-el="footer">
-        <button type="submit" class="fd-btn" data-ff-el="submit" data-ff-tab="submit"><span data-draw-element="editable">Join the waitlist →</span></button>
+      <div data-wl-ts style="margin-bottom: 12px"></div>
+      <div>
+        <button type="submit" class="fd-btn" data-wl-submit><span>Join the waitlist →</span></button>
       </div>
     </div>
-    <div class="fd-form-success" data-ff-el="success" role="status">
+    <div class="fd-form-success" role="status">
       <p class="kk-wl-thanks">You're on the list! ✨ I'll email you the second I can tell you more.</p>
     </div>
-    <div class="fd-form-error" data-ff-el="error" role="alert"></div>
+    <div class="fd-form-error" role="alert" data-wl-error></div>
   </form>
 </div>
 
@@ -82,16 +81,76 @@ const root = `ff-${FORM_ID}`;
   @media (max-width: 767px) { .kk-wl { margin-left: auto; margin-right: auto; } }
 </style>
 
-<script is:inline>
-  // Flodesk's loader (from their embed code). It adds the script that runs the form.
-  (function (w, d, t, h, s, n) {
-    w.FlodeskObject = n;
-    var fn = function () { (w[n].q = w[n].q || []).push(arguments); };
-    w[n] = w[n] || fn;
-    var f = d.getElementsByTagName(t)[0];
-    var v = '?v=' + Math.floor(new Date().getTime() / (120 * 1000)) * 60;
-    var sm = d.createElement(t); sm.async = true; sm.type = 'module'; sm.src = h + s + '.mjs' + v; f.parentNode.insertBefore(sm, f);
-    var sn = d.createElement(t); sn.async = true; sn.noModule = true; sn.src = h + s + '.js' + v; f.parentNode.insertBefore(sn, f);
-  })(window, document, 'script', 'https://assets.flodesk.com', '/universal', 'fd');
-  window.fd('form:handle', { formId: '6ae968b630164fafb1274552', rootEl: '.ff-6ae968b630164fafb1274552' });
+<script>
+  import { turnstileFor } from '../scripts/turnstile';
+
+  const root = document.querySelector<HTMLElement>('[data-wl]');
+  if (root) {
+    const form = root.querySelector<HTMLFormElement>('[data-wl-form]')!;
+    const button = root.querySelector<HTMLButtonElement>('[data-wl-submit]')!;
+    const errorBox = root.querySelector<HTMLElement>('[data-wl-error]')!;
+    const check = turnstileFor(root.querySelector<HTMLElement>('[data-wl-ts]')!, root.dataset.sitekey ?? '', 'dark');
+    const shownAt = Date.now();
+    let sending = false;
+
+    // Start the human check as soon as someone touches the form.
+    form.addEventListener('focusin', () => check.prepare(), { once: true });
+
+    const showError = (message: string) => {
+      errorBox.textContent = message;
+      form.classList.add('fd-has-error');
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (sending) return;
+      form.classList.remove('fd-has-error');
+
+      const data = new FormData(form);
+      const firstName = String(data.get('firstName') ?? '').trim();
+      const email = String(data.get('email') ?? '').trim();
+      if (!firstName || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Please add your first name and a valid email address.');
+        return;
+      }
+
+      sending = true;
+      button.disabled = true;
+      try {
+        const token = await check.getToken();
+        if (!token) {
+          showError("I couldn't confirm you're human just now. Please try again.");
+          check.reset();
+          return;
+        }
+        const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            list: root.dataset.list,
+            firstName,
+            email,
+            token,
+            website: String(data.get('website') ?? ''),
+            loadedAt: shownAt,
+          }),
+        });
+        const result = await response.json().catch(() => ({ ok: false }));
+        if (result && result.ok) {
+          root.classList.add('fd-has-success');
+          return;
+        }
+        if (result && result.error === 'captcha') showError("That check didn't go through. Please try again.");
+        else if (result && result.error === 'missing-fields') showError('Please add your first name and a valid email address.');
+        else showError('Something went wrong. Please try again in a moment.');
+        check.reset();
+      } catch {
+        showError('Something went wrong. Please try again in a moment.');
+        check.reset();
+      } finally {
+        sending = false;
+        button.disabled = false;
+      }
+    });
+  }
 </script>

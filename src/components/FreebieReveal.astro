@@ -1,6 +1,11 @@
 ---
 // Freebie panel that sits behind the footer and is uncovered at the very end of the page.
 // Usage: <FreebieReveal slot="reveal" />  (Layout.astro places it in the reveal slot)
+// The form posts to our own /api/subscribe endpoint (see api/subscribe.mjs), which checks the visitor with Cloudflare
+// Turnstile and then adds them to Flodesk. After sign-up they go to the quiz, the same place Flodesk's form sent them.
+const TURNSTILE_SITE_KEY = '0x4AAAAAAF6sbZzxdQlcet6q';
+const LIST = 'freebie';
+const QUIZ_URL = 'https://the-kyliekelly.github.io/next-1000-subscribers/';
 ---
 <section class="bg-[#fbe6f7] px-6 py-12 sm:py-20 lg:py-24">
   <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
@@ -18,12 +23,87 @@
       <p class="text-black lg:text-lg mb-6 lg:mb-8">
         Answer 6 quick questions and get the list-building strategy most likely to work for your business right now. It takes about 60 seconds.
       </p>
-      <form action="https://form.flodesk.com/forms/6a389632c69dbd7193980270/submit" method="post" class="text-left">
-        <input type="text" name="firstName" placeholder="First name" required class="w-full mb-3 lg:mb-4 px-6 py-3 lg:py-4 lg:text-lg border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
-        <input type="text" name="email" placeholder="Email address" required class="w-full mb-3 lg:mb-4 px-6 py-3 lg:py-4 lg:text-lg border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
-        <input type="text" name="confirm_email_address" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
-        <button type="submit" class="btn-primary w-full text-center cursor-pointer lg:!py-[18px]">Yes, Build My Plan →</button>
+      <form action="/api/subscribe" method="post" novalidate class="text-left" data-fr-form data-list={LIST} data-sitekey={TURNSTILE_SITE_KEY} data-redirect={QUIZ_URL}>
+        <input type="text" name="firstName" placeholder="First name" aria-label="First name" autocomplete="given-name" required maxlength="120" class="w-full mb-3 lg:mb-4 px-6 py-3 lg:py-4 lg:text-lg border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+        <input type="email" name="email" placeholder="Email address" aria-label="Email address" autocomplete="email" required maxlength="200" class="w-full mb-3 lg:mb-4 px-6 py-3 lg:py-4 lg:text-lg border border-warmgray rounded-full bg-white text-black focus:outline-none focus:border-pink focus:ring-1 focus:ring-pink" />
+        <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true" />
+        <div data-fr-ts class="mb-3"></div>
+        <button type="submit" data-fr-submit class="btn-primary w-full text-center cursor-pointer lg:!py-[18px]">Yes, Build My Plan →</button>
+        <p data-fr-error role="alert" class="mt-3 hidden text-center text-sm font-semibold text-black"></p>
       </form>
     </div>
   </div>
 </section>
+
+<script>
+  import { turnstileFor } from '../scripts/turnstile';
+
+  const form = document.querySelector<HTMLFormElement>('[data-fr-form]');
+  if (form) {
+    const button = form.querySelector<HTMLButtonElement>('[data-fr-submit]')!;
+    const errorBox = form.querySelector<HTMLElement>('[data-fr-error]')!;
+    const check = turnstileFor(form.querySelector<HTMLElement>('[data-fr-ts]')!, form.dataset.sitekey ?? '', 'light');
+    const shownAt = Date.now();
+    let sending = false;
+
+    // Start the human check as soon as someone touches the form.
+    form.addEventListener('focusin', () => check.prepare(), { once: true });
+
+    const showError = (message: string) => {
+      errorBox.textContent = message;
+      errorBox.classList.remove('hidden');
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (sending) return;
+      errorBox.classList.add('hidden');
+
+      const data = new FormData(form);
+      const firstName = String(data.get('firstName') ?? '').trim();
+      const email = String(data.get('email') ?? '').trim();
+      if (!firstName || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('Please add your first name and a valid email address.');
+        return;
+      }
+
+      sending = true;
+      button.disabled = true;
+      try {
+        const token = await check.getToken();
+        if (!token) {
+          showError("I couldn't confirm you're human just now. Please try again.");
+          check.reset();
+          return;
+        }
+        const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            list: form.dataset.list,
+            firstName,
+            email,
+            token,
+            website: String(data.get('website') ?? ''),
+            loadedAt: shownAt,
+          }),
+        });
+        const result = await response.json().catch(() => ({ ok: false }));
+        if (result && result.ok) {
+          button.textContent = 'Taking you to your quiz...';
+          window.location.href = form.dataset.redirect ?? '/';
+          return;
+        }
+        if (result && result.error === 'captcha') showError("That check didn't go through. Please try again.");
+        else if (result && result.error === 'missing-fields') showError('Please add your first name and a valid email address.');
+        else showError('Something went wrong. Please try again in a moment.');
+        check.reset();
+      } catch {
+        showError('Something went wrong. Please try again in a moment.');
+        check.reset();
+      }
+      sending = false;
+      button.disabled = false;
+    });
+  }
+</script>
