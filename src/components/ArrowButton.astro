@@ -6,8 +6,10 @@ interface Props {
   label: string;
   variant?: 'light' | 'dark' | 'onPink';
   class?: string;
+  /** Open in the same tab even though it leaves the site (used for checkout links). */
+  sameTab?: boolean;
 }
-const { href, label, variant = 'light', class: extra = '' } = Astro.props;
+const { href, label, variant = 'light', class: extra = '', sameTab = false } = Astro.props;
 const external = /^https?:\/\//.test(href);
 const pill = {
   light: 'bg-white text-black shadow-[0_10px_30px_rgba(224,64,251,0.28)] hover:bg-pink hover:text-white',
@@ -22,7 +24,7 @@ const circle = {
 ---
 <a
   href={href}
-  {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+  {...(external ? (sameTab ? { target: '_self' } : { target: '_blank', rel: 'noopener' }) : {})}
   class:list={['group inline-flex items-center justify-between gap-6 rounded-full pl-8 pr-2.5 py-2.5 lg:pl-10 lg:py-3 lg:pr-3 text-base lg:text-lg font-semibold transition duration-300 hover:-translate-y-1', pill, extra]}
 >
   <span>{label}</span>

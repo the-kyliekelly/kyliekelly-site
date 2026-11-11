@@ -1,0 +1,140 @@
+[
+  {
+    "slug": "50-a-day",
+    "title": "50 A Day",
+    "kicker": "My no-social email list growth system",
+    "short": "The exact system I used to grow my list without posting, without ads, and without an audience to start with. Step-by-step, bite-sized videos so you can take action today.",
+    "category": "Email list growth",
+    "type": "Course",
+    "price": 27,
+    "badge": "",
+    "added": "2026-01-15",
+    "order": 1,
+    "look": "white",
+    "image": { "src": "/images/shop/50-a-day", "w": 1800, "h": 1200, "alt": "The 50 A Day course shown on a laptop, tablet and phone, with student results around it" },
+    "tags": ["list building", "subscribers", "collaborations", "podcast guesting", "freebie swaps", "pr", "lead magnet"],
+    "inside": [
+      "9 short video lessons on the strategy behind attracting 50+ new subscribers a day, without posting anywhere",
+      "My V2 framework, so a list grows consistently whether you're starting from zero or reviving one that's stalled",
+      "The visibility strategies that work on repeat: podcast guesting, collabs, freebie swaps, PR and more",
+      "A 30 day action plan to actually implement it",
+      "A list growth calculator that turns your subscriber goal into a real weekly pace"
+    ],
+    "buy": "https://50aday.kyliekelly.com/checkout",
+    "login": "https://50aday.kyliekelly.com/login"
+  },
+  {
+    "slug": "black-friday-made-simple",
+    "title": "Black Friday Made Simple",
+    "kicker": "A real plan in one afternoon",
+    "short": "Choose whether this year is about growing, nurturing or selling, then build a Black Friday plan that fits your list, with the calculator, offer ideas and promotion timeline to back it up.",
+    "category": "Black Friday",
+    "type": "Course",
+    "price": 97,
+    "badge": "",
+    "added": "2026-09-21",
+    "order": 2,
+    "look": "lilac",
+    "image": { "src": "/images/shop/black-friday-made-simple", "w": 1816, "h": 917, "alt": "Black Friday Made Simple shown on a desktop, tablet and phone" },
+    "tags": ["black friday", "planning", "offers", "promo timeline", "sales", "calculator"],
+    "inside": [
+      "Choose Your Intention: a clear answer on whether this Black Friday is about growing, nurturing or selling",
+      "Know Your Numbers: the calculator I use to reverse engineer a real sales goal",
+      "The Offer Vault: 83 offer ideas, sorted into grow, nurture and sell",
+      "The Promo Timeline: the 3-week timeline I build my own Black Friday promotions around",
+      "Energy & Trust: the mindset module for the moment it gets hard"
+    ],
+    "buy": "https://bfms.kyliekelly.com/",
+    "login": "https://black-friday-made-simple.teachery.co/login"
+  },
+  {
+    "slug": "black-friday-toolkit",
+    "title": "The Black Friday Toolkit",
+    "kicker": "Done-for-you email & social templates",
+    "short": "50 plug-and-play Black Friday emails and 53 social templates, so you're not staring at a blank screen at 9pm the night before. Swap in your details, hit send, done.",
+    "category": "Black Friday",
+    "type": "Templates",
+    "price": 67,
+    "badge": "",
+    "added": "2025-10-20",
+    "order": 3,
+    "look": "pale",
+    "image": { "src": "/images/shop/black-friday-toolkit", "w": 2025, "h": 938, "alt": "The Black Friday Toolkit email and social templates shown on a desktop screen with printed pages around it" },
+    "tags": ["black friday", "email templates", "social templates", "done for you", "swipe file"],
+    "inside": [
+      "50 plug-and-play Black Friday emails",
+      "53 social templates",
+      "Swap in your details, hit send, done"
+    ],
+    "buy": "https://black-friday-toolkit.teachery.co/checkout",
+    "login": "https://black-friday-toolkit.teachery.co/login"
+  },
+  {
+    "slug": "sales-pages-with-claude",
+    "title": "Sales Pages With Claude",
+    "kicker": "Build a live page with your voice",
+    "short": "Build a live sales page for any offer you're testing, using just your voice and Claude. No code, no developers, no waiting around.",
+    "category": "AI & sales pages",
+    "type": "Course",
+    "price": 27,
+    "badge": "",
+    "added": "2026-10-01",
+    "order": 4,
+    "look": "pink",
+    "image": { "src": "/images/shop/sales-pages-with-claude", "w": 1787, "h": 1070, "alt": "Sales Pages With Claude course shown on a desktop, laptop and tablet" },
+    "tags": ["ai", "claude", "sales page", "no code", "testing an offer", "voice"],
+    "inside": [
+      "Build a live sales page for any offer you're testing, using just your voice and Claude",
+      "No code, no developers, no waiting around",
+      "Perfect for testing an idea before you build a whole funnel around it"
+    ],
+    "buy": "https://salespages.kyliekelly.com/checkout",
+    "login": "https://salespages.kyliekelly.com/login"
+  },
+  {
+    "slug": "break-up-with-instagram",
+    "title": "Break Up With Instagram",
+    "kicker": "Not about deleting the app",
+    "short": "A plan for building an Instagram profile that does one job: make the right people want to know more, without you posting every day. It's about finally not needing it to grow your business.",
+    "category": "Instagram",
+    "type": "Course",
+    "price": 67,
+    "badge": "New",
+    "added": "2026-11-02",
+    "order": 5,
+    "look": "black",
+    "image": { "src": "/images/shop/break-up-with-instagram", "w": 1984, "h": 703, "alt": "Break Up With Instagram course title next to an Instagram profile on a phone" },
+    "tags": ["instagram", "profile", "bio", "highlights", "pinned posts", "captions", "visibility"],
+    "inside": [
+      "Why you don't need to post daily, or even weekly, for Instagram to still work for you",
+      "Build a profile that makes a stranger think \"I want to know more\": your photo, bio, highlights and three pin posts",
+      "A static, curated feed that doesn't have to be nine posts, or any specific number",
+      "What I actually do on Instagram each week now, and how little of it is posting",
+      "The Visibility Loop, plus a demo of The Caption Builder"
+    ],
+    "buy": "https://kyliekelly.thrivecart.com/breakup-with-insta/",
+    "login": "https://breakup.kyliekelly.com/login"
+  },
+  {
+    "slug": "coaching-group",
+    "title": "Kylie Kelly's Coaching Group",
+    "kicker": "Weekly voice-note coaching",
+    "short": "Direct access to me when you're stuck: weekly voice-note coaching, straight to your phone. One payment, and I'm in your corner.",
+    "category": "Coaching",
+    "type": "Coaching",
+    "price": 297,
+    "badge": "",
+    "added": "2026-03-01",
+    "order": 6,
+    "look": "lilac",
+    "image": { "src": "/images/shop/coaching-group", "w": 1354, "h": 1538, "alt": "Kylie holding a microphone next to a phone showing the Coaching Group voice-note chat" },
+    "tags": ["coaching", "voice notes", "support", "voxer", "accountability"],
+    "inside": [
+      "Direct access to me when you're stuck",
+      "Weekly voice-note coaching, straight to your phone",
+      "One payment for lifetime access"
+    ],
+    "buy": "https://coaching.kyliekelly.com/join",
+    "login": "https://coaching.kyliekelly.com/session/new"
+  }
+]

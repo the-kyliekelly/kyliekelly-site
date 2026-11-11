@@ -1,0 +1,443 @@
+---
+// The KK Digital Product Shop. Every product lives in src/data/shop-products.json, so adding one to the shop is
+// adding one entry there: the page, the category chips, the filters, the counts and the search all update themselves.
+// The cards are written into the page (so Google and visitors without JavaScript see everything) and a small script
+// adds searching, filtering, sorting, the quick look window and a shareable link for each filtered view.
+import Layout from '../layouts/Layout.astro';
+import FreebieReveal from '../components/FreebieReveal.astro';
+import ArrowButton from '../components/ArrowButton.astro';
+import allProducts from '../data/shop-products.json';
+import settings from '../data/shop-settings.json';
+
+// Seasonal switch: while shop-settings.json names a category under "season", that category goes first in Featured order
+// and a short note shows above the grid. Empty the category (set it to "") when the season is over.
+const season = settings.season?.category ?? '';
+const effOrder = (p: { category: string; order: number }) => p.order - (season && p.category === season ? 100 : 0);
+const products = [...allProducts].sort((a, b) => effOrder(a) - effOrder(b));
+// The Filters button and panel only appear once there are enough products to need them.
+const showFilters = products.length >= 9;
+
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
+const money = (n: number) => `$${n}`;
+
+// The cover tiles stand in for product photos. Give a product an "image" in the JSON and it shows that instead.
+const looks: Record<string, { tile: string; kicker: string; mark: string }> = {
+  pink: { tile: 'bg-pink text-black', kicker: 'text-black', mark: 'text-black' },
+  black: { tile: 'bg-black text-white', kicker: 'text-pink', mark: 'text-pink' },
+  lilac: { tile: 'bg-[#e9d9ec] text-black', kicker: 'text-pink-deep', mark: 'text-pink-deep' },
+  pale: { tile: 'bg-[#fbe6f7] text-black', kicker: 'text-pink-deep', mark: 'text-pink-deep' },
+  white: { tile: 'bg-white text-black border border-black/15', kicker: 'text-pink-deep', mark: 'text-pink-deep' },
+};
+
+const categories = [...new Set(products.map((p) => p.category))];
+const types = [...new Set(products.map((p) => p.type))];
+const countBy = (key: 'category' | 'type') => Object.fromEntries([...new Set(products.map((p) => p[key]))].map((v) => [v, products.filter((p) => p[key] === v).length]));
+const catCounts = countBy('category');
+const typeCounts = countBy('type');
+const priceBands = [
+  { id: 'under-50', label: 'Under $50', test: (n: number) => n < 50 },
+  { id: '50-99', label: '$50 to $99', test: (n: number) => n >= 50 && n < 100 },
+  { id: '100-plus', label: '$100 and over', test: (n: number) => n >= 100 },
+].filter((b) => products.some((p) => b.test(p.price)));
+const bandOf = (n: number) => (priceBands.find((b) => b.test(n)) ?? priceBands[0]).id;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'The KK Digital Product Shop',
+  itemListElement: products.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Product',
+      name: p.title,
+      description: p.short,
+      brand: { '@type': 'Brand', name: 'Kylie Kelly' },
+      offers: { '@type': 'Offer', url: p.buy, price: String(p.price), priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+    },
+  })),
+};
+---
+<Layout title="Digital Product Shop: Email Marketing Courses & Templates | Kylie Kelly" description="Courses, templates and coaching for growing your email list without social media. Filter by topic or price, pick the one thing you need and start today.">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-gradient-to-b from-[#fbe6f7] via-white to-white px-6 pt-12 pb-10 text-center sm:pt-16 sm:pb-12">
+    <div class="mx-auto max-w-3xl">
+      <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-pink-deep">&mdash; The KK Digital Product Shop &mdash;</p>
+      <h1 class="font-serif text-[clamp(2.5rem,6.2vw,4.75rem)] leading-[0.98] text-balance">
+        Grab what you need, <span class="script-accent italic text-pink">start today.</span>
+      </h1>
+      <p class="mx-auto mt-5 max-w-xl text-lg text-black">Courses, templates and coaching for growing your email list without social media. Pick the one thing you need and put it to work today.</p>
+      <p class="mx-auto mt-3 max-w-xl text-[15px] text-black">I grew my own list from 0 to 7,000+ subscribers in 18 months without social media. Everything here comes from that.</p>
+      <p class="mt-5 text-sm"><a href="#student-logins" class="font-semibold underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:decoration-black">Already a student? Log in here</a></p>
+    </div>
+  </section>
+
+  <!-- FIND SOMETHING: search, categories, filters and sorting -->
+  <section class="bg-white px-6 pb-6" aria-label="Find a product" data-shop>
+    <div class="mx-auto max-w-6xl">
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-center">
+        <label class="relative block flex-1" for="shop-search">
+          <span class="sr-only">Search the shop</span>
+          <svg viewBox="0 0 20 20" class="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-black/60" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="6" /><path d="M14 14l4 4" /></svg>
+          <input id="shop-search" type="search" placeholder="Search the shop: try Instagram, Black Friday, templates..." autocomplete="off" class="w-full rounded-full border border-black/30 bg-white py-3.5 pl-12 pr-5 text-[15px] outline-none transition-colors placeholder:text-black/55 focus:border-pink" data-search />
+        </label>
+        <div class="flex items-center gap-3">
+          {showFilters && (
+            <button type="button" class="inline-flex items-center gap-2 rounded-full border border-black px-5 py-3 text-[15px] font-semibold transition-colors hover:bg-black hover:text-white" aria-expanded="false" aria-controls="shop-filters" data-filters-toggle>
+              <svg viewBox="0 0 20 20" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M3 5h14M6 10h8M9 15h2" /></svg>
+              Filters <span class="hidden rounded-full bg-pink px-2 py-0.5 text-xs text-black" data-filters-count>0</span>
+            </button>
+          )}
+          <label class="flex items-center gap-2 text-[15px]" for="shop-sort">
+            <span class="hidden font-semibold sm:inline">Sort</span>
+            <select id="shop-sort" class="rounded-full border border-black bg-white py-3 pl-4 pr-9 text-[15px] font-semibold outline-none focus:border-pink" data-sort>
+              <option value="featured">Featured</option>
+              <option value="newest">Newest</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="az">A to Z</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <!-- category chips -->
+      <div class="-mx-6 mt-5 overflow-x-auto px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label="Categories">
+        <div class="flex w-max gap-2.5 sm:w-auto sm:flex-wrap">
+          <button type="button" class="shop-chip" data-chip="" aria-pressed="true">All <span class="opacity-60">{products.length}</span></button>
+          {categories.map((c) => <button type="button" class="shop-chip" data-chip={c} aria-pressed="false">{c} <span class="opacity-60">{catCounts[c]}</span></button>)}
+        </div>
+      </div>
+
+      <!-- filter panel -->
+      {showFilters && <div id="shop-filters" class="mt-5 hidden rounded-[1.75rem] border border-black/15 bg-offwhite p-6 sm:p-8" data-filters-panel>
+        <div class="grid gap-8 sm:grid-cols-2">
+          <fieldset>
+            <legend class="mb-3 text-xs font-semibold uppercase tracking-widest">Type</legend>
+            <div class="space-y-2.5">
+              {types.map((t) => (
+                <label class="flex cursor-pointer items-center gap-3 text-[15px]">
+                  <input type="checkbox" value={t} class="h-5 w-5 accent-[#b01fc6]" data-type-filter />
+                  <span>{t} <span class="text-black/60">({typeCounts[t]})</span></span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend class="mb-3 text-xs font-semibold uppercase tracking-widest">Price</legend>
+            <div class="space-y-2.5">
+              <label class="flex cursor-pointer items-center gap-3 text-[15px]"><input type="radio" name="shop-price" value="" checked class="h-5 w-5 accent-[#b01fc6]" data-price-filter /> <span>Any price</span></label>
+              {priceBands.map((b) => <label class="flex cursor-pointer items-center gap-3 text-[15px]"><input type="radio" name="shop-price" value={b.id} class="h-5 w-5 accent-[#b01fc6]" data-price-filter /> <span>{b.label}</span></label>)}
+            </div>
+          </fieldset>
+        </div>
+      </div>}
+
+      <!-- result count and active filters -->
+      <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-[15px]">
+        <p class="font-semibold" aria-live="polite" data-count>{products.length} products</p>
+        <button type="button" class="hidden text-sm font-semibold underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black" data-clear>Clear all filters</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE PRODUCTS -->
+  <section class="bg-white px-6 pb-20 sm:pb-24" aria-label="Products">
+    <div class="mx-auto max-w-6xl">
+      {season && settings.season.note && <p class="mb-6 rounded-full bg-[#fbe6f7] px-6 py-3 text-center text-[15px] font-semibold" data-season-note>{settings.season.note}</p>}
+      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-grid>
+        {products.map((p) => {
+          const l = looks[p.look] ?? looks.lilac;
+          const img = (p as { image?: { src: string; w: number; h: number; alt: string } }).image;
+          const compareAt = (p as { compareAt?: number }).compareAt;
+          return (
+            <li class="shop-card group flex flex-col" data-card data-slug={p.slug} data-category={p.category} data-type={p.type} data-price={p.price} data-band={bandOf(p.price)} data-title={p.title} data-added={p.added} data-order={effOrder(p)} data-search={[p.title, p.kicker, p.short, p.category, p.type, ...p.tags].join(' ').toLowerCase()}>
+              {img ? (
+                <div class={`relative aspect-[3/2] overflow-hidden rounded-[2rem] transition duration-300 group-hover:-translate-y-1.5 group-hover:shadow-[0_24px_50px_rgba(224,64,251,0.25)] ${l.tile}`}>
+                  <img
+                    src={`${img.src}-800.webp`}
+                    srcset={`${img.src}-480.webp 480w, ${img.src}-800.webp 800w, ${img.src}-1200.webp 1200w`}
+                    sizes="(min-width: 1024px) 370px, (min-width: 640px) 45vw, 92vw"
+                    width={img.w} height={img.h} alt={img.alt}
+                    class="absolute inset-x-4 bottom-4 top-12 h-[calc(100%-4rem)] w-[calc(100%-2rem)] object-contain"
+                    loading="lazy" decoding="async"
+                  />
+                  <p class={`absolute left-5 top-4 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-widest ${p.look === 'black' ? 'bg-white text-black' : 'bg-black text-white'}`}>{p.category}</p>
+                  {p.badge && <span class="absolute right-5 top-4 rounded-full bg-pink px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-black">{p.badge}</span>}
+                </div>
+              ) : (
+                <div class={`relative flex aspect-[3/2] flex-col justify-between overflow-hidden rounded-[2rem] p-6 transition duration-300 group-hover:-translate-y-1.5 group-hover:shadow-[0_24px_50px_rgba(224,64,251,0.25)] sm:p-7 ${l.tile}`}>
+                  <div class="relative flex items-start justify-between gap-3">
+                    <p class={`text-[11px] font-semibold uppercase tracking-widest ${l.kicker}`}>{p.category}</p>
+                    {p.badge && <span class="rounded-full bg-pink px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-black">{p.badge}</span>}
+                  </div>
+                  <div class="relative">
+                    <p class="font-serif text-[1.7rem] leading-[1.05] text-balance sm:text-3xl">{p.title}</p>
+                    <p class={`mt-2 text-sm ${l.kicker === 'text-black' ? '' : 'opacity-80'}`}>{p.kicker}</p>
+                  </div>
+                  <span class={`absolute bottom-5 right-6 text-xl ${l.mark}`} aria-hidden="true">&#10022;</span>
+                </div>
+              )}
+              <div class="flex flex-1 flex-col px-1 pt-5">
+                <div class="mb-2 flex items-baseline justify-between gap-4">
+                  <h2 class="font-serif text-xl leading-tight">{p.title}</h2>
+                  <p class="flex-none text-xl font-semibold">{compareAt && <s class="mr-2 text-base font-normal text-black/60">{money(compareAt)}</s>}{money(p.price)}</p>
+                </div>
+                <p class="mb-5 line-clamp-3 flex-1 text-[15px] text-black">{p.short}</p>
+                <div class="flex items-center justify-between gap-3">
+                  <a href={p.buy} target="_self" class="group/btn inline-flex items-center gap-3 rounded-full bg-black py-1.5 pl-6 pr-1.5 text-[15px] font-semibold text-white transition duration-300 hover:bg-pink hover:text-black">
+                    Buy now
+                    <span class="grid h-10 w-10 place-items-center rounded-full bg-white text-black transition-colors duration-300"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover/btn:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+                  </a>
+                  <button type="button" class="hidden text-[15px] font-semibold underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black" data-quick={p.slug} aria-haspopup="dialog">Quick look</button>
+                </div>
+              </div>
+              <template data-detail>
+                <p class="mb-2 text-xs font-semibold uppercase tracking-widest text-pink-deep">{p.category} &middot; {p.type}</p>
+                <h2 class="mb-3 font-serif text-3xl leading-tight text-balance">{p.title}</h2>
+                <p class="mb-5 text-black">{p.short}</p>
+                <p class="mb-3 text-xs font-semibold uppercase tracking-widest">What's inside</p>
+                <ul class="mb-7 space-y-2.5 text-[15px]">
+                  {p.inside.map((item) => <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&#9679;</span><span>{item}</span></li>)}
+                </ul>
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
+                  <ArrowButton href={p.buy} label={`Buy now, ${money(p.price)}`} variant="dark" sameTab />
+                  <a href={p.login} target="_blank" rel="noopener" class="text-[15px] font-semibold underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black">Existing student log in</a>
+                </div>
+              </template>
+            </li>
+          );
+        })}
+      </ul>
+
+      <!-- nothing matched -->
+      <div class="mx-auto hidden max-w-md py-16 text-center" data-empty>
+        <p class="mb-3 font-serif text-3xl">Nothing matches that, yet.</p>
+        <p class="mb-6">Try a different word, or clear your filters to see everything in the shop.</p>
+        <button type="button" class="rounded-full bg-black px-7 py-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-pink hover:text-black" data-clear>Clear all filters</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- REASSURANCE -->
+  <section class="border-y border-black/10 bg-white px-6 py-8" aria-label="About buying">
+    <ul class="mx-auto grid max-w-5xl gap-4 text-center text-[15px] sm:grid-cols-3 sm:gap-8">
+      <li><span class="font-semibold">Secure checkout.</span> Payments are handled by Teachery and ThriveCart, never on this site.</li>
+      <li><span class="font-semibold">Digital products.</span> Nothing to ship, so you can start straight away.</li>
+      <li><span class="font-semibold">Questions first?</span> Email <a href="mailto:hello@kyliekelly.com" class="underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black">hello@kyliekelly.com</a></li>
+    </ul>
+  </section>
+
+  <!-- THE SIGNATURE COURSE -->
+  <section class="relative overflow-hidden bg-black px-6 py-16 text-white sm:py-24">
+    <div class="pointer-events-none absolute -left-24 top-1/2 h-[28rem] w-[28rem] -translate-y-1/2 rounded-full bg-pink/25 blur-[120px]" aria-hidden="true"></div>
+    <div class="relative mx-auto grid max-w-5xl items-center gap-8 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
+      <div>
+        <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-pink">&mdash; Want the whole thing? &mdash;</p>
+        <h2 class="font-serif text-4xl leading-[1.02] text-balance sm:text-5xl">The Money-Making <span class="italic text-pink">Email System</span></h2>
+        <p class="mt-5 max-w-xl text-warmgray sm:text-lg">My signature email marketing course: start, grow, nurture and sell, all in one place. For women who want more sales from their list without living on social media.</p>
+      </div>
+      <div class="md:justify-self-end">
+        <ArrowButton href="https://system.kyliekelly.com/join" label="See what's inside" variant="light" />
+      </div>
+    </div>
+  </section>
+
+  <!-- START FREE -->
+  <section class="bg-offwhite px-6 py-16 sm:py-20" aria-label="Start free">
+    <div class="mx-auto max-w-4xl">
+      <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-pink-deep">&mdash; Not ready to buy? Start free &mdash;</p>
+      <h2 class="mb-10 text-center font-serif text-3xl leading-tight text-balance sm:text-4xl">Two free ways to get going.</h2>
+      <ul class="grid gap-5 sm:grid-cols-2">
+        <li class="flex flex-col rounded-[2rem] bg-white p-7 sm:p-8">
+          <p class="mb-2 flex items-baseline justify-between text-xs font-semibold uppercase tracking-widest text-pink-deep"><span>The 60-second quiz</span><span class="text-black">Free</span></p>
+          <h3 class="mb-3 font-serif text-2xl leading-tight">Find your next step</h3>
+          <p class="mb-6 flex-1 text-[15px]">Answer 6 quick questions and get the list-building strategy most likely to work for your business right now.</p>
+          <div><ArrowButton href="/guide" label="Take the quiz" variant="dark" /></div>
+        </li>
+        <li class="flex flex-col rounded-[2rem] bg-white p-7 sm:p-8">
+          <p class="mb-2 flex items-baseline justify-between text-xs font-semibold uppercase tracking-widest text-pink-deep"><span>The free community</span><span class="text-black">Free</span></p>
+          <h3 class="mb-3 font-serif text-2xl leading-tight">Learn with me for free</h3>
+          <p class="mb-6 flex-1 text-[15px]">Join the free Email Marketing Skool community, where I teach and answer your questions.</p>
+          <div><ArrowButton href="https://www.skool.com/email-marketing-skool/about" label="Join for free" variant="dark" /></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- EXISTING STUDENTS -->
+  <section id="student-logins" class="scroll-mt-24 bg-white px-6 py-16 sm:py-20">
+    <div class="mx-auto max-w-3xl">
+      <h2 class="mb-2 text-center font-serif text-3xl sm:text-4xl">Already a student?</h2>
+      <p class="mb-8 text-center">Log in to the one you bought.</p>
+      <ul class="grid gap-3 sm:grid-cols-2">
+        {products.map((p) => (
+          <li>
+            <a href={p.login} target="_blank" rel="noopener" class="flex items-center justify-between gap-4 rounded-[1.5rem] border border-black/20 px-6 py-4 transition-colors hover:border-pink">
+              <span class="font-semibold">{p.title}</span>
+              <span class="text-sm underline decoration-pink decoration-2 underline-offset-4">Log in</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-6 text-center text-sm">Can't remember which one? <a href="https://hello-53.teachery.co/my-learning" target="_blank" rel="noopener" class="font-semibold underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black">See everything you own in one place</a>.</p>
+    </div>
+  </section>
+
+  <!-- QUICK LOOK WINDOW -->
+  <dialog class="shop-dialog w-[min(92vw,40rem)] rounded-[2rem] bg-white p-0 text-black shadow-[0_30px_80px_rgba(0,0,0,0.35)]" aria-label="Product details" data-dialog>
+    <div class="relative p-7 sm:p-10">
+      <button type="button" class="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-offwhite transition-colors hover:bg-pink" aria-label="Close" data-dialog-close>
+        <svg viewBox="0 0 16 16" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" /></svg>
+      </button>
+      <div data-dialog-body></div>
+    </div>
+  </dialog>
+
+  <FreebieReveal slot="reveal" />
+</Layout>
+
+<style>
+  .shop-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    border: 1px solid #000;
+    border-radius: 9999px;
+    padding: 0.6rem 1.1rem;
+    font-size: 15px;
+    font-weight: 600;
+    background: #fff;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+  .shop-chip:hover { border-color: #e040fb; }
+  .shop-chip[aria-pressed='true'] { background: #000; color: #fff; }
+  .shop-dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+  .shop-dialog { max-height: 90vh; overflow-y: auto; margin: auto; }
+  .shop-dialog[open] { animation: shop-pop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  @keyframes shop-pop { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .shop-dialog[open] { animation: none; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-shop]');
+  const grid = document.querySelector<HTMLElement>('[data-grid]');
+  if (root && grid) {
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>('[data-card]'));
+    const search = root.querySelector<HTMLInputElement>('[data-search]')!;
+    const sortEl = root.querySelector<HTMLSelectElement>('[data-sort]')!;
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-chip]'));
+    const typeBoxes = Array.from(root.querySelectorAll<HTMLInputElement>('[data-type-filter]'));
+    const priceRadios = Array.from(root.querySelectorAll<HTMLInputElement>('[data-price-filter]'));
+    const panel = root.querySelector<HTMLElement>('[data-filters-panel]');
+    const toggle = root.querySelector<HTMLButtonElement>('[data-filters-toggle]');
+    const toggleCount = root.querySelector<HTMLElement>('[data-filters-count]');
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    const clearBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-clear]'));
+    const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+
+    const state = { q: '', cat: '', types: [] as string[], price: '', sort: 'featured' };
+
+    const num = (el: HTMLElement, key: string) => Number(el.dataset[key] ?? 0);
+    const sorters: Record<string, (a: HTMLElement, b: HTMLElement) => number> = {
+      featured: (a, b) => num(a, 'order') - num(b, 'order'),
+      newest: (a, b) => String(b.dataset.added).localeCompare(String(a.dataset.added)),
+      'price-asc': (a, b) => num(a, 'price') - num(b, 'price') || num(a, 'order') - num(b, 'order'),
+      'price-desc': (a, b) => num(b, 'price') - num(a, 'price') || num(a, 'order') - num(b, 'order'),
+      az: (a, b) => String(a.dataset.title).localeCompare(String(b.dataset.title)),
+    };
+
+    const readUrl = () => {
+      const p = new URLSearchParams(location.search);
+      state.q = p.get('q') ?? '';
+      state.cat = p.get('category') ?? '';
+      state.types = (p.get('type') ?? '').split(',').filter(Boolean);
+      state.price = p.get('price') ?? '';
+      state.sort = sorters[p.get('sort') ?? ''] ? (p.get('sort') as string) : 'featured';
+    };
+    const writeUrl = () => {
+      const p = new URLSearchParams();
+      if (state.q) p.set('q', state.q);
+      if (state.cat) p.set('category', state.cat);
+      if (state.types.length) p.set('type', state.types.join(','));
+      if (state.price) p.set('price', state.price);
+      if (state.sort !== 'featured') p.set('sort', state.sort);
+      const qs = p.toString();
+      try { history.replaceState(null, '', qs ? `${location.pathname}?${qs}` : location.pathname); } catch { /* fine without it */ }
+    };
+
+    const syncControls = () => {
+      search.value = state.q;
+      sortEl.value = state.sort;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String((c.dataset.chip ?? '') === state.cat)));
+      typeBoxes.forEach((b) => { b.checked = state.types.includes(b.value); });
+      priceRadios.forEach((r) => { r.checked = r.value === state.price; });
+    };
+
+    const apply = () => {
+      const words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+      const shown = cards.filter((c) => {
+        if (state.cat && c.dataset.category !== state.cat) return false;
+        if (state.types.length && !state.types.includes(c.dataset.type ?? '')) return false;
+        if (state.price && c.dataset.band !== state.price) return false;
+        const hay = c.dataset.search ?? '';
+        return words.every((w) => hay.includes(w));
+      });
+      cards.forEach((c) => { c.style.display = shown.includes(c) ? '' : 'none'; });
+      [...cards].sort(sorters[state.sort]).forEach((c) => grid.appendChild(c));
+
+      count.textContent = shown.length === cards.length ? `${cards.length} products` : `${shown.length} of ${cards.length} products`;
+      const panelFilters = state.types.length + (state.price ? 1 : 0);
+      if (toggleCount) {
+        toggleCount.textContent = String(panelFilters);
+        toggleCount.classList.toggle('hidden', panelFilters === 0);
+      }
+      const anyFilter = Boolean(state.q || state.cat || panelFilters);
+      clearBtns.forEach((b) => { if (!b.closest('[data-empty]')) b.classList.toggle('hidden', !anyFilter); });
+      empty.classList.toggle('hidden', shown.length > 0);
+      grid.classList.toggle('hidden', shown.length === 0);
+      writeUrl();
+    };
+
+    search.addEventListener('input', () => { state.q = search.value.trim(); apply(); });
+    sortEl.addEventListener('change', () => { state.sort = sortEl.value; apply(); });
+    chips.forEach((c) => c.addEventListener('click', () => { state.cat = c.dataset.chip ?? ''; syncControls(); apply(); }));
+    typeBoxes.forEach((b) => b.addEventListener('change', () => { state.types = typeBoxes.filter((x) => x.checked).map((x) => x.value); apply(); }));
+    priceRadios.forEach((r) => r.addEventListener('change', () => { state.price = r.value; apply(); }));
+    clearBtns.forEach((b) => b.addEventListener('click', () => { state.q = ''; state.cat = ''; state.types = []; state.price = ''; syncControls(); apply(); }));
+    toggle?.addEventListener('click', () => {
+      if (!panel) return;
+      const open = panel.classList.toggle('hidden') === false;
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+
+    // Quick look: the details are already in the page, the window just shows a copy of them.
+    const dialog = document.querySelector<HTMLDialogElement>('[data-dialog]');
+    const body = document.querySelector<HTMLElement>('[data-dialog-body]');
+    if (dialog && body && typeof dialog.showModal === 'function') {
+      grid.querySelectorAll<HTMLButtonElement>('[data-quick]').forEach((btn) => {
+        btn.classList.remove('hidden');
+        btn.addEventListener('click', () => {
+          const tpl = btn.closest('[data-card]')?.querySelector<HTMLTemplateElement>('[data-detail]');
+          if (!tpl) return;
+          body.replaceChildren(tpl.content.cloneNode(true));
+          dialog.showModal();
+        });
+      });
+      dialog.querySelector('[data-dialog-close]')?.addEventListener('click', () => dialog.close());
+      dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+    }
+
+    readUrl();
+    syncControls();
+    if (panel && toggle && (state.types.length || state.price)) { panel.classList.remove('hidden'); toggle.setAttribute('aria-expanded', 'true'); }
+    apply();
+  }
+</script>
