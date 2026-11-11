@@ -40,6 +40,18 @@ const rawTag = (item: string, name: string) => {
 };
 const formatDate = (d: string) => formatAuDate(d, { day: 'numeric', month: 'short', year: 'numeric' });
 
+// Links in old episode notes that no longer go anywhere. They are taken out of the website's copy here, so the
+// pages are right even before the episode notes in Buzzsprout have been edited. Anything matching a pattern is
+// unlinked (the words stay); the Inside the Inbox waitlist line has nothing left to say, so it goes completely.
+const DEAD_LINKS = [/podcasts\.apple\.com\/us\/podcast\/hormone-rants\/id1595891580/i, /thrivecart\.com\/inside-the-inbox/i];
+function removeDeadLinks(html: string): string {
+  // The old Kit sign-up line on the Inside the Inbox results episode (Kylie now uses Flodesk).
+  let out = html.replace(/(?:→|&rarr;)?\s*Join my email list here:?\s*<a [^>]*kyliekelly\.kit\.com\/general[^>]*>[\s\S]*?<\/a>(?:\s*<b>\s*<br\s*\/?>\s*<\/b>)?/gi, '');
+  out = out.replace(/(?:→|&rarr;)?\s*Wanna be on the waitlist for Season 2[^<]*<a [^>]*thrivecart\.com\/inside-the-inbox[^>]*>[\s\S]*?<\/a>(?:\s*<b>\s*<br\s*\/?>\s*<\/b>)?/gi, '');
+  out = out.replace(/<a\s[^>]*href=(["'])([^"']*)\1[^>]*>([\s\S]*?)<\/a>/gi, (whole, _q, href, inner) => (DEAD_LINKS.some((re) => re.test(href)) ? inner : whole));
+  return out;
+}
+
 async function loadFeedEpisodes() {
   try {
     const res = await fetch('https://feeds.buzzsprout.com/2065148.rss', { signal: AbortSignal.timeout(8000) });
@@ -71,7 +83,7 @@ async function loadFeedEpisodes() {
           href: siteSlug && knownEpisodePages.has(siteSlug)
             ? `/${siteSlug}/`
             : siteHrefByNumber.get(Number(num)) ?? '',
-          notesHtml: rawTag(item, 'description'),
+          notesHtml: removeDeadLinks(rawTag(item, 'description')),
           listenPage,
           buzzId: listenPage.match(/\/episodes\/(\d+)/)?.[1] ?? null,
           feedSlug: siteSlug ?? null,

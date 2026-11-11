@@ -416,6 +416,56 @@
       "permanent": true
     },
     {
+      "source": "/spotlightclub",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/summitplanningschool",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": true
+    },
+    {
+      "source": "/pitch-it",
+      "destination": "https://shop.kyliekelly.com/",
+      "permanent": true
+    },
+    {
+      "source": "/birthday-bash-info",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/the-email-growth-club-waitlist",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/emailgrowthclub-live",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/emailgrowthclub-2-0",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/podcast-episodes/how-to-break-up-with-birth-control-the-right-way-with-jenny-mahoney",
+      "destination": "/podcast/episodes/how-to-break-up-with-birth-control-the-right-way-with-jenny-mahoney",
+      "permanent": true
+    },
+    {
+      "source": "/podcast-episodes/how-to-optimize-your-energy-by-aligning-your-work-with-your-cycle",
+      "destination": "/podcast/episodes/how-to-optimize-your-energy-by-aligning-your-work-with-your-cycle-with-lindsey",
+      "permanent": true
+    },
+    {
+      "source": "/blog-posts/how-to-let-go-of-any-working-mom-guilt-and-why-its-not-serving-you-with-marisa-lonic",
+      "destination": "/podcast/episodes/how-to-let-go-of-working-mom-guilt-with-marisa-lonic-from-mama-work",
+      "permanent": true
+    },
+    {
       "source": "/booking/",
       "destination": "/services",
       "permanent": true
