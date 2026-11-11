@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 
 // Policy text carried over word for word from the previous kyliekelly.com site.
-// The one new section is "Contact form messages" under Processing Your Information.
+// Added since: Contact Form Messages, Voice Messages, Email Sign-up Forms and Spam Protection, How We Use AI, and the Google Analytics / Vercel Web Analytics / Meta Pixel wording (updated 11 Nov 2026).
 type Block = string | { lead: string; text: string } | { list: string[] };
 interface Section {
   id?: string;
@@ -160,13 +160,15 @@ const privacy: Section[] = [
       { lead: 'Cookies, Log Files and Web Beacons', text: 'Like many other Web sites, we makes use of log files. These files merely logs visitors to the site – usually a standard procedure for hosting companies and a part of hosting services’ analytics. The information inside the log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date/time stamp, referring/exit pages, and possibly the number of clicks. This information is used to analyse trends, administer the site, track user’s movement around the site, and gather demographic information. IP addresses and other such information are not linked to any information that is personally identifiable.' },
       'We also use cookies – small text files sent to us by your computer – and web beacons to store certain information. We may use cookies to authenticate your identity, to determine if you are logged onto our website, for personalisation, for security, for targeted advertising, or for analysis of the performance of our website and services. For example, cookies allow us to recommend blog posts to you based on what you have read on our site in the past. We use cookies that are not specific to your account but unique enough to allow us to analyse general trends and use, and to customise your interaction with our website.',
       'Most browsers are set to accept cookies by default. In addition, when you first encounter our website, you will be asked to “consent to cookies.” If you wish to disable cookies, you may do so through your individual browser options. However, this may affect your ability to use or make purchases from our website. More detailed information about cookie management with specific web browsers can be found at the browsers’ respective websites. What Are Cookies? By continuing to use our website and not disabling cookies on your browser, you are consenting to our use of cookies in accordance with the terms of this policy.',
+      { lead: 'Advertising (Meta Pixel)', text: 'We use the Meta Pixel, a tracking tool from Meta (the company behind Facebook and Instagram). It only loads if you click “Accept” on our cookie banner. When it is on, it tells Meta which pages you visit on our website, so that we can measure how our ads perform and show our ads to people who may be interested in them. Meta may use cookies and receives information such as your IP address and browser details. You can say no on the cookie banner, change your choice at any time using the “Cookie settings” link in the footer of our website, or manage the ads you see in your Facebook and Instagram settings.' },
       'In addition, we may use third-party software to post advertisements on our website or mobile app to oversee marketing or email campaigns, or manage other company initiatives. These third party softwares may use cookies or similar tracking technology. We have no control over these third parties or their use of cookies. For more information on opting out of interest-based ads, visit the Network Advertising Initiative Opt-Out Tool or Digital Advertising Alliance Opt-Out Tool.',
     ],
   },
   {
     title: 'Website Analytics',
     blocks: [
-      'We may partner with third party analytic companies, including Google Analytics. The analytic companies may also use cookies or other tracking technologies to analyse visitors’ use of our website or mobile app to determine the popularity of the content, and better understand online activity. We do not transfer personal information to these third party vendors. However, in order to access our website, you must consent to the collection and use of your information by these third party analytic companies. You should review their Privacy Policy and contact them directly if you have questions. If you do not want any information to be collected and used by tracking technologies, visit the Network Advertising Initiative Opt-Out Tool or Digital Advertising Alliance Opt-Out Tool.',
+      { lead: 'Google Analytics', text: 'We use Google Analytics to understand how visitors use our website, such as which pages are popular and how people find us. Google Analytics only runs if you click “Accept” on our cookie banner. It may use cookies or other tracking technologies to analyse visitors’ use of our website and to determine the popularity of our content. We do not transfer personal information to Google Analytics ourselves. You should review Google’s Privacy Policy and contact Google directly if you have questions. If you do not want any information to be collected and used by tracking technologies, click “No thanks” on our cookie banner, or visit the Network Advertising Initiative Opt-Out Tool or Digital Advertising Alliance Opt-Out Tool.' },
+      { lead: 'Vercel Web Analytics', text: 'We also use Vercel Web Analytics, which is built into our website host (Vercel). It counts page views and visitors without using cookies, and it runs whether or not you accept cookies. For each page view it may record the page visited, the page you came from, your approximate location (such as your country or city), your device type, operating system and browser. It does not collect personal identifiers and does not track you across other websites or apps. Visitors are told apart by an anonymous code created from the request, which Vercel discards after 24 hours. You can read more in Vercel’s privacy information for Web Analytics: https://vercel.com/docs/analytics/privacy-policy.' },
     ],
   },
   {
@@ -196,12 +198,30 @@ const privacy: Section[] = [
     ],
   },
   {
+    id: 'signup-forms',
+    title: 'Email Sign-up Forms and Spam Protection',
+    blocks: [
+      'When you join the Inner Circle waitlist or ask for a free resource using a form on this website, your first name and email address are sent through our website host (Vercel) to our email provider, Flodesk, which adds you to our email list and sends you the emails you signed up for. You can unsubscribe at any time using the link at the bottom of any email we send you.',
+      'To keep spam and bots out, these forms use Cloudflare Turnstile, a security check that runs in your browser. Cloudflare receives technical information, such as your IP address and browser details, to work out whether you are a real person, and may occasionally ask you to complete a short challenge. You can read more in Cloudflare’s privacy policy: https://www.cloudflare.com/privacypolicy/.',
+    ],
+  },
+  {
     id: 'voice-messages',
     title: 'Voice Messages (Ask Kylie)',
     blocks: [
       'When you record a question on our Ask Kylie page, your voice recording and the name you enter are collected and stored by SpeakPipe (speakpipe.com), a third-party voice message service, and made available to us. SpeakPipe may also collect technical information such as your IP address and device details, as described in its own privacy policy. Your browser will ask for permission to use your microphone, and you can say no.',
       'We use your recording to listen to your question and, if we choose, to play it or use parts of it on The Email Growth Show and in related content such as show notes, clips and social posts. If we do, we may refer to you by the name you gave. Please do not share sensitive personal information, or the personal details of other people, in your recording.',
       'We keep recordings for as long as we need them for these purposes. You can ask us to delete your recording at any time by emailing hello@kyliekelly.com. If your question has already been published in an episode, we will do what we reasonably can to remove it, but we cannot control copies that have already been distributed on podcast platforms or by other third parties.',
+    ],
+  },
+  {
+    id: 'ai',
+    title: 'How We Use AI',
+    blocks: [
+      'We believe in an AI sandwich: a human at the start, AI in the middle to help with productivity, and a human at the end. We use AI tools to help research, draft and edit some of our content, including blog posts, podcast show notes and episode transcripts. Every piece starts with our own ideas and experience, and is read, edited and approved by a person before it is published. Nothing goes out without Kylie’s eyes on it.',
+      'We never put subscriber, customer or website visitor information, such as names, email addresses or purchase details, into AI tools.',
+      'The quizzes and tools on our website are not AI-powered. Their recommendations are built from Kylie’s own knowledge and rules, not generated by an AI model.',
+      'If you have questions about how we use AI, email hello@kyliekelly.com.',
     ],
   },
   {
@@ -277,7 +297,7 @@ const privacy: Section[] = [
     <div class="max-w-2xl mx-auto">
       <p class="text-pink text-xs uppercase tracking-widest font-semibold mb-3">The fine print</p>
       <h1 class="text-3xl sm:text-4xl font-bold mb-4">Privacy Policy &amp; Terms and Conditions</h1>
-      <p class="text-sm text-black/70 mb-8">Last updated: 26 October 2026</p>
+      <p class="text-sm text-black/70 mb-8">Last updated: 11 November 2026</p>
       <p class="text-black mb-8">
         By using this website, you agree to the following Terms and Conditions and Privacy Policy. Please read them carefully before using this website.
       </p>
