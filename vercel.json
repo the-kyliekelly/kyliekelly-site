@@ -411,6 +411,11 @@
       "permanent": true
     },
     {
+      "source": "/bb-free",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
       "source": "/booking/",
       "destination": "/services",
       "permanent": true
