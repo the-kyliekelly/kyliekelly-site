@@ -65,7 +65,7 @@ const paths = [
     title: 'Grab what you need.',
     text: 'Browse the KK Digital Product Shop for grab-and-go courses, templates and trainings for growing your list without social media.',
     cta: 'Help Me Grow My Email List →',
-    href: 'https://shop.kyliekelly.com/',
+    href: '/shop',
   },
   {
     num: '03',
@@ -332,7 +332,7 @@ const arrowIcon = 'M4 12L12 4M5.5 4H12v6.5';
             {[
               { label: 'Listen to the podcast', href: '/podcast', tint: 'bg-pink text-white', ext: false },
               { label: 'Watch on YouTube', href: 'https://www.youtube.com/@KylieKelly', tint: 'bg-black text-white', ext: true },
-              { label: 'Visit the shop', href: 'https://shop.kyliekelly.com/', tint: 'bg-[#e9d9ec]', ext: true },
+              { label: 'Visit the shop', href: '/shop', tint: 'bg-[#e9d9ec]', ext: false },
               { label: 'Find CoLab', href: 'https://findcolab.com/', tint: 'bg-[#e9d9ec]', ext: true },
             ].map((l) => (
               <a href={l.href} {...(l.ext ? { target: "_blank", rel: "noopener" } : {})} class="flex items-center justify-between gap-6 rounded-full bg-white py-2 pl-6 pr-2 text-[15px] font-semibold shadow-lg transition-transform duration-300 hover:-translate-y-0.5">

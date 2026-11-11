@@ -212,12 +212,12 @@
     },
     {
       "source": "/breakthrough",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": false
     },
     {
       "source": "/breakthrough/",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": false
     },
     {
@@ -422,12 +422,12 @@
     },
     {
       "source": "/summitplanningschool",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": true
     },
     {
       "source": "/pitch-it",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": true
     },
     {
@@ -517,12 +517,12 @@
     },
     {
       "source": "/inbox",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": false
     },
     {
       "source": "/inbox/",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": false
     },
     {
@@ -537,22 +537,22 @@
     },
     {
       "source": "/evergreen-email",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": false
     },
     {
       "source": "/evergreen-email/",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": false
     },
     {
       "source": "/evergreen",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": false
     },
     {
       "source": "/evergreen/",
-      "destination": "https://shop.kyliekelly.com/",
+      "destination": "/shop",
       "permanent": false
     },
     {
