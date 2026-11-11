@@ -16,6 +16,24 @@
     "presaleBar": "Presale: save $700 until 30 November",
     "regularLabel": "See what's inside",
     "presaleLabel": "Join at the presale price",
-    "image": { "src": "/images/responsive/mmes-checkout", "w": 800, "h": 788, "alt": "Kylie Kelly, host of The Email Growth Show" }
+    "image": {
+      "src": "/images/shop/money-making-email-system",
+      "w": 1200,
+      "h": 630,
+      "alt": "The Money-Making Email System: from your first subscriber to your first sale and beyond, with Kylie Kelly"
+    }
+  },
+  "start_free": {
+    "quiz": {
+      "src": "/images/shop/free-quiz",
+      "alt": "The Your Next 1000 Subscribers quiz shown on two tablets"
+    },
+    "skool": {
+      "src": "/images/shop/skool-community",
+      "alt": "The Email Marketing Skool community page"
+    }
+  },
+  "reviews": {
+    "formUrl": "https://senja.io/p/kylie-kelly/r/reviews"
   }
 }

@@ -8,6 +8,7 @@ import FreebieReveal from '../components/FreebieReveal.astro';
 import ArrowButton from '../components/ArrowButton.astro';
 import allProducts from '../data/shop-products.json';
 import settings from '../data/shop-settings.json';
+import allReviews from '../data/shop-reviews.json';
 
 // Seasonal switch: while shop-settings.json names a category under "season", that category goes first in Featured order
 // and a short note shows above the grid. Empty the category (set it to "") when the season is over.
@@ -19,9 +20,23 @@ const showFilters = products.length >= 9;
 
 // The featured Money-Making Email System block shows the presale price until presaleEnds, then the regular price.
 const feat = settings.featured;
+const freeImg = settings.start_free;
 const presaleLive = Date.now() < new Date(feat.presaleEnds).getTime();
 const savings = feat.regularPrice - feat.presalePrice;
 const studentHub = 'https://hello-53.teachery.co/my-learning';
+
+// Reviews live in src/data/shop-reviews.json (one entry per review, matched to a product by its slug).
+const reviewsFor = (slug: string) => allReviews.filter((r) => r.product === slug).sort((a, b) => b.date.localeCompare(a.date));
+const stars = (n: number) => '\u2605'.repeat(n) + '\u2606'.repeat(5 - n);
+const summary = (slug: string) => {
+  const list = reviewsFor(slug);
+  const count = list.length;
+  const avg = count ? list.reduce((s, r) => s + r.rating, 0) / count : 0;
+  const bars = [5, 4, 3, 2, 1].map((n) => ({ n, pct: count ? Math.round((list.filter((r) => r.rating === n).length / count) * 100) : 0 }));
+  return { list, count, avg, bars };
+};
+const reviewFormUrl = settings.reviews.formUrl;
+const niceDate = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-AU', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const money = (n: number) => `$${n}`;
@@ -80,24 +95,25 @@ const jsonLd = {
       {presaleLive && (
         <p class="bg-black px-6 py-3.5 text-center text-[15px] font-semibold text-white sm:text-base" data-presale data-ends={feat.presaleEnds}><span class="mr-2 text-pink" aria-hidden="true">&#10022;</span>{feat.presaleBar}<span class="ml-2 text-pink" aria-hidden="true">&#10022;</span></p>
       )}
-      <div class="grid md:grid-cols-[0.85fr_1.15fr]">
-        <div class="relative aspect-[4/3] border-black max-md:border-b-2 md:aspect-auto md:min-h-[24rem] md:border-r-2">
-          <img
-            src={`${feat.image.src}-800.webp`}
-            srcset={`${feat.image.src}-480.webp 480w, ${feat.image.src}-800.webp 800w`}
-            sizes="(min-width: 768px) 45vw, 92vw"
-            width={feat.image.w} height={feat.image.h} alt={feat.image.alt}
-            class="absolute inset-0 h-full w-full object-cover object-top" loading="lazy" decoding="async"
-          />
-          <p class="absolute left-5 top-4 rounded-full bg-black px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white">Signature course</p>
-          <p class="absolute bottom-4 right-4 -rotate-3 rounded-full border-2 border-black bg-pink px-5 py-2 text-2xl font-bold leading-none text-black shadow-[3px_3px_0_0_#000]">{presaleLive ? <s class="mr-2 text-base font-semibold opacity-60" data-presale>{money(feat.regularPrice)}</s> : null}<span data-price-now data-regular={money(feat.regularPrice)}>{money(presaleLive ? feat.presalePrice : feat.regularPrice)}</span></p>
-        </div>
-        <div class="flex flex-col justify-center p-7 sm:p-10 lg:p-12">
+      <div class="relative bg-black">
+        <img
+          src={`${feat.image.src}-1200.webp`}
+          srcset={`${feat.image.src}-480.webp 480w, ${feat.image.src}-800.webp 800w, ${feat.image.src}-1200.webp 1200w`}
+          sizes="(min-width: 1152px) 1152px, 92vw"
+          width={feat.image.w} height={feat.image.h} alt={feat.image.alt}
+          class="block h-auto w-full" loading="lazy" decoding="async"
+        />
+        <p class="absolute bottom-3 left-3 -rotate-3 rounded-full border-2 border-black bg-pink px-4 py-1.5 text-xl font-bold leading-none text-black shadow-[3px_3px_0_0_#000] sm:bottom-5 sm:left-auto sm:right-6 sm:px-5 sm:py-2 sm:text-2xl">{presaleLive ? <s class="mr-2 text-sm font-semibold opacity-60 sm:text-base" data-presale>{money(feat.regularPrice)}</s> : null}<span data-price-now data-regular={money(feat.regularPrice)}>{money(presaleLive ? feat.presalePrice : feat.regularPrice)}</span></p>
+      </div>
+      <div class="grid gap-6 p-7 sm:p-10 md:grid-cols-[1.25fr_1fr] md:items-center md:gap-12">
+        <div>
+          <h2 class="sr-only">{feat.title} {feat.accent}</h2>
           <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">{feat.kicker}</p>
-          <h2 class="mb-4 font-serif text-4xl font-bold leading-[1.02] text-balance sm:text-5xl">{feat.title} <span class="italic text-pink">{feat.accent}</span></h2>
           <p class="mb-4 max-w-xl text-lg text-black">{feat.copy}</p>
-          {presaleLive && <p class="mb-4 text-lg font-semibold" data-presale>{money(feat.presalePrice)} until 30 November, then {money(feat.regularPrice)}. That's {money(savings)} off.</p>}
-          <p class="mb-7 max-w-xl text-[15px] text-black">{feat.proof}</p>
+          <p class="max-w-xl text-[15px] text-black">{feat.proof}</p>
+        </div>
+        <div class="md:justify-self-end">
+          {presaleLive && <p class="mb-5 text-lg font-semibold" data-presale>{money(feat.presalePrice)} until 30 November, then {money(feat.regularPrice)}. That's {money(savings)} off.</p>}
           <div data-cta data-regular-label={feat.regularLabel}><ArrowButton href={feat.buy} label={presaleLive ? feat.presaleLabel : feat.regularLabel} variant="dark" sameTab /></div>
         </div>
       </div>
@@ -181,6 +197,7 @@ const jsonLd = {
         {products.map((p) => {
           const img = (p as { image?: { src: string; w: number; h: number; alt: string } }).image;
           const compareAt = (p as { compareAt?: number }).compareAt;
+          const rv = summary(p.slug);
           return (
             <li class="shop-card group flex flex-col overflow-hidden rounded-[2rem] border-2 border-black bg-white transition duration-300 hover:-translate-y-1.5 hover:shadow-[7px_7px_0_0_#e040fb]" data-card data-slug={p.slug} data-category={p.category} data-type={p.type} data-price={p.price} data-band={bandOf(p.price)} data-title={p.title} data-added={p.added} data-order={effOrder(p)} data-search={[p.title, p.kicker, p.short, p.category, p.type, ...p.tags].join(' ').toLowerCase()}>
               {img ? (
@@ -210,6 +227,13 @@ const jsonLd = {
               )}
               <div class="flex flex-1 flex-col p-6">
                 <h2 class="mb-2 font-serif text-[1.85rem] font-bold leading-[1.02] text-balance sm:text-[2rem]">{p.title}</h2>
+                {rv.count > 0 && (
+                  <button type="button" class="mb-2 inline-flex items-center gap-2 self-start text-sm hover:underline" data-quick={p.slug} data-open-tab="reviews" aria-haspopup="dialog" aria-label={`${rv.avg.toFixed(1)} out of 5 from ${rv.count} ${rv.count === 1 ? 'review' : 'reviews'}. Read the reviews`}>
+                    <span class="tracking-wide text-pink" aria-hidden="true">{stars(Math.round(rv.avg))}</span>
+                    <span class="font-semibold">{rv.avg.toFixed(1)}</span>
+                    <span class="text-black/70">({rv.count} {rv.count === 1 ? 'review' : 'reviews'})</span>
+                  </button>
+                )}
                 <p class="mb-1 text-sm font-semibold text-pink">{p.kicker}</p>
                 <p class="mb-6 mt-2 line-clamp-3 flex-1 text-[15px] text-black">{p.short}</p>
                 <a href={p.buy} target="_self" aria-label={`Buy ${p.title}, ${money(p.price)}`} class="group/btn flex items-center justify-between gap-3 rounded-full bg-black px-6 py-3.5 text-base font-semibold text-white transition-colors duration-300 hover:bg-pink hover:text-black">
@@ -220,12 +244,48 @@ const jsonLd = {
               </div>
               <template data-detail>
                 <p class="mb-2 text-xs font-semibold uppercase tracking-widest text-pink">{p.category} &middot; {p.type}</p>
-                <h2 class="mb-3 font-serif text-3xl leading-tight text-balance">{p.title}</h2>
-                <p class="mb-5 text-black">{p.short}</p>
-                <p class="mb-3 text-xs font-semibold uppercase tracking-widest">What's inside</p>
-                <ul class="mb-7 space-y-2.5 text-[15px]">
-                  {p.inside.map((item) => <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&#9679;</span><span>{item}</span></li>)}
-                </ul>
+                <h2 class="mb-3 font-serif text-3xl font-bold leading-tight text-balance">{p.title}</h2>
+                <p class="mb-6 text-black">{p.short}</p>
+                <div role="tablist" class="mb-5 flex gap-6 border-b border-black/15" aria-label="About this product">
+                  <button type="button" role="tab" class="shop-tab" aria-selected="true" data-tab="inside">What's inside</button>
+                  <button type="button" role="tab" class="shop-tab" aria-selected="false" data-tab="reviews">Reviews ({rv.count})</button>
+                </div>
+                <div role="tabpanel" data-panel="inside">
+                  <ul class="mb-7 space-y-2.5 text-[15px]">
+                    {p.inside.map((item) => <li class="flex gap-3"><span class="text-pink" aria-hidden="true">&#9679;</span><span>{item}</span></li>)}
+                  </ul>
+                </div>
+                <div role="tabpanel" data-panel="reviews" hidden>
+                  {rv.count > 0 ? (
+                    <div class="mb-6">
+                      <div class="mb-5 grid items-center gap-4 rounded-2xl bg-offwhite p-5 sm:grid-cols-[auto_1fr] sm:gap-8">
+                        <div class="text-center">
+                          <p class="font-serif text-4xl font-bold leading-none">{rv.avg.toFixed(1)}</p>
+                          <p class="mt-1 tracking-wide text-pink" aria-hidden="true">{stars(Math.round(rv.avg))}</p>
+                          <p class="mt-1 text-xs">Based on {rv.count} {rv.count === 1 ? 'review' : 'reviews'}</p>
+                        </div>
+                        <ul class="space-y-1 text-xs" aria-label="Rating breakdown">
+                          {rv.bars.map((b) => (
+                            <li class="flex items-center gap-2"><span class="w-4 text-right">{b.n}</span><span class="h-2 flex-1 overflow-hidden rounded-full bg-black/10"><span class="block h-full rounded-full bg-pink" style={`width:${b.pct}%`}></span></span><span class="w-9 text-right">{b.pct}%</span></li>
+                          ))}
+                        </ul>
+                      </div>
+                      <ul class="space-y-5">
+                        {rv.list.map((r) => (
+                          <li class="border-b border-black/10 pb-5 last:border-0 last:pb-0">
+                            <p class="tracking-wide text-pink" aria-label={`${r.rating} out of 5 stars`}>{stars(r.rating)}</p>
+                            <p class="mt-1 font-semibold">{r.name}{r.tagline && <span class="font-normal text-black/70">, {r.tagline}</span>} <span class="text-sm font-normal text-black/60">&middot; {niceDate(r.date)}</span></p>
+                            {r.title && <p class="mt-2 font-serif text-lg font-bold leading-snug">{r.title}</p>}
+                            <p class="mt-1 text-[15px]">{r.text}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p class="mb-6 text-[15px]">No reviews here yet. If you've bought this, I'd love to hear what you thought.</p>
+                  )}
+                  <p class="mb-7"><a href={reviewFormUrl} target="_blank" rel="noopener" class="inline-flex rounded-full border-2 border-black px-6 py-3 text-[15px] font-semibold transition-colors hover:bg-black hover:text-white">Write a review</a></p>
+                </div>
                 <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
                   <ArrowButton href={p.buy} label={`Buy now, ${money(p.price)}`} variant="dark" sameTab />
                   <a href={p.login} target="_blank" rel="noopener" class="text-[15px] font-semibold underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black">Existing student log in</a>
@@ -259,19 +319,31 @@ const jsonLd = {
   <section class="bg-offwhite px-6 py-16 sm:py-20" aria-label="Start free">
     <div class="mx-auto max-w-4xl">
       <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-pink">&mdash; Not ready to buy? Start free &mdash;</p>
-      <h2 class="mb-10 text-center font-serif text-3xl leading-tight text-balance sm:text-4xl">Two free ways to get going.</h2>
-      <ul class="grid gap-5 sm:grid-cols-2">
-        <li class="flex flex-col rounded-[2rem] bg-white p-7 sm:p-8">
-          <p class="mb-2 flex items-baseline justify-between text-xs font-semibold uppercase tracking-widest text-pink"><span>The 60-second quiz</span><span class="text-black">Free</span></p>
-          <h3 class="mb-3 font-serif text-2xl leading-tight">Find your next step</h3>
-          <p class="mb-6 flex-1 text-[15px]">Answer 6 quick questions and get the list-building strategy most likely to work for your business right now.</p>
-          <div><ArrowButton href="/guide" label="Take the quiz" variant="dark" /></div>
+      <h2 class="mb-10 text-center font-serif text-3xl font-bold leading-tight text-balance sm:text-4xl">Two free ways to get going.</h2>
+      <ul class="grid gap-6 sm:grid-cols-2">
+        <li class="group flex flex-col overflow-hidden rounded-[2rem] border-2 border-black bg-white transition duration-300 hover:-translate-y-1.5 hover:shadow-[7px_7px_0_0_#e040fb]">
+          <div class="relative aspect-[3/2] bg-white">
+            <img src={`${freeImg.quiz.src}-800.webp`} srcset={`${freeImg.quiz.src}-480.webp 480w, ${freeImg.quiz.src}-800.webp 800w`} sizes="(min-width: 640px) 400px, 92vw" width="1254" height="1049" alt={freeImg.quiz.alt} class="absolute inset-x-4 bottom-4 top-12 h-[calc(100%-4rem)] w-[calc(100%-2rem)] object-contain" loading="lazy" decoding="async" />
+            <p class="absolute left-5 top-4 rounded-full bg-black px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white">The 60-second quiz</p>
+            <p class="absolute bottom-3 right-4 -rotate-3 rounded-full border-2 border-black bg-pink px-4 py-1.5 text-xl font-bold leading-none text-black shadow-[3px_3px_0_0_#000]">Free</p>
+          </div>
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="mb-2 font-serif text-[1.85rem] font-bold leading-[1.02] text-balance">Find your next step</h3>
+            <p class="mb-6 flex-1 text-[15px]">Answer 6 quick questions and get the list-building strategy most likely to work for your business right now.</p>
+            <a href="/guide" class="group/btn flex items-center justify-between gap-3 rounded-full bg-black px-6 py-3.5 text-base font-semibold text-white transition-colors duration-300 hover:bg-pink hover:text-black"><span>Take the quiz</span><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover/btn:rotate-45" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></a>
+          </div>
         </li>
-        <li class="flex flex-col rounded-[2rem] bg-white p-7 sm:p-8">
-          <p class="mb-2 flex items-baseline justify-between text-xs font-semibold uppercase tracking-widest text-pink"><span>The free community</span><span class="text-black">Free</span></p>
-          <h3 class="mb-3 font-serif text-2xl leading-tight">Learn with me for free</h3>
-          <p class="mb-6 flex-1 text-[15px]">Join the free Email Marketing Skool community, where I teach and answer your questions.</p>
-          <div><ArrowButton href="https://www.skool.com/email-marketing-skool/about" label="Join for free" variant="dark" /></div>
+        <li class="group flex flex-col overflow-hidden rounded-[2rem] border-2 border-black bg-white transition duration-300 hover:-translate-y-1.5 hover:shadow-[7px_7px_0_0_#e040fb]">
+          <div class="relative aspect-[3/2] bg-white">
+            <img src={`${freeImg.skool.src}-484.webp`} srcset={`${freeImg.skool.src}-480.webp 480w`} sizes="(min-width: 640px) 400px, 92vw" width="484" height="290" alt={freeImg.skool.alt} class="absolute inset-x-4 bottom-4 top-12 h-[calc(100%-4rem)] w-[calc(100%-2rem)] rounded-xl object-contain" loading="lazy" decoding="async" />
+            <p class="absolute left-5 top-4 rounded-full bg-black px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white">The free community</p>
+            <p class="absolute bottom-3 right-4 -rotate-3 rounded-full border-2 border-black bg-pink px-4 py-1.5 text-xl font-bold leading-none text-black shadow-[3px_3px_0_0_#000]">Free</p>
+          </div>
+          <div class="flex flex-1 flex-col p-6">
+            <h3 class="mb-2 font-serif text-[1.85rem] font-bold leading-[1.02] text-balance">Learn with me for free</h3>
+            <p class="mb-6 flex-1 text-[15px]">Join the free Email Marketing Skool community, where I teach and answer your questions.</p>
+            <a href="https://www.skool.com/email-marketing-skool/about" target="_self" class="group/btn flex items-center justify-between gap-3 rounded-full bg-black px-6 py-3.5 text-base font-semibold text-white transition-colors duration-300 hover:bg-pink hover:text-black"><span>Join for free</span><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover/btn:rotate-45" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></a>
+          </div>
         </li>
       </ul>
     </div>
@@ -289,6 +361,12 @@ const jsonLd = {
 
   <FreebieReveal slot="reveal" />
 </Layout>
+
+<style is:global>
+  .shop-tab { padding: 0.6rem 0.1rem; margin-bottom: -1px; font-size: 15px; font-weight: 600; border-bottom: 3px solid transparent; color: rgba(0, 0, 0, 0.6); }
+  .shop-tab:hover { color: #000; }
+  .shop-tab[aria-selected='true'] { color: #000; border-bottom-color: #e040fb; }
+</style>
 
 <style>
   .shop-chip {
@@ -417,8 +495,17 @@ const jsonLd = {
           const tpl = btn.closest('[data-card]')?.querySelector<HTMLTemplateElement>('[data-detail]');
           if (!tpl) return;
           body.replaceChildren(tpl.content.cloneNode(true));
+          showTab(btn.dataset.openTab ?? 'inside');
           dialog.showModal();
         });
+      });
+      const showTab = (name: string) => {
+        body.querySelectorAll<HTMLElement>('[data-tab]').forEach((tab) => tab.setAttribute('aria-selected', String(tab.dataset.tab === name)));
+        body.querySelectorAll<HTMLElement>('[data-panel]').forEach((panel) => { panel.hidden = panel.dataset.panel !== name; });
+      };
+      body.addEventListener('click', (e) => {
+        const tab = (e.target as HTMLElement).closest<HTMLElement>('[data-tab]');
+        if (tab) showTab(tab.dataset.tab ?? 'inside');
       });
       dialog.querySelector('[data-dialog-close]')?.addEventListener('click', () => dialog.close());
       dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
