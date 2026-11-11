@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import CookieBanner from '../components/CookieBanner.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
 import Tracking from '../components/Tracking.astro';
+import Analytics from '@vercel/analytics/astro';
 import vercel from '../../vercel.json';
 import '../styles/global.css';
 
@@ -60,6 +61,8 @@ const shareImage = new URL(image, Astro.site).toString();
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:wght@300;400;600&display=swap" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:wght@300;400;600&display=swap" /></noscript>
     <slot name="head" />
+    <!-- Vercel Web Analytics: page views and visitor numbers, no cookies. Turned on in the Vercel dashboard under Analytics. -->
+    <Analytics />
   </head>
   <body>
     <div class="reveal-page" data-reveal-page>
