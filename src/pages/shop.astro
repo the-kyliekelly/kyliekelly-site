@@ -20,15 +20,6 @@ const showFilters = products.length >= 9;
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const money = (n: number) => `$${n}`;
 
-// The cover tiles stand in for product photos. Give a product an "image" in the JSON and it shows that instead.
-const looks: Record<string, { tile: string; kicker: string; mark: string }> = {
-  pink: { tile: 'bg-pink text-black', kicker: 'text-black', mark: 'text-black' },
-  black: { tile: 'bg-black text-white', kicker: 'text-pink', mark: 'text-pink' },
-  lilac: { tile: 'bg-[#e9d9ec] text-black', kicker: 'text-pink-deep', mark: 'text-pink-deep' },
-  pale: { tile: 'bg-[#fbe6f7] text-black', kicker: 'text-pink-deep', mark: 'text-pink-deep' },
-  white: { tile: 'bg-white text-black border border-black/15', kicker: 'text-pink-deep', mark: 'text-pink-deep' },
-};
-
 const categories = [...new Set(products.map((p) => p.category))];
 const types = [...new Set(products.map((p) => p.type))];
 const countBy = (key: 'category' | 'type') => Object.fromEntries([...new Set(products.map((p) => p[key]))].map((v) => [v, products.filter((p) => p[key] === v).length]));
@@ -64,20 +55,22 @@ const jsonLd = {
   </Fragment>
 
   <!-- HERO -->
-  <section class="relative overflow-hidden bg-gradient-to-b from-[#fbe6f7] via-white to-white px-6 pt-12 pb-10 text-center sm:pt-16 sm:pb-12">
-    <div class="mx-auto max-w-3xl">
-      <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-pink-deep">&mdash; The KK Digital Product Shop &mdash;</p>
-      <h1 class="font-serif text-[clamp(2.5rem,6.2vw,4.75rem)] leading-[0.98] text-balance">
+  <section class="relative overflow-hidden bg-black px-6 pt-14 pb-14 text-center text-white sm:pt-20 sm:pb-16">
+    <div class="pointer-events-none absolute -left-24 top-1/2 h-[26rem] w-[26rem] -translate-y-1/2 rounded-full bg-pink/25 blur-[120px]" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[22rem] rounded-full bg-pink/20 blur-[120px]" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-3xl">
+      <p class="mb-5 text-xs font-semibold uppercase tracking-widest text-pink">&mdash; The KK Digital Product Shop &mdash;</p>
+      <h1 class="font-serif text-[clamp(2.75rem,7.4vw,6rem)] leading-[0.95] text-balance">
         Grab what you need, <span class="script-accent italic text-pink">start today.</span>
       </h1>
-      <p class="mx-auto mt-5 max-w-xl text-lg text-black">Courses, templates and coaching for growing your email list without social media. Pick the one thing you need and put it to work today.</p>
-      <p class="mx-auto mt-3 max-w-xl text-[15px] text-black">I grew my own list from 0 to 7,000+ subscribers in 18 months without social media. Everything here comes from that.</p>
-      <p class="mt-5 text-sm"><a href="#student-logins" class="font-semibold underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:decoration-black">Already a student? Log in here</a></p>
+      <p class="mx-auto mt-6 max-w-xl text-lg text-white">Courses, templates and coaching for growing your email list without social media. Pick the one thing you need and put it to work today.</p>
+      <p class="mx-auto mt-3 max-w-xl text-[15px] text-warmgray">I grew my own list from 0 to 7,000+ subscribers in 18 months without social media. Everything here comes from that.</p>
+      <p class="mt-6 text-sm"><a href="#student-logins" class="font-semibold text-white underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:text-pink">Already a student? Log in here</a></p>
     </div>
   </section>
 
   <!-- FIND SOMETHING: search, categories, filters and sorting -->
-  <section class="bg-white px-6 pb-6" aria-label="Find a product" data-shop>
+  <section class="bg-white px-6 pb-6 pt-10 sm:pt-12" aria-label="Find a product" data-shop>
     <div class="mx-auto max-w-6xl">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-center">
         <label class="relative block flex-1" for="shop-search">
@@ -148,53 +141,47 @@ const jsonLd = {
   <!-- THE PRODUCTS -->
   <section class="bg-white px-6 pb-20 sm:pb-24" aria-label="Products">
     <div class="mx-auto max-w-6xl">
-      {season && settings.season.note && <p class="mb-6 rounded-full bg-[#fbe6f7] px-6 py-3 text-center text-[15px] font-semibold" data-season-note>{settings.season.note}</p>}
+      {season && settings.season.note && <p class="mb-6 rounded-full bg-black px-6 py-3.5 text-center text-[15px] font-semibold text-white sm:text-base" data-season-note><span class="mr-2 text-pink" aria-hidden="true">&#10022;</span>{settings.season.note}</p>}
       <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-grid>
         {products.map((p) => {
-          const l = looks[p.look] ?? looks.lilac;
           const img = (p as { image?: { src: string; w: number; h: number; alt: string } }).image;
           const compareAt = (p as { compareAt?: number }).compareAt;
           return (
-            <li class="shop-card group flex flex-col" data-card data-slug={p.slug} data-category={p.category} data-type={p.type} data-price={p.price} data-band={bandOf(p.price)} data-title={p.title} data-added={p.added} data-order={effOrder(p)} data-search={[p.title, p.kicker, p.short, p.category, p.type, ...p.tags].join(' ').toLowerCase()}>
+            <li class="shop-card group flex flex-col overflow-hidden rounded-[2rem] border-2 border-black bg-white transition duration-300 hover:-translate-y-1.5 hover:shadow-[7px_7px_0_0_#e040fb]" data-card data-slug={p.slug} data-category={p.category} data-type={p.type} data-price={p.price} data-band={bandOf(p.price)} data-title={p.title} data-added={p.added} data-order={effOrder(p)} data-search={[p.title, p.kicker, p.short, p.category, p.type, ...p.tags].join(' ').toLowerCase()}>
               {img ? (
-                <div class={`relative aspect-[3/2] overflow-hidden rounded-[2rem] transition duration-300 group-hover:-translate-y-1.5 group-hover:shadow-[0_24px_50px_rgba(224,64,251,0.25)] ${l.tile}`}>
+                <div class={`relative aspect-[3/2] bg-white`}>
+                  {p.look === 'black' && <div class="absolute inset-x-4 bottom-4 top-12 rounded-2xl bg-black" aria-hidden="true"></div>}
                   <img
                     src={`${img.src}-800.webp`}
                     srcset={`${img.src}-480.webp 480w, ${img.src}-800.webp 800w, ${img.src}-1200.webp 1200w`}
                     sizes="(min-width: 1024px) 370px, (min-width: 640px) 45vw, 92vw"
                     width={img.w} height={img.h} alt={img.alt}
-                    class="absolute inset-x-4 bottom-4 top-12 h-[calc(100%-4rem)] w-[calc(100%-2rem)] object-contain"
+                    class={`absolute inset-x-4 bottom-4 top-12 h-[calc(100%-4rem)] w-[calc(100%-2rem)] object-contain ${p.look === 'black' ? 'p-3' : ''}`}
                     loading="lazy" decoding="async"
                   />
-                  <p class={`absolute left-5 top-4 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-widest ${p.look === 'black' ? 'bg-white text-black' : 'bg-black text-white'}`}>{p.category}</p>
+                  <p class="absolute left-5 top-4 rounded-full bg-black px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white">{p.category}</p>
                   {p.badge && <span class="absolute right-5 top-4 rounded-full bg-pink px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-black">{p.badge}</span>}
+                  <p class="absolute bottom-3 right-4 -rotate-3 rounded-full border-2 border-black bg-pink px-4 py-1.5 text-xl font-bold leading-none text-black shadow-[3px_3px_0_0_#000] transition-transform duration-300 group-hover:rotate-0 group-hover:scale-105">{compareAt && <s class="mr-1.5 text-sm font-semibold opacity-60">{money(compareAt)}</s>}{money(p.price)}</p>
                 </div>
               ) : (
-                <div class={`relative flex aspect-[3/2] flex-col justify-between overflow-hidden rounded-[2rem] p-6 transition duration-300 group-hover:-translate-y-1.5 group-hover:shadow-[0_24px_50px_rgba(224,64,251,0.25)] sm:p-7 ${l.tile}`}>
-                  <div class="relative flex items-start justify-between gap-3">
-                    <p class={`text-[11px] font-semibold uppercase tracking-widest ${l.kicker}`}>{p.category}</p>
+                <div class="relative flex aspect-[3/2] flex-col justify-between bg-white p-6">
+                  <div class="flex items-start justify-between gap-3">
+                    <p class="rounded-full bg-black px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white">{p.category}</p>
                     {p.badge && <span class="rounded-full bg-pink px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-black">{p.badge}</span>}
                   </div>
-                  <div class="relative">
-                    <p class="font-serif text-[1.7rem] leading-[1.05] text-balance sm:text-3xl">{p.title}</p>
-                    <p class={`mt-2 text-sm ${l.kicker === 'text-black' ? '' : 'opacity-80'}`}>{p.kicker}</p>
-                  </div>
-                  <span class={`absolute bottom-5 right-6 text-xl ${l.mark}`} aria-hidden="true">&#10022;</span>
+                  <p class="font-serif text-2xl italic leading-tight text-pink-deep text-balance">{p.kicker}</p>
+                  <p class="absolute bottom-3 right-4 -rotate-3 rounded-full border-2 border-black bg-pink px-4 py-1.5 text-xl font-bold leading-none text-black shadow-[3px_3px_0_0_#000]">{money(p.price)}</p>
                 </div>
               )}
-              <div class="flex flex-1 flex-col px-1 pt-5">
-                <div class="mb-2 flex items-baseline justify-between gap-4">
-                  <h2 class="font-serif text-xl leading-tight">{p.title}</h2>
-                  <p class="flex-none text-xl font-semibold">{compareAt && <s class="mr-2 text-base font-normal text-black/60">{money(compareAt)}</s>}{money(p.price)}</p>
-                </div>
-                <p class="mb-5 line-clamp-3 flex-1 text-[15px] text-black">{p.short}</p>
-                <div class="flex items-center justify-between gap-3">
-                  <a href={p.buy} target="_self" class="group/btn inline-flex items-center gap-3 rounded-full bg-black py-1.5 pl-6 pr-1.5 text-[15px] font-semibold text-white transition duration-300 hover:bg-pink hover:text-black">
-                    Buy now
-                    <span class="grid h-10 w-10 place-items-center rounded-full bg-white text-black transition-colors duration-300"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover/btn:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
-                  </a>
-                  <button type="button" class="hidden text-[15px] font-semibold underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black" data-quick={p.slug} aria-haspopup="dialog">Quick look</button>
-                </div>
+              <div class="flex flex-1 flex-col p-6">
+                <h2 class="mb-2 font-serif text-[1.85rem] font-bold leading-[1.02] text-balance sm:text-[2rem]">{p.title}</h2>
+                <p class="mb-1 text-sm font-semibold text-pink-deep">{p.kicker}</p>
+                <p class="mb-6 mt-2 line-clamp-3 flex-1 text-[15px] text-black">{p.short}</p>
+                <a href={p.buy} target="_self" aria-label={`Buy ${p.title}, ${money(p.price)}`} class="group/btn flex items-center justify-between gap-3 rounded-full bg-black px-6 py-3.5 text-base font-semibold text-white transition-colors duration-300 hover:bg-pink hover:text-black">
+                  <span>Buy now</span>
+                  <svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover/btn:rotate-45" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg>
+                </a>
+                <button type="button" class="mt-4 hidden self-center text-[15px] font-semibold underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black" data-quick={p.slug} aria-haspopup="dialog">Quick look: what's inside</button>
               </div>
               <template data-detail>
                 <p class="mb-2 text-xs font-semibold uppercase tracking-widest text-pink-deep">{p.category} &middot; {p.type}</p>
@@ -316,7 +303,7 @@ const jsonLd = {
     transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   }
   .shop-chip:hover { border-color: #e040fb; }
-  .shop-chip[aria-pressed='true'] { background: #000; color: #fff; }
+  .shop-chip[aria-pressed='true'] { background: #e040fb; color: #000; }
   .shop-dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
   .shop-dialog { max-height: 90vh; overflow-y: auto; margin: auto; }
   .shop-dialog[open] { animation: shop-pop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
