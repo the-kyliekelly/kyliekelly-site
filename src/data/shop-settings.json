@@ -7,7 +7,6 @@
     "kicker": "My signature email marketing course",
     "title": "The Money-Making",
     "accent": "Email System",
-    "copy": "Start, grow, nurture and sell, all in one place. For women who want more sales from their list without living on social media.",
     "proof": "Built on how I grew my own list from 0 to 7,000+ subscribers in 18 months without social media.",
     "buy": "https://system.kyliekelly.com/join",
     "presalePrice": 297,
@@ -18,10 +17,13 @@
     "presaleLabel": "Join at the presale price",
     "image": {
       "src": "/images/shop/money-making-email-system",
-      "w": 1200,
+      "w": 640,
       "h": 630,
-      "alt": "The Money-Making Email System: from your first subscriber to your first sale and beyond, with Kylie Kelly"
-    }
+      "alt": "Kylie Kelly smiling, in a pink top"
+    },
+    "eyebrowPresale": "Pre-sale · now open",
+    "subtitle": "From your first subscriber to your first sale and beyond",
+    "byline": "with Kylie Kelly"
   },
   "start_free": {
     "quiz": {
