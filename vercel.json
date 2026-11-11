@@ -1,6 +1,12 @@
 {
   "redirects": [
     {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "shop.kyliekelly.com" }],
+      "destination": "https://kyliekelly.com/shop",
+      "permanent": true
+    },
+    {
       "source": "/category/podcast",
       "destination": "/podcast",
       "permanent": true
