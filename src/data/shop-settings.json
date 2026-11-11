@@ -1,6 +1,21 @@
 {
   "season": {
-    "category": "Black Friday",
+    "category": "",
     "note": "Black Friday is coming, so the planning tools are up first."
+  },
+  "featured": {
+    "kicker": "My signature email marketing course",
+    "title": "The Money-Making",
+    "accent": "Email System",
+    "copy": "Start, grow, nurture and sell, all in one place. For women who want more sales from their list without living on social media.",
+    "proof": "Built on how I grew my own list from 0 to 7,000+ subscribers in 18 months without social media.",
+    "buy": "https://system.kyliekelly.com/join",
+    "presalePrice": 297,
+    "regularPrice": 997,
+    "presaleEnds": "2026-12-01T15:59:00+11:00",
+    "presaleBar": "Presale: save $700 until 30 November",
+    "regularLabel": "See what's inside",
+    "presaleLabel": "Join at the presale price",
+    "image": { "src": "/images/responsive/mmes-checkout", "w": 800, "h": 788, "alt": "Kylie Kelly, host of The Email Growth Show" }
   }
 }

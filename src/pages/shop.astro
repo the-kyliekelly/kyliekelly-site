@@ -17,6 +17,12 @@ const products = [...allProducts].sort((a, b) => effOrder(a) - effOrder(b));
 // The Filters button and panel only appear once there are enough products to need them.
 const showFilters = products.length >= 9;
 
+// The featured Money-Making Email System block shows the presale price until presaleEnds, then the regular price.
+const feat = settings.featured;
+const presaleLive = Date.now() < new Date(feat.presaleEnds).getTime();
+const savings = feat.regularPrice - feat.presalePrice;
+const studentHub = 'https://hello-53.teachery.co/my-learning';
+
 const arrow = 'M4 12L12 4M5.5 4H12v6.5';
 const money = (n: number) => `$${n}`;
 
@@ -59,13 +65,42 @@ const jsonLd = {
     <div class="pointer-events-none absolute -left-24 top-1/2 h-[26rem] w-[26rem] -translate-y-1/2 rounded-full bg-pink/25 blur-[120px]" aria-hidden="true"></div>
     <div class="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[22rem] rounded-full bg-pink/20 blur-[120px]" aria-hidden="true"></div>
     <div class="relative mx-auto max-w-3xl">
-      <p class="mb-5 text-xs font-semibold uppercase tracking-widest text-pink">&mdash; The KK Digital Product Shop &mdash;</p>
+      <p class="mb-5 text-xs font-semibold uppercase tracking-widest text-white">&mdash; The KK Digital Product Shop &mdash;</p>
       <h1 class="font-serif text-[clamp(2.75rem,7.4vw,6rem)] leading-[0.95] text-balance">
-        Grab what you need, <span class="script-accent italic text-pink">start today.</span>
+        Grab what you need, <span class="script-accent font-bold italic text-pink">start today.</span>
       </h1>
       <p class="mx-auto mt-6 max-w-xl text-lg text-white">Courses, templates and coaching for growing your email list without social media. Pick the one thing you need and put it to work today.</p>
-      <p class="mx-auto mt-3 max-w-xl text-[15px] text-warmgray">I grew my own list from 0 to 7,000+ subscribers in 18 months without social media. Everything here comes from that.</p>
-      <p class="mt-6 text-sm"><a href="#student-logins" class="font-semibold text-white underline decoration-pink decoration-2 underline-offset-4 transition-colors hover:text-pink">Already a student? Log in here</a></p>
+      <p class="mt-7"><a href={studentHub} target="_blank" rel="noopener" class="inline-block text-xs font-semibold uppercase tracking-widest text-white underline decoration-pink decoration-2 underline-offset-[6px] transition-colors hover:text-pink">Already a student? Log in here</a></p>
+    </div>
+  </section>
+
+  <!-- FEATURED: THE MONEY-MAKING EMAIL SYSTEM -->
+  <section class="bg-white px-6 pt-10 sm:pt-12" aria-label="Featured course">
+    <div class="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border-2 border-black bg-white">
+      {presaleLive && (
+        <p class="bg-black px-6 py-3.5 text-center text-[15px] font-semibold text-white sm:text-base" data-presale data-ends={feat.presaleEnds}><span class="mr-2 text-pink" aria-hidden="true">&#10022;</span>{feat.presaleBar}<span class="ml-2 text-pink" aria-hidden="true">&#10022;</span></p>
+      )}
+      <div class="grid md:grid-cols-[0.85fr_1.15fr]">
+        <div class="relative aspect-[4/3] border-black max-md:border-b-2 md:aspect-auto md:min-h-[24rem] md:border-r-2">
+          <img
+            src={`${feat.image.src}-800.webp`}
+            srcset={`${feat.image.src}-480.webp 480w, ${feat.image.src}-800.webp 800w`}
+            sizes="(min-width: 768px) 45vw, 92vw"
+            width={feat.image.w} height={feat.image.h} alt={feat.image.alt}
+            class="absolute inset-0 h-full w-full object-cover object-top" loading="lazy" decoding="async"
+          />
+          <p class="absolute left-5 top-4 rounded-full bg-black px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white">Signature course</p>
+          <p class="absolute bottom-4 right-4 -rotate-3 rounded-full border-2 border-black bg-pink px-5 py-2 text-2xl font-bold leading-none text-black shadow-[3px_3px_0_0_#000]">{presaleLive ? <s class="mr-2 text-base font-semibold opacity-60" data-presale>{money(feat.regularPrice)}</s> : null}<span data-price-now data-regular={money(feat.regularPrice)}>{money(presaleLive ? feat.presalePrice : feat.regularPrice)}</span></p>
+        </div>
+        <div class="flex flex-col justify-center p-7 sm:p-10 lg:p-12">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-pink">{feat.kicker}</p>
+          <h2 class="mb-4 font-serif text-4xl font-bold leading-[1.02] text-balance sm:text-5xl">{feat.title} <span class="italic text-pink">{feat.accent}</span></h2>
+          <p class="mb-4 max-w-xl text-lg text-black">{feat.copy}</p>
+          {presaleLive && <p class="mb-4 text-lg font-semibold" data-presale>{money(feat.presalePrice)} until 30 November, then {money(feat.regularPrice)}. That's {money(savings)} off.</p>}
+          <p class="mb-7 max-w-xl text-[15px] text-black">{feat.proof}</p>
+          <div data-cta data-regular-label={feat.regularLabel}><ArrowButton href={feat.buy} label={presaleLive ? feat.presaleLabel : feat.regularLabel} variant="dark" sameTab /></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -114,7 +149,7 @@ const jsonLd = {
             <div class="space-y-2.5">
               {types.map((t) => (
                 <label class="flex cursor-pointer items-center gap-3 text-[15px]">
-                  <input type="checkbox" value={t} class="h-5 w-5 accent-[#b01fc6]" data-type-filter />
+                  <input type="checkbox" value={t} class="h-5 w-5 accent-[#e040fb]" data-type-filter />
                   <span>{t} <span class="text-black/60">({typeCounts[t]})</span></span>
                 </label>
               ))}
@@ -123,8 +158,8 @@ const jsonLd = {
           <fieldset>
             <legend class="mb-3 text-xs font-semibold uppercase tracking-widest">Price</legend>
             <div class="space-y-2.5">
-              <label class="flex cursor-pointer items-center gap-3 text-[15px]"><input type="radio" name="shop-price" value="" checked class="h-5 w-5 accent-[#b01fc6]" data-price-filter /> <span>Any price</span></label>
-              {priceBands.map((b) => <label class="flex cursor-pointer items-center gap-3 text-[15px]"><input type="radio" name="shop-price" value={b.id} class="h-5 w-5 accent-[#b01fc6]" data-price-filter /> <span>{b.label}</span></label>)}
+              <label class="flex cursor-pointer items-center gap-3 text-[15px]"><input type="radio" name="shop-price" value="" checked class="h-5 w-5 accent-[#e040fb]" data-price-filter /> <span>Any price</span></label>
+              {priceBands.map((b) => <label class="flex cursor-pointer items-center gap-3 text-[15px]"><input type="radio" name="shop-price" value={b.id} class="h-5 w-5 accent-[#e040fb]" data-price-filter /> <span>{b.label}</span></label>)}
             </div>
           </fieldset>
         </div>
@@ -169,13 +204,13 @@ const jsonLd = {
                     <p class="rounded-full bg-black px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white">{p.category}</p>
                     {p.badge && <span class="rounded-full bg-pink px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-black">{p.badge}</span>}
                   </div>
-                  <p class="font-serif text-2xl italic leading-tight text-pink-deep text-balance">{p.kicker}</p>
+                  <p class="font-serif text-2xl italic leading-tight text-pink text-balance">{p.kicker}</p>
                   <p class="absolute bottom-3 right-4 -rotate-3 rounded-full border-2 border-black bg-pink px-4 py-1.5 text-xl font-bold leading-none text-black shadow-[3px_3px_0_0_#000]">{money(p.price)}</p>
                 </div>
               )}
               <div class="flex flex-1 flex-col p-6">
                 <h2 class="mb-2 font-serif text-[1.85rem] font-bold leading-[1.02] text-balance sm:text-[2rem]">{p.title}</h2>
-                <p class="mb-1 text-sm font-semibold text-pink-deep">{p.kicker}</p>
+                <p class="mb-1 text-sm font-semibold text-pink">{p.kicker}</p>
                 <p class="mb-6 mt-2 line-clamp-3 flex-1 text-[15px] text-black">{p.short}</p>
                 <a href={p.buy} target="_self" aria-label={`Buy ${p.title}, ${money(p.price)}`} class="group/btn flex items-center justify-between gap-3 rounded-full bg-black px-6 py-3.5 text-base font-semibold text-white transition-colors duration-300 hover:bg-pink hover:text-black">
                   <span>Buy now</span>
@@ -184,7 +219,7 @@ const jsonLd = {
                 <button type="button" class="mt-4 hidden self-center text-[15px] font-semibold underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black" data-quick={p.slug} aria-haspopup="dialog">Quick look: what's inside</button>
               </div>
               <template data-detail>
-                <p class="mb-2 text-xs font-semibold uppercase tracking-widest text-pink-deep">{p.category} &middot; {p.type}</p>
+                <p class="mb-2 text-xs font-semibold uppercase tracking-widest text-pink">{p.category} &middot; {p.type}</p>
                 <h2 class="mb-3 font-serif text-3xl leading-tight text-balance">{p.title}</h2>
                 <p class="mb-5 text-black">{p.short}</p>
                 <p class="mb-3 text-xs font-semibold uppercase tracking-widest">What's inside</p>
@@ -212,66 +247,33 @@ const jsonLd = {
 
   <!-- REASSURANCE -->
   <section class="border-y border-black/10 bg-white px-6 py-8" aria-label="About buying">
-    <ul class="mx-auto grid max-w-5xl gap-4 text-center text-[15px] sm:grid-cols-3 sm:gap-8">
+    <ul class="mx-auto grid max-w-6xl gap-5 text-center text-[15px] sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
       <li><span class="font-semibold">Secure checkout.</span> Payments are handled by Teachery and ThriveCart, never on this site.</li>
       <li><span class="font-semibold">Digital products.</span> Nothing to ship, so you can start straight away.</li>
       <li><span class="font-semibold">Questions first?</span> Email <a href="mailto:hello@kyliekelly.com" class="underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black">hello@kyliekelly.com</a></li>
+      <li><span class="font-semibold">Already a student?</span> <a href={studentHub} target="_blank" rel="noopener" class="underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black">Log in here</a>, or use "Existing student log in" in a product's quick look.</li>
     </ul>
-  </section>
-
-  <!-- THE SIGNATURE COURSE -->
-  <section class="relative overflow-hidden bg-black px-6 py-16 text-white sm:py-24">
-    <div class="pointer-events-none absolute -left-24 top-1/2 h-[28rem] w-[28rem] -translate-y-1/2 rounded-full bg-pink/25 blur-[120px]" aria-hidden="true"></div>
-    <div class="relative mx-auto grid max-w-5xl items-center gap-8 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
-      <div>
-        <p class="mb-4 text-xs font-semibold uppercase tracking-widest text-pink">&mdash; Want the whole thing? &mdash;</p>
-        <h2 class="font-serif text-4xl leading-[1.02] text-balance sm:text-5xl">The Money-Making <span class="italic text-pink">Email System</span></h2>
-        <p class="mt-5 max-w-xl text-warmgray sm:text-lg">My signature email marketing course: start, grow, nurture and sell, all in one place. For women who want more sales from their list without living on social media.</p>
-      </div>
-      <div class="md:justify-self-end">
-        <ArrowButton href="https://system.kyliekelly.com/join" label="See what's inside" variant="light" />
-      </div>
-    </div>
   </section>
 
   <!-- START FREE -->
   <section class="bg-offwhite px-6 py-16 sm:py-20" aria-label="Start free">
     <div class="mx-auto max-w-4xl">
-      <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-pink-deep">&mdash; Not ready to buy? Start free &mdash;</p>
+      <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-pink">&mdash; Not ready to buy? Start free &mdash;</p>
       <h2 class="mb-10 text-center font-serif text-3xl leading-tight text-balance sm:text-4xl">Two free ways to get going.</h2>
       <ul class="grid gap-5 sm:grid-cols-2">
         <li class="flex flex-col rounded-[2rem] bg-white p-7 sm:p-8">
-          <p class="mb-2 flex items-baseline justify-between text-xs font-semibold uppercase tracking-widest text-pink-deep"><span>The 60-second quiz</span><span class="text-black">Free</span></p>
+          <p class="mb-2 flex items-baseline justify-between text-xs font-semibold uppercase tracking-widest text-pink"><span>The 60-second quiz</span><span class="text-black">Free</span></p>
           <h3 class="mb-3 font-serif text-2xl leading-tight">Find your next step</h3>
           <p class="mb-6 flex-1 text-[15px]">Answer 6 quick questions and get the list-building strategy most likely to work for your business right now.</p>
           <div><ArrowButton href="/guide" label="Take the quiz" variant="dark" /></div>
         </li>
         <li class="flex flex-col rounded-[2rem] bg-white p-7 sm:p-8">
-          <p class="mb-2 flex items-baseline justify-between text-xs font-semibold uppercase tracking-widest text-pink-deep"><span>The free community</span><span class="text-black">Free</span></p>
+          <p class="mb-2 flex items-baseline justify-between text-xs font-semibold uppercase tracking-widest text-pink"><span>The free community</span><span class="text-black">Free</span></p>
           <h3 class="mb-3 font-serif text-2xl leading-tight">Learn with me for free</h3>
           <p class="mb-6 flex-1 text-[15px]">Join the free Email Marketing Skool community, where I teach and answer your questions.</p>
           <div><ArrowButton href="https://www.skool.com/email-marketing-skool/about" label="Join for free" variant="dark" /></div>
         </li>
       </ul>
-    </div>
-  </section>
-
-  <!-- EXISTING STUDENTS -->
-  <section id="student-logins" class="scroll-mt-24 bg-white px-6 py-16 sm:py-20">
-    <div class="mx-auto max-w-3xl">
-      <h2 class="mb-2 text-center font-serif text-3xl sm:text-4xl">Already a student?</h2>
-      <p class="mb-8 text-center">Log in to the one you bought.</p>
-      <ul class="grid gap-3 sm:grid-cols-2">
-        {products.map((p) => (
-          <li>
-            <a href={p.login} target="_blank" rel="noopener" class="flex items-center justify-between gap-4 rounded-[1.5rem] border border-black/20 px-6 py-4 transition-colors hover:border-pink">
-              <span class="font-semibold">{p.title}</span>
-              <span class="text-sm underline decoration-pink decoration-2 underline-offset-4">Log in</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <p class="mt-6 text-center text-sm">Can't remember which one? <a href="https://hello-53.teachery.co/my-learning" target="_blank" rel="noopener" class="font-semibold underline decoration-pink decoration-2 underline-offset-4 hover:decoration-black">See everything you own in one place</a>.</p>
     </div>
   </section>
 
@@ -426,5 +428,18 @@ const jsonLd = {
     syncControls();
     if (panel && toggle && (state.types.length || state.price)) { panel.classList.remove('hidden'); toggle.setAttribute('aria-expanded', 'true'); }
     apply();
+  }
+</script>
+
+<script>
+  // Keeps the featured block right on a page that was built days ago: once the presale has ended it drops the presale wording and shows the regular price.
+  const bar = document.querySelector<HTMLElement>('[data-presale][data-ends]');
+  if (bar && Date.now() >= new Date(bar.dataset.ends ?? '').getTime()) {
+    document.querySelectorAll<HTMLElement>('[data-presale]').forEach((el) => el.remove());
+    const price = document.querySelector<HTMLElement>('[data-price-now]');
+    if (price?.dataset.regular) price.textContent = price.dataset.regular;
+    const cta = document.querySelector<HTMLElement>('[data-cta]');
+    const label = cta?.querySelector('a > span');
+    if (cta?.dataset.regularLabel && label) label.textContent = cta.dataset.regularLabel;
   }
 </script>
