@@ -447,6 +447,16 @@
       "permanent": true
     },
     {
+      "source": "/emailgrowthclub-live/",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
+      "permanent": true
+    },
+    {
+      "source": "/emailgrowthclub-2-0/",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
+      "permanent": true
+    },
+    {
       "source": "/podcast-episodes/how-to-break-up-with-birth-control-the-right-way-with-jenny-mahoney",
       "destination": "/podcast/episodes/how-to-break-up-with-birth-control-the-right-way-with-jenny-mahoney",
       "permanent": true
