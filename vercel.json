@@ -118,12 +118,12 @@
     },
     {
       "source": "/the-email-growth-club",
-      "destination": "/services",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
       "permanent": true
     },
     {
       "source": "/the-email-growth-club/",
-      "destination": "/services",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
       "permanent": true
     },
     {
@@ -133,16 +133,6 @@
     },
     {
       "source": "/empress/",
-      "destination": "/services",
-      "permanent": true
-    },
-    {
-      "source": "/event",
-      "destination": "/services",
-      "permanent": true
-    },
-    {
-      "source": "/event/",
       "destination": "/services",
       "permanent": true
     },
@@ -448,12 +438,12 @@
     },
     {
       "source": "/emailgrowthclub-live",
-      "destination": "/services",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
       "permanent": true
     },
     {
       "source": "/emailgrowthclub-2-0",
-      "destination": "/services",
+      "destination": "https://www.skool.com/email-marketing-skool/about",
       "permanent": true
     },
     {

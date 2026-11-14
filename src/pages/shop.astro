@@ -23,7 +23,7 @@ const feat = settings.featured;
 const freeImg = settings.start_free;
 const presaleLive = Date.now() < new Date(feat.presaleEnds).getTime();
 const savings = feat.regularPrice - feat.presalePrice;
-const studentHub = 'https://hello-53.teachery.co/my-learning';
+const studentHub = 'https://students.kyliekelly.com/login';
 
 // Reviews live in src/data/shop-reviews.json (one entry per review, matched to a product by its slug).
 const reviewsFor = (slug: string) => allReviews.filter((r) => r.product === slug).sort((a, b) => b.date.localeCompare(a.date));
