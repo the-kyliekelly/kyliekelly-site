@@ -68,8 +68,14 @@ const bannerPhotos = bannerNames
   .filter((img): img is ImageMetadata => Boolean(img));
 const newestFirst = allPosts.filter((p) => p.categories.includes(35)).sort((a, b) => +new Date(b.date) - +new Date(a.date));
 
+// A post that should not take the photo its place in the blog would give it: slug -> a photo name from the list above.
+const bannerOverrides: Record<string, string> = { 'is-instagram-worth-it-for-your-business': '06-overhead-planner' };
+const photoByName = (name: string) => Object.entries(bannerFiles).find(([path]) => path.includes(`/${name}.`))?.[1].default;
+
 export function bannerFor(slug: string): ImageMetadata | undefined {
   if (!bannerPhotos.length) return undefined;
+  const chosen = bannerOverrides[slug] ? photoByName(bannerOverrides[slug]) : undefined;
+  if (chosen) return chosen;
   const position = Math.max(0, newestFirst.findIndex((p) => p.slug === slug));
   return bannerPhotos[position % bannerPhotos.length];
 }
