@@ -46,6 +46,9 @@ export const blogCovers: Record<string, { image?: string; topic: string; placeho
   'how-to-start-an-email-newsletter': {
     topic: 'Email marketing',
   },
+  'is-instagram-worth-it-for-your-business': {
+    topic: 'Visibility',
+  },
   'the-rise-framework-explained-how-to-grow-your-audience-without-burning-out': {
     image: '/images/blog/Kylie-Kelly-Blog-How-To-Grow-Your-Audience-Without-Burning-Out2-791x1024.jpg',
     topic: 'Audience growth',
