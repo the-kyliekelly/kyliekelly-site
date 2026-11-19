@@ -34,7 +34,7 @@ const bands = [
 const n = Number(num) || 0;
 // Episodes that use a chosen photo instead of the next one in the rotation: episode number -> photo number
 // (its position in src/assets/episode-photos, counting from 1).
-const chosenPhoto: Record<string, number> = { '274': 8 };
+const chosenPhoto: Record<string, number> = { '274': 8, '276': 1 };
 // A guest episode uses the guest's headshot when one has been added, otherwise one of Kylie's photos.
 const guestPhoto = guestPhotoFor(num);
 const chosen = chosenPhoto[num] ? photos[chosenPhoto[num] - 1] : undefined;
