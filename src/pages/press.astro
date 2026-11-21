@@ -1,35 +1,223 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+import portrait from '../assets/press/about/kylie-portrait.jpg';
+import londonMockup from '../assets/press/features/london-daily-news-mockup.jpg';
+import mondaysArticle from '../assets/press/features/business-mondays-article.jpg';
+import videoColie from '../assets/press/videos/colie-james-business-first-creatives.jpg';
+import videoJillian from '../assets/press/videos/jillian-leslie-email-marketing-secrets.jpg';
+import videoMoriah from '../assets/press/videos/moriah-riona-do-you-need-instagram.jpg';
+import pcClickToClient from '../assets/press/podcasts/from-click-to-client-ep-61.jpg';
+import pcImpact from '../assets/press/podcasts/shes-making-an-impact.jpg';
+import pcRebelBoss from '../assets/press/podcasts/rebel-boss-virtual-summit-2024.jpg';
+import pcUnfiltered from '../assets/press/podcasts/marketing-unfiltered-ep-136.jpg';
+import pcEntrepreneurSchool from '../assets/press/podcasts/entrepreneur-school-ep-77.jpg';
+import pcRockstar from '../assets/press/podcasts/zero-to-rockstar-coaching-business-ep-18.jpg';
+import pcBusinessFirst from '../assets/press/podcasts/business-first-creatives.jpg';
+import pcSixFigure from '../assets/press/podcasts/6-figure-secrets-ep-359.jpg';
+import pcCrush from '../assets/press/podcasts/crush-the-rush.jpg';
+import pcX from '../assets/press/podcasts/the-x-podcast.jpg';
+
+const pressKit = 'https://drive.google.com/file/d/1c-2DqDiIy-NH_wC1hEy_n6MzjbRlrQV5/view?usp=sharing';
+const photos = 'https://drive.google.com/drive/folders/1L1G8_h3uJ2fMgyV5oKA344Y6XuhJw-da?usp=sharing';
+const speak = 'mailto:hello@kyliekelly.com?subject=Speaking%20invitation';
+const guest = 'mailto:hello@kyliekelly.com?subject=Podcast%20guest%20invitation';
+
+const features = [
+  {
+    outlet: 'Forbes',
+    title: '10 Effective Email Marketing Strategies',
+    href: 'https://www.forbes.com/advisor/business/software/email-marketing-strategy/',
+    logo: '/images/press/forbes.png',
+  },
+  {
+    outlet: 'Business Mondays',
+    title: 'Independent Business Podcast Surpasses 200 Episodes & 40,000 Downloads',
+    href: 'https://businessmondays.co.uk/independent-business-podcast-surpasses-200-episodes-40000-downloads-highlighting-the-power-of-sustainable-growth/',
+    image: mondaysArticle,
+    alt: 'The Business Mondays article about The Email Growth Show, with a photo of Kylie holding a microphone',
+  },
+  {
+    outlet: 'London Daily News',
+    title: 'Why six-figure female entrepreneurs are breaking up with social media in 2025',
+    href: 'https://www.londondaily.news/why-six-figure-female-entrepreneurs-are-breaking-up-with-social-media-in-2025/',
+    image: londonMockup,
+    pos: 'object-[50%_62%]',
+    alt: 'The London Daily News article about Kylie shown on a tablet resting on magazines',
+  },
+];
+
+const videos = [
+  {
+    host: 'Colie James',
+    title: 'How to Build Visibility Without Relying on Social Media with Kylie Kelly',
+    href: 'https://www.youtube.com/watch?v=fQCmJHtLy_0&list=PLGZmMjiuNcg6kijXbNYQbIWAThCscdoZk',
+    image: videoColie,
+    alt: 'Thumbnail for Colie James\'s Business-First Creatives episode with Kylie Kelly',
+  },
+  {
+    host: 'Jillian Leslie',
+    title: 'Email Marketing Secrets 2025: How Kylie Kelly Sold $25K to New Subscribers with Just Emails',
+    href: 'https://www.youtube.com/watch?v=XH9TR7vJGnE',
+    image: videoJillian,
+    alt: 'Thumbnail for Jillian Leslie\'s video "This strategy changed everything"',
+  },
+  {
+    host: 'Moriah Riona Branding',
+    title: 'Do You Really Need Instagram? Build a Business WITHOUT Social Media',
+    href: 'https://www.youtube.com/watch?v=JQH41VmATqM',
+    image: videoMoriah,
+    alt: 'Thumbnail for Moriah Riona Branding\'s video "She said no to Instagram"',
+  },
+];
+
+const podcasts = [
+  { name: 'From Click to Client', note: 'Episode 61', image: pcClickToClient, alt: 'From Click to Client podcast graphic for episode 61 with Kylie Kelly' },
+  { name: "She's Making an Impact", note: 'Podcast', image: pcImpact, alt: "She's Making an Impact podcast graphic featuring Kylie Kelly" },
+  { name: 'Rebel Boss Virtual Summit', note: 'May 2024', image: pcRebelBoss, alt: 'Rebel Boss Virtual Summit graphic, May 2024, hosted by Eden Fried' },
+  { name: 'Marketing Unfiltered', note: 'Episode 136', image: pcUnfiltered, alt: 'Marketing Unfiltered podcast graphic for episode 136 with Kylie Kelly' },
+  { name: 'Entrepreneur School', note: 'Episode 77', image: pcEntrepreneurSchool, alt: 'Entrepreneur School podcast graphic for episode 77 with Kylie Kelly' },
+  { name: 'Zero to Rockstar Coaching Business', note: 'Episode 18', image: pcRockstar, alt: 'Zero to Rockstar Coaching Business podcast graphic for episode 18 with Kylie Kelly' },
+  { name: 'Business-First Creatives', note: 'Episode 272', image: pcBusinessFirst, alt: 'Business-First Creatives podcast graphic with Colie James and Kylie Kelly' },
+  { name: '6-Figure Secrets', note: 'Episode 359', image: pcSixFigure, alt: '6-Figure Secrets podcast graphic for episode 359 featuring Kylie Kelly' },
+  { name: 'Crush the Rush', note: 'Podcast', image: pcCrush, alt: 'Crush the Rush podcast graphic featuring Kylie Kelly' },
+  { name: 'The X Podcast', note: 'with Brenda Rigney', image: pcX, alt: 'The X Podcast with Brenda Rigney cover art' },
+];
 
 const topics = [
-  { title: 'Visibility Without Burnout: Strategic Growth for Women Who Want to Be Seen', desc: "What sustainable visibility really looks like, and why it's the key to audience and revenue growth for female founders done with the hustle." },
-  { title: 'The RISE Framework\u2122: 4 Steps to Grow Your Audience & Authority Without Paid Ads', desc: 'The simple 4-part framework Kylie uses to help business owners grow audience, boost credibility, and create consistent income.' },
-  { title: 'From Overlooked to In-Demand: List Building Strategies That Actually Convert', desc: 'How to attract the right people without social media burnout, build connection fast, and sell with ease.' },
-  { title: "Let's Rethink Visibility: Why Showing Up More Isn't the Answer", desc: 'What intentional visibility looks like, and how to build brand recognition without sacrificing your sanity.' },
-  { title: "Email Is Not Dead, It's Just Boring (Here's How to Fix It)", desc: 'A no-fluff take on how to write emails people actually want to read.' },
+  { title: 'Visibility Without Burnout: Strategic Growth for Women Who Want to Be Seen', desc: "In this session, Kylie breaks down what sustainable visibility really looks like - and why it's the key to audience and revenue growth for female founders who are done with the hustle. You'll walk away with visibility strategies that feel good and actually work, no dancing on Reels required." },
+  { title: 'The RISE Framework™: 4 Steps to Grow Your Audience & Authority Without Paid Ads', desc: 'Learn the simple 4-part framework Kylie uses to help business owners grow their audience, boost credibility, and create consistent income - all while protecting their energy. This conversation is perfect for those craving alignment, not algorithms.' },
+  { title: 'From Overlooked to In-Demand: List Building Strategies That Actually Convert', desc: 'Want to grow an email list full of buyers, not just freebie seekers? Kylie shares how to attract the right people (without social media burnout), build connection fast, and sell with ease - using strategies like collaborations, freebie swaps, and guest speaking.' },
+  { title: "Let's Rethink Visibility: Why Showing Up More Isn't the Answer", desc: 'If you\'re feeling exhausted trying to "be everywhere," this one\'s for you. Kylie unpacks what intentional visibility looks like, how to lean into your natural strengths, and how to build brand recognition without sacrificing your sanity.' },
+  { title: "Email Is Not Dead, It's Just Boring (Here's How to Fix It)", desc: "A no-fluff take on how to write emails people actually want to read. Bonus: she'll share the biggest myths keeping your emails from converting." },
+];
+
+const questions = [
+  'What does visibility without burnout actually look like?',
+  'How does your RISE Framework help women grow sustainably?',
+  "What are your favourite list-building strategies that don't involve social media?",
+  'What makes a good visibility plan in 2027?',
 ];
 ---
-<Layout title="Press & Speaking | Kylie Kelly, Email Marketing Expert" description="Book Kylie Kelly for your podcast, summit or stage. Featured in Forbes and Business Insider.">
+<Layout title="Press & Media | Kylie Kelly, Email Marketing Educator & Podcast Host" description="Press, speaking and podcast guest information for Kylie Kelly: her bio, press kit, approved photos, signature topics and where she has been featured.">
 
+  <!-- Hero -->
   <section class="bg-black text-white px-6 py-20 text-center">
     <h1 class="text-4xl sm:text-5xl font-bold mb-6 max-w-2xl mx-auto">A Trusted Voice On Sustainable Online Business &amp; Trust-Led Growth</h1>
-    <a href="mailto:hello@kyliekelly.com" class="btn-pink">Invite Kylie to Speak →</a>
+    <p class="text-warmgray max-w-xl mx-auto mb-8">Kylie Kelly is a business strategist, writer, and podcast host known for her work on <strong class="text-white font-semibold">sustainable growth, audience trust</strong>, and <strong class="text-white font-semibold">building businesses beyond social media dependence</strong>.</p>
+    <a href={speak} class="btn-pink">Invite Kylie to Speak →</a>
   </section>
 
+  <!-- As featured in -->
+  <section class="px-6 py-10 text-center">
+    <p class="text-[11px] uppercase tracking-[0.2em] font-semibold mb-6">As featured in</p>
+    <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+      <img src="/images/press/business-mondays.jpg" alt="Business Mondays" loading="lazy" class="h-12 w-auto mix-blend-multiply" />
+      <img src="/images/press/forbes.png" alt="Forbes" loading="lazy" class="h-8 w-auto" />
+      <img src="/images/press/business-insider.jpg" alt="Business Insider" loading="lazy" class="h-10 w-auto mix-blend-multiply" />
+      <img src="/images/press/london-daily-news.png" alt="London Daily News" loading="lazy" class="h-8 w-auto" />
+    </div>
+  </section>
+
+  <!-- About + press materials -->
   <section class="px-6 py-16">
-    <div class="max-w-2xl mx-auto text-center">
-      <p class="text-muted mb-8">
-        Kylie Kelly is one of the leading voices on sustainable online business and relationship-led growth. She has built two multi six-figure businesses and brings more than a decade of experience across audience growth, visibility, and long-term business strategy. Host of The Email Growth Show, a top 1.5% podcast. Featured in Forbes, Authority Magazine, and Business Insider.
-      </p>
-      <div class="flex justify-center gap-4">
-        <a href="https://drive.google.com/file/d/1c-2DqDiIy-NH_wC1hEy_n6MzjbRlrQV5/view" class="btn-outline text-xs !py-2 !px-5">Press Kit →</a>
-        <a href="https://drive.google.com/drive/folders/1L1G8_h3uJ2fMgyV5oKA344Y6XuhJw-da" class="btn-outline text-xs !py-2 !px-5">Approved Photos →</a>
+    <div class="max-w-5xl mx-auto grid items-center gap-10 md:grid-cols-[0.8fr_1.2fr]">
+      <Image src={portrait} alt="Kylie Kelly sitting cross-legged on a chair holding a microphone" widths={[400, 640, 900]} sizes="(min-width: 768px) 40vw, 90vw" class="mx-auto w-full max-w-sm rounded-2xl object-cover" />
+      <div>
+        <p class="text-pink text-xs uppercase tracking-widest font-normal mb-3">About Kylie Kelly</p>
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4">Real Visibility. Real Strategy. Real Growth.</h2>
+        <p class="font-serif italic text-lg mb-6">Helping women grow their audience with aligned, relationship-first strategies - without burnout, social media or bro-marketing.</p>
+        <div class="space-y-4 text-muted">
+          <p>Kylie Kelly is one of the leading voices on sustainable online business and relationship-led growth. She brings more than a decade of experience across audience growth, visibility, and long-term business strategy.</p>
+          <p>Kylie is the host of The Email Growth Show, a top 1.5% podcast, where she explores trust, attention, and long-term growth in a rapidly changing online landscape. Her insights have been featured in Forbes, Business Mondays and London Daily News.</p>
+        </div>
+        <p class="text-xs uppercase tracking-widest font-semibold mt-8 mb-3">Download press materials here:</p>
+        <div class="flex flex-wrap gap-4">
+          <a href={pressKit} class="btn-outline text-xs !py-2 !px-5">Press Kit →</a>
+          <a href={photos} class="btn-outline text-xs !py-2 !px-5">Approved Photos →</a>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- Editorial features -->
+  <section class="bg-offwhite px-6 py-16">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-10">Editorial Features</h2>
+      <div class="grid gap-6 md:grid-cols-3">
+        {features.map((f) => (
+          <a href={f.href} class="group flex flex-col overflow-hidden rounded-2xl bg-white transition-shadow hover:shadow-lg">
+            <div class="flex aspect-[4/3] items-center justify-center overflow-hidden bg-[#f1eeea]">
+              {f.image ? (
+                <Image src={f.image} alt={f.alt} widths={[400, 640, 900]} sizes="(min-width: 768px) 30vw, 90vw" class:list={['h-full w-full object-cover transition-transform duration-300 group-hover:scale-105', f.pos ?? 'object-top']} />
+              ) : (
+                <img src={f.logo} alt={f.outlet} loading="lazy" class="h-14 w-auto" />
+              )}
+            </div>
+            <div class="flex flex-1 flex-col p-6">
+              <p class="text-pink text-xs uppercase tracking-widest mb-2">{f.outlet}</p>
+              <p class="font-serif font-bold mb-4">{f.title}</p>
+              <span class="mt-auto text-xs font-semibold uppercase tracking-widest underline decoration-pink decoration-2 underline-offset-4">Read the article here →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Video appearances -->
+  <section class="px-6 py-16">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-10">Video &amp; YouTube Appearances</h2>
+      <div class="grid gap-6 md:grid-cols-3">
+        {videos.map((v) => (
+          <a href={v.href} class="group flex flex-col">
+            <div class="relative aspect-video overflow-hidden rounded-2xl bg-black">
+              <Image src={v.image} alt={v.alt} widths={[400, 640, 900]} sizes="(min-width: 768px) 30vw, 90vw" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+              <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                <span class="flex h-14 w-14 items-center justify-center rounded-full bg-black/70 text-white transition-colors group-hover:bg-pink"><svg viewBox="0 0 24 24" class="ml-0.5 h-6 w-6" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></span>
+              </span>
+            </div>
+            <p class="text-pink text-xs uppercase tracking-widest mt-4 mb-1">{v.host}</p>
+            <p class="font-serif font-bold">{v.title}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Podcast features -->
+  <section class="bg-offwhite px-6 py-16">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-4">Podcast Features</h2>
+      <p class="text-muted text-center max-w-2xl mx-auto mb-10">Kylie has appeared on podcasts discussing sustainable growth, audience ownership, and long-term visibility, including:</p>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        {podcasts.map((p) => (
+          <figure>
+            <Image src={p.image} alt={p.alt} widths={[240, 400, 640]} sizes="(min-width: 1024px) 18vw, (min-width: 640px) 30vw, 46vw" loading="lazy" class="aspect-square w-full rounded-xl object-cover" />
+            <figcaption class="mt-2 text-xs leading-snug"><span class="font-semibold">{p.name}</span><br /><span class="text-muted">{p.note}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Podcast guest invitation -->
+  <section class="bg-black text-white px-6 py-16 text-center">
+    <div class="max-w-2xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest font-normal mb-3">Enquiries &amp; Invitations</p>
+      <h2 class="text-3xl font-bold mb-6">Invite Kylie to guest on your podcast</h2>
+      <p class="text-warmgray mb-4">Whether they're just starting to grow an audience, feeling stuck in visibility burnout, or ready to scale with strategy that actually feels good - your listeners will walk away encouraged, inspired, and armed with practical steps they can take right away to grow their reach and impact.</p>
+      <p class="text-warmgray mb-8">I don't believe in "one-size-fits-all" visibility - so our conversation will be packed with real talk, practical tools, and fresh ideas based on what actually works (no fluff, no burnout).</p>
+      <a href={guest} class="btn-pink">Invite Kylie to guest on your podcast →</a>
+    </div>
+  </section>
+
+  <!-- Signature topics -->
   <section class="bg-offwhite px-6 py-16">
     <div class="max-w-3xl mx-auto">
+      <p class="text-pink text-xs uppercase tracking-widest font-normal text-center mb-3">Your go-to tell-it-like-it-is biz strategist</p>
       <h2 class="text-2xl font-bold text-center mb-10">Kylie's Signature Topics</h2>
       <div class="space-y-6">
         {topics.map((t) => (
@@ -42,8 +230,24 @@ const topics = [
     </div>
   </section>
 
-  <section class="px-6 py-16 text-center">
-    <a href="mailto:hello@kyliekelly.com" class="btn-primary">Invite Kylie to Speak →</a>
+  <!-- What do you want to hear -->
+  <section class="px-6 py-16">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-6">What do you want to hear?</h2>
+      <p class="text-muted text-center mb-8">Whether it's on a podcast, virtual stage, or inside your membership - I love sharing honest, actionable conversations that help women be seen, grow strategically, and build visibility that actually feels good.</p>
+      <ul class="text-center text-sm space-y-2 mb-12">
+        <li>→ Topics available for podcast guest spots, summits, and private trainings</li>
+        <li>→ Custom sessions available upon request</li>
+      </ul>
+      <h3 class="font-serif font-bold text-xl text-center mb-4">Great questions for interviews:</h3>
+      <ul class="space-y-3 text-center text-muted">
+        {questions.map((q) => <li>{q}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="px-6 pb-20 text-center">
+    <a href={speak} class="btn-primary">Invite Kylie to Speak →</a>
   </section>
 
 </Layout>
