@@ -30,15 +30,17 @@ interface Props {
   video?: string;
   /** When the post was last refreshed (shown as "Updated ..." and used as dateModified). */
   updated?: string;
+  /** Keep the "In this post" list to the h2 headings only, even when the post has more than 8 of them. */
+  tocH2Only?: boolean;
 }
 
-const { slug, title, seoTitle, description, date, html: rawHtml, highlights = [], video, updated } = Astro.props;
+const { slug, title, seoTitle, description, date, html: rawHtml, highlights = [], video, updated, tocH2Only = false } = Astro.props;
 const html = highlights.length ? highlightPhrases(rawHtml, highlights, slug) : rawHtml;
 const cover = blogCovers[slug];
 
 // The banner photo (see bannerFor in src/lib/blog.ts). The sidebar uses a photo of Kylie.
 const banner = bannerFor(slug);
-const { intro, rest, cta, toc, words } = prepareBlogHtml(html);
+const { intro, rest, cta, toc, words } = prepareBlogHtml(html, { h2Only: tocH2Only });
 const updatedLabel = updated ? formatAuDate(updated, { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 const readMins = Math.max(1, Math.round(words / 220));
 const dateLabel = formatAuDate(date, { day: 'numeric', month: 'long', year: 'numeric' });

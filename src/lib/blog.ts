@@ -46,6 +46,9 @@ export const blogCovers: Record<string, { image?: string; topic: string; placeho
   'how-to-start-an-email-newsletter': {
     topic: 'Email marketing',
   },
+  'bundle-vs-summit-do-you-have-to-host': {
+    topic: 'List growth',
+  },
   'is-instagram-worth-it-for-your-business': {
     topic: 'Visibility',
   },
@@ -110,7 +113,7 @@ export interface BlogToc {
  * the intro, and everything from there on. The "In this post" list goes between the two, and is plain links to
  * the headings. No script, so search and AI crawlers read it as it is.
  */
-export function prepareBlogHtml(source: string): { intro: string; rest: string; cta: string; toc: BlogToc[]; words: number } {
+export function prepareBlogHtml(source: string, opts: { h2Only?: boolean } = {}): { intro: string; rest: string; cta: string; toc: BlogToc[]; words: number } {
   // The closing call to action (a <div class="post-cta">) is shown full width under the article, not inside it.
   const cta = source.match(/<div class="post-cta">[\s\S]*?<\/div>/)?.[0] ?? '';
   const html = cta ? source.replace(cta, '') : source;
@@ -135,9 +138,9 @@ export function prepareBlogHtml(source: string): { intro: string; rest: string; 
   });
   const firstH2 = withIds.search(/<h2[\s>]/i);
   const h2Count = toc.filter((t) => t.level === 2).length;
-  // The list shows the h2 headings; the h3s join it only when there are more than 8 h2s.
+  // The list shows the h2 headings; the h3s join it only when there are more than 8 h2s (unless the post sets tocH2Only).
   // Labels left over from the old podcast-style posts ("In this post, you'll learn", "Love this post? Save it for later") are not sections.
-  const shown = toc.filter((t) => (t.level === 2 || h2Count > 8) && !NOT_A_SECTION.test(t.title));
+  const shown = toc.filter((t) => (t.level === 2 || (h2Count > 8 && !opts.h2Only)) && !NOT_A_SECTION.test(t.title));
   return {
     intro: firstH2 === -1 ? withIds : withIds.slice(0, firstH2),
     rest: firstH2 === -1 ? '' : withIds.slice(firstH2),
