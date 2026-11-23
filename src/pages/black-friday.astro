@@ -1,0 +1,234 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import ArrowButton from '../components/ArrowButton.astro';
+import Highlight from '../components/Highlight.astro';
+import heroPhoto from '../assets/episode-photos/09-lilac-disco-ball-shoulder.webp';
+
+const arrow = 'M4 12L12 4M5.5 4H12v6.5';
+
+// ---- HOW THIS PAGE WORKS -------------------------------------------------------------------------------------
+// Everything you might change is in this top block.
+// - My own offer (the Money-Making Email System) uses the same pre-sale dates as the shop page.
+// - Each deal below has an `ends` moment. When it passes, the card shows "This sale has ended" by itself (even on a
+//   page that was built days ago). The deal's words come from the affiliate emails of Nov 2026.
+// - A deal with an empty `url` is left off the page until a link is added.
+// To retire the page after Cyber Monday, delete this file and add a redirect for /black-friday in vercel.json.
+
+const mmes = {
+  buy: 'https://system.kyliekelly.com/join',
+  presalePrice: 297,
+  regularPrice: 997,
+  presaleEnds: '2026-12-01T15:59:00+11:00', // 11:59pm US Eastern on 30 Nov
+};
+const money = (n: number) => `$${n.toLocaleString('en-US')}`;
+const presaleLive = Date.now() < new Date(mmes.presaleEnds).getTime();
+
+// Brand logos: public/images/logos/<slug>.png. No file = the brand name in text instead.
+const logoFor = (slug: string) => {
+  for (const ext of ['png', 'svg', 'webp', 'jpg']) {
+    if (fs.existsSync(path.join(process.cwd(), 'public/images/logos', `${slug}.${ext}`))) return `/images/logos/${slug}.${ext}`;
+  }
+  return null;
+};
+
+// On sale right now. All links are affiliate links.
+const deals = [
+  {
+    slug: 'teachery',
+    name: 'Teachery',
+    tag: 'Courses',
+    desc: 'This is where I host my courses and programs. Super simple to set up and it just works.',
+    deal: '40% off the Lifetime Plan: $570 instead of $950',
+    detail: 'Use code BF2026 at checkout. One payment, no subscription.',
+    endsLabel: 'Ends 1 Dec, 11:59pm US Pacific',
+    ends: '2026-12-02T06:59:00Z',
+    url: 'https://app.teachery.co/deal?a=KYLIEKELLY',
+    tint: 'bg-[#fbe6f7]',
+  },
+  {
+    slug: 'hello-audio',
+    name: 'Hello Audio',
+    tag: 'Private podcasts',
+    desc: 'A private podcast host for your course, freebie or membership, so your people can listen on the go. I use it for the audio for my audio summits.',
+    deal: '40% off your first year of any plan',
+    detail: 'For new and returning customers. The discount applies by itself, no code needed.',
+    endsLabel: 'Ends 2 Dec, 11:59pm US Pacific',
+    ends: '2026-12-03T07:59:00Z',
+    url: 'https://helloaudio.fm/bf26?fpr=kylie-ae0c66',
+    tint: 'bg-[#e9d9ec]',
+  },
+  {
+    slug: 'dama-jue',
+    name: 'Dama Jue',
+    tag: 'Trainings & templates',
+    desc: 'Trainings, systems and ThriveCart templates, from someone who really knows the tech.',
+    deal: '40% off all trainings and systems, 50% off ThriveCart templates and courses',
+    detail: 'Her $9 offers are not included.',
+    endsLabel: 'Ends 30 Nov, 11:59pm US Eastern',
+    ends: '2026-12-01T04:59:00Z',
+    url: 'https://thepregnantceo--damajue.thrivecart.com/affiliate-program/6362df903751f/',
+    tint: 'bg-pink-light',
+  },
+]
+  .filter((d) => d.url)
+  .map((d) => ({ ...d, logo: logoFor(d.slug) }));
+
+// Perks that come with my link all year (not Black Friday sales). Same links as the Favorites page.
+const perks = [
+  { slug: 'flodesk', name: 'Flodesk', tag: 'Email marketing', perk: '25% off your first year', url: 'https://flodesk.com/c/KYLIEKELLY' },
+  { slug: 'buzzsprout', name: 'Buzzsprout', tag: 'Podcasting', perk: '$20 credit', url: 'https://www.buzzsprout.com/?referrer_id=2046932' },
+  { slug: 'descript', name: 'Descript', tag: 'Audio & video editing', perk: '50% off your first 2 months of Creator', url: 'https://descript.cello.so/JlEIs2TnSLt' },
+  { slug: 'wispr-flow', name: 'Wispr Flow', tag: 'Voice dictation', perk: 'A free month of Flow Pro', url: 'https://wisprflow.ai/r?KYLIE344' },
+].map((p) => ({ ...p, logo: logoFor(p.slug) }));
+---
+<Layout title="Black Friday 2026 Deals for Online Business Owners | Kylie Kelly" description="My Black Friday 2026 picks for online business owners: the Money-Making Email System at $297 until 30 November, plus the tools and trainings on sale right now.">
+
+  <!-- ABOVE THE FOLD -->
+  <section class="relative overflow-hidden bg-black px-6 pb-48 pt-20 text-center text-white sm:pb-72 sm:pt-28">
+    <div class="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-pink/25 blur-[120px]" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-4xl">
+      <p class="mb-6 text-xs font-semibold uppercase tracking-[0.25em] text-pink">Black Friday 2026</p>
+      <h1 class="font-serif text-[clamp(2.4rem,7.5vw,5.5rem)] leading-[1.05] text-balance">
+        Looking for the <span class="italic text-pink">hottest Black Friday deals</span> for your online biz?
+      </h1>
+      <p class="mt-8 text-xs font-semibold uppercase tracking-[0.25em] text-warmgray">Look no further...</p>
+    </div>
+  </section>
+
+  <section class="relative z-10 -mt-24 rounded-t-[2.5rem] bg-offwhite px-6 pb-20 pt-16 sm:-mt-32 sm:pb-28 sm:pt-20">
+    <div class="mx-auto grid max-w-6xl items-start gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:gap-16">
+      <div class="-mt-36 md:-mt-52">
+        <Image src={heroPhoto} alt="Kylie Kelly laughing with a disco ball on her shoulder" widths={[480, 640, 900]} sizes="(min-width: 768px) 40vw, 90vw" class="mx-auto block h-auto w-full max-w-md rounded-sm shadow-[0_24px_60px_rgba(0,0,0,0.25)]" loading="eager" />
+      </div>
+      <div class="md:pt-4">
+        <h2 class="font-serif text-4xl leading-[1.08] text-balance sm:text-5xl">
+          Skip the Black Friday <span class="italic">bullshit.</span> Here's my scoop on this year's <Highlight>best sales.</Highlight>
+        </h2>
+        <div class="mt-8 space-y-5 text-[17px] leading-relaxed text-black">
+          <p>Brace yourself, because this isn't your average Black Friday chaos. No parking spots to fight over, no crowds to elbow through. Just the deals I'd actually send to a friend (and a short list, on purpose).</p>
+          <p>First up is my own: the Money-Making Email System, at its $297 pre-sale price until 30 November, then $997 (that's $700 off, and it's the only time it will be this price). After that you'll find the tools and trainings I recommend that are on sale right now, with the real dates each one ends.</p>
+          <p>Ready to shop, save and support some seriously good people? Let's dive in before they're gone.</p>
+        </div>
+        <div class="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
+          <a href="#mine" class="rounded-full bg-black px-5 py-2.5 text-white transition-colors hover:bg-pink">My offer</a>
+          <a href="#deals" class="rounded-full bg-white px-5 py-2.5 text-black ring-1 ring-black/15 transition-colors hover:bg-pink-light">On sale right now</a>
+          <a href="#perks" class="rounded-full bg-white px-5 py-2.5 text-black ring-1 ring-black/15 transition-colors hover:bg-pink-light">Always-on perks</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MY OFFER -->
+  <section id="mine" class="scroll-mt-20 bg-black px-6 py-20 text-white sm:py-28">
+    <div class="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2">
+      <div class="relative mx-auto w-full max-w-sm md:max-w-none">
+        <div class="pointer-events-none absolute inset-[8%] rounded-full bg-pink/30 blur-3xl" aria-hidden="true"></div>
+        <img src="/images/shop/money-making-email-system-640.webp" srcset="/images/shop/money-making-email-system-480.webp 480w, /images/shop/money-making-email-system-640.webp 640w" sizes="(min-width: 768px) 420px, 90vw" width="640" height="630" alt="Kylie Kelly smiling, in a pink top" class="relative block h-auto w-full rounded-[2rem]" loading="lazy" decoding="async" />
+        {presaleLive && <p class="absolute right-4 top-4 rotate-3 rounded-full border-2 border-black bg-[#d4ff3a] px-4 py-2 text-sm font-bold uppercase leading-none tracking-wide text-black shadow-[3px_3px_0_0_#000] sm:text-base" data-presale>Save $700</p>}
+        <p class="absolute bottom-4 left-4 -rotate-3 rounded-full border-2 border-black bg-pink px-5 py-2 text-2xl font-bold leading-none text-black shadow-[3px_3px_0_0_#000]">
+          {presaleLive && <s class="mr-2 text-base font-semibold opacity-60" data-presale>{money(mmes.regularPrice)}</s>}<span data-price-now data-regular={money(mmes.regularPrice)}>{money(presaleLive ? mmes.presalePrice : mmes.regularPrice)}</span>
+        </p>
+      </div>
+      <div>
+        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-pink">My offer{presaleLive && <span data-presale> &middot; pre-sale ends 30 Nov</span>}</p>
+        <h2 class="font-serif text-4xl leading-[1.05] sm:text-6xl">The Money-Making <span class="italic text-pink">Email System</span></h2>
+        <p class="mt-4 text-lg text-warmgray">From your first subscriber to your first sale and beyond</p>
+        <p class="mt-6 text-[17px] leading-relaxed">My signature email marketing course. It walks you through the five parts of an email system (start, grow, nurture, sell and scale), built on how I grew my own list from 0 to 7,000+ subscribers in 18 months without social media.</p>
+        {presaleLive && <p class="mt-5 text-[15px] font-semibold" data-presale>{money(mmes.presalePrice)} until 30 November, then {money(mmes.regularPrice)}. That's {money(mmes.regularPrice - mmes.presalePrice)} off, and this is the only time it will be this price.</p>}
+        <div class="mt-8" data-cta data-regular-label="See what's inside"><ArrowButton href={mmes.buy} label={presaleLive ? 'Join at the pre-sale price' : "See what's inside"} variant="light" sameTab /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEALS -->
+  <section id="deals" class="scroll-mt-20 bg-offwhite px-6 py-20 sm:py-28">
+    <div class="mx-auto max-w-5xl">
+      <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest">Tools &amp; trainings I recommend</p>
+      <h2 class="mb-4 text-center font-serif text-4xl font-bold italic sm:text-5xl">On sale right now</h2>
+      <p class="mx-auto mb-14 max-w-xl text-center text-sm text-black/70">Friendly heads up: these are affiliate links, which means I may earn a commission (at no extra cost to you). The deals and dates below come straight from each company.</p>
+      <div class="flex flex-wrap justify-center gap-6">
+        {deals.map((d) => (
+          <article class={`flex w-full flex-col rounded-[2rem] p-8 sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] ${d.tint}`} data-ends={d.ends}>
+            <p class="mb-6 inline-block self-start rounded-full bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">{d.tag}</p>
+            {d.logo ? (
+              <h3 class="mb-5 inline-flex h-20 max-w-full items-center self-start rounded-2xl bg-white px-6">
+                <img src={d.logo} alt={d.name} class="max-h-11 w-auto max-w-full object-contain" loading="lazy" />
+              </h3>
+            ) : (
+              <h3 class="mb-5 font-serif text-4xl text-balance">{d.name}</h3>
+            )}
+            <p class="mb-6 text-sm text-black">{d.desc}</p>
+            <p class="mb-3 rounded-2xl bg-black px-5 py-4 text-[15px] font-semibold leading-snug text-white"><span class="mr-2 text-pink" aria-hidden="true">&#10022;</span>{d.deal}</p>
+            <p class="mb-1 text-sm text-black">{d.detail}</p>
+            <p class="mb-6 flex-grow text-xs font-semibold uppercase tracking-wider text-black/70">{d.endsLabel}</p>
+            <div data-cta>
+              <a href={d.url} target="_blank" rel="sponsored noopener" class="group inline-flex items-center gap-4 rounded-full bg-white pl-6 pr-2 py-2 text-[15px] font-semibold text-black transition-transform duration-300 hover:-translate-y-1" aria-label={`Get the ${d.name} deal (affiliate link)`}>
+                Get the deal
+                <span class="grid h-10 w-10 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ALWAYS-ON PERKS -->
+  <section id="perks" class="scroll-mt-20 bg-white px-6 py-20 sm:py-28">
+    <div class="mx-auto max-w-5xl">
+      <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest">Not a Black Friday sale</p>
+      <h2 class="mb-4 text-center font-serif text-4xl font-bold italic sm:text-5xl">Perks that come with my link all year</h2>
+      <p class="mx-auto mb-12 max-w-xl text-center text-sm text-black/70">These companies haven't announced a Black Friday deal, but my links get you a little something extra anyway. They're the tools I use to run my own business.</p>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {perks.map((p) => (
+          <a href={p.url} target="_blank" rel="sponsored noopener" class="group flex items-center gap-5 rounded-[1.75rem] bg-offwhite p-5 transition-transform duration-300 hover:-translate-y-1" aria-label={`${p.name}: ${p.perk} (affiliate link)`}>
+            {p.logo ? (
+              <span class="grid h-16 w-24 flex-none place-items-center rounded-xl bg-white px-3"><img src={p.logo} alt="" class="max-h-9 w-auto max-w-full object-contain" loading="lazy" /></span>
+            ) : null}
+            <span class="flex-1">
+              <span class="block text-xs font-semibold uppercase tracking-widest text-black/60">{p.tag}</span>
+              <span class="block font-serif text-2xl">{p.name}</span>
+              <span class="mt-1 inline-flex items-center gap-2 text-sm font-semibold"><span class="h-2 w-2 rounded-full bg-pink"></span>{p.perk}</span>
+            </span>
+            <span class="grid h-11 w-11 flex-none place-items-center rounded-full bg-pink-light text-black transition-colors duration-300 group-hover:bg-pink group-hover:text-white" aria-hidden="true"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={arrow} /></svg></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="bg-pink-light px-6 py-20 text-center sm:py-24">
+    <div class="mx-auto max-w-2xl">
+      <h2 class="font-serif text-4xl italic leading-tight text-balance sm:text-5xl">Not sure where to start? Start with the system.</h2>
+      <p class="mt-5 text-[17px] text-black">If you only grab one thing this Black Friday, make it the one that grows your list and turns it into sales.</p>
+      <div class="mt-8 flex justify-center" data-cta data-regular-label="See what's inside"><ArrowButton href={mmes.buy} label={presaleLive ? 'Join at the pre-sale price' : "See what's inside"} variant="dark" sameTab /></div>
+      <p class="mt-10 text-xs text-black/70">Some links on this page are affiliate links, which means I may earn a commission if you buy, at no extra cost to you. I only share what I truly use and love. <a href="/disclaimer" class="underline decoration-pink decoration-2 underline-offset-2">Read my full disclosure</a>.</p>
+    </div>
+  </section>
+
+</Layout>
+
+<script is:inline>
+  // Keeps the page right on a build made days ago. Once a sale's end has passed, its card says so instead of offering the deal,
+  // and once my pre-sale ends, the page switches to the regular price.
+  (function () {
+    var now = Date.now();
+    document.querySelectorAll('article[data-ends]').forEach(function (card) {
+      if (now < new Date(card.getAttribute('data-ends')).getTime()) return;
+      card.style.opacity = '0.6';
+      var cta = card.querySelector('[data-cta]');
+      if (cta) cta.innerHTML = '<p class="text-sm font-semibold">This sale has ended.</p>';
+    });
+    if (now >= new Date('2026-12-01T15:59:00+11:00').getTime()) {
+      document.querySelectorAll('[data-presale]').forEach(function (el) { el.remove(); });
+      document.querySelectorAll('[data-price-now]').forEach(function (el) { el.textContent = el.getAttribute('data-regular'); });
+      document.querySelectorAll('[data-cta][data-regular-label] a span:first-child').forEach(function (el) {
+        el.textContent = el.closest('[data-cta]').getAttribute('data-regular-label');
+      });
+    }
+  })();
+</script>
