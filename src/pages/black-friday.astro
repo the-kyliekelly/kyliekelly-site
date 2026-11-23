@@ -76,6 +76,19 @@ const deals = [
   .filter((d) => d.url)
   .map((d) => ({ ...d, logo: logoFor(d.slug) }));
 
+// The free event I'm a contributor in (Nadine Nethery's 12 Days of Gifts, 7-18 Dec 2026). The link is my affiliate link to the registration page.
+// When `ends` passes the card says so by itself. Retire this block (and the "free" section below) after 18 Dec.
+const freeEvent = {
+  name: '12 Days of Gifts',
+  with: 'with Nadine Nethery',
+  dates: '7 to 18 December',
+  desc: "Nadine's gift collaboration wraps up the year with a group of online business owners (I'm one of them) each sharing a free gift. Sign up and you can snag the gifts from everyone involved.",
+  deal: 'Free to join',
+  endsLabel: 'Runs 7 to 18 Dec',
+  ends: '2026-12-18T23:59:00+11:00',
+  url: 'https://thepregnantceo--candocontent.thrivecart.com/retention-lab-starter/6abb4d8fcef1d/',
+};
+
 // Perks that come with my link all year (not Black Friday sales). Same links as the Favorites page.
 const perks = [
   { slug: 'flodesk', name: 'Flodesk', tag: 'Email marketing', perk: '25% off your first year', url: 'https://flodesk.com/c/KYLIEKELLY' },
@@ -109,12 +122,13 @@ const perks = [
         </h2>
         <div class="mt-8 space-y-5 text-[17px] leading-relaxed text-black">
           <p>Brace yourself, because this isn't your average Black Friday chaos. No parking spots to fight over, no crowds to elbow through. Just the deals I'd actually send to a friend (and a short list, on purpose).</p>
-          <p>First up is my own: the Money-Making Email System, at its $297 pre-sale price until 30 November, then $997 (that's $700 off, and it's the only time it will be this price). After that you'll find the tools and trainings I recommend that are on sale right now, with the real dates each one ends.</p>
+          <p>First up is my own: the Money-Making Email System, at its $297 pre-sale price until 30 November, then $997 (that's $700 off, and it's the only time it will be this price). After that you'll find the tools and trainings I recommend that are on sale right now, with the real dates each one ends, plus a free event to wrap up the year.</p>
           <p>Ready to shop, save and support some seriously good people? Let's dive in before they're gone.</p>
         </div>
         <div class="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
           <a href="#mine" class="rounded-full bg-black px-5 py-2.5 text-white transition-colors hover:bg-pink">My offer</a>
           <a href="#deals" class="rounded-full bg-white px-5 py-2.5 text-black ring-1 ring-black/15 transition-colors hover:bg-pink-light">On sale right now</a>
+          <a href="#free" class="rounded-full bg-white px-5 py-2.5 text-black ring-1 ring-black/15 transition-colors hover:bg-pink-light">Something free</a>
           <a href="#perks" class="rounded-full bg-white px-5 py-2.5 text-black ring-1 ring-black/15 transition-colors hover:bg-pink-light">Always-on perks</a>
         </div>
       </div>
@@ -184,6 +198,31 @@ const perks = [
           </article>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- SOMETHING FREE -->
+  <section id="free" class="scroll-mt-20 bg-pink-light px-6 py-20 sm:py-24">
+    <div class="mx-auto max-w-5xl">
+      <article class="relative grid items-center gap-8 rounded-[2.5rem] bg-white p-6 sm:p-10 md:grid-cols-2 md:gap-12" data-ends={freeEvent.ends}>
+        <p class="absolute -top-4 left-8 z-10 -rotate-2 rounded-full border-2 border-black bg-[#d4ff3a] px-4 py-2 text-sm font-bold uppercase leading-none tracking-wide text-black shadow-[3px_3px_0_0_#000]">Free</p>
+        <div class="overflow-hidden rounded-2xl shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+          <img src="/images/events/12-days-of-gifts-1200.webp" srcset="/images/events/12-days-of-gifts-800.webp 800w, /images/events/12-days-of-gifts-1200.webp 1200w" sizes="(min-width: 768px) 460px, 90vw" width="1200" height="600" alt="12 Days of Gifts, online biz edition: let's spread a little holiday joy and close out the year on a high, 7 to 18 December 2026" class="block h-auto w-full" loading="lazy" decoding="async" />
+        </div>
+        <div>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-widest">Something free &middot; {freeEvent.dates}</p>
+          <h2 class="font-serif text-3xl leading-[1.05] text-balance sm:text-4xl">{freeEvent.name} <span class="italic text-pink">{freeEvent.with}</span></h2>
+          <p class="mt-4 text-[16px] leading-relaxed text-black">{freeEvent.desc}</p>
+          <p class="mb-3 mt-6 rounded-2xl bg-black px-5 py-4 text-[15px] font-semibold leading-snug text-white"><span class="mr-2 text-pink" aria-hidden="true">&#10022;</span>{freeEvent.deal}</p>
+          <p class="mb-6 text-xs font-semibold uppercase tracking-wider text-black/70">{freeEvent.endsLabel}</p>
+          <div data-cta>
+            <a href={freeEvent.url} target="_blank" rel="sponsored noopener" class="group inline-flex items-center gap-4 rounded-full bg-black pl-6 pr-2 py-2 text-[15px] font-semibold text-white transition-transform duration-300 hover:-translate-y-1" aria-label="Get your free spot in 12 Days of Gifts (affiliate link)">
+              Get your free spot
+              <span class="grid h-10 w-10 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
+            </a>
+          </div>
+        </div>
+      </article>
     </div>
   </section>
 
