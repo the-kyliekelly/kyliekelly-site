@@ -72,6 +72,18 @@ const deals = [
     url: 'https://thepregnantceo--damajue.thrivecart.com/affiliate-program/6362df903751f/',
     tint: 'bg-pink-light',
   },
+  {
+    slug: 'kit',
+    name: 'Kit',
+    tag: 'Email marketing',
+    desc: "I used Kit for 3 years and absolutely loved it before moving my list to Flodesk. I'm still a Kit partner, so if it's your platform (or you're choosing between the two), their Black Friday sale is a good time to start.",
+    deal: '60% off your first three months of the Creator plan',
+    detail: '',
+    endsLabel: 'Ends 1 Dec',
+    ends: '2026-12-02T07:59:00Z', // Kit says "ends Dec 1, 2026"; its countdown points to 11:59pm US Pacific
+    url: 'https://partners.kit.com/1lghjneh1419-deal',
+    tint: 'bg-[#fbe6f7]',
+  },
 ]
   .filter((d) => d.url)
   .map((d) => ({ ...d, logo: logoFor(d.slug) }));
@@ -170,26 +182,29 @@ const perks = [
 
   <!-- DEALS -->
   <section id="deals" class="scroll-mt-20 bg-offwhite px-6 py-20 sm:py-28">
-    <div class="mx-auto max-w-5xl">
+    <div class="mx-auto max-w-5xl xl:max-w-6xl">
       <p class="mb-3 text-center text-xs font-semibold uppercase tracking-widest">Tools &amp; trainings I recommend</p>
       <h2 class="mb-4 text-center font-serif text-4xl font-bold italic sm:text-5xl">On sale right now</h2>
       <p class="mx-auto mb-14 max-w-xl text-center text-sm text-black/70">Friendly heads up: these are affiliate links, which means I may earn a commission (at no extra cost to you). The deals and dates below come straight from each company.</p>
-      <div class="flex flex-wrap justify-center gap-6">
+      <!-- Four deals sit in one row on wide screens, two by two on tablets and laptops, one by one on phones. Fewer deals (when one is removed) share the row evenly. -->
+      <div class={`grid gap-6 sm:grid-cols-2 ${deals.length >= 4 ? 'xl:grid-cols-4' : deals.length === 3 ? 'lg:grid-cols-3' : ''}`}>
         {deals.map((d) => (
-          <article class={`flex w-full flex-col rounded-[2rem] p-8 sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] ${d.tint}`} data-ends={d.ends}>
-            <p class="mb-6 inline-block self-start rounded-full bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">{d.tag}</p>
+          <article class={`grid gap-y-0 rounded-[2rem] p-8 [grid-row:span_6] [grid-template-rows:subgrid] xl:p-6 ${d.tint}`} data-ends={d.ends}>
+            <p class="mb-6 inline-block self-start justify-self-start rounded-full bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">{d.tag}</p>
             {d.logo ? (
-              <h3 class="mb-5 inline-flex h-20 max-w-full items-center self-start rounded-2xl bg-white px-6">
+              <h3 class="mb-5 inline-flex h-20 max-w-full items-center self-start justify-self-start rounded-2xl bg-white px-6">
                 <img src={d.logo} alt={d.name} class="max-h-11 w-auto max-w-full object-contain" loading="lazy" />
               </h3>
             ) : (
               <h3 class="mb-5 font-serif text-4xl text-balance">{d.name}</h3>
             )}
-            <p class="mb-6 text-sm text-black">{d.desc}</p>
-            <p class="mb-3 rounded-2xl bg-black px-5 py-4 text-[15px] font-semibold leading-snug text-white"><span class="mr-2 text-pink" aria-hidden="true">&#10022;</span>{d.deal}</p>
-            <p class="mb-1 text-sm text-black">{d.detail}</p>
-            <p class="mb-6 flex-grow text-xs font-semibold uppercase tracking-wider text-black/70">{d.endsLabel}</p>
-            <div data-cta>
+            <div class="mb-6 space-y-3 text-sm text-black">
+              <p>{d.desc}</p>
+              {d.detail && <p>{d.detail}</p>}
+            </div>
+            <p class="mb-3 flex items-center gap-2 rounded-2xl bg-black px-5 py-4 text-[15px] font-semibold leading-snug text-white"><span class="text-pink" aria-hidden="true">&#10022;</span><span>{d.deal}</span></p>
+            <p class="mb-6 self-start text-xs font-semibold uppercase tracking-wider text-black/70">{d.endsLabel}</p>
+            <div data-cta class="self-end">
               <a href={d.url} target="_blank" rel="sponsored noopener" class="group inline-flex items-center gap-4 rounded-full bg-white pl-6 pr-2 py-2 text-[15px] font-semibold text-black transition-transform duration-300 hover:-translate-y-1" aria-label={`Get the ${d.name} deal (affiliate link)`}>
                 Get the deal
                 <span class="grid h-10 w-10 place-items-center rounded-full bg-pink text-white transition-colors duration-300 group-hover:bg-black"><svg viewBox="0 0 16 16" class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={arrow} /></svg></span>
@@ -256,7 +271,7 @@ const perks = [
       <h2 class="font-serif text-4xl italic leading-tight text-balance sm:text-5xl">Not sure where to start? Start with the system.</h2>
       <p class="mt-5 text-[17px] text-black">If you only grab one thing this Black Friday, make it the one that grows your list and turns it into sales.</p>
       <div class="mt-8 flex justify-center" data-cta data-regular-label="See what's inside"><ArrowButton href={mmes.buy} label={presaleLive ? 'Join at the pre-sale price' : "See what's inside"} variant="dark" sameTab /></div>
-      <p class="mt-10 text-xs text-black/70">Some links on this page are affiliate links, which means I may earn a commission if you buy, at no extra cost to you. I only share what I truly use and love. <a href="/disclaimer" class="underline decoration-pink decoration-2 underline-offset-2">Read my full disclosure</a>.</p>
+      <p class="mt-10 text-xs text-black/70">Some links on this page are affiliate links, which means I may earn a commission if you buy, at no extra cost to you. I only share tools I've used and loved. <a href="/disclaimer" class="underline decoration-pink decoration-2 underline-offset-2">Read my full disclosure</a>.</p>
     </div>
   </section>
 
