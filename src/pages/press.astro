@@ -8,9 +8,9 @@ import mondaysArticle from '../assets/press/features/business-mondays-article.jp
 import videoColie from '../assets/press/videos/colie-james-business-first-creatives.jpg';
 import videoJillian from '../assets/press/videos/jillian-leslie-email-marketing-secrets.jpg';
 import videoMoriah from '../assets/press/videos/moriah-riona-do-you-need-instagram.jpg';
+import pcCreativeBodega from '../assets/press/podcasts/the-creative-bodega-ep-92.jpg';
 import pcClickToClient from '../assets/press/podcasts/from-click-to-client-ep-61.jpg';
 import pcImpact from '../assets/press/podcasts/shes-making-an-impact.jpg';
-import pcRebelBoss from '../assets/press/podcasts/rebel-boss-virtual-summit-2024.jpg';
 import pcUnfiltered from '../assets/press/podcasts/marketing-unfiltered-ep-136.jpg';
 import pcEntrepreneurSchool from '../assets/press/podcasts/entrepreneur-school-ep-77.jpg';
 import pcRockstar from '../assets/press/podcasts/zero-to-rockstar-coaching-business-ep-18.jpg';
@@ -73,9 +73,9 @@ const videos = [
 ];
 
 const podcasts = [
+  { name: 'The Creative Bodega', note: 'Episode 92', image: pcCreativeBodega, alt: 'The Creative Bodega podcast cover art with host Em Connors', href: 'https://www.thecreativebodega.com/blog/92-grow-email-list-without-social-media' },
   { name: 'From Click to Client', note: 'Episode 61', image: pcClickToClient, alt: 'From Click to Client podcast graphic for episode 61 with Kylie Kelly' },
   { name: "She's Making an Impact", note: 'Podcast', image: pcImpact, alt: "She's Making an Impact podcast graphic featuring Kylie Kelly" },
-  { name: 'Rebel Boss Virtual Summit', note: 'May 2024', image: pcRebelBoss, alt: 'Rebel Boss Virtual Summit graphic, May 2024, hosted by Eden Fried' },
   { name: 'Marketing Unfiltered', note: 'Episode 136', image: pcUnfiltered, alt: 'Marketing Unfiltered podcast graphic for episode 136 with Kylie Kelly' },
   { name: 'Entrepreneur School', note: 'Episode 77', image: pcEntrepreneurSchool, alt: 'Entrepreneur School podcast graphic for episode 77 with Kylie Kelly' },
   { name: 'Zero to Rockstar Coaching Business', note: 'Episode 18', image: pcRockstar, alt: 'Zero to Rockstar Coaching Business podcast graphic for episode 18 with Kylie Kelly' },
@@ -192,13 +192,22 @@ const questions = [
     <div class="max-w-5xl mx-auto">
       <h2 class="text-2xl font-bold text-center mb-4">Podcast Features</h2>
       <p class="text-muted text-center max-w-2xl mx-auto mb-10">Kylie has appeared on podcasts discussing sustainable growth, audience ownership, and long-term visibility, including:</p>
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {podcasts.map((p) => (
-          <figure>
-            <Image src={p.image} alt={p.alt} widths={[240, 400, 640]} sizes="(min-width: 1024px) 18vw, (min-width: 640px) 30vw, 46vw" loading="lazy" class="aspect-square w-full rounded-xl object-cover" />
-            <figcaption class="mt-2 text-xs leading-snug"><span class="font-semibold">{p.name}</span><br /><span class="text-muted">{p.note}</span></figcaption>
-          </figure>
-        ))}
+      <!-- A row that doesn't fill up is centred. A podcast with an href links to its episode. -->
+      <div class="flex flex-wrap justify-center gap-4">
+        {podcasts.map((p) => {
+          const card = (
+            <figure>
+              <Image src={p.image} alt={p.alt} widths={[240, 400, 640]} sizes="(min-width: 1024px) 18vw, (min-width: 640px) 30vw, 46vw" loading="lazy" class="aspect-square w-full rounded-xl object-cover" />
+              <figcaption class="mt-2 text-xs leading-snug"><span class="font-semibold">{p.name}</span><br /><span class="text-muted">{p.note}</span></figcaption>
+            </figure>
+          );
+          const width = 'w-[calc((100%-1rem)/2)] sm:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-4rem)/5)]';
+          return p.href ? (
+            <a href={p.href} target="_blank" rel="noopener" class={`block transition-transform duration-300 hover:-translate-y-1 ${width}`} aria-label={`Listen to Kylie on ${p.name}, ${p.note.toLowerCase()}`}>{card}</a>
+          ) : (
+            <div class={width}>{card}</div>
+          );
+        })}
       </div>
     </div>
   </section>
